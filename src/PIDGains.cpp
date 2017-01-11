@@ -24,15 +24,6 @@ void PIDGains::set (double newP, double newI, double newD, int newIZone, double 
     setFeedForward (newFeedForward);
 }
 
-//void PIDGains::switchToGains (SmartTalon &talon)
-//{
-//    talon.SetP (m_P);
-//    talon.SetI (m_I);
-//    talon.SetD (m_D);
-//    talon.SetIzone (m_IZone);
-//    talon.SetF (m_FeedForward);
-//}
-
 double PIDGains::getP ()
 {
     return m_P;

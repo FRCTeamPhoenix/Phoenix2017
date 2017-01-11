@@ -11,8 +11,16 @@ SmartTalon::SmartTalon (int deviceNumber, double maxForwardSpeed, double maxReve
         m_maxForwardSpeed(maxForwardSpeed),
         m_maxReverseSpeed(maxReverseSpeed),
         m_tuneTimer(),
-        m_distanceGains(0, 0, 0, 0, 0),
-        m_speedGains(0, 0, 0, 0, 0)
+        m_distanceGains(0,
+                        0,
+                        0,
+                        0,
+                        0),
+        m_speedGains(0,
+                     0,
+                     0,
+                     0,
+                     0)
 
 
 {
@@ -22,11 +30,20 @@ double SmartTalon::getGoal ()
     return m_goal;
 }
 
+void SmartTalon::switchToGain (PIDGains gains)
+{
+    SetP (gains.getP ());
+    SetI (gains.getI ());
+    SetD (gains.getD ());
+    SetIzone (gains.getIZone ());
+    SetF (gains.getFeedForward ());
+}
+
 void SmartTalon::goTo (double position)
 {
     SetControlMode (CANSpeedController::kPosition);
 
-//    m_distanceGains.switchToGains (*this);
+    switchToGain (m_distanceGains);
 
     Set (position);
 
@@ -36,21 +53,21 @@ void SmartTalon::goAt (double speed)
 {
     SetControlMode (CANSpeedController::kSpeed);
 
-//    m_speedGains.switchToGains (*this);
+    switchToGain (m_speedGains);
 
     speed = (speed > 1) ? 1 : speed;
     speed = (speed < -1) ? -1 : speed;
 
     speed = (speed > 0) ? speed * m_maxForwardSpeed : speed * m_maxReverseSpeed;
 
-    Set(speed);
+    Set (speed);
 }
 
 void SmartTalon::goDistance (double distance)
 {
     SetControlMode (CANSpeedController::kPosition);
 
-//    m_distanceGains.switchToGains (*this);
+    switchToGain (m_distanceGains);
 
     double cPos = GetPosition ();
 
@@ -168,8 +185,6 @@ void SmartTalon::tuneRate (double pInit, double goalRate, int IZone, double F)
     SetD (0);
     SetF (F);
     SetIzone (IZone);
-
-
 
     int phase = 1;
     bool notTuned = true;

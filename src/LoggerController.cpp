@@ -5,7 +5,7 @@
  *      Author: connortess
  */
 
-#include <LoggerController.h>
+#include "LoggerController.h"
 
 LoggerController::LoggerController()
 {

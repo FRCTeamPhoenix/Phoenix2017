@@ -26,8 +26,6 @@ public:
     void setIZone(int newIZone);
     void setFeedForward(double newFeedForward);
 
-//    void switchToGains();
-
 private:
     double m_P = 0;
 

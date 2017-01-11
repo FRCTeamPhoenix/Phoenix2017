@@ -28,13 +28,14 @@ public:
     void tuneRate(double pInit, double goalRate, int IZone, double F);
 
 private:
+
+    void switchToGain(PIDGains gains);
     double m_goal;
 
     double m_maxForwardSpeed;
     double m_maxReverseSpeed;
 
     Timer m_tuneTimer;
-
 
     PIDGains m_distanceGains;
     PIDGains m_speedGains;
