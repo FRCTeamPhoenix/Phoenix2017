@@ -13,7 +13,7 @@ class Robot: public SampleRobot
     Talon m_FLDrive;
     Talon m_BRDrive;
     Talon m_BLDrive;
-//    LoggerController m_loggerController;
+    LoggerController m_loggerController;
 
 
 public:
@@ -21,27 +21,27 @@ public:
             m_FRDrive(PortAssign::frontRightWheelMotor),
             m_FLDrive(PortAssign::frontLeftWheelMotor),
             m_BRDrive(PortAssign::backRightWheelMotor),
-            m_BLDrive(PortAssign::backLeftWheelMotor)
-//            m_loggerController()
+            m_BLDrive(PortAssign::backLeftWheelMotor),
+            m_loggerController()
         {
         }
 	void RobotInit() override {
-//	    LOGI << "Start Robot Init";
+	    LOGI << "Start Robot Init";
 
 	}
 
 	void Autonomous() {
-//	    LOGI << "Start Auto";
+	    LOGI << "Start Auto";
 
 	}
 
 	void OperatorControl() {
-//	    LOGI << "Start Teleop";
+	    LOGI << "Start Teleop";
 
 	}
 
 	void Test() {
-//	    LOGI << "Start Test Mode";
+	    LOGI << "Start Test Mode";
 	}
 
 };

@@ -9,7 +9,7 @@
 
 LoggerController::LoggerController()
 {
-//    initLogger();
+    initLogger();
 }
 
 LoggerController::~LoggerController()
@@ -17,7 +17,7 @@ LoggerController::~LoggerController()
     // TODO Auto-generated destructor stub
 }
 
-void initLogger(){
+void LoggerController::initLogger(){
     //Logger initialized with Debug severity
     plog::init(plog::debug, "/home/lvuser/robot_log.txt");
 
