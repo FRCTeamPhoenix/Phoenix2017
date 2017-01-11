@@ -5,10 +5,10 @@
  *      Author: lukec
  */
 
-#ifndef SRC_SHOOTER_H_
-#define SRC_SHOOTER_H_
+#ifndef SRC_SHOOTERCONTROLLER_H_
+#define SRC_SHOOTERCONTROLLER_H_
 #include "WPIlib.h"
-class Shooter
+class ShooterController
 {
 private:
  Talon* m_rightFlyWheelMotor;
@@ -17,7 +17,7 @@ private:
  Encoder* m_leftFlyWheelEncoder;
 
 	 void stop(); //Stop!!
-	 void Start(); //start da fly wheels
+	 void start(); //start da fly wheels
 public:
  enum STATE
  {
@@ -33,8 +33,13 @@ public:
  	 STATE getState();//Getter
 
 
-	Shooter();
-	virtual ~Shooter();
+	ShooterController(
+			Talon* rightFlyWheelMotor,
+			Talon* leftFlyWheelMotor,
+			Encoder* rightFlyWheelEncoder,
+			Encoder* leftFlyWheelEncoder
+			);
+	virtual ~ShooterController();
 };
 
-#endif /* SRC_SHOOTER_H_ */
+#endif /* SRC_SHOOTERCONTROLLER_H_ */
