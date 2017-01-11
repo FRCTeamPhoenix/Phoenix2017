@@ -3,7 +3,7 @@
 #include "constants.h"
 #include "plog/Log.h"
 #include "sys/stat.h"
-//#include "LoggerController.h"
+#include "LoggerController.h"
 
 using namespace std;
 
