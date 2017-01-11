@@ -51,6 +51,22 @@ void ConfigEditor::getConfig() {
    }
 }
 
+void ConfigEditor::setInt(std::string key, int value) {
+    Preferences::GetInstance()->PutInt(key, value);
+}
+
+void ConfigEditor::setFloat(std::string key, float value) {
+    Preferences::GetInstance()->PutFloat(key, value);
+}
+
+void ConfigEditor::setDouble(std::string key, double value) {
+    Preferences::GetInstance()->PutDouble(key, value);
+}
+
+void ConfigEditor::setString(std::string key, std::string value) {
+    Preferences::GetInstance()->PutString(key, value);
+}
+
 int ConfigEditor::getInt(std::string key, int defaultValue) {
    return Preferences::GetInstance()->GetInt(key, defaultValue);
 }
