@@ -88,15 +88,16 @@ void ConfigEditor::saveConfig() {
 
    if(! isType(newValue,type))
       return;
-
-   if(type == "int") {
-      Preferences::GetInstance()->PutInt(keyName, std::stoi(newValue));
-   } else if(type == "float") {
-      Preferences::GetInstance()->PutFloat(keyName, std::stof(newValue));
-   } else if(type == "double") {
-      Preferences::GetInstance()->PutDouble(keyName, std::stod(newValue));
-   } else {
-      Preferences::GetInstance()->PutString(keyName, newValue);
+   if(!ConfigVariables::protection[pos]) {
+       if(type == "int") {
+          Preferences::GetInstance()->PutInt(keyName, std::stoi(newValue));
+       } else if(type == "float") {
+          Preferences::GetInstance()->PutFloat(keyName, std::stof(newValue));
+       } else if(type == "double") {
+          Preferences::GetInstance()->PutDouble(keyName, std::stod(newValue));
+       } else {
+          Preferences::GetInstance()->PutString(keyName, newValue);
+       }
    }
 }
 

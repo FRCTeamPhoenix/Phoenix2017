@@ -22,12 +22,23 @@ namespace ConfigVariables {
    const static std::string variables[numberOfVars] = {
          "PID_p",
          "PID_i",
-         "PID_d"
+         "PID_d",
+         "PID_iz",
+         "PID_f"
    };
    const static std::string types[numberOfVars] = {
-         "float", //PID_p
-         "float", //PID_i
-         "float"  //PID_d
+         "double", //PID_p
+         "double", //PID_i
+         "double", //PID_d,
+         "double", //PID_iz
+         "double"  //PID_f
+   };
+   const static double protection[numberOfVars] = {
+         true,
+         true,
+         true,
+         true,
+         true
    };
 };
 
