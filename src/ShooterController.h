@@ -8,38 +8,33 @@
 #ifndef SRC_SHOOTERCONTROLLER_H_
 #define SRC_SHOOTERCONTROLLER_H_
 #include "WPIlib.h"
+#include "FlyWheels.h"
+#include "Turret.h"
+#include "constants.h"
+
 class ShooterController
 {
-private:
- Talon* m_rightFlyWheelMotor;
- Talon* m_leftFlyWheelMotor;
- Encoder* m_rightFlyWheelEncoder;
- Encoder* m_leftFlyWheelEncoder;
 
-	 void stop(); //Stop!!
-	 void start(); //start da fly wheels
 public:
  enum STATE
  {
 	 IDLE,    //Resting
-	 SPINNING,//Gaining speed
-	 LOADING, //loader
-	 SHOOTING,//fire in the hole
-	 STOP     //EStop
+	 AUTO,    //Auto
+	 TELEOP   //Teleop
  };
 
  	 void run();
- 	 STATE setState();//Setter
+ 	 void setState(STATE state);//Setter
  	 STATE getState();//Getter
 
 
-	ShooterController(
-			Talon* rightFlyWheelMotor,
-			Talon* leftFlyWheelMotor,
-			Encoder* rightFlyWheelEncoder,
-			Encoder* leftFlyWheelEncoder
-			);
+	ShooterController
+	(
+
+	);
 	virtual ~ShooterController();
+private:
+	STATE m_state;
 };
 
 #endif /* SRC_SHOOTERCONTROLLER_H_ */

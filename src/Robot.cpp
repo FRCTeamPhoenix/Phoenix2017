@@ -4,6 +4,7 @@
 #include "plog/Log.h"
 #include "sys/stat.h"
 #include "LoggerController.h"
+#include "ShooterController.h"
 
 using namespace std;
 
@@ -14,6 +15,7 @@ class Robot: public SampleRobot
     Talon m_BRDrive;
     Talon m_BLDrive;
     LoggerController m_loggerController;
+    ShooterController m_shooterController;
 
 
 public:

@@ -7,18 +7,10 @@
 
 #include <ShooterController.h>
 
-ShooterController::ShooterController(
-		Talon* rightFlyWheelMotor,
-		Talon* leftFlyWheelMotor,
-		Encoder* rightFlyWheelEncoder,
-		Encoder* leftFlyWheelEncoder
-		):
-		m_rightFlyWheelMotor(rightFlyWheelMotor),
-		m_leftFlyWheelMotor(leftFlyWheelMotor),
-		m_rightFlyWheelEncoder(rightFlyWheelEncoder),
-		m_leftFlyWheelEncoder(leftFlyWheelEncoder)
-{
+ShooterController::ShooterController()
 
+{
+	m_state = IDLE;
 }
 
 ShooterController::~ShooterController()
@@ -28,32 +20,30 @@ ShooterController::~ShooterController()
 
 void ShooterController::run()
 {
-	switch(getState())
+	switch (getState())
 	{
 	case IDLE:
+
 		break;
-	case STOP:
+
+	case AUTO:
+
 		break;
-	case SPINNING:
-		break;
-	case SHOOTING:
-		break;
-	case LOADING:
+
+	case TELEOP:
+
 		break;
 	}
 }
 
-void ShooterController::start()
-{
 
-}
 
 ShooterController::STATE ShooterController::getState()
 {
-
+	return m_state;
 }
 
-ShooterController::STATE ShooterController::setState()
+void ShooterController::setState(STATE state)
 {
-
+	m_state = state;
 }

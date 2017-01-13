@@ -7,12 +7,50 @@
 
 #include <FlyWheels.h>
 
-FlyWheels::FlyWheels() {
-	// TODO Auto-generated constructor stub
+FlyWheels::FlyWheels(SmartTalon& rightFlyWheelMotor,
+		SmartTalon& leftFlyWheelMotor, Joystick* gamepad):
+		m_rightFlyWheelMotor(rightFlyWheelMotor), m_leftFlyWheelMotor(
+				leftFlyWheelMotor), m_gamepad(gamepad) {
+
+	m_state = STATE::OFF;
+}
+
+FlyWheels::~FlyWheels()
+{
 
 }
 
-FlyWheels::~FlyWheels() {
-	// TODO Auto-generated destructor stub
+void FlyWheels::run()
+{
+	switch (getState())
+	{
+	case OFF:
+		m_rightFlyWheelMotor.goAt(0.0); //stop right FlyWheel
+		m_leftFlyWheelMotor.goAt(0.0); //stop left FlyWheel
+
+		if (m_gamepad->GetRawButton(DriveStationConstants::buttonRT))
+		{
+			setState(ON);
+		}
+		break;
+	case ON:
+		m_rightFlyWheelMotor.goAt(motorSpeed); // set right FlyWheel speed
+		m_leftFlyWheelMotor.goAt(motorSpeed); //set left Flywheel speed
+
+		if (m_gamepad->GetRawButton(DriveStationConstants::buttonLT))
+		{
+			setState(OFF);
+		}
+		break;
+	}
 }
 
+FlyWheels::STATE FlyWheels::getState()
+{
+	return m_state;
+}
+void FlyWheels::setState(STATE state)
+{
+	m_state = state;
+
+}
