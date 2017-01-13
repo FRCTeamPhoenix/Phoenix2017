@@ -28,6 +28,7 @@ class Climber
         virtual ~Climber();
         void stop();
         void run();
+        void start();
 
     private:
         Talon * m_motor;
