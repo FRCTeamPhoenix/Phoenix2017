@@ -4,6 +4,7 @@
 #include "plog/Log.h"
 #include "sys/stat.h"
 #include "LoggerController.h"
+#include "ConfigEditor.h"
 
 using namespace std;
 
@@ -15,6 +16,8 @@ class Robot: public SampleRobot
     Talon m_BLDrive;
     LoggerController m_loggerController;
 
+    ConfigEditor m_configEditor;
+
 
 public:
         Robot():
@@ -22,7 +25,9 @@ public:
             m_FLDrive(PortAssign::frontLeftWheelMotor),
             m_BRDrive(PortAssign::backRightWheelMotor),
             m_BLDrive(PortAssign::backLeftWheelMotor),
-            m_loggerController()
+            m_loggerController(),
+            m_configEditor()
+
         {
         }
 	void RobotInit() override {
@@ -51,11 +56,12 @@ public:
 	}
 
 	void Test() {
-	    LOGI << "Start Test Mode";
-            while(IsEnabled() && IsTest())
-            {
 
-            }
+	    LOGI << "Start Test Mode";
+	    while(IsTest() && IsEnabled())
+	    {
+	        m_configEditor.update();
+	    }
 	}
 
 };
