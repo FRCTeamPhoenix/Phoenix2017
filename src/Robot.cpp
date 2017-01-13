@@ -28,20 +28,34 @@ public:
 	void RobotInit() override {
 	    LOGI << "Start Robot Init";
 
+
 	}
 
 	void Autonomous() {
 	    LOGI << "Start Auto";
+            while(IsEnabled() && IsAutonomous())
+            {
+
+            }
 
 	}
 
 	void OperatorControl() {
 	    LOGI << "Start Teleop";
 
+	    while(IsEnabled() && IsOperatorControl())
+	    {
+
+	    }
+
 	}
 
 	void Test() {
 	    LOGI << "Start Test Mode";
+            while(IsEnabled() && IsTest())
+            {
+
+            }
 	}
 
 };

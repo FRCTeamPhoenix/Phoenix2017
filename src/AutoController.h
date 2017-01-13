@@ -1,11 +1,10 @@
 #pragma once
 
-#include "Actions.h"
-#include "BaseController.h"
+#include "Actions/Actions.h"
 #include "CommandParser.h"
 #include <queue>
 
-class AutoController : public BaseController
+class AutoController
 {
 public:
     AutoController(void);

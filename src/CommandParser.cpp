@@ -1,30 +1,27 @@
 #include "CommandParser.h"
 
-#include <iostream>
-#include <sstream>
-#include <WPILib.h>
+
 
 #define ACTION_PAIR(n) {#n, createAction<n>}
 
 /* Add ACTION_PAIR for every existing action. */
 _pmap CommandParser::parseMap =
 {
-    ACTION_PAIR(ActionNone),
-    ACTION_PAIR(ActionPrint),
+
 };
 
-CommandParser::CommandParser(std::string filename)
-    : m_input(filename)
+CommandParser::CommandParser(std::string filename) :
+       m_input(filename)
 {
 }
 
 CommandParser::~CommandParser(void)
-{}
-
-void
-CommandParser::parse(std::queue<Action*>* queue)
 {
-    // SmartDashboard::PutString("DB/String 7", "Blah");
+    m_input.close();
+}
+
+void CommandParser::parse(std::queue<Action*>* queue)
+{
     std::string line;
     int currentLine = 0;
     while (std::getline(m_input, line))
@@ -44,12 +41,10 @@ CommandParser::parse(std::queue<Action*>* queue)
             if (Action* (*generator)(double) = parseMap[actionName])
                 queue->push(generator(value));
             else
-                std::cerr << "Found nonexistent command at line "
-                          << currentLine << "." << std::endl;
+                std::cerr << "Found nonexistent command at line " << currentLine << "." << std::endl;
 
             if (split.peek() == EOF)
-                std::cerr << "Found garbage at end of line "
-                          << currentLine << "." << std::endl;
+                std::cerr << "Found garbage at end of line " << currentLine << "." << std::endl;
         }
         catch (...)
         {
@@ -64,7 +59,7 @@ CommandParser::parse(std::queue<Action*>* queue)
  *
  * Used as a function pointer.
  */
-template <class A>
+template<class A>
 Action*
 createAction(double value)
 {
