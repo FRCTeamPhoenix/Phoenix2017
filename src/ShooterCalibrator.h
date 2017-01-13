@@ -27,6 +27,11 @@ public:
 
 private:
 
+   // Reference distance/power pairings for calibration
+   double referenceVals[2][4];
+
+   double interpolateLinear(double distance);
+
 };
 
 
