@@ -37,24 +37,21 @@ double ShooterCalibrator::getFlywheelPower(double distance)
 
 double ShooterCalibrator::interpolateLinear(double distance) {
 
-   // table index of upper bound on distance
-   int upperBound = -1;
+   // Table indexes of lower and upper bounds on distance
+   // (Lower bound will be -1 if the distance is lower than ALL reference values)
+   int lowerBound = -1;
+   int upperBound = 0;
 
    for (int i = 0; i <= 3; i++) {
-
-      if (distance <= referenceVals[i][0]) {
-         upperBound = i;
+      if (distance >= referenceVals[i][0]) {
+         lowerBound = i;
          break;
       }
-
-      // Fire at full power if maximum
-      if (upperBound == -1) {
-         return 1;
-      }
-
    }
 
-      return 0;
+   upperBound = lowerBound + 1;
+
+   return 0;
 
 }
 
