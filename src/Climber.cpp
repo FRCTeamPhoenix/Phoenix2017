@@ -8,41 +8,35 @@
 
 Climber::Climber(
         Talon * motor,
-        Joystick * gamepad) {
+        Joystick * gamepad)
+{
     m_motor = motor;
     m_gamepad = gamepad;
-    m_state = false;
-
-}
-Climber::~Climber(){
 }
 
-void Climber::run(){
+Climber::~Climber()
+{
+}
 
-    bool m_climb = m_gamepad->GetRawButton(buttonNames::buttonA);
-
-    switch (m_climb){
-            if(m_climb){
-                m_motor->Set(1.0f);
-            } else {
-                stop();
+void Climber::run()
+{
+    //bool m_climb = m_gamepad->GetRawButton(buttonNames::buttonA); //Reason why is because we need to setup buttons
+    switch (m_state)
+    {
+        case OFF:
+            if (!m_gamepad->GetRawButton(buttonNames::buttonA))
+            {
+                break;
             }
+            m_state = ON;
+            break;
+
+        case ON:
+            if (m_gamepad->GetRawButton(buttonNames::buttonA))
+            {
             }
 
-
-
-
-
-    //WE NEED STOP METHOD
+    }
 
 
 }
-
-
-
-
-
-
-
-
-

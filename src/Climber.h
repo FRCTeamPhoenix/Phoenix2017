@@ -5,6 +5,7 @@
  *      Author: evsci_000
  */
 #include "WPILib.h"
+#include "constants.h"
 #ifndef SRC_CLIMBER_H_
 #define SRC_CLIMBER_H_
 
@@ -16,21 +17,22 @@
 class Climber
 {
     public:
-
-        bool m_state;
+        enum STATE
+         {
+             OFF,
+             ON
+         };
         Climber(Talon * motor,
                 Joystick * gamepad
-                );
+        );
         virtual ~Climber();
-
+        void stop();
         void run();
 
     private:
         Talon * m_motor;
         Joystick * m_gamepad;
-
-
-        void stop();
+        STATE m_state;
 
 
 };
