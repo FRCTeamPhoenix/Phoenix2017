@@ -17,6 +17,8 @@ class ShooterCalibrator
 
 public:
 
+   const static int DP_PAIRS = 4;
+
    /* Constructor will eventually be changed to take in a file containing a table of
     * measured distance/power pairings, for use in interpolation. */
    ShooterCalibrator();
@@ -28,9 +30,13 @@ public:
 private:
 
    // Reference distance/power pairings for calibration
-   double referenceVals[2][4];
+   double refVals[DP_PAIRS][2];
 
    double interpolateLinear(double distance);
+
+   void sortRefVals(double (&referenceVals)[DP_PAIRS][2]);
+
+   void printRefVals(double (&referenceVals)[DP_PAIRS][2]);
 
 };
 
