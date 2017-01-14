@@ -7,7 +7,7 @@
 
 #ifndef SRC_SHOOTER_H_
 #define SRC_SHOOTER_H_
-#include "WPIlib.h"
+#include "WPILib.h"
 class Shooter
 {
 private:

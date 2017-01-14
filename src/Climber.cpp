@@ -5,6 +5,7 @@
  *      Author: evsci_000
  */
 #include "Climber.h"
+#include "constants.h"
 
 Climber::Climber(
         Talon * motor,
@@ -37,7 +38,7 @@ void Climber::run()
     {
         case OFF:
             // Button A is the climbing button
-            if (!m_gamepad->GetRawButton(buttonNames::buttonA))
+            if (!m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonA))
             {
                 break;
             }
@@ -45,13 +46,13 @@ void Climber::run()
             break;
 
         case ON:
-            if (m_gamepad->GetRawButton(buttonNames::buttonA))
+            if (m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonA))
             {
                 start();
             }
 
             // Emergency stop button for the robot is the start button
-            if (m_gamepad->GetRawButton(buttonNames::buttonStart))
+            if (m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonStart))
             {
                 m_state = OFF;
                 break;

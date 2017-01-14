@@ -1,9 +1,9 @@
-
 #include "WPILib.h"
 #include "constants.h"
 #include "plog/Log.h"
 #include "sys/stat.h"
 #include "LoggerController.h"
+#include "ConfigEditor.h"
 
 using namespace std;
 
@@ -43,7 +43,6 @@ class Robot: public SampleRobot
         void Test() {
             LOGI << "Start Test Mode";
         }
-
 };
 
 START_ROBOT_CLASS(Robot)
