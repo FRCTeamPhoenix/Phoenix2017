@@ -4,10 +4,14 @@
 #ifndef INC_2017_PRESEASON_MECHANISMS_SMARTTALON_H
 #define INC_2017_PRESEASON_MECHANISMS_SMARTTALON_H
 
+#include <iostream>
 #include "WPILib.h"
 #include "PIDGains.h"
 #include "CANTalon.h"
+#include "json.hpp"
 
+using namespace std;
+using json=nlohmann::json;
 class SmartTalon : public CANTalon
 {
 public:
