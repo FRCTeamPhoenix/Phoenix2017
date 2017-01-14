@@ -35,10 +35,10 @@ class relativeMecanumDrivetrain
 public:
     relativeMecanumDrivetrain(SmartTalon& FRTalon, SmartTalon& FLTalon, SmartTalon& BRTalon, SmartTalon& BLTalon);
 
-    void moveDistance(double distance, double angle);
+    void moveDistance(double distance, double angle, double speed);
     void moveAt(double speed, double angle);
     void rotate(double angle);
-    void moveRelative(double FB, double LR);
+    void moveRelative(double FB, double LR, double rotation);
     void stop();
 
 private:

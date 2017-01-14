@@ -11,16 +11,16 @@ SmartTalon::SmartTalon (int deviceNumber, double maxForwardSpeed, double maxReve
         m_maxForwardSpeed(maxForwardSpeed),
         m_maxReverseSpeed(maxReverseSpeed),
         m_tuneTimer(),
-        m_distanceGains(0,
+        m_distanceGains(5.4,
                         0,
-                        0,
-                        0,
-                        0),
-        m_speedGains(0,
+                        108,
+                        4000,
+                        0.5),
+        m_speedGains(1,
+                     0.005,
                      0,
-                     0,
-                     0,
-                     0)
+                     4000,
+                     0.5)
 
 
 {
@@ -39,9 +39,10 @@ void SmartTalon::switchToGain (PIDGains gains)
     SetF (gains.getFeedForward ());
 }
 
-void SmartTalon::goTo (double position)
+void SmartTalon::goTo (double position, double speed)
 {
     SetControlMode (CANSpeedController::kPosition);
+    ConfigMaxOutputVoltage(speed * 12);
 
     switchToGain (m_distanceGains);
 
@@ -52,6 +53,8 @@ void SmartTalon::goTo (double position)
 void SmartTalon::goAt (double speed)
 {
     SetControlMode (CANSpeedController::kSpeed);
+    ConfigMaxOutputVoltage(12);
+
 
     switchToGain (m_speedGains);
 
@@ -63,9 +66,13 @@ void SmartTalon::goAt (double speed)
     Set (speed);
 }
 
-void SmartTalon::goDistance (double distance)
+void SmartTalon::goDistance (double distance, double speed)
 {
     SetControlMode (CANSpeedController::kPosition);
+    ConfigMaxOutputVoltage(speed * 12);
+
+    SetPosition(0);
+    Set(0);
 
     switchToGain (m_distanceGains);
 
@@ -155,7 +162,7 @@ void SmartTalon::tunePosition (double pInit, double tuneDistance, double F)
         else if (changeCount > 1)
         {
             ocillation = true;
-            SetD (GetD () + 10 * GetP ());
+            SetD (GetD () + GetP ());
         }
         else
         {

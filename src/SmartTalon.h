@@ -13,9 +13,9 @@ class SmartTalon : public CANTalon
 public:
     SmartTalon(int deviceNumber, double maxForwardSpeed, double maxReverseSpeed);
 
-    void goTo(double position);
+    void goTo(double position, double speed);
     void goAt(double speed);
-    void goDistance(double distance);
+    void goDistance(double distance, double speed);
 
     double getGoal();
 

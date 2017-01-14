@@ -29,31 +29,31 @@ void relativeMecanumDrivetrain::stop ()
 
 double relativeMecanumDrivetrain::getXComponent (double magnitude, double angle)
 {
-    angle -= 45;
+    angle += 45;
     angle *= (M_PI / 180);
 
-    return magnitude * cos(angle);
+    return magnitude / cos(angle);
 }
 
 double relativeMecanumDrivetrain::getYComponent (double magnitude, double angle)
 {
-    angle -= 45;
+    angle += 45;
     angle *= (M_PI / 180);
 
-    return magnitude * sin(angle);
+    return magnitude / sin(angle);
 }
 
 
-void relativeMecanumDrivetrain::moveDistance (double distance, double angle)
+void relativeMecanumDrivetrain::moveDistance (double distance, double angle, double speed)
 {
     double distanceX = getXComponent(distance, angle);
     double distanceY = getYComponent(distance, angle);
 
-    m_FLTalon.goDistance (distanceX);
-    m_BRTalon.goDistance (distanceX);
+    m_FLTalon.goDistance (distanceX, speed);
+    m_BRTalon.goDistance (distanceX, speed);
 
-    m_FRTalon.goDistance (distanceY);
-    m_BLTalon.goDistance (distanceY);
+    m_FRTalon.goDistance (distanceY, speed);
+    m_BLTalon.goDistance (distanceY, speed);
 }
 
 void relativeMecanumDrivetrain::moveAt (double speed, double angle)
@@ -61,14 +61,14 @@ void relativeMecanumDrivetrain::moveAt (double speed, double angle)
     double speedX = getXComponent(speed, angle);
     double speedY = getYComponent(speed, angle);
 
-    m_FLTalon.goDistance (speedX);
-    m_BRTalon.goDistance (speedX);
+    m_FLTalon.goAt (speedX);
+    m_BRTalon.goAt (speedX);
 
-    m_FRTalon.goDistance (speedY);
-    m_BLTalon.goDistance (speedY);
+    m_FRTalon.goAt (speedY);
+    m_BLTalon.goAt (speedY);
 }
 
-void relativeMecanumDrivetrain::moveRelative (double FB, double LR)
+void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotation)
 {
     double x = cos(M_PI_4) * FB + cos(-M_PI_4) * LR;
     double y = sin(M_PI_4) * FB + sin(-M_PI_4) * LR;
@@ -79,12 +79,17 @@ void relativeMecanumDrivetrain::moveRelative (double FB, double LR)
     y = y > 1   ?   1   : y;
     y = y < -1  ?  -1   : y;
 
-    m_FLTalon.goAt (x);
-    m_BRTalon.goAt (x);
 
 
-    m_FRTalon.goAt (y);
-    m_BLTalon.goAt (y);
+
+    m_FLTalon.goAt (x + rotation);
+    m_BRTalon.goAt (x - rotation);
+
+
+    m_FRTalon.goAt (y - rotation);
+    m_BLTalon.goAt (y + rotation);
 
 }
+
+
 
