@@ -20,12 +20,14 @@ Climber::~Climber()
 
 void Climber::start()
 {
-    // TODO Make Start When we have Motors
+    // TODO Not sure if talons or smarttalons will be used, start might need to be changed
+    m_motor->Set(1.0f);
 }
 
 void Climber::stop()
 {
-    // TODO Make stop when we have Motors
+    // TODO Not sure if talons or smarttalons will be used, stop might need to be changed
+    m_motor->Set(0.0f);
 }
 
 void Climber::run()
@@ -34,6 +36,7 @@ void Climber::run()
     switch (m_state)
     {
         case OFF:
+            // Button A is the climbing button
             if (!m_gamepad->GetRawButton(buttonNames::buttonA))
             {
                 break;
@@ -42,7 +45,6 @@ void Climber::run()
             break;
 
         case ON:
-            // Button A is the climbing button
             if (m_gamepad->GetRawButton(buttonNames::buttonA))
             {
                 start();
