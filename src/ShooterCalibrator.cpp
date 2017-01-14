@@ -48,11 +48,6 @@ ShooterCalibrator::ShooterCalibrator()
 
 }
 
-double ShooterCalibrator::getFlywheelPower(double distance)
-{
-   return 0;
-}
-
 double ShooterCalibrator::interpolateLinear(double distance) {
 
    int lowerBound = -1;
@@ -98,6 +93,41 @@ void printRefVals(double (&referenceVals)[ShooterCalibrator::DP_PAIRS][2])
       std::cout << "]" << '\n';
    }
 
+}
+
+// Required initial velocity to shoot from a given distance, when stationary
+// Lookup table will be used to convert velocity to power
+double getRequiredStartingVelocity(double distance, double shootingElevation, double height)
+{
+   return sqrt(distance*distance*ShooterCalibrator::g
+         /(cos(shootingElevation)*cos(shootingElevation)*(distance*tan(shootingElevation) - height)));
+}
+
+// TODO: Use encoder info to calculate current sideways velocity
+double getCurrentSidewaysVelocity()
+{
+   return 0;
+}
+
+double getRequiredFlywheelVelocity(double distance, double shootingElevation, double height)
+{
+   double vN = getRequiredStartingVelocity(distance, shootingElevation, height);
+   double vR = getCurrentSidewaysVelocity();
+   return sqrt((vN*vN - vR*vR)/(cos(shootingElevation)*cos(shootingElevation)));
+}
+
+double getStationaryDistance(double startingVelocity, double shootingElevation)
+{
+   return 2*startingVelocity*startingVelocity*cos(shootingElevation)*cos(shootingElevation)/ShooterCalibrator::g;
+}
+
+double ShooterCalibrator::getFlywheelPower(double distance, double shootingElevation, double height)
+{
+   //double v0 = getRequiredFlywheelVelocity(distance, shootingElevation, height);
+   //double dx = getStationaryDistance(v0, shootingElevation);
+   // Table lookup: required power for dx (interpolation)
+   // return required power
+   return 0;
 }
 
 ShooterCalibrator::~ShooterCalibrator()

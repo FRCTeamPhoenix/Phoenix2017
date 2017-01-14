@@ -9,6 +9,7 @@
  */
 
 #include "WPILib.h"
+#include "math.h"
 #ifndef SRC_SHOOTERCALIBRATOR_H_
 #define SRC_SHOOTERCALIBRATOR_H_
 
@@ -21,13 +22,14 @@ public:
     * measured distance/power pairings, for use in interpolation. */
    ShooterCalibrator();
 
-   double getFlywheelPower(double distance);
+   double getFlywheelPower(double distance, double shootingElevation, double height);
 
    virtual ~ShooterCalibrator();
 
-
    // Number of distance/power pairings in table
       const static int DP_PAIRS = 4;
+
+      const static int g = 9.8;
 
 private:
 
@@ -37,6 +39,13 @@ private:
 
    void printRefVals(double (&referenceVals)[DP_PAIRS][2]);
 
+   double getRequiredStartingVelocity(double distance, double shootingElevation, double height);
+
+   double getCurrentSidewaysVelocity();
+
+   double getRequiredFlywheelVelocity(double distance, double shootingElevation, double height);
+
+   double getStationaryDistance(double startingVelocity, double shootingElevation);
 
    // Reference distance/power pairings for calibration
    double refVals[DP_PAIRS][2];
