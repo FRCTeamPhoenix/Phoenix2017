@@ -31,7 +31,7 @@ void FlyWheels::run()
 		m_rightFlyWheelMotor.goAt(0.0); //stop right FlyWheel
 		m_leftFlyWheelMotor.goAt(0.0); //stop left FlyWheel
 
-		if (m_gamepad.GetRawButton(DriveStationConstants::buttonRT))
+		if (m_gamepad.GetRawButton(DriveStationConstants::triggerRT))
 		{
 			setState(ON);
 		}
@@ -40,7 +40,7 @@ void FlyWheels::run()
 		m_rightFlyWheelMotor.goAt(motorSpeed); // set right FlyWheel speed
 		m_leftFlyWheelMotor.goAt(motorSpeed); //set left Flywheel speed
 
-		if (m_gamepad.GetRawButton(DriveStationConstants::buttonLT))
+		if (m_gamepad.GetRawButton(DriveStationConstants::triggerLT))
 		{
 			setState(OFF);
 		}

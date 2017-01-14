@@ -4,24 +4,23 @@
 
 #include "PIDGains.h"
 
-
-PIDGains::PIDGains (double P, double I, double D, int IZone, double FeedForward)
+PIDGains::PIDGains(double P, double I, double D, int IZone, double FeedForward)
 {
-    setP (P);
-    setI (I);
-    setD (D);
-    setIZone (IZone);
-    setFeedForward (FeedForward);
+    setP(P);
+    setI(I);
+    setD(D);
+    setIZone(IZone);
+    setFeedForward(FeedForward);
 
 }
 
-void PIDGains::set (double newP, double newI, double newD, int newIZone, double newFeedForward)
+void PIDGains::set(double newP, double newI, double newD, int newIZone, double newFeedForward)
 {
-    setP (newP);
-    setI (newI);
-    setD (newD);
-    setIZone (newIZone);
-    setFeedForward (newFeedForward);
+    setP(newP);
+    setI(newI);
+    setD(newD);
+    setIZone(newIZone);
+    setFeedForward(newFeedForward);
 }
 
 //void PIDGains::switchToGains (SmartTalon &talon)
@@ -33,34 +32,32 @@ void PIDGains::set (double newP, double newI, double newD, int newIZone, double 
 //    talon.SetF (m_FeedForward);
 //}
 
-double PIDGains::getP ()
+double PIDGains::getP()
 {
     return m_P;
 }
 
-double PIDGains::getI ()
+double PIDGains::getI()
 {
     return m_I;
 }
 
-double PIDGains::getD ()
+double PIDGains::getD()
 {
     return m_D;
 }
 
-int PIDGains::getIZone ()
+int PIDGains::getIZone()
 {
     return m_IZone;
 }
 
-double PIDGains::getFeedForward ()
+double PIDGains::getFeedForward()
 {
     return m_FeedForward;
 }
 
-
-
-void PIDGains::setP (double newP)
+void PIDGains::setP(double newP)
 {
     if (newP < 0)
     {
@@ -72,7 +69,7 @@ void PIDGains::setP (double newP)
     }
 }
 
-void PIDGains::setI (double newI)
+void PIDGains::setI(double newI)
 {
     if (newI < 0)
     {
@@ -84,7 +81,7 @@ void PIDGains::setI (double newI)
     }
 }
 
-void PIDGains::setD (double newD)
+void PIDGains::setD(double newD)
 {
     if (newD < 0)
     {
@@ -96,7 +93,7 @@ void PIDGains::setD (double newD)
     }
 }
 
-void PIDGains::setIZone (int newIZone)
+void PIDGains::setIZone(int newIZone)
 {
     if (newIZone < 0)
     {
@@ -108,7 +105,7 @@ void PIDGains::setIZone (int newIZone)
     }
 }
 
-void PIDGains::setFeedForward (double newFeedForward)
+void PIDGains::setFeedForward(double newFeedForward)
 {
     if (newFeedForward < 0)
     {

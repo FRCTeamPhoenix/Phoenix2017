@@ -1,4 +1,3 @@
-
 #include "WPILib.h"
 #include "constants.h"
 #include "plog/Log.h"
@@ -7,6 +6,7 @@
 #include "FlyWheels.h"
 #include "Turret.h"
 #include "ShooterController.h"
+#include "ConfigEditor.h"
 
 using namespace std;
 
@@ -25,10 +25,10 @@ class Robot: public SampleRobot
     Turret m_turret;
     LoggerController m_loggerController;
     ShooterController m_shooterController;
-
+    ConfigEditor m_configEditor;
 
 public:
-        Robot():
+    Robot() :
             m_FRDrive(PortAssign::frontRightWheelMotor),
             m_FLDrive(PortAssign::frontLeftWheelMotor),
             m_BRDrive(PortAssign::backRightWheelMotor),
@@ -41,28 +41,44 @@ public:
 			m_flywheel(m_rightFlyWheelMotor,m_leftFlyWheelMotor, m_gamepad),
 			m_turret(m_turretRotateMotor, m_gamepad),
             m_loggerController(),
-			m_shooterController(m_flywheel, m_turret)
+			m_shooterController(m_flywheel, m_turret),
+            m_configEditor()
 
+    {
+    }
+    void RobotInit() override
+    {
+        LOGI << "Start Robot Init";
+
+    }
+
+    void Autonomous()
+    {
+        LOGI << "Start Auto";
+        while (IsEnabled() && IsAutonomous())
         {
+
         }
-	void RobotInit() override {
-	    LOGI << "Start Robot Init";
 
-	}
+    }
+    void OperatorControl()
+    {
+        LOGI << "Start Teleop";
 
-	void Autonomous() {
-	    LOGI << "Start Auto";
-	    m_shooterController.run();
-	}
+        while (IsEnabled() && IsOperatorControl())
+        {
 
-	void OperatorControl() {
-	    LOGI << "Start Teleop";
+        }
+    }
 
-	}
-
-	void Test() {
-	    LOGI << "Start Test Mode";
-	}
+    void Test()
+    {
+        LOGI << "Start Test Mode";
+        while (IsTest() && IsEnabled())
+        {
+            m_configEditor.update();
+        }
+    }
 
 };
 
