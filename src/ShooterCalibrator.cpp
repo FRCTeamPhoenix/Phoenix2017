@@ -10,6 +10,7 @@
 
 #include <ShooterCalibrator.h>
 
+// Retrieve and organize reference distance/power values
 ShooterCalibrator::ShooterCalibrator()
 {
 
@@ -28,7 +29,7 @@ ShooterCalibrator::ShooterCalibrator()
    refVals[3][0] = 25;
    refVals[3][1] = 0.8;
 
-   // Sort reference distance-power value pairs in order of increasing distance (selection sort)
+   // Sort reference distance/power pairs in order of increasing distance (selection sort)
    for (int i = 1; i < ShooterCalibrator::DP_PAIRS; i++)
    {
       double currentDistance = refVals[i][0];
@@ -54,7 +55,34 @@ double ShooterCalibrator::getFlywheelPower(double distance)
 
 double ShooterCalibrator::interpolateLinear(double distance) {
 
-   return 0;
+   int lowerBound = -1;
+   for (int i = 0; i < ShooterCalibrator::DP_PAIRS; i++) {
+      if (distance >= refVals[i][0]) {
+         lowerBound = i;
+         break;
+      }
+   }
+
+   // Temporary ~ a [much] better method of extrapolation will be needed
+   // If distance is less than the lowest entry's, round up to lowest entry's power
+   if (lowerBound == -1) {
+      return refVals[0][1];
+   }
+   // If distance is greater than the highest entry's, round down to highest entry's power
+   else if (lowerBound == DP_PAIRS) {
+      return refVals[DP_PAIRS - 1][1];
+   }
+
+   else {
+
+      // Change in required power (% of total) per unit distance (m)
+      double slope = (refVals[lowerBound + 1][1] - refVals[lowerBound][1])
+            / (refVals[lowerBound + 1][0] - refVals[lowerBound][0]);
+
+      // Linear interpolation
+      return refVals[lowerBound + 1][1] + slope*(distance - refVals[lowerBound][0]);
+
+   }
 
 }
 
