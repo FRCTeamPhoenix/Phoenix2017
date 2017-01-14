@@ -24,7 +24,10 @@ ShooterController::~ShooterController()
 
 void ShooterController::run()
 {
-	switch (getState())
+	m_flywheel.run();
+	m_turret.run();
+
+	switch (m_state)
 	{
 	case IDLE:
 

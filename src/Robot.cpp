@@ -55,19 +55,20 @@ public:
     void Autonomous()
     {
         LOGI << "Start Auto";
+        m_shooterController.setState(ShooterController::AUTO);
         while (IsEnabled() && IsAutonomous())
         {
-
+        	m_shooterController.run();
         }
 
     }
     void OperatorControl()
     {
         LOGI << "Start Teleop";
-
+        m_shooterController.setState(ShooterController::TELEOP);
         while (IsEnabled() && IsOperatorControl())
         {
-
+        	m_shooterController.run();
         }
     }
 
