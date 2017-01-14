@@ -5,7 +5,7 @@
 #include "relativeMecanumDrivetrain.h"
 #include "plog/Log.h"
 #include "sys/stat.h"
-//#include "ADIS16448_IMU.h"
+#include "ADIS16448_IMU.h"
 //#include "LoggerController.h"
 
 using namespace std;
@@ -49,23 +49,24 @@ public:
 	}
 
 	void OperatorControl() {
+		weirdBoardThing.Reset();
 
         while(IsEnabled() && IsOperatorControl())
         {
-//            std::ostringstream outputX;
-//			outputX << "Weird Gyro X: ";
-//			outputX << (weirdBoardThing.GetAngleX());
-//			SmartDashboard::PutString("DB/String 5", outputX.str());
-//
-//            std::ostringstream outputY;
-//			outputY << "Weird Gyro Y: ";
-//			outputY << (weirdBoardThing.GetAngleY());
-//			SmartDashboard::PutString("DB/String 6", outputY.str());
-//
-//            std::ostringstream outputZ;
-//			outputZ << "Weird Gyro Z: ";
-//			outputZ << (weirdBoardThing.GetAngleX());
-//			SmartDashboard::PutString("DB/String 7", outputZ.str());
+            std::ostringstream outputX;
+			outputX << "Weird Gyro X: ";
+			outputX << (weirdBoardThing.GetAngleX());
+			SmartDashboard::PutString("DB/String 5", outputX.str());
+
+            std::ostringstream outputY;
+			outputY << "Weird Gyro Y: ";
+			outputY << (weirdBoardThing.GetAngleY());
+			SmartDashboard::PutString("DB/String 6", outputY.str());
+
+            std::ostringstream outputZ;
+			outputZ << "Weird Gyro Z: ";
+			outputZ << (weirdBoardThing.GetAngleZ());
+			SmartDashboard::PutString("DB/String 7", outputZ.str());
 
             double FrontBack = -m_gamepad.GetY ();
             double LeftRight = m_gamepad.GetX ();
