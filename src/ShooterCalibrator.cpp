@@ -28,6 +28,23 @@ ShooterCalibrator::ShooterCalibrator()
    refVals[3][0] = 25;
    refVals[3][1] = 0.8;
 
+   // Sort reference distance-power value pairs in order of increasing distance (selection sort)
+   for (int i = 1; i < ShooterCalibrator::DP_PAIRS; i++)
+   {
+      double currentDistance = refVals[i][0];
+      double currentPower = refVals[i][1];
+      int j = i;
+      while (j > 0 && refVals[j - 1][0] > currentDistance)
+      {
+         refVals[j][0] = refVals[j - 1][0];
+         refVals[j][1] = refVals[j - 1][1];
+         j--;
+      }
+      refVals[j][0] = currentDistance;
+      refVals[j][1] = currentPower;
+   }
+
+
 }
 
 double ShooterCalibrator::getFlywheelPower(double distance)
@@ -38,28 +55,6 @@ double ShooterCalibrator::getFlywheelPower(double distance)
 double ShooterCalibrator::interpolateLinear(double distance) {
 
    return 0;
-
-}
-
-// Sort reference distance-power value pairs in order of increasing distance
-void sortRefVals(double (&referenceVals)[ShooterCalibrator::DP_PAIRS][2])
-{
-
-   // Selection sort
-   for (int i = 1; i < ShooterCalibrator::DP_PAIRS; i++)
-   {
-      double currentDistance = referenceVals[i][0];
-      double currentPower = referenceVals[i][1];
-      int j = i;
-      while (j > 0 && referenceVals[j - 1][0] > currentDistance)
-      {
-         referenceVals[j][0] = referenceVals[j - 1][0];
-         referenceVals[j][1] = referenceVals[j - 1][1];
-         j--;
-      }
-      referenceVals[j][0] = currentDistance;
-      referenceVals[j][1] = currentPower;
-   }
 
 }
 
