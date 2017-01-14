@@ -14,7 +14,8 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
     m_FRTalon(FRTalon),
     m_FLTalon(FLTalon),
     m_BRTalon(BRTalon),
-    m_BLTalon(BLTalon)
+    m_BLTalon(BLTalon),
+    m_driveTrain(FLTalon, BLTalon, FRTalon, BLTalon)
 {
 }
 
@@ -43,6 +44,16 @@ double relativeMecanumDrivetrain::getYComponent (double magnitude, double angle)
     return magnitude / sin(angle);
 }
 
+void relativeMecanumDrivetrain::rotate (double angle, double speed)
+{
+    double rotation = angle * 23;
+    m_FLTalon.goDistance (rotation, speed);
+    m_BRTalon.goDistance (-rotation, speed);
+
+    m_FRTalon.goDistance (-rotation, speed);
+    m_BLTalon.goDistance (rotation, speed);
+
+}
 
 void relativeMecanumDrivetrain::moveDistance (double distance, double angle, double speed)
 {

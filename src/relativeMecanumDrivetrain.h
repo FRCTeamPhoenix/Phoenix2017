@@ -37,15 +37,18 @@ public:
 
     void moveDistance(double distance, double angle, double speed);
     void moveAt(double speed, double angle);
-    void rotate(double angle);
+    void rotate(double angle, double speed);
     void moveRelative(double FB, double LR, double rotation);
     void stop();
+
+
 
 private:
 
     double getXComponent(double magnitude, double angle);
     double getYComponent(double magnitude, double angle);
 
+    RobotDrive m_driveTrain;
 
     SmartTalon& m_FRTalon;
     SmartTalon& m_FLTalon;
