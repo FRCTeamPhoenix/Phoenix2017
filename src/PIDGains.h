@@ -19,7 +19,6 @@ public:
     int getIZone();
     double getFeedForward();
 
-
     void setP(double newP);
     void setI(double newI);
     void setD(double newD);
