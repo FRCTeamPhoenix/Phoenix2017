@@ -14,10 +14,17 @@ struct PortAssign {
    const static uint32_t frontLeftWheelMotor = 1;
    const static uint32_t frontRightWheelMotor = 2;
    const static uint32_t backRightWheelMotor = 3;
+   const static uint32_t leftFlyWheelMotor = 5;
+   const static uint32_t rightFlyWheelMotor = 6;
+   const static uint32_t turretRotationMotor = 7;
 
    //Controllers
    const static uint32_t joystick = 0;
    const static uint32_t gamepad = 1;
+};
+
+struct RobotConstants{
+	constexpr static float turretDamp = 0.6f;
 };
 
 namespace DriveStationConstants{

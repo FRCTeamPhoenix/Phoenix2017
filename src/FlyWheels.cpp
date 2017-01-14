@@ -7,10 +7,13 @@
 
 #include <FlyWheels.h>
 
-FlyWheels::FlyWheels(SmartTalon& rightFlyWheelMotor,
-		SmartTalon& leftFlyWheelMotor, Joystick* gamepad):
-		m_rightFlyWheelMotor(rightFlyWheelMotor), m_leftFlyWheelMotor(
-				leftFlyWheelMotor), m_gamepad(gamepad) {
+FlyWheels::FlyWheels(
+		SmartTalon& rightFlyWheelMotor,
+		SmartTalon& leftFlyWheelMotor,
+		Joystick& gamepad):
+		m_rightFlyWheelMotor(rightFlyWheelMotor),
+		m_leftFlyWheelMotor(leftFlyWheelMotor),
+		m_gamepad(gamepad) {
 
 	m_state = STATE::OFF;
 }
@@ -22,13 +25,13 @@ FlyWheels::~FlyWheels()
 
 void FlyWheels::run()
 {
-	switch (getState())
+	switch (m_state)
 	{
 	case OFF:
 		m_rightFlyWheelMotor.goAt(0.0); //stop right FlyWheel
 		m_leftFlyWheelMotor.goAt(0.0); //stop left FlyWheel
 
-		if (m_gamepad->GetRawButton(DriveStationConstants::buttonRT))
+		if (m_gamepad.GetRawButton(DriveStationConstants::buttonRT))
 		{
 			setState(ON);
 		}
@@ -37,7 +40,7 @@ void FlyWheels::run()
 		m_rightFlyWheelMotor.goAt(motorSpeed); // set right FlyWheel speed
 		m_leftFlyWheelMotor.goAt(motorSpeed); //set left Flywheel speed
 
-		if (m_gamepad->GetRawButton(DriveStationConstants::buttonLT))
+		if (m_gamepad.GetRawButton(DriveStationConstants::buttonLT))
 		{
 			setState(OFF);
 		}

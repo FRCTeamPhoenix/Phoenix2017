@@ -7,7 +7,11 @@
 
 #include <ShooterController.h>
 
-ShooterController::ShooterController()
+ShooterController::ShooterController(
+		FlyWheels& flywheel,
+		Turret& turret):
+		m_flywheel(flywheel),
+		m_turret(turret)
 
 {
 	m_state = IDLE;

@@ -29,7 +29,7 @@ public:
 	FlyWheels(
 			SmartTalon& rightFlyWheelMotor,
 			SmartTalon& leftFlyWheelMotor,
-			Joystick* gamepad
+			Joystick& gamepad
 	);
 	virtual ~FlyWheels();
 
@@ -39,7 +39,7 @@ private:
 	float motorSpeed = 0.5;
 	SmartTalon& m_rightFlyWheelMotor; //Right FlyWheel Motor
 	SmartTalon& m_leftFlyWheelMotor; // Left FlyWheel Motor
-	Joystick* m_gamepad; //Gamepad
+	Joystick& m_gamepad; //Gamepad
 
 };
 

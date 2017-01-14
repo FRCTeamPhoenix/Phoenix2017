@@ -29,17 +29,16 @@ public:
 	void setState(STATE state); //Set State
 
 	Turret(
-			SmartTalon& m_turretRotatorMotor,
-	        Joystick* gamepad
-	                   );
+			SmartTalon& turretRotatorMotor,
+	        Joystick& gamepad
+			);
 	virtual ~Turret();
 
 private:
 	SmartTalon& m_turretRotatorMotor; //Turret Motor
-	Joystick* m_gamepad;
+	Joystick& m_gamepad;
 
-	float m_gamepadJoystick = 0.0;
-	float motorSpeed = 0.5;
+	float m_gamepadJoystick;
 	STATE m_state;
 };
 

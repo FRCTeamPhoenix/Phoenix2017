@@ -30,11 +30,14 @@ public:
 
 	ShooterController
 	(
-
+			FlyWheels& flywheel,
+			Turret& turret
 	);
 	virtual ~ShooterController();
 private:
 	STATE m_state;
+	FlyWheels& m_flywheel;
+	Turret& m_turret;
 };
 
 #endif /* SRC_SHOOTERCONTROLLER_H_ */

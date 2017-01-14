@@ -5,15 +5,16 @@
  *      Author: lukec
  */
 
-#include <Turret.h>
+#include "Turret.h"
 
 Turret::Turret(
 		SmartTalon& turretRotatorMotor,
-		Joystick* gamepad):
+		Joystick& gamepad):
 		m_turretRotatorMotor(turretRotatorMotor),
 		m_gamepad(gamepad)
-{
 
+{
+	m_state = IDLE;
 
 }
 
@@ -25,7 +26,7 @@ Turret::~Turret()
 
 void Turret::run()
 {
-	switch (getState())
+	switch (m_state)
 	{
 	case IDLE:
 		m_turretRotatorMotor.goAt(0.0);
@@ -38,7 +39,7 @@ void Turret::run()
 		break;
 
 	case MOVING:
-		m_turretRotatorMotor.goAt(motorSpeed);
+		m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
 
 		if(gamepadJoystickWithDeadZone() == 0)
 		{
@@ -57,7 +58,7 @@ float Turret::gamepadJoystickWithDeadZone()
 	if (fabs(power) < 0.05f){
 		power = 0;
 	}
-	return power;
+	return power * RobotConstants::turretDamp;
 }
 
 Turret::STATE Turret::getState()
