@@ -17,11 +17,11 @@
 class Climber
 {
     public:
-        enum STATE
-         {
-             OFF,
-             ON
-         };
+        enum state
+        {
+            OFF,
+            ON
+        };
         Climber(Talon * motor,
                 Joystick * gamepad
         );
@@ -33,7 +33,7 @@ class Climber
     private:
         Talon * m_motor;
         Joystick * m_gamepad;
-        STATE m_state;
+        state m_state;
 
 
 };

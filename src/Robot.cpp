@@ -9,40 +9,40 @@ using namespace std;
 
 class Robot: public SampleRobot
 {
-    Talon m_FRDrive;
-    Talon m_FLDrive;
-    Talon m_BRDrive;
-    Talon m_BLDrive;
-    LoggerController m_loggerController;
+        Talon m_FRDrive;
+        Talon m_FLDrive;
+        Talon m_BRDrive;
+        Talon m_BLDrive;
+        LoggerController m_loggerController;
 
 
-public:
+    public:
         Robot():
             m_FRDrive(PortAssign::frontRightWheelMotor),
             m_FLDrive(PortAssign::frontLeftWheelMotor),
             m_BRDrive(PortAssign::backRightWheelMotor),
             m_BLDrive(PortAssign::backLeftWheelMotor),
             m_loggerController()
-        {
+    {
+    }
+        void RobotInit() override {
+            LOGI << "Start Robot Init";
+
         }
-	void RobotInit() override {
-	    LOGI << "Start Robot Init";
 
-	}
+        void Autonomous() {
+            LOGI << "Start Auto";
 
-	void Autonomous() {
-	    LOGI << "Start Auto";
+        }
 
-	}
+        void OperatorControl() {
+            LOGI << "Start Teleop";
 
-	void OperatorControl() {
-	    LOGI << "Start Teleop";
+        }
 
-	}
-
-	void Test() {
-	    LOGI << "Start Test Mode";
-	}
+        void Test() {
+            LOGI << "Start Test Mode";
+        }
 
 };
 
