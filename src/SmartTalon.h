@@ -5,6 +5,7 @@
 #define INC_2017_PRESEASON_MECHANISMS_SMARTTALON_H
 
 #include <fstream>
+#include <iostream>
 #include "WPILib.h"
 #include "PIDGains.h"
 #include "CANTalon.h"

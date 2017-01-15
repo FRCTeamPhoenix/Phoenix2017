@@ -13,25 +13,29 @@ SmartTalon::SmartTalon (int deviceNumber) :
 
 
 {
+    stringstream ss;
+    ss << deviceNumber;
+    string deviceNumberStr = ss.str();
+
 	ifstream json_file;
 	json_file.open("/home/lvuser/talons.json");
 	json talons;
 	json_file >> talons;
 	json_file.close();
-	m_distanceGains.set (talons[deviceNumber]["distance"]["p"],
-                         talons[deviceNumber]["distance"]["i"],
-                         talons[deviceNumber]["distance"]["d"],
-                         talons[deviceNumber]["distance"]["izone"],
-                         talons[deviceNumber]["distance"]["ff"]);
+	m_distanceGains.set (talons[deviceNumberStr]["distance"]["p"],
+                         talons[deviceNumberStr]["distance"]["i"],
+                         talons[deviceNumberStr]["distance"]["d"],
+                         talons[deviceNumberStr]["distance"]["izone"],
+                         talons[deviceNumberStr]["distance"]["ff"]);
 
-	m_speedGains.set (talons[deviceNumber]["speed"]["p"],
-                      talons[deviceNumber]["speed"]["i"],
-                      talons[deviceNumber]["speed"]["d"],
-                      talons[deviceNumber]["speed"]["izone"],
-                      talons[deviceNumber]["speed"]["ff"]);
+	m_speedGains.set (talons[deviceNumberStr]["speed"]["p"],
+                      talons[deviceNumberStr]["speed"]["i"],
+                      talons[deviceNumberStr]["speed"]["d"],
+                      talons[deviceNumberStr]["speed"]["izone"],
+                      talons[deviceNumberStr]["speed"]["ff"]);
 
-	m_maxForwardSpeed = talons[deviceNumber]["maxfvel"];
-	m_maxReverseSpeed = talons[deviceNumber]["maxrvel"];
+	m_maxForwardSpeed = talons[deviceNumberStr]["maxfvel"];
+	m_maxReverseSpeed = talons[deviceNumberStr]["maxrvel"];
 }
 
 double SmartTalon::getGoal ()

@@ -7,8 +7,11 @@
 #include "ADIS16448_IMU.h"
 #include "ConfigEditor.h"
 #include "LoggerController.h"
+#include <fstream>
+#include "json.hpp"
 
 using namespace std;
+using json=nlohmann::json;
 
 class Robot: public SampleRobot
 {
@@ -40,7 +43,6 @@ class Robot: public SampleRobot
         void RobotInit() override
         {
             LOGI << "Start Robot Init";
-
         }
 
         void Autonomous()

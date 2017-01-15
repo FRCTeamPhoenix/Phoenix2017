@@ -19,6 +19,7 @@ LoggerController::~LoggerController()
 
 void LoggerController::initLogger()
 {
+
     plog::init(plog::debug,"/home/lvuser/robot_log.txt",10000,2);
 
     static plog::RollingFileAppender<plog::UndecoratedFormatter> fileAppender("/home/lvuser/CAN_Speed_Tuning.csv"); // Create the 1st appender.
