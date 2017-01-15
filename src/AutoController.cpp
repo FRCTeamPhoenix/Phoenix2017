@@ -56,3 +56,9 @@ AutoController::clearQueue()
 	m_queue.pop();
     }
 }
+
+void
+AutoController::pushAction(Action* action)
+{
+    m_queue.push(action);
+}
