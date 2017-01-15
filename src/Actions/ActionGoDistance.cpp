@@ -20,11 +20,11 @@ ActionGoDistance::ActionGoDistance(relativeMecanumDrivetrain * driveTrain, doubl
 void ActionGoDistance::init()
 {
     m_initialized = true;
+    m_driveTrain->moveDistance(m_distance, m_angle, m_speed);
 }
 
 bool ActionGoDistance::execute()
 {
-    m_driveTrain->moveDistance(m_distance, m_angle, m_speed);
     return true;
 }
 

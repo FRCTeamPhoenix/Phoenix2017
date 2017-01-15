@@ -13,8 +13,15 @@
 class ActionRotate: public Action
 {
     public:
-        ActionRotate();
+        ActionRotate(relativeMecanumDrivetrain * driveTrain, double speed, double angle);
+        void init(void);
+        bool execute(void);
         virtual ~ActionRotate();
+
+    private:
+        relativeMecanumDrivetrain * m_driveTrain;
+        double m_angle;
+        double m_speed;
 };
 
 #endif /* SRC_ACTIONS_ACTIONROTATE_H_ */
