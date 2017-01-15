@@ -102,5 +102,14 @@ void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotat
 
 }
 
+double relativeMecanumDrivetrain::getAvgError ()
+{
+    int FL_error = m_FLTalon.GetClosedLoopError ();
+    int BR_error = m_BRTalon.GetClosedLoopError ();
+    int FR_error = m_FRTalon.GetClosedLoopError ();
+    int BL_error = m_BLTalon.GetClosedLoopError ();
 
+    return (FL_error + BR_error + FR_error + BL_error) / 4;
+
+}
 

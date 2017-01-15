@@ -40,6 +40,7 @@ public:
     void rotate(double angle, double speed);
     void moveRelative(double FB, double LR, double rotation);
     void stop();
+    double getAvgError();
 
 
 

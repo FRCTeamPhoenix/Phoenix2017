@@ -5,9 +5,11 @@
  *      Author: cooli
  */
 
-#include <Actions/ActionGoDistance.h>
+#include "ActionGoDistance.h"
+#include "../relativeMecanumDrivetrain.h"
 
-ActionGoDistance::ActionGoDistance(relativeMecanumDrivetrain * driveTrain, double distance, double angle, double speed):
+
+ActionGoDistance::ActionGoDistance(relativeMecanumDrivetrain& driveTrain, double distance, double angle, double speed):
     Action(),
     m_driveTrain(driveTrain),
     m_distance(distance),
@@ -20,7 +22,7 @@ ActionGoDistance::ActionGoDistance(relativeMecanumDrivetrain * driveTrain, doubl
 void ActionGoDistance::init()
 {
     m_initialized = true;
-    m_driveTrain->moveDistance(m_distance, m_angle, m_speed);
+    m_driveTrain.moveDistance(m_distance, m_angle, m_speed);
 }
 
 bool ActionGoDistance::execute()

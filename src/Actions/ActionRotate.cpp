@@ -5,9 +5,11 @@
  *      Author: cooli
  */
 
-#include <Actions/ActionRotate.h>
+#include "ActionRotate.h"
+#include "../relativeMecanumDrivetrain.h"
 
-ActionRotate::ActionRotate(relativeMecanumDrivetrain * driveTrain, double speed, double angle):
+
+ActionRotate::ActionRotate(relativeMecanumDrivetrain& driveTrain, double speed, double angle):
     Action(),
     m_driveTrain(driveTrain),
     m_speed(speed),
@@ -19,7 +21,7 @@ ActionRotate::ActionRotate(relativeMecanumDrivetrain * driveTrain, double speed,
 void ActionRotate::init()
 {
     m_initialized = true;
-    m_driveTrain->rotate(m_angle, m_speed);
+    m_driveTrain.rotate(m_angle, m_speed);
 }
 
 bool ActionRotate::execute()

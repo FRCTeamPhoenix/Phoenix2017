@@ -8,18 +8,20 @@
 #ifndef SRC_ACTIONS_ACTIONROTATE_H_
 #define SRC_ACTIONS_ACTIONROTATE_H_
 
-#include <Actions/Action.h>
+#include "Action.h"
+#include "../relativeMecanumDrivetrain.h"
+
 
 class ActionRotate: public Action
 {
     public:
-        ActionRotate(relativeMecanumDrivetrain * driveTrain, double speed, double angle);
+        ActionRotate(relativeMecanumDrivetrain& driveTrain, double speed, double angle);
         void init(void);
         bool execute(void);
         virtual ~ActionRotate();
 
     private:
-        relativeMecanumDrivetrain * m_driveTrain;
+        relativeMecanumDrivetrain& m_driveTrain;
         double m_angle;
         double m_speed;
 };

@@ -7,6 +7,8 @@
 #include "ADIS16448_IMU.h"
 #include "ConfigEditor.h"
 #include "LoggerController.h"
+#include "AutoController.h"
+#include "Actions.h"
 #include <fstream>
 #include "json.hpp"
 
@@ -26,6 +28,8 @@ class Robot: public SampleRobot
 	    ADIS16448_IMU weirdBoardThing;
         LoggerController m_loggerController;
         ConfigEditor m_configEditor;
+        AutoController m_autoController;
+
 
     public:
         Robot() :
@@ -36,7 +40,8 @@ class Robot: public SampleRobot
                 m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive),
                 m_gamepad(0),
                 m_loggerController(),
-                m_configEditor()
+                m_configEditor(),
+                m_autoController()
 
         {
         }
@@ -47,27 +52,15 @@ class Robot: public SampleRobot
 
         void Autonomous()
         {
+            m_autoController.clearQueue ();
+            m_autoController.pushAction (new ActionGoDistance(m_drivetrain, 3000, 0, 0.2));
+            m_autoController.pushAction (new ActionMotorDoneDistance(m_drivetrain, 300));
+            m_autoController.pushAction (new ActionGoDistance(m_drivetrain, 3000, 180, 0.2));
+
             LOGI << "Start Auto";
             while (IsEnabled() && IsAutonomous())
             {
-                m_drivetrain.moveDistance (5400, 0, 0.4);
-                SmartDashboard::PutString("DB/String 6", "Part 1");
-                Wait(1);
-                while (m_FRDrive.GetSpeed () > 50){ }
-                m_drivetrain.rotate (-30, 0.4);
-                SmartDashboard::PutString("DB/String 6", "Part 2");
-                Wait(1);
-                while (m_FRDrive.GetSpeed () > 50){ }
-			    m_drivetrain.moveDistance (900, 90, 0.4);
-                SmartDashboard::PutString("DB/String 6", "Part 3");
-                Wait(1);
-                while (m_FRDrive.GetSpeed () > 50){ }
-                m_drivetrain.moveDistance (1800, -90, 0.4);
-                SmartDashboard::PutString("DB/String 6", "Part 4");
-                Wait(1);
-                while (m_FRDrive.GetSpeed () > 50){ }
-                m_drivetrain.moveDistance (5400, -90, 0.4);
-                SmartDashboard::PutString("DB/String 6", "Part 5");
+                m_autoController.run ();
             }
 
         }
