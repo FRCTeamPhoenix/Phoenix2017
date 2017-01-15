@@ -19,6 +19,8 @@ class Robot: public SampleRobot
     SmartTalon m_rightFlyWheelMotor;
     SmartTalon m_leftFlyWheelMotor;
     SmartTalon m_turretRotateMotor;
+    DigitalInput m_leftLimitSwitch;
+    DigitalInput m_rightLimitSwitch;
     Joystick m_joystick;
     Joystick m_gamepad;
     FlyWheels m_flywheel;
@@ -36,10 +38,12 @@ public:
 			m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor,2000,2000),
 			m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor,2000,2000),
 			m_turretRotateMotor(PortAssign::turretRotationMotor,2000,200),
+			m_leftLimitSwitch(PortAssign::leftLimitSwitch),
+			m_rightLimitSwitch(PortAssign::rightLimitSwitch),
 			m_joystick(PortAssign::joystick),
 			m_gamepad(PortAssign::gamepad),
 			m_flywheel(m_rightFlyWheelMotor,m_leftFlyWheelMotor, m_gamepad),
-			m_turret(m_turretRotateMotor, m_gamepad),
+			m_turret(m_turretRotateMotor, m_leftLimitSwitch, m_rightLimitSwitch, m_gamepad),
             m_loggerController(),
 			m_shooterController(m_flywheel, m_turret),
             m_configEditor()

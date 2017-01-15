@@ -9,11 +9,15 @@
 
 Turret::Turret(
         SmartTalon& turretRotatorMotor,
+        DigitalInput& leftLimitSwitch,
+        DigitalInput& rightLimitSwitch,
         Joystick& gamepad):
         m_turretRotatorMotor(turretRotatorMotor),
+        m_leftLimitSwitch(leftLimitSwitch),
+        m_rightLimitSwitch(rightLimitSwitch),
         m_gamepad(gamepad)
 {
-    m_state = IDLE;
+    m_state = HOMING;
     m_gamepadJoystick = 0;
 }
 
@@ -23,30 +27,47 @@ Turret::~Turret()
 
 void Turret::run()
 {
-    switch (m_state)
-    {
-
-    //Idle state of Turret
-    //Changes to Moving when there is joystick movement that is not in the deadzone
-    case IDLE:
-        m_turretRotatorMotor.goAt(0.0);
-
-        if(gamepadJoystickWithDeadZone() != 0)
-        {
-            setState(MOVING);
-        }
-        break;
-
-        //Moving state of Turret
-        //Changes to Idle when there is no joystick movement
-    case MOVING:
-        m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
-
-        if(gamepadJoystickWithDeadZone() == 0)
+    //Homing State of Turret
+    //Returns Turret to right limit.
+    if(m_state == HOMING){
+        m_turretRotatorMotor.goAt(0.5);//will need to be changed. temp number.
+        if(m_rightLimitSwitch.Get() || m_leftLimitSwitch.Get())
         {
             setState(IDLE);
         }
-        break;
+    }
+    else{
+        switch (m_state)
+        {
+
+            //Idle state of Turret
+            //Changes to Moving when there is joystick movement that is not in the deadzone
+            case IDLE:
+                m_turretRotatorMotor.goAt(0.0);
+
+                if(gamepadJoystickWithDeadZone() != 0)
+                {
+                    setState(MOVING);
+                }
+                break;
+                //Moving state of Turret
+                //Changes to Idle when there is no joystick movement
+            case MOVING:
+                m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
+
+                if(m_rightLimitSwitch.Get() || m_leftLimitSwitch.Get())
+                {
+                    setState(IDLE);
+                }
+
+                if(gamepadJoystickWithDeadZone() == 0)
+                {
+                    setState(IDLE);
+                }
+                break;
+            case HOMING:
+                break;
+        }
     }
 }
 

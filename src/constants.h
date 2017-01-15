@@ -20,6 +20,11 @@ struct PortAssign {
    //Controllers
    const static uint32_t joystick = 0;
    const static uint32_t gamepad = 1;
+
+   //Limit Switches
+   const static uint32_t rightLimitSwitch = 1;
+   const static uint32_t leftLimitSwitch = 2;
+
 };
 
 struct RobotConstants{

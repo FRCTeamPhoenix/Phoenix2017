@@ -30,7 +30,7 @@ void FlyWheels::run()
 
     //Off State for the FlyWheels
     //Motors are given 0.0f to stop the flywheels
-    //Ganges state to On if the right trigger is pressed
+    //Changes state to On if the right trigger is pressed
     case OFF:
         m_rightFlyWheelMotor.goAt(0.0); //stop right FlyWheel
         m_leftFlyWheelMotor.goAt(0.0); //stop left FlyWheel
