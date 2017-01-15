@@ -7,7 +7,10 @@
 
 #include <Actions/ActionGoAt.h>
 
-ActionGoAt::ActionGoAt()
+ActionGoAt::ActionGoAt(relativeMecanumDrivetrain * driveTrain, double speed, double angle):
+    Action(),
+    m_driveTrain(driveTrain),
+    m_angle(angle)
 {
     // TODO Auto-generated constructor stub
 

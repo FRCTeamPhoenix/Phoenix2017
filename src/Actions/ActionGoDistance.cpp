@@ -7,14 +7,29 @@
 
 #include <Actions/ActionGoDistance.h>
 
-ActionGoDistance::ActionGoDistance()
+ActionGoDistance::ActionGoDistance(relativeMecanumDrivetrain * driveTrain, double distance, double angle, double speed):
+    Action(),
+    m_driveTrain(driveTrain),
+    m_distance(distance),
+    m_angle(angle),
+    m_speed(speed)
 {
-    // TODO Auto-generated constructor stub
 
+}
+
+void ActionGoDistance::init()
+{
+    m_initialized = true;
+}
+
+bool ActionGoDistance::execute()
+{
+    m_driveTrain->moveDistance(m_distance, m_angle, m_speed);
+    return true;
 }
 
 ActionGoDistance::~ActionGoDistance()
 {
-    // TODO Auto-generated destructor stub
+
 }
 

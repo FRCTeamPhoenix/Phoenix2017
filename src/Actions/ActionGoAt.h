@@ -13,8 +13,15 @@
 class ActionGoAt: public Action
 {
     public:
-        ActionGoAt();
+        ActionGoAt(relativeMecanumDrivetrain * driveTrain, double speed, double angle);
         virtual ~ActionGoAt();
+        void init(void);
+        bool execute(void);
+
+    private:
+        relativeMecanumDrivetrain * m_driveTrain;
+        double m_speed;
+        double m_angle;
 };
 
 #endif /* SRC_ACTIONS_ACTIONGOAT_H_ */
