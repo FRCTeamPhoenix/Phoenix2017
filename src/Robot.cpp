@@ -50,15 +50,22 @@ class Robot: public SampleRobot
             {
                 m_drivetrain.moveDistance (5400, 0, 0.4);
                 SmartDashboard::PutString("DB/String 6", "Part 1");
+                Wait(1);
                 while (m_FRDrive.GetSpeed () > 50){ }
                 m_drivetrain.rotate (-30, 0.4);
                 SmartDashboard::PutString("DB/String 6", "Part 2");
+                Wait(1);
                 while (m_FRDrive.GetSpeed () > 50){ }
-                m_drivetrain.moveDistance (1800, 180, 0.4);
+			    m_drivetrain.moveDistance (900, 90, 0.4);
                 SmartDashboard::PutString("DB/String 6", "Part 3");
+                Wait(1);
+                while (m_FRDrive.GetSpeed () > 50){ }
+                m_drivetrain.moveDistance (1800, -90, 0.4);
+                SmartDashboard::PutString("DB/String 6", "Part 4");
+                Wait(1);
                 while (m_FRDrive.GetSpeed () > 50){ }
                 m_drivetrain.moveDistance (5400, -90, 0.4);
-                SmartDashboard::PutString("DB/String 6", "Part 4");
+                SmartDashboard::PutString("DB/String 6", "Part 5");
             }
 
         }
