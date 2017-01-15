@@ -15,31 +15,28 @@ class Turret
 {
 
 public:
+    enum STATE
+    {
+        IDLE, //State of the Turret when it is not moving
+        MOVING //State of the Turret when it is moving/aiming
+    };
+    void run();
+    float gamepadJoystickWithDeadZone(); //Creates a deadzone for the gamepad joystick
 
-	enum STATE
-	{
-	IDLE, //Turret Rotating
-	MOVING //Turret IDLE
+    STATE getState(); // Gets the current state of Turret
+    void setState(STATE state); //Sets the state of Turret
 
-	};
-	void run();
-	float gamepadJoystickWithDeadZone();
-
-	STATE getState(); // Get State
-	void setState(STATE state); //Set State
-
-	Turret(
-			SmartTalon& turretRotatorMotor,
-	        Joystick& gamepad
-			);
-	virtual ~Turret();
+    Turret(
+            SmartTalon& turretRotatorMotor,
+            Joystick& gamepad
+    );
+    virtual ~Turret();
 
 private:
-	SmartTalon& m_turretRotatorMotor; //Turret Motor
-	Joystick& m_gamepad;
-
-	float m_gamepadJoystick;
-	STATE m_state;
+    SmartTalon& m_turretRotatorMotor; //Turret Motor for rotating the turret
+    Joystick& m_gamepad; //Turret uses a joystick on the gamepad
+    float m_gamepadJoystick; //Variable for the gamepad joystick value that is out putted
+    STATE m_state; //State variable for the Turret
 };
 
 #endif /* SRC_TURRET_H_ */

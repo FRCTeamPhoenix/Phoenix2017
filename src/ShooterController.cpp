@@ -8,13 +8,13 @@
 #include <ShooterController.h>
 
 ShooterController::ShooterController(
-		FlyWheels& flywheel,
-		Turret& turret):
-		m_flywheel(flywheel),
-		m_turret(turret)
+        FlyWheels& flywheel,
+        Turret& turret):
+        m_flywheel(flywheel),
+        m_turret(turret)
 
 {
-	m_state = IDLE;
+    m_state = IDLE;
 }
 
 ShooterController::~ShooterController()
@@ -24,33 +24,38 @@ ShooterController::~ShooterController()
 
 void ShooterController::run()
 {
-	m_flywheel.run();
-	m_turret.run();
+    //Run functinos of FlyWheels and Turret
+    m_flywheel.run();
+    m_turret.run();
 
-	switch (m_state)
-	{
-	case IDLE:
+    switch (m_state)
+    {
 
-		break;
+    //Idle state for the ShooterController
+    case IDLE:
 
-	case AUTO:
+        break;
 
-		break;
+    //Auto state for the ShooterController
+    case AUTO:
 
-	case TELEOP:
+        break;
 
-		break;
-	}
+    //Teleop state for the ShooterController
+    case TELEOP:
+
+        break;
+    }
 }
 
-
-
+//Gets the current state of the ShooterController state machine
 ShooterController::STATE ShooterController::getState()
 {
-	return m_state;
+    return m_state;
 }
 
+//Sets the state when there is a change in the ShooterController state machine
 void ShooterController::setState(STATE state)
 {
-	m_state = state;
+    m_state = state;
 }
