@@ -26,6 +26,8 @@ public:
 
     STATE getState(); // Gets the current state of Turret
     void setState(STATE state); //Sets the state of Turret
+    void autoTarget(float); //Follows the target for the shooter
+    float degreeToTicks(float);
 
     Turret(
             SmartTalon& turretRotatorMotor,

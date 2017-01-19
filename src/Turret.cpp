@@ -71,6 +71,14 @@ void Turret::run()
     }
 }
 
+void Turret::autoTarget(float degrees){
+    m_turretRotatorMotor.goDistance(degreeToTicks(degrees));
+}
+
+float Turret::degreeToTicks(float angle){
+    return angle * RobotConstants::degreesToTicks;
+}
+
 //Creates a function for the gamepad joystick with a deadzone
 //Has a damping effect because we do not want the turret moving at full speed
 float Turret::gamepadJoystickWithDeadZone()

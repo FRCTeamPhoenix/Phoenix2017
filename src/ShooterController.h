@@ -27,7 +27,6 @@ public:
     void setState(STATE state); //Sets the state of the ShooterController
     STATE getState(); //Gets the current state of the ShooterController
 
-
     ShooterController
     (
             FlyWheels& flywheel, //Takes in the FlyWheels
