@@ -60,11 +60,12 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
     double distanceX = getXComponent(distance, angle);
     double distanceY = getYComponent(distance, angle);
 
+    m_BLTalon.goDistance (distanceY, speed);
+
     m_FLTalon.goDistance (distanceX, speed);
     m_BRTalon.goDistance (distanceX, speed);
 
     m_FRTalon.goDistance (distanceY, speed);
-    m_BLTalon.goDistance (distanceY, speed);
 }
 
 void relativeMecanumDrivetrain::moveAt (double speed, double angle)

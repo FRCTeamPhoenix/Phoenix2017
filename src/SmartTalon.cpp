@@ -4,7 +4,7 @@
 
 #include "SmartTalon.h"
 
-SmartTalon::SmartTalon (int deviceNumber) :
+SmartTalon::SmartTalon (int deviceNumber, FeedbackDevice device) :
     CANTalon(deviceNumber),
     m_goal(0),
     m_tuneTimer(),
@@ -13,6 +13,7 @@ SmartTalon::SmartTalon (int deviceNumber) :
 
 
 {
+    SetFeedbackDevice(device);
     stringstream ss;
     ss << deviceNumber;
     string deviceNumberStr = ss.str();
@@ -36,6 +37,8 @@ SmartTalon::SmartTalon (int deviceNumber) :
 
 	m_maxForwardSpeed = talons[deviceNumberStr]["maxfvel"];
 	m_maxReverseSpeed = talons[deviceNumberStr]["maxrvel"];
+
+	SetSafetyEnabled(false);
 }
 
 double SmartTalon::getGoal ()
@@ -54,46 +57,41 @@ void SmartTalon::switchToGain (PIDGains gains)
 
 void SmartTalon::goTo (double position, double speed)
 {
-	SetControlMode (CANSpeedController::kPosition);
+    switchToGain (m_distanceGains);
+    SetControlMode (CANSpeedController::kPosition);
 	ConfigMaxOutputVoltage(speed * 12);
-
-	switchToGain (m_distanceGains);
-
 	Set (position);
 
 }
 
 void SmartTalon::goAt (double speed)
 {
+    speed = (speed > 1) ? 1 : speed;
+    speed = (speed < -1) ? -1 : speed;
+
+    speed = (speed > 0) ? speed * m_maxForwardSpeed : speed * m_maxReverseSpeed;
+
+    switchToGain (m_speedGains);
 	SetControlMode (CANSpeedController::kSpeed);
 	ConfigMaxOutputVoltage(12);
+//	SetEncPosition(0);
+	SetSetpoint(speed);
 
-
-	switchToGain (m_speedGains);
-
-	speed = (speed > 1) ? 1 : speed;
-	speed = (speed < -1) ? -1 : speed;
-
-	speed = (speed > 0) ? speed * m_maxForwardSpeed : speed * m_maxReverseSpeed;
-
-	Set (speed);
 }
 
 void SmartTalon::goDistance (double distance, double speed)
 {
-	SetControlMode (CANSpeedController::kPosition);
-	ConfigMaxOutputVoltage(speed * 12);
 
-	SetPosition(0);
+    double cPos = GetPosition ();
+
+    double fPos = cPos + distance;
+
+    switchToGain (m_distanceGains);
+    SetControlMode (CANSpeedController::kPosition);
+    ConfigMaxOutputVoltage(12);
+    SetEncPosition(0);
 	Set(0);
-
-	switchToGain (m_distanceGains);
-
-	double cPos = GetPosition ();
-
-	double fPos = cPos + distance;
-
-	Set (fPos);
+	SetSetpoint (fPos);
 
 }
 

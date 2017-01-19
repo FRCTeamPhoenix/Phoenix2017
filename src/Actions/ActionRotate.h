@@ -15,7 +15,7 @@
 class ActionRotate: public Action
 {
     public:
-        ActionRotate(relativeMecanumDrivetrain& driveTrain, double speed, double angle);
+        ActionRotate(relativeMecanumDrivetrain& driveTrain, double angle, double speed);
         void init(void);
         bool execute(void);
         virtual ~ActionRotate();

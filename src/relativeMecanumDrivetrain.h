@@ -49,12 +49,14 @@ private:
     double getXComponent(double magnitude, double angle);
     double getYComponent(double magnitude, double angle);
 
-    RobotDrive m_driveTrain;
+
 
     SmartTalon& m_FRTalon;
     SmartTalon& m_FLTalon;
     SmartTalon& m_BRTalon;
     SmartTalon& m_BLTalon;
+
+    RobotDrive m_driveTrain;
 
 };
 
