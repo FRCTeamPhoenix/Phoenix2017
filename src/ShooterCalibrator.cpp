@@ -95,6 +95,7 @@ void printRefVals(double (&referenceVals)[ShooterCalibrator::DP_PAIRS][2])
 
 }
 
+/*
 // Required initial velocity to shoot from a given distance, when stationary
 // Lookup table will be used to convert velocity to power
 double getRequiredStartingVelocity(double distance, double shootingElevation, double height)
@@ -129,6 +130,7 @@ double ShooterCalibrator::getFlywheelPower(double distance, double shootingEleva
    // return required power
    return 0;
 }
+*/
 
 ShooterCalibrator::~ShooterCalibrator()
 {

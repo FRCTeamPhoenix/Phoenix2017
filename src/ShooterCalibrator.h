@@ -29,8 +29,6 @@ public:
    // Number of distance/power pairings in table
       const static int DP_PAIRS = 4;
 
-      const static int g = 9.8;
-
 private:
 
    double interpolateLinear(double distance);
@@ -39,6 +37,7 @@ private:
 
    void printRefVals(double (&referenceVals)[DP_PAIRS][2]);
 
+   /*
    double getRequiredStartingVelocity(double distance, double shootingElevation, double height);
 
    double getCurrentSidewaysVelocity();
@@ -46,6 +45,7 @@ private:
    double getRequiredFlywheelVelocity(double distance, double shootingElevation, double height);
 
    double getStationaryDistance(double startingVelocity, double shootingElevation);
+   */
 
    // Reference distance/power pairings for calibration
    double refVals[DP_PAIRS][2];
