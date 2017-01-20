@@ -8,7 +8,7 @@
 #include "SmartTalon.h"
 #include "WPILib.h"
 
-class relativeMecanumDrivetrain
+class relativeMecanumDrivetrain : public PIDOutput, public PIDSource
 {
 
 /*
@@ -40,11 +40,25 @@ public:
     void rotate(double angle, double speed);
     void moveRelative(double FB, double LR, double rotation);
     void stop();
+
+    void PIDWrite(double output);
+    double PIDGet();
+
+    void SetPIDSourceType(PIDSourceType pidSource);
+
     double getAvgError();
 
+    CANSpeedController::ControlMode m_mode;
 
+    PIDController* m_distanceController;
 
 private:
+
+
+    double m_goalX;
+    double m_goalY;
+    double m_goalGyro;
+    double m_maxSpeed;
 
     double getXComponent(double magnitude, double angle);
     double getYComponent(double magnitude, double angle);

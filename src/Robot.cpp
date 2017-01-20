@@ -161,6 +161,10 @@ class Robot: public SampleRobot
 //                    m_drivetrain.G(2000, 0, 0.4);
 //                    init = true;
 
+            	std::stringstream mode;
+            	mode << "Current Mode: " << m_drivetrain.m_mode;
+            	SmartDashboard::PutString("DB/String 2", mode.str());
+
                 if (m_gamepad.GetRawButton(1))
                 {
                     m_FRDrive.tunePosition(2, 3200, 0.5);
@@ -181,12 +185,16 @@ class Robot: public SampleRobot
                 }
                 else if (m_gamepad.GetRawButton(4))
                 {
-                    m_drivetrain.moveDistance(2000, 0, 0.4);
+                    m_drivetrain.moveDistance(2000, 45, 0.05);
                 }
                 else if (m_gamepad.GetRawButton(5))
                 {
-                    m_drivetrain.moveDistance(20000, -160, 0.2);
+                    m_drivetrain.moveDistance(2000, -90, 0.05);
                 }
+                else if (m_gamepad.GetRawButton(6))
+				{
+					m_drivetrain.moveDistance(2000, -180, 0.05);
+				}
                 else if (m_gamepad.GetRawButton(11))
                 {
 					double FrontBack = -m_gamepad.GetY();
