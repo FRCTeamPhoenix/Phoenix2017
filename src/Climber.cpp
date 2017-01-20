@@ -24,7 +24,7 @@ void Climber::run()
     switch (m_state)
     {
         case OFF:
-            if (!m_gamepad->GetRawButton(buttonNames::buttonA))
+            if (!m_gamepad->GetRawButton(DriveStationConstants::buttonA))
             {
                 break;
             }
@@ -32,7 +32,7 @@ void Climber::run()
             break;
 
         case ON:
-            if (m_gamepad->GetRawButton(buttonNames::buttonA))
+            if (m_gamepad->GetRawButton(DriveStationConstants::buttonA))
             {
             }
 

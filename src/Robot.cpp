@@ -1,9 +1,9 @@
-
 #include "WPILib.h"
 #include "constants.h"
 #include "plog/Log.h"
 #include "sys/stat.h"
 #include "LoggerController.h"
+#include "ConfigEditor.h"
 
 using namespace std;
 
@@ -14,35 +14,55 @@ class Robot: public SampleRobot
     Talon m_BRDrive;
     Talon m_BLDrive;
     LoggerController m_loggerController;
-
+    ConfigEditor m_configEditor;
 
 public:
-        Robot():
+    Robot() :
             m_FRDrive(PortAssign::frontRightWheelMotor),
             m_FLDrive(PortAssign::frontLeftWheelMotor),
             m_BRDrive(PortAssign::backRightWheelMotor),
             m_BLDrive(PortAssign::backLeftWheelMotor),
-            m_loggerController()
+            m_loggerController(),
+            m_configEditor()
+
+    {
+    }
+    void RobotInit() override
+    {
+        LOGI << "Start Robot Init";
+
+    }
+
+    void Autonomous()
+    {
+        LOGI << "Start Auto";
+        while (IsEnabled() && IsAutonomous())
         {
+
         }
-	void RobotInit() override {
-	    LOGI << "Start Robot Init";
 
-	}
+    }
 
-	void Autonomous() {
-	    LOGI << "Start Auto";
+    void OperatorControl()
+    {
+        LOGI << "Start Teleop";
 
-	}
+        while (IsEnabled() && IsOperatorControl())
+        {
 
-	void OperatorControl() {
-	    LOGI << "Start Teleop";
+        }
 
-	}
+    }
 
-	void Test() {
-	    LOGI << "Start Test Mode";
-	}
+    void Test()
+    {
+
+        LOGI << "Start Test Mode";
+        while (IsTest() && IsEnabled())
+        {
+            m_configEditor.update();
+        }
+    }
 
 };
 
