@@ -10,14 +10,19 @@
 relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
                                                       SmartTalon &FLTalon,
                                                       SmartTalon &BRTalon,
-                                                      SmartTalon &BLTalon):
+                                                      SmartTalon &BLTalon,
+                                                      ADIS16448_IMU &gyro,
+                                                      HeadingControl::GyroAxes axis):
 
+    m_headingControl(gyro, axis, true),
     m_FRTalon(FRTalon),
     m_FLTalon(FLTalon),
     m_BRTalon(BRTalon),
     m_BLTalon(BLTalon),
     m_driveTrain(FLTalon, BLTalon, FRTalon, BLTalon)
+
 {
+    m_gyroSensitivity = 0.5;
     m_goalX = 0;
     m_goalY = 0;
     m_goalGyro = 0;
@@ -27,6 +32,7 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
 
     m_distanceController = new PIDController(0.001, 0, 0.000, this, this);
     m_distanceController->Enable();
+    m_distanceController->SetAbsoluteTolerance (800);
 }
 
 
@@ -92,6 +98,8 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
     m_maxSpeed = fabs(speed);
     m_goalX = distanceX;
     m_goalY = distanceY;
+
+    m_headingControl.keepAt ();
 
     m_FLTalon.SetEncPosition (0);
     m_BRTalon.SetEncPosition (0);
@@ -175,17 +183,6 @@ void relativeMecanumDrivetrain::PIDWrite (double output)
     	double speedX = 0;
     	double speedY = 0;
 
-    	if(fabs(m_goalX) < 0.05 && fabs(m_goalY) < 0.05)
-    	{
-            m_FLTalon.goAt (speedX);
-            m_BRTalon.goAt (speedX);
-
-            m_FRTalon.goAt (speedY);
-            m_BLTalon.goAt (speedY);
-
-            return;
-    	}
-
     	if(fabs(m_goalX) > fabs(m_goalY))
     	{
     		speedX = relativeMax;
@@ -201,16 +198,19 @@ void relativeMecanumDrivetrain::PIDWrite (double output)
     	speedX *= fabs(m_goalX) / m_goalX;
 
 
-        m_FLTalon.goAt (speedX);
-        m_BRTalon.goAt (speedX);
+        m_FLTalon.goAt (speedX + (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity));
+        m_BRTalon.goAt (speedX - (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity));
 
-        m_FRTalon.goAt (speedY);
-        m_BLTalon.goAt (speedY);
+        m_FRTalon.goAt (speedY - (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity));
+        m_BLTalon.goAt (speedY + (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity));
 
         std::stringstream speeds;
-        speeds << "Output: " << output << "  Scale X: " << speedX << "  Scale Y: " << speedY;
+        speeds << "Output Dist: " << output;
         SmartDashboard::PutString("DB/String 3", speeds.str());
 
+        std::stringstream rot;
+        rot << "Rotation: " << m_headingControl.getOutput();
+        SmartDashboard::PutString("DB/String 9", rot.str());
         LOGI << speeds.str();
     }
 }

@@ -6,6 +6,8 @@
 #define PHOENIX2017_RELATIVEMECANUMDRIVETRAIN_H
 
 #include "SmartTalon.h"
+#include "HeadingControl.h"
+#include "ADIS16448_IMU.h"
 #include "WPILib.h"
 
 class relativeMecanumDrivetrain : public PIDOutput, public PIDSource
@@ -33,7 +35,7 @@ class relativeMecanumDrivetrain : public PIDOutput, public PIDSource
  */
 
 public:
-    relativeMecanumDrivetrain(SmartTalon& FRTalon, SmartTalon& FLTalon, SmartTalon& BRTalon, SmartTalon& BLTalon);
+    relativeMecanumDrivetrain(SmartTalon& FRTalon, SmartTalon& FLTalon, SmartTalon& BRTalon, SmartTalon& BLTalon, ADIS16448_IMU& gyro, HeadingControl::GyroAxes axis);
 
     void moveDistance(double distance, double angle, double speed);
     void moveAt(double speed, double angle);
@@ -50,10 +52,13 @@ public:
 
     CANSpeedController::ControlMode m_mode;
 
-    PIDController* m_distanceController;
 
 private:
 
+    PIDController* m_distanceController;
+    HeadingControl m_headingControl;
+
+    double m_gyroSensitivity;
 
     double m_goalX;
     double m_goalY;

@@ -21,11 +21,12 @@ class Robot: public SampleRobot
         SmartTalon m_FLDrive;
         SmartTalon m_BRDrive;
         SmartTalon m_BLDrive;
+        ADIS16448_IMU m_gyro;
 
         relativeMecanumDrivetrain m_drivetrain;
 
         Joystick m_gamepad;
-	    ADIS16448_IMU weirdBoardThing;
+
         LoggerController m_loggerController;
         ConfigEditor m_configEditor;
         AutoController m_autoController;
@@ -37,7 +38,8 @@ class Robot: public SampleRobot
                 m_FLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
                 m_BRDrive(4, CANTalon::FeedbackDevice::QuadEncoder),
                 m_BLDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
-                m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive),
+                m_gyro(),
+                m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_gyro, HeadingControl::GyroAxes::x),
                 m_gamepad(0),
                 m_loggerController(),
                 m_configEditor(),
@@ -83,7 +85,7 @@ class Robot: public SampleRobot
 
         void OperatorControl()
         {
-            weirdBoardThing.Reset();
+            m_gyro.Reset();
             LOGI << "Start Teleop";
         	int count = 0;
 
@@ -161,7 +163,22 @@ class Robot: public SampleRobot
 //                    m_drivetrain.G(2000, 0, 0.4);
 //                    init = true;
 
-            	std::stringstream mode;
+				std::ostringstream outputX;
+				outputX << "Weird Gyro X: ";
+				outputX << (m_gyro.GetAngleX());
+				SmartDashboard::PutString("DB/String 6", outputX.str());
+
+				std::ostringstream outputY;
+				outputY << "Weird Gyro Y: ";
+				outputY << (m_gyro.GetAngleY());
+				SmartDashboard::PutString("DB/String 7", outputY.str());
+
+				std::ostringstream outputZ;
+				outputZ << "Weird Gyro Z: ";
+				outputZ << (m_gyro.GetAngleZ());
+				SmartDashboard::PutString("DB/String 8", outputZ.str());
+
+				std::stringstream mode;
             	mode << "Current Mode: " << m_drivetrain.m_mode;
             	SmartDashboard::PutString("DB/String 2", mode.str());
 
@@ -179,21 +196,21 @@ class Robot: public SampleRobot
 //                	m_BLDrive.goDistance(2000, 0.4);
 
                 }
-                else if (m_gamepad.GetRawButton(3))
+                else if (m_gamepad.GetRawButton(5))
                 {
-                    m_drivetrain.moveDistance(4000, 0, 0.1);
+                    m_drivetrain.moveDistance(8000, 0, 0.03);
                 }
                 else if (m_gamepad.GetRawButton(4))
                 {
                     m_drivetrain.moveDistance(2000, 60, 0.1);
                 }
-                else if (m_gamepad.GetRawButton(5))
-                {
-                    m_drivetrain.moveDistance(2000, -90, 0.1);
-                }
                 else if (m_gamepad.GetRawButton(6))
+                {
+                    m_drivetrain.moveDistance(8000, -90, 0.1);
+                }
+                else if (m_gamepad.GetRawButton(3))
 				{
-					m_drivetrain.moveDistance(4000, -180, 0.1);
+					m_drivetrain.moveDistance(8000, -180, 0.03);
 				}
                 else if (m_gamepad.GetRawButton(11))
                 {

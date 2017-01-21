@@ -8,7 +8,7 @@
 #include "WPILib.h"
 #include "ADIS16448_IMU.h"
 
-class HeadingControl : public 
+class HeadingControl : public PIDSource, public PIDOutput
 {
 public:
     enum GyroAxes {
@@ -17,12 +17,25 @@ public:
         z
     };
 
-    HeadingControl(GyroAxes axis, bool invertDirection)
+    HeadingControl(ADIS16448_IMU& gyro, GyroAxes axis, bool invertDirection);
 
+    double getOutput();
+    void setGoal(double goal);
+    void keepAt();
+    void changeAngle(double change);
 
 private:
-    ADIS16448_IMU m_gyro;
+
+    double PIDGet();
+    void PIDWrite(double output);
+
+
+    ADIS16448_IMU& m_gyro;
+    GyroAxes m_axisOfInterest;
     bool m_invertDirection;
+    double m_currentOutput;
+    PIDController m_gyroController;
+
 
 };
 
