@@ -15,6 +15,9 @@ struct PortAssign {
         const static uint32_t frontRightWheelMotor = 2;
         const static uint32_t backRightWheelMotor = 3;
 
+        const static uint32_t lidarTriggerPin = 8;
+        const static uint32_t lidarMonitorPin = 9;
+
 };
 
 namespace ConfigVariables {

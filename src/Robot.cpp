@@ -11,6 +11,7 @@
 #include "Actions/Actions.h"
 #include <fstream>
 #include "json.hpp"
+#include "Lidar.h"
 
 using namespace std;
 using json=nlohmann::json;
@@ -29,6 +30,7 @@ class Robot: public SampleRobot
         LoggerController m_loggerController;
         ConfigEditor m_configEditor;
         AutoController m_autoController;
+        Lidar m_lidar;
 
 
     public:
@@ -41,7 +43,8 @@ class Robot: public SampleRobot
                 m_gamepad(0),
                 m_loggerController(),
                 m_configEditor(),
-                m_autoController()
+                m_autoController(),
+                m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0)
 
         {
         }
