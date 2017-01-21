@@ -24,6 +24,8 @@ using json=nlohmann::json;
 
 void testSmartTalon(SmartTalon* talon, const char* name);
 #define TEST_SMART_TALON(talon) testSmartTalon(&talon, #talon)
+void testTalon(Talon* talon, const char* name);
+#define TEST_TALON(talon) testTalon(&talon, #talon)
 
 class Robot: public SampleRobot
 {
@@ -35,6 +37,8 @@ class Robot: public SampleRobot
     SmartTalon m_rightFlyWheelMotor;
     SmartTalon m_leftFlyWheelMotor;
     SmartTalon m_turretRotateMotor;
+    Talon m_loader;
+    Talon m_indexer;
     DigitalInput m_leftLimitSwitch;
     DigitalInput m_rightLimitSwitch;
     Joystick m_joystick;
@@ -62,6 +66,8 @@ public:
             m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
             m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
             m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
+            m_loader(0),
+            m_indexer(1),
             m_leftLimitSwitch(PortAssign::leftLimitSwitch),
             m_rightLimitSwitch( PortAssign::rightLimitSwitch),
             m_joystick(PortAssign::joystick),
@@ -135,6 +141,9 @@ public:
                 // TEST_SMART_TALON(m_feeder);
                 TEST_SMART_TALON(m_turretRotateMotor);
 
+                TEST_TALON(m_loader);
+                TEST_TALON(m_indexer);
+
                 LOGD << "Leaving Debug Test Mode";
             }
             while (IsTest())
@@ -179,4 +188,25 @@ testSmartTalon(SmartTalon* talon, const char* name)
     timer.Stop();
     talon->goAt(0.0);
     LOGI << name << "'s encoder delta: " << talon->Get() - initialPos;
+}
+
+void
+testTalon(Talon* talon, const char* name)
+{
+    Timer timer;
+
+    LOGI << "Spinning Talon " << name << " forward at 60% for 3 seconds.";
+    timer.Start();
+    while (timer.Get() < 3)
+        talon->Set(0.6);
+    timer.Stop();
+    talon->Set(0.0);
+
+    LOGI << "Spinning Talon " << name << " backward at 60% for 3 seconds.";
+    timer.Reset();
+    timer.Start();
+    while (timer.Get() < 3)
+        talon->Set(-0.6);
+    timer.Stop();
+    talon->Set(0.0);
 }
