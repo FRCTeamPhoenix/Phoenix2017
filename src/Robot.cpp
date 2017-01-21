@@ -181,19 +181,19 @@ class Robot: public SampleRobot
                 }
                 else if (m_gamepad.GetRawButton(3))
                 {
-                    m_drivetrain.moveAt(0.5, 0);
+                    m_drivetrain.moveDistance(4000, 0, 0.1);
                 }
                 else if (m_gamepad.GetRawButton(4))
                 {
-                    m_drivetrain.moveDistance(2000, 45, 0.05);
+                    m_drivetrain.moveDistance(2000, 60, 0.1);
                 }
                 else if (m_gamepad.GetRawButton(5))
                 {
-                    m_drivetrain.moveDistance(2000, -90, 0.05);
+                    m_drivetrain.moveDistance(2000, -90, 0.1);
                 }
                 else if (m_gamepad.GetRawButton(6))
 				{
-					m_drivetrain.moveDistance(2000, -180, 0.05);
+					m_drivetrain.moveDistance(4000, -180, 0.1);
 				}
                 else if (m_gamepad.GetRawButton(11))
                 {

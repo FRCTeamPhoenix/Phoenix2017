@@ -25,7 +25,7 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
 
     m_mode = CANSpeedController::ControlMode::kPosition;
 
-    m_distanceController = new PIDController(0.1, 0, 0, this, this);
+    m_distanceController = new PIDController(0.001, 0, 0.000, this, this);
     m_distanceController->Enable();
 }
 
