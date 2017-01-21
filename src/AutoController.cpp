@@ -6,7 +6,7 @@
 AutoController::AutoController(void)
     : m_parser("/home/lvuser/auto.txt")
 {
-    m_parser.parse(&m_queue);
+//    m_parser.parse(&m_queue);
 }
 
 AutoController::~AutoController(void)
@@ -35,7 +35,7 @@ AutoController::performAction(void)
     if (!currentAction->isInitialized())
 	    currentAction->init();
     /* Execute returns true if finished */
-    if (currentAction->execute())
+    else if (currentAction->execute())
     {
 	delete currentAction;
 	m_queue.pop();

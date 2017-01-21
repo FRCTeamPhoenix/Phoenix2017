@@ -20,6 +20,8 @@ public:
     HeadingControl(ADIS16448_IMU& gyro, GyroAxes axis, bool invertDirection);
 
     double getOutput();
+    bool isDone();
+
     void setGoal(double goal);
     void keepAt();
     void changeAngle(double change);

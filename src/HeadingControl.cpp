@@ -48,6 +48,30 @@ double HeadingControl::getOutput ()
     return m_currentOutput;
 }
 
+bool HeadingControl::isDone ()
+{
+    double angle = 0;
+    switch(m_axisOfInterest){
+        case x:
+            angle = m_gyro.GetAngleX();
+            break;
+        case y:
+            angle = m_gyro.GetAngleY();
+            break;
+        case z:
+            angle = m_gyro.GetAngleZ();
+            break;
+    }
+
+    double goal = m_gyroController.GetSetpoint ();
+
+    if(fabs(goal - angle) < 5){
+        return true;
+    }
+    return false;
+
+}
+
 void HeadingControl::setGoal (double goal)
 {
     m_gyroController.SetSetpoint (goal);
@@ -70,5 +94,16 @@ void HeadingControl::keepAt ()
 
 void HeadingControl::changeAngle (double change)
 {
-    m_gyroController.SetSetpoint (m_gyroController.GetSetpoint () + change);
+    switch(m_axisOfInterest){
+        case x:
+            m_gyroController.SetSetpoint (m_gyro.GetAngleX () + change);
+            break;
+        case y:
+            m_gyroController.SetSetpoint (m_gyro.GetAngleY () + change);
+            break;
+        case z:
+            m_gyroController.SetSetpoint (m_gyro.GetAngleZ () + change);
+            break;
+    }
 }
+

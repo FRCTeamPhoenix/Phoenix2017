@@ -11,14 +11,14 @@
 class ActionMotorDoneDistance : public Action
 {
 public:
-    ActionMotorDoneDistance(relativeMecanumDrivetrain& driveTrain, int allowedError);
+    ActionMotorDoneDistance(relativeMecanumDrivetrain& driveTrain);
     void init(void);
     bool execute(void);
     virtual ~ActionMotorDoneDistance();
 
 private:
     relativeMecanumDrivetrain& m_driveTrain;
-    int m_allowedError;
+
 };
 
 

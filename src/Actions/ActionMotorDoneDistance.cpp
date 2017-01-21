@@ -5,10 +5,9 @@
 #include "ActionMotorDoneDistance.h"
 
 
-ActionMotorDoneDistance::ActionMotorDoneDistance (relativeMecanumDrivetrain &driveTrain, int allowedError):
+ActionMotorDoneDistance::ActionMotorDoneDistance (relativeMecanumDrivetrain &driveTrain):
     Action(),
-    m_driveTrain(driveTrain),
-    m_allowedError(allowedError)
+    m_driveTrain(driveTrain)
 { }
 
 void ActionMotorDoneDistance::init()
@@ -18,7 +17,7 @@ void ActionMotorDoneDistance::init()
 
 bool ActionMotorDoneDistance::execute()
 {
-    if(m_driveTrain.getAvgError () < m_allowedError)
+    if(m_driveTrain.doneMove())
         return true;
     return false;
 }

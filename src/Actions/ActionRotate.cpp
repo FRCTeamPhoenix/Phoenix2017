@@ -21,18 +21,7 @@ ActionRotate::ActionRotate(relativeMecanumDrivetrain& driveTrain, double angle, 
 
 void ActionRotate::init()
 {
-
-    std::ostringstream Angel;
-    Angel << "Angle: ";
-    Angel << (m_angle);
-    SmartDashboard::PutString("DB/String 5", Angel.str());
-
-    std::ostringstream Speed;
-    Speed << "speed: ";
-    Speed << (m_speed);
-    SmartDashboard::PutString("DB/String 6", Speed.str());
-
-    m_driveTrain.rotate(m_angle, m_speed);
+    m_driveTrain.moveDistance(0, 0, m_speed, m_angle);
     m_initialized = true;
 
 

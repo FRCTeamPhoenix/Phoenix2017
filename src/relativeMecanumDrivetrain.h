@@ -37,7 +37,7 @@ class relativeMecanumDrivetrain : public PIDOutput, public PIDSource
 public:
     relativeMecanumDrivetrain(SmartTalon& FRTalon, SmartTalon& FLTalon, SmartTalon& BRTalon, SmartTalon& BLTalon, ADIS16448_IMU& gyro, HeadingControl::GyroAxes axis);
 
-    void moveDistance(double distance, double angle, double speed);
+    void moveDistance(double distance, double angle, double speed, double rotation = 0);
     void moveAt(double speed, double angle);
     void rotate(double angle, double speed);
     void moveRelative(double FB, double LR, double rotation);
@@ -48,15 +48,18 @@ public:
 
     void SetPIDSourceType(PIDSourceType pidSource);
 
-    double getAvgError();
+    bool doneMove();
+
 
     CANSpeedController::ControlMode m_mode;
 
 
 private:
 
-    PIDController* m_distanceController;
+    PIDController m_distanceController;
     HeadingControl m_headingControl;
+
+    double m_distanceOutput;
 
     double m_gyroSensitivity;
 
@@ -67,6 +70,8 @@ private:
 
     double getXComponent(double magnitude, double angle);
     double getYComponent(double magnitude, double angle);
+
+    double getDistance();
 
 
 

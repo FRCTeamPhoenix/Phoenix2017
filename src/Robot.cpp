@@ -55,29 +55,22 @@ class Robot: public SampleRobot
         void Autonomous()
         {
 //            m_autoController.clearQueue ();
-//            m_autoController.pushAction (new ActionRotate(m_drivetrain, 90, 0.4));
-//            m_autoController.pushAction (new ActionGoDistance(m_drivetrain, 2000, 0, 0.4));
-
-//            m_autoController.pushAction (new ActionMotorDoneDistance(m_drivetrain, 300));
-//            m_autoController.pushAction (new ActionGoDistance(m_drivetrain, 3000, 180, 0.2));
+////            m_autoController.pushAction (new ActionRotate(m_drivetrain, 90, 0.4));
+//            m_autoController.pushAction (new ActionGoDistance(m_drivetrain, 8200, 0, 0.1));
+//			m_autoController.pushAction (new ActionMotorDoneDistance(m_drivetrain));
+//            m_autoController.pushAction (new ActionGoDistance(m_drivetrain, 8200, 0, 0.1));
+//			m_autoController.pushAction (new ActionMotorDoneDistance(m_drivetrain));
+//////			m_autoController.pushAction (new ActionRotate(m_drivetrain, 30, 0.05));
+//			m_autoController.pushAction (new ActionGoDistance(m_drivetrain, 1500, -90, 0.1));
+//			m_autoController.pushAction (new ActionMotorDoneDistance(m_drivetrain));
+//            m_autoController.pushAction (new ActionGoDistance(m_drivetrain, 3000, 90, 0.1));
+//			m_autoController.pushAction (new ActionMotorDoneDistance(m_drivetrain));
+//            m_autoController.pushAction (new ActionGoDistance(m_drivetrain, 8000, 0, 0.1));
         	bool init = false;
 
             LOGI << "Start Auto";
             while (IsEnabled() && IsAutonomous())
             {
-            	if(!init){
-                    m_drivetrain.moveDistance(2000, 0, 0.4);
-
-//            		m_FRDrive.SetControlMode(CANSpeedController::kPosition);
-//                	m_FRDrive.Set(2000);
-                    init = true;
-            	}
-
-            	m_FRDrive.SetSetpoint(2000);
-				m_FLDrive.SetSetpoint(2000);
-				m_BRDrive.SetSetpoint(2000);
-				m_BLDrive.SetSetpoint(2000);
-
 //                m_autoController.run ();
             }
 
@@ -178,9 +171,9 @@ class Robot: public SampleRobot
 				outputZ << (m_gyro.GetAngleZ());
 				SmartDashboard::PutString("DB/String 8", outputZ.str());
 
-				std::stringstream mode;
-            	mode << "Current Mode: " << m_drivetrain.m_mode;
-            	SmartDashboard::PutString("DB/String 2", mode.str());
+//				std::stringstream mode;
+//            	mode << "Current Mode: " << m_drivetrain.m_mode;
+//            	SmartDashboard::PutString("DB/String 2", mode.str());
 
                 if (m_gamepad.GetRawButton(1))
                 {
@@ -188,25 +181,19 @@ class Robot: public SampleRobot
                 }
                 else if (m_gamepad.GetRawButton(2))
                 {
-//                    m_drivetrain.moveDistance(2000, 0, 0.4);
-                	m_FRDrive.SetControlMode(CANSpeedController::kPosition);
-                	m_FRDrive.Set(2000);
-//                	m_FLDrive.goDistance(2000, 0.4);
-//                	m_BRDrive.goDistance(2000, 0.4);
-//                	m_BLDrive.goDistance(2000, 0.4);
-
+                    m_drivetrain.moveDistance(0, 0, 0.03, -120);
                 }
                 else if (m_gamepad.GetRawButton(5))
                 {
-                    m_drivetrain.moveDistance(8000, 0, 0.03);
+                    m_drivetrain.moveDistance(16000, 0, 0.03, 90);
                 }
                 else if (m_gamepad.GetRawButton(4))
                 {
-                    m_drivetrain.moveDistance(2000, 60, 0.1);
+                    m_drivetrain.moveDistance(0, 0, 0.03, 90);
                 }
                 else if (m_gamepad.GetRawButton(6))
                 {
-                    m_drivetrain.moveDistance(8000, -90, 0.1);
+                    m_drivetrain.moveDistance(8000, -90, 0.03);
                 }
                 else if (m_gamepad.GetRawButton(3))
 				{

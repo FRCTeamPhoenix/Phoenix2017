@@ -19,10 +19,11 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
     m_FLTalon(FLTalon),
     m_BRTalon(BRTalon),
     m_BLTalon(BLTalon),
-    m_driveTrain(FLTalon, BLTalon, FRTalon, BLTalon)
+    m_driveTrain(FLTalon, BLTalon, FRTalon, BLTalon),
+    m_distanceController(0.001, 0, 0.000, this, this)
 
 {
-    m_gyroSensitivity = 0.5;
+    m_gyroSensitivity = 1;
     m_goalX = 0;
     m_goalY = 0;
     m_goalGyro = 0;
@@ -30,9 +31,8 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
 
     m_mode = CANSpeedController::ControlMode::kPosition;
 
-    m_distanceController = new PIDController(0.001, 0, 0.000, this, this);
-    m_distanceController->Enable();
-    m_distanceController->SetAbsoluteTolerance (800);
+    m_distanceController.Enable();
+    m_distanceController.SetAbsoluteTolerance (800);
 }
 
 
@@ -79,7 +79,7 @@ void relativeMecanumDrivetrain::rotate (double angle, double speed)
 
 }
 
-void relativeMecanumDrivetrain::moveDistance (double distance, double angle, double speed)
+void relativeMecanumDrivetrain::moveDistance (double distance, double angle, double speed, double rotation)
 {
     m_mode = CANSpeedController::ControlMode::kPosition;
 
@@ -87,29 +87,30 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
     double distanceY = getYComponent(distance, angle);
 
 
-    std::stringstream gX;
-    gX << "Goal X: " << distanceX;
-    SmartDashboard::PutString("DB/String 0", gX.str());
-
-    std::stringstream gY;
-    gY << "Goal Y: " << distanceY;
-    SmartDashboard::PutString("DB/String 1", gY.str());
+//    std::stringstream gX;
+//    gX << "Goal X: " << distanceX;
+//    SmartDashboard::PutString("DB/String 0", gX.str());
+//
+//    std::stringstream gY;
+//    gY << "Goal Y: " << distanceY;
+//    SmartDashboard::PutString("DB/String 1", gY.str());
 
     m_maxSpeed = fabs(speed);
     m_goalX = distanceX;
     m_goalY = distanceY;
 
-    m_headingControl.keepAt ();
+//    m_headingControl.keepAt ();
+    m_headingControl.changeAngle (rotation);
 
     m_FLTalon.SetEncPosition (0);
     m_BRTalon.SetEncPosition (0);
     m_FRTalon.SetEncPosition (0);
     m_BLTalon.SetEncPosition (0);
 
-    m_distanceController->SetSetpoint (sqrt((distanceX * distanceX) + (distanceY * distanceY)));
+    m_distanceController.SetSetpoint (sqrt((distanceX * distanceX) + (distanceY * distanceY)));
 
     std::stringstream sP;
-    sP << "SetPoint: " << m_distanceController->GetSetpoint ();
+    sP << "SetPoint: " << m_distanceController.GetSetpoint ();
     SmartDashboard::PutString("DB/String 5", sP.str());
 }
 
@@ -148,24 +149,32 @@ void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotat
 
 }
 
-double relativeMecanumDrivetrain::getAvgError ()
+bool relativeMecanumDrivetrain::doneMove ()
 {
-    int FL_error = m_FLTalon.GetClosedLoopError ();
-    int BR_error = m_BRTalon.GetClosedLoopError ();
-    int FR_error = m_FRTalon.GetClosedLoopError ();
-    int BL_error = m_BLTalon.GetClosedLoopError ();
+    bool angleDone = m_headingControl.isDone ();
 
-    return (FL_error + BR_error + FR_error + BL_error) / 4;
+    bool distDone = false;
+
+    double distance = getDistance();
+    double goal = m_distanceController.GetSetpoint();
+
+    if(fabs(goal - distance) < 0.05 * goal)
+    {
+        distDone = true;
+    }
+
+    if(angleDone && distDone)
+    {
+        return true;
+    }
+    return false;
+
 }
 
 
 double relativeMecanumDrivetrain::PIDGet ()
 {
-    double xPos = (m_FLTalon.GetEncPosition () + m_BRTalon.GetEncPosition ()) / 2;
-    double yPos = (m_FRTalon.GetEncPosition () + m_BLTalon.GetEncPosition ()) / 2;
-
-    double distance = sqrt((xPos * xPos) + (yPos * yPos));
-
+    double distance = getDistance();
     std::stringstream dist;
     dist << "Distance: " << distance;
     SmartDashboard::PutString("DB/String 4", dist.str());
@@ -179,9 +188,12 @@ void relativeMecanumDrivetrain::PIDWrite (double output)
 {
     if(CANSpeedController::ControlMode::kPosition == m_mode)
     {
+        m_distanceOutput = output;
         double relativeMax = output * m_maxSpeed;
     	double speedX = 0;
     	double speedY = 0;
+
+
 
     	if(fabs(m_goalX) > fabs(m_goalY))
     	{
@@ -194,8 +206,19 @@ void relativeMecanumDrivetrain::PIDWrite (double output)
     		speedX = fabs((m_goalX / m_goalY)) * relativeMax;
     	}
 
+
     	speedY *= fabs(m_goalY) / m_goalY;
     	speedX *= fabs(m_goalX) / m_goalX;
+
+        if(fabs(m_goalY) < 0.05)
+        {
+            speedY = 0;
+        }
+
+        if(fabs(m_goalX) < 0.05)
+        {
+            speedX = 0;
+        }
 
 
         m_FLTalon.goAt (speedX + (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity));
@@ -204,13 +227,26 @@ void relativeMecanumDrivetrain::PIDWrite (double output)
         m_FRTalon.goAt (speedY - (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity));
         m_BLTalon.goAt (speedY + (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity));
 
+        std::stringstream gX;
+        gX << "speed X: " << speedX;
+        SmartDashboard::PutString("DB/String 0", gX.str());
+
+        std::stringstream gY;
+        gY << "speed Y: " << speedY;
+        SmartDashboard::PutString("DB/String 1", gY.str());
+
         std::stringstream speeds;
         speeds << "Output Dist: " << output;
         SmartDashboard::PutString("DB/String 3", speeds.str());
 
         std::stringstream rot;
-        rot << "Rotation: " << m_headingControl.getOutput();
-        SmartDashboard::PutString("DB/String 9", rot.str());
+        rot << "Rotation Spd: " << (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity);
+        SmartDashboard::PutString("DB/String 2", rot.str());
+        LOGI << speeds.str();
+
+        std::stringstream rotation;
+        rotation << "Rotation: " << m_headingControl.getOutput ();
+        SmartDashboard::PutString("DB/String 9", rotation.str());
         LOGI << speeds.str();
     }
 }
@@ -218,4 +254,13 @@ void relativeMecanumDrivetrain::PIDWrite (double output)
 void relativeMecanumDrivetrain::SetPIDSourceType (PIDSourceType pidSource)
 {
     m_pidSource = pidSource;
+}
+
+double relativeMecanumDrivetrain::getDistance ()
+{
+
+    double xPos = (m_FLTalon.GetEncPosition () + m_BRTalon.GetEncPosition ()) / 2;
+    double yPos = (m_FRTalon.GetEncPosition () + m_BLTalon.GetEncPosition ()) / 2;
+
+    return sqrt((xPos * xPos) + (yPos * yPos));
 }
