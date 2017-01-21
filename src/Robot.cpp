@@ -154,25 +154,29 @@ START_ROBOT_CLASS(Robot)
 void
 testSmartTalon(SmartTalon* talon, const char* name)
 {
-    int originalPos;
+    int initialPos;
+    int finalPos;
     Timer timer;
 
     LOGI << "Spinning SmartTalon " << name << " forward at 60% for 3 seconds.";
-    originalPos = talon->Get();
+    initialPos = talon->Get();
     timer.Start();
     while (timer.Get() < 3)
         talon->goAt(0.6);
     timer.Stop();
     talon->goAt(0.0);
-    LOGI << name << "'s encoder delta: " << talon->Get() - originalPos;
+    finalPos = talon->Get();
+    LOGI << name << "'s initial encoder value: " << initialPos;
+    LOGI << name << "'s final encoder value: " << finalPos;
+    LOGI << name << "'s encoder delta: " << finalPos - initialPos;
 
     LOGI << "Spinning SmartTalon " << name << " backward at 60% for 3 seconds.";
-    originalPos = talon->Get();
+    initialPos = talon->Get();
     timer.Reset();
     timer.Start();
     while (timer.Get() < 3)
         talon->goAt(-0.6);
     timer.Stop();
     talon->goAt(0.0);
-    LOGI << name << "'s encoder delta: " << talon->Get() - originalPos;
+    LOGI << name << "'s encoder delta: " << talon->Get() - initialPos;
 }
