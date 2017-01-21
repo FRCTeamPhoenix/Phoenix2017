@@ -1,4 +1,5 @@
 #include "WPILib.h"
+#include "SmartTalon.h"
 #include "constants.h"
 #include "SmartTalon.h"
 #include "relativeMecanumDrivetrain.h"
@@ -20,6 +21,9 @@
 
 using namespace std;
 using json=nlohmann::json;
+
+void testSmartTalon(SmartTalon* talon, const char* name);
+#define TEST_SMART_TALON(talon) testSmartTalon(&talon, #talon)
 
 class Robot: public SampleRobot
 {
@@ -46,6 +50,8 @@ class Robot: public SampleRobot
     SmartTalon m_climberMotor;
     Climber m_climber;
 
+    const bool m_debug = true; // Set this to false unless you want debug feature
+
 public:
     Robot() :
             m_FRDrive(3, CANTalon::FeedbackDevice::QuadEncoder),
@@ -70,9 +76,9 @@ public:
             m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
 			m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
 			m_climber(m_climberMotor, m_joystick)
-
     {
     }
+
     void RobotInit() override
     {
         LOGI << "Start Robot Init";
@@ -112,20 +118,61 @@ public:
 
     void Test()
     {
-
         LOGI << "Start Test Mode";
-        while (IsEnabled() && IsTest())
+        if (IsEnabled())
         {
+            if (m_debug)
+            {
+                LOGD << "Entering Debug Test Mode";
 
-            //m_rightFlyWheelMotor.goAt(m_joystick.GetY());
-            //m_leftFlyWheelMotor.goAt(m_joystick.GetY());
+                TEST_SMART_TALON(m_FRDrive);
+                TEST_SMART_TALON(m_FLDrive);
+                TEST_SMART_TALON(m_BRDrive);
+                TEST_SMART_TALON(m_BLDrive);
+                TEST_SMART_TALON(m_leftFlyWheelMotor);
+                TEST_SMART_TALON(m_rightFlyWheelMotor);
+                // TEST_SMART_TALON(m_climber);
+                // TEST_SMART_TALON(m_feeder);
+                TEST_SMART_TALON(m_turretRotateMotor);
+
+                LOGD << "Leaving Debug Test Mode";
+            }
+            while (IsTest())
+            {
+                // m_rightFlyWheelMotor.goAt(m_joystick.GetY());
+                // m_leftFlyWheelMotor.goAt(m_joystick.GetY());
         	m_climber.run();
-            m_configEditor.update();
-
+                m_configEditor.update();
+            }
         }
-
     }
 
 };
 
 START_ROBOT_CLASS(Robot)
+
+void
+testSmartTalon(SmartTalon* talon, const char* name)
+{
+    int originalPos;
+    Timer timer;
+
+    LOGI << "Spinning SmartTalon " << name << " forward at 60% for 3 seconds.";
+    originalPos = talon->Get();
+    timer.Start();
+    while (timer.Get() < 3)
+        talon->goAt(0.6);
+    timer.Stop();
+    talon->goAt(0.0);
+    LOGI << name << "'s encoder delta: " << talon->Get() - originalPos;
+
+    LOGI << "Spinning SmartTalon " << name << " backward at 60% for 3 seconds.";
+    originalPos = talon->Get();
+    timer.Reset();
+    timer.Start();
+    while (timer.Get() < 3)
+        talon->goAt(-0.6);
+    timer.Stop();
+    talon->goAt(0.0);
+    LOGI << name << "'s encoder delta: " << talon->Get() - originalPos;
+}
