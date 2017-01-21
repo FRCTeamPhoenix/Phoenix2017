@@ -13,6 +13,8 @@
       <sourceFolder url="file://$MODULE_DIR$/CommandParser.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ConfigEditor.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ConfigEditor.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/HeadingControl.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/HeadingControl.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/LoggerController.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/LoggerController.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/PIDGains.cpp" isTestSource="false" />
