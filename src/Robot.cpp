@@ -22,8 +22,15 @@
 using namespace std;
 using json=nlohmann::json;
 
+/*
+ * Given a SmartTalon, runs it forward and backward at 60% for 3 seconds and
+ * outputs the encoder's initial, final, and delta values.
+ */
 void testSmartTalon(SmartTalon* talon, const char* name);
 #define TEST_SMART_TALON(talon) testSmartTalon(&talon, #talon)
+/*
+ * Given a Talon, runs it forward and backward at 60% for 3 seconds.
+ */
 void testTalon(Talon* talon, const char* name);
 #define TEST_TALON(talon) testTalon(&talon, #talon)
 
