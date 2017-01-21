@@ -13,6 +13,7 @@ public:
     void run(void);
     bool performAction(void);
     void clearQueue(void);
+    void pushAction(Action*);
 private:
     CommandParser m_parser;
     std::queue<Action*> m_queue;

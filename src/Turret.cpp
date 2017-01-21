@@ -72,7 +72,7 @@ void Turret::run()
 }
 
 void Turret::autoTarget(float degrees){
-    m_turretRotatorMotor.goDistance(degreeToTicks(degrees));
+    m_turretRotatorMotor.goDistance(degreeToTicks(degrees), 0.1);
 }
 
 float Turret::degreeToTicks(float angle){

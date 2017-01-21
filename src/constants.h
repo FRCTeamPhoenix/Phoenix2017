@@ -24,6 +24,9 @@ struct PortAssign {
    //Limit Switches
    const static uint32_t rightLimitSwitch = 1;
    const static uint32_t leftLimitSwitch = 2;
+   
+   const static uint32_t lidarTriggerPin = 8;
+   const static uint32_t lidarMonitorPin = 9;
 
 };
 

@@ -4,18 +4,23 @@
 #ifndef INC_2017_PRESEASON_MECHANISMS_SMARTTALON_H
 #define INC_2017_PRESEASON_MECHANISMS_SMARTTALON_H
 
+#include <fstream>
+#include <iostream>
 #include "WPILib.h"
 #include "PIDGains.h"
 #include "CANTalon.h"
+#include "json.hpp"
 
+using namespace std;
+using json=nlohmann::json;
 class SmartTalon : public CANTalon
 {
 public:
-    SmartTalon(int deviceNumber, double maxForwardSpeed, double maxReverseSpeed);
+    SmartTalon(int deviceNumber, FeedbackDevice device);
 
-    void goTo(double position);
+    void goTo(double position, double speed);
     void goAt(double speed);
-    void goDistance(double distance);
+    void goDistance(double distance, double speed);
 
     double getGoal();
 
@@ -28,13 +33,14 @@ public:
     void tuneRate(double pInit, double goalRate, int IZone, double F);
 
 private:
+
+    void switchToGain(PIDGains gains);
     double m_goal;
 
     double m_maxForwardSpeed;
     double m_maxReverseSpeed;
 
     Timer m_tuneTimer;
-
 
     PIDGains m_distanceGains;
     PIDGains m_speedGains;

@@ -33,7 +33,7 @@ AutoController::performAction(void)
 
     Action *currentAction = m_queue.front();
     if (!currentAction->isInitialized())
-	currentAction->init();
+	    currentAction->init();
     /* Execute returns true if finished */
     if (currentAction->execute())
     {
@@ -55,4 +55,10 @@ AutoController::clearQueue()
 	delete m_queue.front();
 	m_queue.pop();
     }
+}
+
+void
+AutoController::pushAction(Action* action)
+{
+    m_queue.push(action);
 }
