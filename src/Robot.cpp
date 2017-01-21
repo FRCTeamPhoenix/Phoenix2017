@@ -20,7 +20,6 @@ using json=nlohmann::json;
 class Robot: public SampleRobot
 {
         RobotJSON m_robotJSON;
-        json m_json;
 
         SmartTalon m_FRDrive;
         SmartTalon m_FLDrive;
@@ -40,12 +39,11 @@ class Robot: public SampleRobot
     public:
         Robot() :
                 m_robotJSON("robot.json"),
-                m_json(m_robotJSON.getJSON()),
-                m_FRDrive(3, CANTalon::FeedbackDevice::QuadEncoder, m_json["drivetrain"]["talons"]["frdrive"]),
-                m_FLDrive(2, CANTalon::FeedbackDevice::QuadEncoder, m_json["drivetrain"]["talons"]["fldrive"]),
-                m_BRDrive(4, CANTalon::FeedbackDevice::QuadEncoder, m_json["drivetrain"]["talons"]["brdrive"]),
-                m_BLDrive(1, CANTalon::FeedbackDevice::QuadEncoder, m_json["drivetrain"]["talons"]["bldrive"]),
-                m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_json["drivetrain"]["distance"]),
+                m_FRDrive(3, CANTalon::FeedbackDevice::QuadEncoder, m_robotJSON.getJSON()["drivetrain"]["talons"]["frdrive"]),
+                m_FLDrive(2, CANTalon::FeedbackDevice::QuadEncoder, m_robotJSON.getJSON()["drivetrain"]["talons"]["fldrive"]),
+                m_BRDrive(4, CANTalon::FeedbackDevice::QuadEncoder, m_robotJSON.getJSON()["drivetrain"]["talons"]["brdrive"]),
+                m_BLDrive(1, CANTalon::FeedbackDevice::QuadEncoder, m_robotJSON.getJSON()["drivetrain"]["talons"]["bldrive"]),
+                m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_robotJSON.getJSON()["drivetrain"]["distance"]),
                 m_gamepad(0),
                 m_loggerController(),
                 m_configEditor(),
