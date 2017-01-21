@@ -45,7 +45,7 @@ class Robot: public SampleRobot
                 m_FLDrive(2, CANTalon::FeedbackDevice::QuadEncoder, m_json["drivetrain"]["talons"]["fldrive"]),
                 m_BRDrive(4, CANTalon::FeedbackDevice::QuadEncoder, m_json["drivetrain"]["talons"]["brdrive"]),
                 m_BLDrive(1, CANTalon::FeedbackDevice::QuadEncoder, m_json["drivetrain"]["talons"]["bldrive"]),
-                m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive),
+                m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_json["drivetrain"]["distance"]),
                 m_gamepad(0),
                 m_loggerController(),
                 m_configEditor(),

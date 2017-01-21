@@ -33,7 +33,7 @@ class relativeMecanumDrivetrain : public PIDOutput, public PIDSource
  */
 
 public:
-    relativeMecanumDrivetrain(SmartTalon& FRTalon, SmartTalon& FLTalon, SmartTalon& BRTalon, SmartTalon& BLTalon);
+    relativeMecanumDrivetrain(SmartTalon& FRTalon, SmartTalon& FLTalon, SmartTalon& BRTalon, SmartTalon& BLTalon, json taloncfg);
 
     void moveDistance(double distance, double angle, double speed);
     void moveAt(double speed, double angle);

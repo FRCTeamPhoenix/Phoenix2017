@@ -10,7 +10,8 @@
 relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
                                                       SmartTalon &FLTalon,
                                                       SmartTalon &BRTalon,
-                                                      SmartTalon &BLTalon):
+                                                      SmartTalon &BLTalon,
+                                                      json taloncfg):
 
     m_FRTalon(FRTalon),
     m_FLTalon(FLTalon),
@@ -25,7 +26,7 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
 
     m_mode = CANSpeedController::ControlMode::kPosition;
 
-    m_distanceController = new PIDController(0.1, 0, 0, this, this);
+    m_distanceController = new PIDController(taloncfg["p"], taloncfg["i"], taloncfg["d"], this, this);
     m_distanceController->Enable();
 }
 
