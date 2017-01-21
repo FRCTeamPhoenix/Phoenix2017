@@ -1,3 +1,78 @@
 {
-	
+	"drivetrain": {
+		"talons": {
+			"frdrive": {
+				"speed": {
+					"p": 1,
+					"i": 0.005,
+					"d": 0,
+					"izone": 4000,
+					"ff": 0.5
+				},
+				"distance": {
+					"p": 5.4,
+					"i": 0,
+					"d": 108,
+					"izone": 4000,
+					"ff": 0.5
+				},
+			"maxfvel": 2000,
+			"maxrvel": 2000
+			},
+			"fldrive": {
+				"speed": {
+					"p": 1,
+					"i": 0.005,
+					"d": 0,
+					"izone": 4000,
+					"ff": 0.5
+				},
+				"distance": {
+					"p": 5.4,
+					"i": 0,
+					"d": 108,
+					"izone": 4000,
+					"ff": 0.5
+				},
+			"maxfvel": 2000,
+			"maxrvel": 2000
+			},
+			"brdrive": {
+				"speed": {
+					"p": 1,
+					"i": 0.005,
+					"d": 0,
+					"izone": 4000,
+					"ff": 0.5
+				},
+				"distance": {
+					"p": 5.4,
+					"i": 0,
+					"d": 108,
+					"izone": 4000,
+					"ff": 0.5
+				},
+			"maxfvel": 2000,
+			"maxrvel": 2000
+			},
+			"bldrive": {
+				"speed": {
+					"p": 1,
+					"i": 0.005,
+					"d": 0,
+					"izone": 4000,
+					"ff": 0.5
+				},
+				"distance": {
+					"p": 5.4,
+					"i": 0,
+					"d": 108,
+					"izone": 4000,
+					"ff": 0.5
+				},
+			"maxfvel": 2000,
+			"maxrvel": 2000
+			}
+		}
+	}
 }

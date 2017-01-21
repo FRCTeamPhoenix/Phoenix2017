@@ -4,7 +4,7 @@
 
 #include "SmartTalon.h"
 
-SmartTalon::SmartTalon (int deviceNumber, FeedbackDevice device) :
+SmartTalon::SmartTalon (int deviceNumber, FeedbackDevice device, json taloncfg) :
     CANTalon(deviceNumber),
     m_goal(0),
     m_tuneTimer(),
@@ -18,25 +18,20 @@ SmartTalon::SmartTalon (int deviceNumber, FeedbackDevice device) :
     ss << deviceNumber;
     string deviceNumberStr = ss.str();
 
-	ifstream json_file;
-	json_file.open("/home/lvuser/talons.json");
-	json talons;
-	json_file >> talons;
-	json_file.close();
-	m_distanceGains.set (talons[deviceNumberStr]["distance"]["p"],
-                         talons[deviceNumberStr]["distance"]["i"],
-                         talons[deviceNumberStr]["distance"]["d"],
-                         talons[deviceNumberStr]["distance"]["izone"],
-                         talons[deviceNumberStr]["distance"]["ff"]);
+	m_distanceGains.set (taloncfg["distance"]["p"],
+	                     taloncfg["distance"]["i"],
+	                     taloncfg["distance"]["d"],
+	                     taloncfg["distance"]["izone"],
+	                     taloncfg["distance"]["ff"]);
 
-	m_speedGains.set (talons[deviceNumberStr]["speed"]["p"],
-                      talons[deviceNumberStr]["speed"]["i"],
-                      talons[deviceNumberStr]["speed"]["d"],
-                      talons[deviceNumberStr]["speed"]["izone"],
-                      talons[deviceNumberStr]["speed"]["ff"]);
+	m_speedGains.set (taloncfg["speed"]["p"],
+	                  taloncfg["speed"]["i"],
+	                  taloncfg["speed"]["d"],
+	                  taloncfg["speed"]["izone"],
+	                  taloncfg["speed"]["ff"]);
 
-	m_maxForwardSpeed = talons[deviceNumberStr]["maxfvel"];
-	m_maxReverseSpeed = talons[deviceNumberStr]["maxrvel"];
+	m_maxForwardSpeed = taloncfg["maxfvel"];
+	m_maxReverseSpeed = taloncfg["maxrvel"];
 
 	SetSafetyEnabled(false);
 }
