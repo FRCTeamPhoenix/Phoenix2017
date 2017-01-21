@@ -13,19 +13,26 @@
       <sourceFolder url="file://$MODULE_DIR$/CommandParser.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ConfigEditor.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ConfigEditor.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlyWheels.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlyWheels.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/HeadingControl.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/HeadingControl.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Lidar.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Lidar.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/LoggerController.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/LoggerController.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/PIDGains.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/PIDGains.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Robot.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Shooter.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Shooter.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ShooterCalibrator.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ShooterCalibrator.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ShooterController.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ShooterController.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/SmartTalon.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/SmartTalon.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Turret.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Turret.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/constants.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/relativeMecanumDrivetrain.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/relativeMecanumDrivetrain.h" isTestSource="false" />

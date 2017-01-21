@@ -9,15 +9,30 @@
 #define SRC_CONSTANTS_H_
 
 struct PortAssign {
-        // Channels for wheels
-        const static uint32_t backLeftWheelMotor = 0;
-        const static uint32_t frontLeftWheelMotor = 1;
-        const static uint32_t frontRightWheelMotor = 2;
-        const static uint32_t backRightWheelMotor = 3;
+   const static uint32_t backLeftWheelMotor = 1;
+   const static uint32_t frontLeftWheelMotor = 2;
+   const static uint32_t frontRightWheelMotor = 3;
+   const static uint32_t backRightWheelMotor = 4;
+   const static uint32_t leftFlyWheelMotor = 5;
+   const static uint32_t rightFlyWheelMotor = 6;
+   const static uint32_t turretRotationMotor = 7;
 
-        const static uint32_t lidarTriggerPin = 8;
-        const static uint32_t lidarMonitorPin = 9;
+   //Controllers
+   const static uint32_t joystick = 0;
+   const static uint32_t gamepad = 1;
 
+   //Limit Switches
+   const static uint32_t rightLimitSwitch = 1;
+   const static uint32_t leftLimitSwitch = 2;
+   
+   const static uint32_t lidarTriggerPin = 8;
+   const static uint32_t lidarMonitorPin = 9;
+
+};
+
+struct RobotConstants{
+	constexpr static float turretDamp = 0.6f;
+	constexpr static float degreesToTicks = 0.5f; //THIS IS WRONG. NEEDS TO BE CHANGED
 };
 
 namespace ConfigVariables {
