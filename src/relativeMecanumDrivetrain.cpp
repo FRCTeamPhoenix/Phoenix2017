@@ -175,25 +175,31 @@ void relativeMecanumDrivetrain::PIDWrite (double output)
     	double speedX = 0;
     	double speedY = 0;
 
+    	if(fabs(m_goalX) < 0.05 && fabs(m_goalY) < 0.05)
+    	{
+            m_FLTalon.goAt (speedX);
+            m_BRTalon.goAt (speedX);
+
+            m_FRTalon.goAt (speedY);
+            m_BLTalon.goAt (speedY);
+
+            return;
+    	}
+
     	if(fabs(m_goalX) > fabs(m_goalY))
     	{
     		speedX = relativeMax;
-    		speedY = (m_goalY / m_goalX) * relativeMax;
+    		speedY = fabs((m_goalY / m_goalX)) * relativeMax;
     	}
     	else
     	{
     		speedY = relativeMax;
-    		speedX = (m_goalX / m_goalY) * relativeMax;
+    		speedX = fabs((m_goalX / m_goalY)) * relativeMax;
     	}
 
-    	if(0 > m_goalX)
-    	{
-    		speedX *= -1;
-    	}
-    	if(0 > m_goalY)
-    	{
-    		speedY *= -1;
-    	}
+    	speedY *= fabs(m_goalY) / m_goalY;
+    	speedX *= fabs(m_goalX) / m_goalX;
+
 
         m_FLTalon.goAt (speedX);
         m_BRTalon.goAt (speedX);
