@@ -8,9 +8,10 @@
 #include "constants.h"
 
 Climber::Climber(
-        Talon * motor,
+        SmartTalon * motor,
         Joystick * gamepad)
 {
+    m_state = OFF;
     m_motor = motor;
     m_gamepad = gamepad;
 }
@@ -21,14 +22,12 @@ Climber::~Climber()
 
 void Climber::start()
 {
-    // TODO Not sure if talons or smarttalons will be used, start might need to be changed
-    m_motor->Set(1.0f);
+    m_motor->goAt(1.0);
 }
 
 void Climber::stop()
 {
-    // TODO Not sure if talons or smarttalons will be used, stop might need to be changed
-    m_motor->Set(0.0f);
+    m_motor->goAt(0.0);
 }
 
 void Climber::run()
