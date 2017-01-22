@@ -52,7 +52,7 @@ public:
             m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive),
             m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
             m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-            m_turretRotateMotor(PortAssign::turretRotationMotor, CANTalon::FeedbackDevice::QuadEncoder),
+            m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
             m_leftLimitSwitch(PortAssign::leftLimitSwitch),
             m_rightLimitSwitch( PortAssign::rightLimitSwitch),
             m_joystick(PortAssign::joystick),
@@ -111,8 +111,6 @@ public:
         LOGI << "Start Test Mode";
         while (IsEnabled() && IsTest())
         {
-            m_rightFlyWheelMotor.goAt(m_joystick.GetY());
-            m_leftFlyWheelMotor.goAt(m_joystick.GetY());
             m_configEditor.update();
 
         }
