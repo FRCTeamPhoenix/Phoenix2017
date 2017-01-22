@@ -9,13 +9,24 @@
 #define SRC_CONSTANTS_H_
 
 struct PortAssign {
+
+   //CANTalon ID's
    const static uint32_t backLeftWheelMotor = 1;
    const static uint32_t frontLeftWheelMotor = 2;
    const static uint32_t frontRightWheelMotor = 3;
    const static uint32_t backRightWheelMotor = 4;
    const static uint32_t leftFlyWheelMotor = 5;
    const static uint32_t rightFlyWheelMotor = 6;
-   const static uint32_t turretRotationMotor = 7;
+   const static uint32_t climber = 7;
+   const static uint32_t feeder = 8;
+   const static uint32_t turret = 9;
+
+
+   //Talon ports
+   const static uint32_t loader =0;
+   const static uint32_t indexer =1;
+
+
 
    //Controllers
    const static uint32_t joystick = 0;
