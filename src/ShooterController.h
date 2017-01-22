@@ -7,7 +7,7 @@
 
 #ifndef SRC_SHOOTERCONTROLLER_H_
 #define SRC_SHOOTERCONTROLLER_H_
-#include "WPIlib.h"
+#include "WPILib.h"
 #include "FlyWheels.h"
 #include "Turret.h"
 #include "constants.h"
