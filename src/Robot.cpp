@@ -111,6 +111,9 @@ public:
         LOGI << "Start Test Mode";
         while (IsEnabled() && IsTest())
         {
+
+            m_rightFlyWheelMotor.goAt(m_joystick.GetY());
+            m_leftFlyWheelMotor.goAt(m_joystick.GetY());
             m_configEditor.update();
 
         }
