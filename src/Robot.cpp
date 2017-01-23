@@ -30,18 +30,19 @@ class Robot: public SampleRobot
     SmartTalon m_rightFlyWheelMotor;
     SmartTalon m_leftFlyWheelMotor;
     SmartTalon m_turretRotateMotor;
-    DigitalInput m_leftLimitSwitch;
-    DigitalInput m_rightLimitSwitch;
     Joystick m_joystick;
     Joystick m_gamepad;
+    Lidar m_lidar;
     ADIS16448_IMU weirdBoardThing;
+    Communications m_visionComs;
+    ShooterCalibrator m_shooterCalibrator;
     FlyWheels m_flywheel;
     Turret m_turret;
     LoggerController m_loggerController;
     ShooterController m_shooterController;
     ConfigEditor m_configEditor;
     AutoController m_autoController;
-    Lidar m_lidar;
+
 
 public:
     Robot() :
@@ -53,18 +54,19 @@ public:
             m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
 			m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
 			m_turretRotateMotor(PortAssign::turretRotationMotor, CANTalon::FeedbackDevice::QuadEncoder),
-			m_leftLimitSwitch(PortAssign::leftLimitSwitch),
-			m_rightLimitSwitch(PortAssign::rightLimitSwitch),
 			m_joystick(PortAssign::joystick),
 			m_gamepad(PortAssign::gamepad),
+			m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0),
 			weirdBoardThing(),
-			m_flywheel(m_rightFlyWheelMotor,m_leftFlyWheelMotor, m_gamepad),
-			m_turret(m_turretRotateMotor, m_leftLimitSwitch, m_rightLimitSwitch, m_gamepad),
+			m_visionComs(),
+			m_shooterCalibrator(),
+			m_flywheel(m_rightFlyWheelMotor,m_leftFlyWheelMotor,m_shooterCalibrator,m_lidar, m_gamepad, m_joystick),
+			m_turret(m_turretRotateMotor, m_visionComs, m_gamepad),
             m_loggerController(),
 			m_shooterController(m_flywheel, m_turret),
             m_configEditor(),
-            m_autoController(),
-            m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0)
+            m_autoController()
+
 
     {
     }
