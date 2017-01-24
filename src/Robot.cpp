@@ -44,8 +44,8 @@ class Robot: public SampleRobot
     SmartTalon m_rightFlyWheelMotor;
     SmartTalon m_leftFlyWheelMotor;
     SmartTalon m_turretRotateMotor;
+    SmartTalon m_indexer;
     Talon m_loader;
-    Talon m_indexer;
     DigitalInput m_leftLimitSwitch;
     DigitalInput m_rightLimitSwitch;
     Joystick m_joystick;
@@ -73,8 +73,8 @@ public:
             m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
             m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
             m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
-            m_loader(0),
-            m_indexer(1),
+            m_indexer(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder),
+            m_loader(PortAssign::loader),
             m_leftLimitSwitch(PortAssign::leftLimitSwitch),
             m_rightLimitSwitch( PortAssign::rightLimitSwitch),
             m_joystick(PortAssign::joystick),
@@ -147,9 +147,9 @@ public:
                 // TEST_SMART_TALON(m_climber);
                 // TEST_SMART_TALON(m_feeder);
                 TEST_SMART_TALON(m_turretRotateMotor);
+                TEST_SMART_TALON(m_indexer);
 
                 TEST_TALON(m_loader);
-                TEST_TALON(m_indexer);
 
                 LOGD << "Leaving Debug Test Mode";
             }
