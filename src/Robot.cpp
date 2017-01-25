@@ -26,11 +26,13 @@ using json=nlohmann::json;
 /*
  * Given a SmartTalon, runs it forward and backward at 60% for 3 seconds and
  * outputs the encoder's initial, final, and delta values.
+ * Outputs Lidar values to SmartDashboard at the same time.
  */
 void testSmartTalon(SmartTalon* talon, const char* name, Lidar* lidar);
 #define TEST_SMART_TALON(talon) testSmartTalon(&talon, #talon, &m_lidar)
 /*
  * Given a Talon, runs it forward and backward at 60% for 3 seconds.
+ * Outputs Lidar values to SmartDashboard at the same time.
  */
 void testTalon(Talon* talon, const char* name, Lidar* lidar);
 #define TEST_TALON(talon) testTalon(&talon, #talon, &m_lidar)
