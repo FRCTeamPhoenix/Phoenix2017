@@ -134,26 +134,21 @@ public:
 
             //indexer test
             if (m_gamepad.GetRawButton(DriveStationConstants::buttonA)){
+                m_indexerMotor.goDistance(1000,0.5);
 
-            m_indexerMotor.Reset();
-            while (m_indexerMotor.GetEncPosition() < 1000){
-                m_indexerMotor.goAt(m_joystick.GetThrottle());
-
-            }
+           }
 
            std::ostringstream indexerEncoderValue;
            indexerEncoderValue << "EncoderI: ";
            indexerEncoderValue << m_feederMotor.GetEncPosition();
-           SmartDashboard::PutString("DB/String 6", indexerEncoderValue.str());
-
-       }
+           SmartDashboard::PutString("DB/String 8", indexerEncoderValue.str());
 
 
 
 
-            /*m_rightFlyWheelMotor.goAt(m_joystick.GetY());
+            m_rightFlyWheelMotor.goAt(m_joystick.GetY());
             m_leftFlyWheelMotor.goAt(m_joystick.GetY());
-            */m_configEditor.update();
+            m_configEditor.update();
 
         }
 
