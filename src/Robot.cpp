@@ -47,6 +47,7 @@ class Robot: public SampleRobot
                 m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0)
 
         {
+
         }
         void RobotInit() override
         {
