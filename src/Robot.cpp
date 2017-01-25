@@ -42,6 +42,9 @@ class Robot: public SampleRobot
     ConfigEditor m_configEditor;
     AutoController m_autoController;
     Lidar m_lidar;
+    SmartTalon m_feederMotor;
+    DigitalInput m_indexerLimitSwitch;
+    SmartTalon m_indexerMotor;
 
 public:
     Robot() :
@@ -64,7 +67,10 @@ public:
             m_shooterController(m_flywheel, m_turret),
             m_configEditor(),
             m_autoController(),
-            m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0)
+            m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
+            m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
+            m_indexerLimitSwitch(PortAssign::indexerLimitSwitch),
+            m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder)
 
     {
     }
@@ -111,10 +117,43 @@ public:
         LOGI << "Start Test Mode";
         while (IsEnabled() && IsTest())
         {
+           //feeder test
+            m_feederMotor.goAt(m_joystick.GetThrottle());
 
-            m_rightFlyWheelMotor.goAt(m_joystick.GetY());
+            std::ostringstream throttleValue;
+            throttleValue << "Throttle: ";
+            throttleValue << m_joystick.GetThrottle();
+            SmartDashboard::PutString("DB/String 7", throttleValue.str());
+
+            std::ostringstream feederEncoderValue;
+            feederEncoderValue << "EncoderF: ";
+            feederEncoderValue << m_feederMotor.GetEncPosition();
+            SmartDashboard::PutString("DB/String 6", feederEncoderValue.str());
+
+
+
+            //indexer test
+            if (m_gamepad.GetRawButton(DriveStationConstants::buttonA)){
+
+            m_indexerMotor.Reset();
+            while (m_indexerMotor.GetEncPosition() < 1000){
+                m_indexerMotor.goAt(m_joystick.GetThrottle());
+
+            }
+
+           std::ostringstream indexerEncoderValue;
+           indexerEncoderValue << "EncoderI: ";
+           indexerEncoderValue << m_feederMotor.GetEncPosition();
+           SmartDashboard::PutString("DB/String 6", indexerEncoderValue.str());
+
+       }
+
+
+
+
+            /*m_rightFlyWheelMotor.goAt(m_joystick.GetY());
             m_leftFlyWheelMotor.goAt(m_joystick.GetY());
-            m_configEditor.update();
+            */m_configEditor.update();
 
         }
 
