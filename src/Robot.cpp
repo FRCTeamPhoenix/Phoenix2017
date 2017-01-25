@@ -16,6 +16,7 @@
 #include <fstream>
 #include "json.hpp"
 #include "Lidar.h"
+#include "Climber.h"
 
 using namespace std;
 using json=nlohmann::json;
@@ -42,6 +43,8 @@ class Robot: public SampleRobot
     ConfigEditor m_configEditor;
     AutoController m_autoController;
     Lidar m_lidar;
+    SmartTalon m_climberMotor;
+    Climber m_climber;
 
 public:
     Robot() :
@@ -64,7 +67,9 @@ public:
             m_shooterController(m_flywheel, m_turret),
             m_configEditor(),
             m_autoController(),
-            m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0)
+            m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
+			m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
+			m_climber(m_climberMotor, m_joystick)
 
     {
     }
@@ -96,7 +101,7 @@ public:
 
         m_expansionBoard.Reset();
         LOGI << "Start Teleop";
-        int count = 0;
+        //int count = 0;
 
         while (IsEnabled() && IsOperatorControl())
         {
@@ -112,8 +117,9 @@ public:
         while (IsEnabled() && IsTest())
         {
 
-            m_rightFlyWheelMotor.goAt(m_joystick.GetY());
-            m_leftFlyWheelMotor.goAt(m_joystick.GetY());
+            //m_rightFlyWheelMotor.goAt(m_joystick.GetY());
+            //m_leftFlyWheelMotor.goAt(m_joystick.GetY());
+        	m_climber.run();
             m_configEditor.update();
 
         }

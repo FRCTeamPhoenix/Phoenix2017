@@ -5,6 +5,7 @@
  *      Author: evsci_000
  */
 #include "WPILib.h"
+#include "SmartTalon.h"
 #include "constants.h"
 #ifndef SRC_CLIMBER_H_
 #define SRC_CLIMBER_H_
@@ -22,16 +23,17 @@ class Climber
              OFF,
              ON
          };
-        Climber(Talon * motor,
-                Joystick * gamepad
+        Climber(SmartTalon & motor,
+                Joystick & gamepad
         );
         virtual ~Climber();
+        void move(double speed);
         void stop();
         void run();
 
     private:
-        Talon * m_motor;
-        Joystick * m_gamepad;
+        SmartTalon & m_motor;
+        Joystick & m_gamepad;
         STATE m_state;
 
 
