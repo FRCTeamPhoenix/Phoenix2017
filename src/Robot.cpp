@@ -36,6 +36,12 @@ void testSmartTalon(SmartTalon* talon, const char* name, Lidar* lidar);
  */
 void testTalon(Talon* talon, const char* name, Lidar* lidar);
 #define TEST_TALON(talon) testTalon(&talon, #talon, &m_lidar)
+/*
+ * Given a DigitalInput (Limit Switch), waits for its input and logs event.
+ * Test can be canceled by pressing A button on gamepad.
+ */
+void testLimitSwitch(DigitalInput* lswitch, const char* name, Joystick* gamepad);
+#define TEST_LIMIT_SWITCH(lswitch) testLimitSwitch(&lswitch, #lswitch, &m_gamepad)
 
 class Robot: public SampleRobot
 {
@@ -154,6 +160,9 @@ public:
 
                 TEST_TALON(m_loader);
 
+                TEST_LIMIT_SWITCH(m_leftLimitSwitch);
+                TEST_LIMIT_SWITCH(m_rightLimitSwitch);
+
                 LOGD << "Leaving Debug Test Mode";
             }
             while (IsTest())
@@ -251,4 +260,33 @@ testTalon(Talon* talon, const char* name, Lidar* lidar)
     }
     timer.Stop();
     talon->Set(0.0);
+}
+
+void
+testLimitSwitch(DigitalInput* lswitch, const char* name, Joystick* gamepad)
+{
+    std::stringstream db0, db1;
+
+    LOGI << "Waiting on " << name << "'s input.";
+    db0 << "Push " << name << " to continue.";
+    db1 << "Push A button on gamepad to skip.";
+    SmartDashboard::PutString("DB/String 0", db0.str());
+    SmartDashboard::PutString("DB/String 1", db1.str());
+
+    bool success; // Was limit switch pressed?
+    /* Wait for either the limit switch or A button to be pressed. */
+    while (!(success = lswitch->Get()) && !gamepad->GetRawButton(DriveStationConstants::buttonA));
+
+    if (success)
+    {
+        LOGI << name << " has been pressed.";
+    }
+    else
+    {
+        LOGI << name << " test has been skipped.";
+        SmartDashboard::PutString("DB/String 0", "Release A button.");
+        SmartDashboard::PutString("DB/String 1", "");
+        /* Wait for A button to be released. */
+        while (gamepad->GetRawButton(DriveStationConstants::buttonA));
+    }
 }
