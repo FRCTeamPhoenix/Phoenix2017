@@ -18,6 +18,7 @@
 #include "json.hpp"
 #include "Lidar.h"
 #include "Climber.h"
+#include <sstream>
 
 using namespace std;
 using json=nlohmann::json;
@@ -26,13 +27,13 @@ using json=nlohmann::json;
  * Given a SmartTalon, runs it forward and backward at 60% for 3 seconds and
  * outputs the encoder's initial, final, and delta values.
  */
-void testSmartTalon(SmartTalon* talon, const char* name);
-#define TEST_SMART_TALON(talon) testSmartTalon(&talon, #talon)
+void testSmartTalon(SmartTalon* talon, const char* name, Lidar* lidar);
+#define TEST_SMART_TALON(talon) testSmartTalon(&talon, #talon, &m_lidar)
 /*
  * Given a Talon, runs it forward and backward at 60% for 3 seconds.
  */
-void testTalon(Talon* talon, const char* name);
-#define TEST_TALON(talon) testTalon(&talon, #talon)
+void testTalon(Talon* talon, const char* name, Lidar* lidar);
+#define TEST_TALON(talon) testTalon(&talon, #talon, &m_lidar)
 
 class Robot: public SampleRobot
 {
@@ -167,8 +168,26 @@ public:
 
 START_ROBOT_CLASS(Robot)
 
+/*
+ * Function that updates Lidar and outputs calculated
+ * distances to SmartDashboard.
+ */
 void
-testSmartTalon(SmartTalon* talon, const char* name)
+lidarDebugUpdate(Lidar* lidar)
+{
+    lidar->run();
+
+    std::stringstream slowAverage;
+    slowAverage << "Lidar Slow Average: " << lidar->getSlowAverage();
+    SmartDashboard::PutString("DB/String 8", slowAverage.str());
+
+    std::stringstream fastAverage;
+    slowAverage << "Lidar Fast Average: " << lidar->getFastAverage();
+    SmartDashboard::PutString("DB/String 9", fastAverage.str());
+}
+
+void
+testSmartTalon(SmartTalon* talon, const char* name, Lidar* lidar)
 {
     int initialPos;
     int finalPos;
@@ -178,7 +197,10 @@ testSmartTalon(SmartTalon* talon, const char* name)
     initialPos = talon->Get();
     timer.Start();
     while (timer.Get() < 3)
+    {
         talon->goAt(0.6);
+        lidarDebugUpdate(lidar);
+    }
     timer.Stop();
     talon->goAt(0.0);
     finalPos = talon->Get();
@@ -191,7 +213,10 @@ testSmartTalon(SmartTalon* talon, const char* name)
     timer.Reset();
     timer.Start();
     while (timer.Get() < 3)
+    {
         talon->goAt(-0.6);
+        lidarDebugUpdate(lidar);
+    }
     timer.Stop();
     talon->goAt(0.0);
     LOGI << name << "'s initial encoder value: " << initialPos;
@@ -200,14 +225,17 @@ testSmartTalon(SmartTalon* talon, const char* name)
 }
 
 void
-testTalon(Talon* talon, const char* name)
+testTalon(Talon* talon, const char* name, Lidar* lidar)
 {
     Timer timer;
 
     LOGI << "Spinning Talon " << name << " forward at 60% for 3 seconds.";
     timer.Start();
     while (timer.Get() < 3)
+    {
         talon->Set(0.6);
+        lidarDebugUpdate(lidar);
+    }
     timer.Stop();
     talon->Set(0.0);
 
@@ -215,7 +243,10 @@ testTalon(Talon* talon, const char* name)
     timer.Reset();
     timer.Start();
     while (timer.Get() < 3)
+    {
         talon->Set(-0.6);
+        lidarDebugUpdate(lidar);
+    }
     timer.Stop();
     talon->Set(0.0);
 }
