@@ -149,23 +149,23 @@ public:
             {
                 LOGD << "Entering Debug Test Mode";
 
-                TEST_SMART_TALON(m_FRDrive);
-                TEST_SMART_TALON(m_FLDrive);
-                TEST_SMART_TALON(m_BRDrive);
-                TEST_SMART_TALON(m_BLDrive);
-                TEST_SMART_TALON(m_leftFlyWheelMotor);
-                TEST_SMART_TALON(m_rightFlyWheelMotor);
-                TEST_SMART_TALON(m_climberMotor);
+                TEST_SMART_TALON(m_FRDrive);                    // LD1
+                TEST_SMART_TALON(m_FLDrive);                    // LD2
+                TEST_SMART_TALON(m_BRDrive);                    // RD1
+                TEST_SMART_TALON(m_BLDrive);                    // RD2
+                TEST_SMART_TALON(m_leftFlyWheelMotor);          // FW1
+                TEST_SMART_TALON(m_rightFlyWheelMotor);         // FW2
+                TEST_SMART_TALON(m_climberMotor);               // CMR
                 // TEST_SMART_TALON(m_feeder);
-                TEST_SMART_TALON(m_turretRotateMotor);
-                TEST_SMART_TALON(m_indexer);
+                TEST_SMART_TALON(m_turretRotateMotor);          // TRT
+                TEST_SMART_TALON(m_indexer);                    // INDX
 
-                TEST_TALON(m_loader);
+                TEST_TALON(m_loader);                           // LOAD
 
-                TEST_UPPER_LIMIT_SWITCH(m_climberMotor);
-                TEST_UPPER_LIMIT_SWITCH(m_turretRotateMotor);
-                TEST_LOWER_LIMIT_SWITCH(m_turretRotateMotor);
-                TEST_UPPER_LIMIT_SWITCH(m_indexer);
+                TEST_UPPER_LIMIT_SWITCH(m_climberMotor);        // CLIME
+                TEST_UPPER_LIMIT_SWITCH(m_turretRotateMotor);   // CWRL
+                TEST_LOWER_LIMIT_SWITCH(m_turretRotateMotor);   // CCWRL
+                TEST_UPPER_LIMIT_SWITCH(m_indexer);             // INDXS
 
                 LOGD << "Leaving Debug Test Mode";
             }
