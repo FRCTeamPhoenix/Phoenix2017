@@ -37,11 +37,13 @@ void testSmartTalon(SmartTalon* talon, const char* name, Lidar* lidar);
 void testTalon(Talon* talon, const char* name, Lidar* lidar);
 #define TEST_TALON(talon) testTalon(&talon, #talon, &m_lidar)
 /*
- * Given a DigitalInput (Limit Switch), waits for its input and logs event.
- * Test can be canceled by pressing A button on gamepad.
+ * Given a SmartTalon, waits for its upper/lower limit switch's input and logs
+ * the event. Test can be canceled by pressing A button on gamepad.
  */
-void testLimitSwitch(DigitalInput* lswitch, const char* name, Joystick* gamepad);
-#define TEST_LIMIT_SWITCH(lswitch) testLimitSwitch(&lswitch, #lswitch, &m_gamepad)
+void testUpperLimitSwitch(SmartTalon* talon, const char* name, Joystick* gamepad);
+#define TEST_UPPER_LIMIT_SWITCH(talon) testUpperLimitSwitch(&talon, #talon, &m_gamepad)
+void testLowerLimitSwitch(SmartTalon* talon, const char* name, Joystick* gamepad);
+#define TEST_LOWER_LIMIT_SWITCH(talon) testLowerLimitSwitch(&talon, #talon, &m_gamepad)
 
 class Robot: public SampleRobot
 {
@@ -153,15 +155,17 @@ public:
                 TEST_SMART_TALON(m_BLDrive);
                 TEST_SMART_TALON(m_leftFlyWheelMotor);
                 TEST_SMART_TALON(m_rightFlyWheelMotor);
-                // TEST_SMART_TALON(m_climber);
+                TEST_SMART_TALON(m_climberMotor);
                 // TEST_SMART_TALON(m_feeder);
                 TEST_SMART_TALON(m_turretRotateMotor);
                 TEST_SMART_TALON(m_indexer);
 
                 TEST_TALON(m_loader);
 
-                TEST_LIMIT_SWITCH(m_leftLimitSwitch);
-                TEST_LIMIT_SWITCH(m_rightLimitSwitch);
+                TEST_UPPER_LIMIT_SWITCH(m_climberMotor);
+                TEST_UPPER_LIMIT_SWITCH(m_turretRotateMotor);
+                TEST_LOWER_LIMIT_SWITCH(m_turretRotateMotor);
+                TEST_UPPER_LIMIT_SWITCH(m_indexer);
 
                 LOGD << "Leaving Debug Test Mode";
             }
@@ -263,27 +267,56 @@ testTalon(Talon* talon, const char* name, Lidar* lidar)
 }
 
 void
-testLimitSwitch(DigitalInput* lswitch, const char* name, Joystick* gamepad)
+testUpperLimitSwitch(SmartTalon* talon, const char* name, Joystick* gamepad)
 {
     std::stringstream db0, db1;
 
-    LOGI << "Waiting on " << name << "'s input.";
-    db0 << "Push " << name << " to continue.";
+    LOGI << "Waiting on " << name << "'s upper limit switch input.";
+    db0 << "Push " << name << "'s upper limit switch to continue.";
     db1 << "Push A button on gamepad to skip.";
     SmartDashboard::PutString("DB/String 0", db0.str());
     SmartDashboard::PutString("DB/String 1", db1.str());
 
     bool success; // Was limit switch pressed?
     /* Wait for either the limit switch or A button to be pressed. */
-    while (!(success = lswitch->Get()) && !gamepad->GetRawButton(DriveStationConstants::buttonA));
+    while (!(success = talon->IsFwdLimitSwitchClosed()) && !gamepad->GetRawButton(DriveStationConstants::buttonA));
 
     if (success)
     {
-        LOGI << name << " has been pressed.";
+        LOGI << name << "'s upper limit switch has been pressed.";
     }
     else
     {
-        LOGI << name << " test has been skipped.";
+        LOGI << name << "'s upper limit switch test has been skipped.";
+        SmartDashboard::PutString("DB/String 0", "Release A button.");
+        SmartDashboard::PutString("DB/String 1", "");
+        /* Wait for A button to be released. */
+        while (gamepad->GetRawButton(DriveStationConstants::buttonA));
+    }
+}
+
+void
+testLowerLimitSwitch(SmartTalon* talon, const char* name, Joystick* gamepad)
+{
+    std::stringstream db0, db1;
+
+    LOGI << "Waiting on " << name << "'s lower limit switch input.";
+    db0 << "Push " << name << "'s lower limit switch to continue.";
+    db1 << "Push A button on gamepad to skip.";
+    SmartDashboard::PutString("DB/String 0", db0.str());
+    SmartDashboard::PutString("DB/String 1", db1.str());
+
+    bool success; // Was limit switch pressed?
+    /* Wait for either the limit switch or A button to be pressed. */
+    while (!(success = talon->IsRevLimitSwitchClosed()) && !gamepad->GetRawButton(DriveStationConstants::buttonA));
+
+    if (success)
+    {
+        LOGI << name << "'s lower limit switch has been pressed.";
+    }
+    else
+    {
+        LOGI << name << "'s lower limit switch test has been skipped.";
         SmartDashboard::PutString("DB/String 0", "Release A button.");
         SmartDashboard::PutString("DB/String 1", "");
         /* Wait for A button to be released. */
