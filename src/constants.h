@@ -14,6 +14,9 @@ struct PortAssign {
         const static uint32_t frontLeftWheelMotor = 1;
         const static uint32_t frontRightWheelMotor = 2;
         const static uint32_t backRightWheelMotor = 3;
+        const static uint32_t climberMotor = 4;
+        const static uint32_t gamepad = 1;
+        const static uint32_t gathererMotor = 4;
 
 };
 

@@ -23,6 +23,7 @@ public:
 	void run(); // This is the main function for the gatherer
 	void stop(); // Stops the gatherer
 	void start(); // Starts the gatherer
+	void move(double speed); // to test if the motor is working otherwise DONOT use
 
 private:
 	Talon & m_motor;

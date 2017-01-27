@@ -2,7 +2,7 @@
  * Climber.h
  *
  *  Created on: Jan 10, 2017
- *      Author: evsci_000
+ *      Author: Joshua Calzadillas
  */
 #include "WPILib.h"
 #include "SmartTalon.h"

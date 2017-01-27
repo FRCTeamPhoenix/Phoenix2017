@@ -38,11 +38,15 @@ void Gatherer::run() {
 }
 
 void Gatherer::stop() {
-	m_motor.Set(0.0);
+	m_motor.Set(0.0f);
 }
 
 void Gatherer::start() {
-	m_motor.Set(1.0);
+	m_motor.Set(1.0f);
+}
+
+void Gatherer::move(double speed) {
+	m_motor.Set(speed);
 }
 
 Gatherer::~Gatherer() {
