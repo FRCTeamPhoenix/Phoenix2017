@@ -42,7 +42,9 @@ void Indexer::run()
             m_indexerMotor->Set(0.0);
         break;
     case QUARTER_TURN:
-        /* TODO: Insert code for quarter-turn here */
+        m_indexerMotor->goDistance(1024, 0.5);
+        if (m_indexerMotor->GetSpeed() == 0.0)
+            m_state = OFF;
         break;
     }
 }
