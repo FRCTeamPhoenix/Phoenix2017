@@ -9,28 +9,29 @@
 #define SRC_INDEXER_H_
 #include "WPILib.h"
 #include "constants.h"
+#include "SmartTalon.h"
 
 class Indexer
 {
-    public:
-        Indexer(Talon* IndexerMotor, Joystick* gamepad);
-        virtual ~Indexer();
+public:
+    Indexer(SmartTalon* indexerMotor, Joystick* gamepad);
+    virtual ~Indexer();
 
-        enum state
-        {
-            ON,
-            OFF,
-            QuarterTurn
-        };
+    enum State
+    {
+        ON,
+        OFF,
+        QUARTER_TURN
+    };
 
-        void run();
-        void start();
-        void stop();
+    State getState();
+    void setState(State state);
+    void run();
 
-    private:
-        state m_state;
-        Talon* m_IndexerMotor;
-        Joystick* m_gamepad;
+private:
+    State m_state;
+    SmartTalon* m_indexerMotor;
+    Joystick* m_gamepad;
 };
 
 #endif /* SRC_INDEXER_H_ */

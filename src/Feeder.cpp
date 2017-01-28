@@ -7,8 +7,8 @@
 
 #include <Feeder.h>
 
-Feeder::Feeder(Talon* FeederMotor, Joystick* gamepad):
-    m_FeederMotor(FeederMotor),
+Feeder::Feeder(SmartTalon* feederMotor, Joystick* gamepad):
+    m_feederMotor(feederMotor),
     m_gamepad(gamepad)
 {
     m_state = OFF;
@@ -16,6 +16,16 @@ Feeder::Feeder(Talon* FeederMotor, Joystick* gamepad):
 
 Feeder::~Feeder()
 {
+}
+
+State Feeder::getState()
+{
+    return m_state;
+}
+
+void Feeder::setState(State state)
+{
+    m_state = state;
 }
 
 void Feeder::run()
@@ -27,7 +37,6 @@ void Feeder::run()
             if (!m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonA))
             {
                 m_state = OFF;
-                break;
             }
             break;
 
@@ -36,18 +45,7 @@ void Feeder::run()
             if (m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonA))
             {
                 m_state = ON;
-                break;
             }
             break;
     }
-}
-
-void Feeder::start()
-{
-    m_FeederMotor->Set(0.5f);
-}
-
-void Feeder::stop()
-{
-    m_FeederMotor->Set(0.0f);
 }

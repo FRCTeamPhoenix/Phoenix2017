@@ -7,8 +7,8 @@
 
 #include <Gatherer.h>
 
-Gatherer::Gatherer(Talon* GathererMotor, Joystick* gamepad):
-    m_GathererMotor(GathererMotor),
+Gatherer::Gatherer(SmartTalon* gathererMotor, Joystick* gamepad):
+    m_gathererMotor(gathererMotor),
     m_gamepad(gamepad)
 {
     m_state = OFF;
@@ -16,6 +16,16 @@ Gatherer::Gatherer(Talon* GathererMotor, Joystick* gamepad):
 
 Gatherer::~Gatherer()
 {
+}
+
+State Gatherer::getState()
+{
+    return m_state;
+}
+
+void Gatherer::setState(State state)
+{
+    m_state = state;
 }
 
 void Gatherer::run()
@@ -27,7 +37,6 @@ void Gatherer::run()
             if (!m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonX))
             {
                 m_state = OFF;
-                break;
             }
             break;
 
@@ -36,18 +45,7 @@ void Gatherer::run()
             if (m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonX))
             {
                 m_state = ON;
-                break;
             }
             break;
     }
-}
-
-void Gatherer::start()
-{
-    m_GathererMotor->Set(0.5f);
-}
-
-void Gatherer::stop()
-{
-    m_GathererMotor->Set(0.0f);
 }

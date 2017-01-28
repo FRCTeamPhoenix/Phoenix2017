@@ -9,27 +9,28 @@
 #define SRC_Gatherer_H_
 #include "WPILib.h"
 #include "constants.h"
+#include "SmartTalon.h"
 
 class Gatherer
 {
-    public:
-        Gatherer(Talon* GathererMotor, Joystick* gamepad);
-        virtual ~Gatherer();
+public:
+    Gatherer(SmartTalon* gathererMotor, Joystick* gamepad);
+    virtual ~Gatherer();
 
-        enum state
-        {
-            ON,
-            OFF
-        };
+    enum State
+    {
+        ON,
+        OFF
+    };
 
-        void run();
-        void start();
-        void stop();
+    State getState();
+    void setState(State state);
+    void run();
 
-    private:
-        state m_state;
-        Talon*  m_GathererMotor;
-        Joystick* m_gamepad;
+private:
+    State m_state;
+    SmartTalon* m_gathererMotor;
+    Joystick* m_gamepad;
 };
 
 #endif /* SRC_Gatherer_H_ */

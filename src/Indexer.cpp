@@ -7,8 +7,8 @@
 
 #include <Indexer.h>
 
-Indexer::Indexer(Talon* IndexerMotor, Joystick* gamepad):
-    m_IndexerMotor(IndexerMotor),
+Indexer::Indexer(SmartTalon* indexerMotor, Joystick* gamepad):
+    m_indexerMotor(indexerMotor),
     m_gamepad(gamepad)
 {
     m_state = OFF;
@@ -16,6 +16,16 @@ Indexer::Indexer(Talon* IndexerMotor, Joystick* gamepad):
 
 Indexer::~Indexer()
 {
+}
+
+State Indexer::getState()
+{
+    return m_state;
+}
+
+void Indexer::setState(State state)
+{
+    m_state = state;
 }
 
 void Indexer::run()
@@ -28,12 +38,10 @@ void Indexer::run()
                     !m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonY))
             {
                 m_state = OFF;
-                break;
             }
             if (m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonY))
             {
-                m_state = QuarterTurn;
-                break;
+                m_state = QUARTER_TURN;
             }
             break;
 
@@ -42,38 +50,24 @@ void Indexer::run()
             if (m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonB))
             {
                 m_state = ON;
-                break;
             }
             if (m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonY))
             {
-                m_state = QuarterTurn;
-                break;
+                m_state = QUARTER_TURN;
             }
             break;
 
-        case QuarterTurn:
+        case QUARTER_TURN:
             start();
             if (m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonB))
             {
                 m_state = ON;
-                break;
             }
             if (!m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonB) &&
                     !m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonY))
             {
                 m_state = OFF;
-                break;
             }
             break;
     }
-}
-
-void Indexer::start()
-{
-    m_IndexerMotor->Set(0.5f);
-}
-
-void Indexer::stop()
-{
-    m_IndexerMotor->Set(0.0f);
 }

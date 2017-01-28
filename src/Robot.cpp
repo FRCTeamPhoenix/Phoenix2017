@@ -17,6 +17,9 @@
 #include "json.hpp"
 #include "Lidar.h"
 #include "Climber.h"
+#include "Gatherer.h"
+#include "Feeder.h"
+#include "Indexer.h"
 
 using namespace std;
 using json=nlohmann::json;
@@ -45,6 +48,9 @@ class Robot: public SampleRobot
     Lidar m_lidar;
     SmartTalon m_climberMotor;
     Climber m_climber;
+    SmartTalon m_gathererMotor;
+    SmartTalon m_feederMotor;
+    SmartTalon m_indexerMotor;
 
 public:
     Robot() :
@@ -69,7 +75,10 @@ public:
             m_autoController(),
             m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
 			m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
-			m_climber(m_climberMotor, m_joystick)
+			m_climber(m_climberMotor, m_joystick),
+			m_gathererMotor(PortAssign::loader),
+			m_feederMotor(PortAssign::feeder),
+			m_indexerMotor(PortAssign::indexer)
 
     {
     }
