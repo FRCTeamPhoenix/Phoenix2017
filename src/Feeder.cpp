@@ -33,13 +33,13 @@ void Feeder::run()
     switch (m_state)
     {
     case ON:
-        m_feederMotor->Set(0.5);
+        m_feederMotor->goAt(0.5);
         break;
     case OFF:
         if (m_gamepad->GetRawButton(DriveStationConstants::buttonX))
-            m_feederMotor->Set(0.5);
+            m_feederMotor->goAt(0.5);
         else
-            m_feederMotor->Set(0.0);
+            m_feederMotor->goAt(0.0);
         break;
     }
 }

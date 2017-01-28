@@ -7,7 +7,7 @@
 
 #include <Gatherer.h>
 
-Gatherer::Gatherer(SmartTalon* gathererMotor, Joystick* gamepad):
+Gatherer::Gatherer(Talon* gathererMotor, Joystick* gamepad):
     m_gathererMotor(gathererMotor),
     m_gamepad(gamepad)
 {

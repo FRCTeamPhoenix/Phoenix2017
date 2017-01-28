@@ -48,7 +48,7 @@ class Robot: public SampleRobot
     Lidar m_lidar;
     SmartTalon m_climberMotor;
     Climber m_climber;
-    SmartTalon m_gathererMotor;
+    Talon m_gathererMotor;
     SmartTalon m_feederMotor;
     SmartTalon m_indexerMotor;
 
@@ -76,7 +76,7 @@ public:
             m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
             m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
             m_climber(m_climberMotor, m_joystick),
-            m_gathererMotor(PortAssign::loader, CANTalon::FeedbackDevice::QuadEncoder),
+            m_gathererMotor(PortAssign::loader),
             m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
             m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder)
     {

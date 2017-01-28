@@ -33,13 +33,13 @@ void Indexer::run()
     switch (m_state)
     { 
     case ON:
-        m_indexerMotor->Set(0.5);
+        m_indexerMotor->goAt(0.5);
         break;
     case OFF:
         if (m_gamepad->GetRawButton(DriveStationConstants::buttonX))
-            m_indexerMotor->Set(0.5);
+            m_indexerMotor->goAt(0.5);
         else
-            m_indexerMotor->Set(0.0);
+            m_indexerMotor->goAt(0.0);
         break;
     case QUARTER_TURN:
         m_indexerMotor->goDistance(1024, 0.5);
