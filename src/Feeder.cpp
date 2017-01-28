@@ -18,12 +18,12 @@ Feeder::~Feeder()
 {
 }
 
-State Feeder::getState()
+Feeder::State Feeder::getState()
 {
     return m_state;
 }
 
-void Feeder::setState(State state)
+void Feeder::setState(Feeder::State state)
 {
     m_state = state;
 }
@@ -32,20 +32,14 @@ void Feeder::run()
 {
     switch (m_state)
     {
-        case ON:
-            start();
-            if (!m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonA))
-            {
-                m_state = OFF;
-            }
-            break;
-
-        case OFF:
-            stop();
-            if (m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonA))
-            {
-                m_state = ON;
-            }
-            break;
+    case ON:
+        m_feederMotor->Set(0.5);
+        break;
+    case OFF:
+        if (m_gamepad->GetRawButton(DriveStationConstants::buttonX))
+            m_feederMotor->Set(0.5);
+        else
+            m_feederMotor->Set(0.0);
+        break;
     }
 }

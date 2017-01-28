@@ -18,12 +18,12 @@ Gatherer::~Gatherer()
 {
 }
 
-State Gatherer::getState()
+Gatherer::State Gatherer::getState()
 {
     return m_state;
 }
 
-void Gatherer::setState(State state)
+void Gatherer::setState(Gatherer::State state)
 {
     m_state = state;
 }
@@ -32,20 +32,14 @@ void Gatherer::run()
 {
     switch (m_state)
     {
-        case ON:
-            start();
-            if (!m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonX))
-            {
-                m_state = OFF;
-            }
-            break;
-
-        case OFF:
-            stop();
-            if (m_gamepad->GetRawButton(DriveStationConstants::buttonNames::buttonX))
-            {
-                m_state = ON;
-            }
-            break;
+    case ON:
+        m_gathererMotor->Set(0.5);
+        break;
+    case OFF:
+        if (m_gamepad->GetRawButton(DriveStationConstants::buttonX))
+            m_gathererMotor->Set(0.5);
+        else
+            m_gathererMotor->Set(0.0);
+        break;
     }
 }

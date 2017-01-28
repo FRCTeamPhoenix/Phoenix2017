@@ -74,12 +74,11 @@ public:
             m_configEditor(),
             m_autoController(),
             m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
-			m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
-			m_climber(m_climberMotor, m_joystick),
-			m_gathererMotor(PortAssign::loader),
-			m_feederMotor(PortAssign::feeder),
-			m_indexerMotor(PortAssign::indexer)
-
+            m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
+            m_climber(m_climberMotor, m_joystick),
+            m_gathererMotor(PortAssign::loader, CANTalon::FeedbackDevice::QuadEncoder),
+            m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
+            m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder)
     {
     }
     void RobotInit() override
@@ -128,7 +127,7 @@ public:
 
             //m_rightFlyWheelMotor.goAt(m_joystick.GetY());
             //m_leftFlyWheelMotor.goAt(m_joystick.GetY());
-        	m_climber.run();
+                m_climber.run();
             m_configEditor.update();
 
         }
