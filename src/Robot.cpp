@@ -16,12 +16,15 @@
 #include <fstream>
 #include "json.hpp"
 #include "Lidar.h"
+#include "JSONFile.h"
 
 using namespace std;
 using json=nlohmann::json;
 
 class Robot: public SampleRobot
 {
+    JSONFile m_talonsJSON;
+
     SmartTalon m_FRDrive;
     SmartTalon m_FLDrive;
     SmartTalon m_BRDrive;
@@ -45,14 +48,15 @@ class Robot: public SampleRobot
 
 public:
     Robot() :
-            m_FRDrive(3, CANTalon::FeedbackDevice::QuadEncoder),
-            m_FLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
-            m_BRDrive(4, CANTalon::FeedbackDevice::QuadEncoder),
-            m_BLDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
+            m_talonsJSON("talons.json"),
+            m_FRDrive(3, CANTalon::FeedbackDevice::QuadEncoder, m_talonsJSON.get()["3"]),
+            m_FLDrive(2, CANTalon::FeedbackDevice::QuadEncoder, m_talonsJSON.get()["2"]),
+            m_BRDrive(4, CANTalon::FeedbackDevice::QuadEncoder, m_talonsJSON.get()["4"]),
+            m_BLDrive(1, CANTalon::FeedbackDevice::QuadEncoder, m_talonsJSON.get()["1"]),
             m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_gyro, HeadingControl::GyroAxes::x),
-            m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-			m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-			m_turretRotateMotor(PortAssign::turretRotationMotor, CANTalon::FeedbackDevice::QuadEncoder),
+            m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder, m_talonsJSON.get()["6"]),
+			m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder, m_talonsJSON.get()["5"]),
+			m_turretRotateMotor(PortAssign::turretRotationMotor, CANTalon::FeedbackDevice::QuadEncoder, m_talonsJSON.get()["7"]),
 			m_leftLimitSwitch(PortAssign::leftLimitSwitch),
 			m_rightLimitSwitch(PortAssign::rightLimitSwitch),
 			m_joystick(PortAssign::joystick),

@@ -9,6 +9,7 @@
 #include "WPILib.h"
 #include "PIDGains.h"
 #include "CANTalon.h"
+#include "plog/Log.h"
 #include "json.hpp"
 
 using namespace std;
@@ -16,7 +17,7 @@ using json=nlohmann::json;
 class SmartTalon : public CANTalon
 {
 public:
-    SmartTalon(int deviceNumber, FeedbackDevice device);
+    SmartTalon(int deviceNumber, FeedbackDevice device, json taloncfg);
 
     void goTo(double position, double speed);
     void goAt(double speed);
