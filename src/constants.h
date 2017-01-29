@@ -15,7 +15,7 @@ struct PortAssign {
    const static uint32_t backRightWheelMotor = 4;
    const static uint32_t leftFlyWheelMotor = 5;
    const static uint32_t rightFlyWheelMotor = 6;
-   const static uint32_t turretRotationMotor = 7;
+   const static uint32_t turretRotationMotor = 6;
 
    //Controllers
    const static uint32_t joystick = 0;

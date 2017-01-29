@@ -80,7 +80,7 @@ private:
     SmartTalon& m_BRTalon;
     SmartTalon& m_BLTalon;
 
-    RobotDrive m_driveTrain;
+//    RobotDrive m_driveTrain;
 
 };
 

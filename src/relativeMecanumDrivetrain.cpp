@@ -19,7 +19,7 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
     m_FLTalon(FLTalon),
     m_BRTalon(BRTalon),
     m_BLTalon(BLTalon),
-    m_driveTrain(FLTalon, BLTalon, FRTalon, BLTalon),
+//    m_driveTrain(FLTalon, BLTalon, FRTalon, BLTalon),
     m_distanceController(0.001, 0, 0.000, this, this)
 
 {
@@ -29,7 +29,7 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
     m_goalGyro = 0;
     m_maxSpeed = 0;
 
-    m_mode = CANSpeedController::ControlMode::kPosition;
+    m_mode = CANSpeedController::ControlMode::kSpeed;
 
     m_distanceController.Enable();
     m_distanceController.SetAbsoluteTolerance (800);
@@ -109,9 +109,9 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
 
     m_distanceController.SetSetpoint (sqrt((distanceX * distanceX) + (distanceY * distanceY)));
 
-    std::stringstream sP;
-    sP << "SetPoint: " << m_distanceController.GetSetpoint ();
-    SmartDashboard::PutString("DB/String 5", sP.str());
+//    std::stringstream sP;
+//    sP << "SetPoint: " << m_distanceController.GetSetpoint ();
+//    SmartDashboard::PutString("DB/String 5", sP.str());
 }
 
 void relativeMecanumDrivetrain::moveAt (double speed, double angle)
@@ -175,11 +175,11 @@ bool relativeMecanumDrivetrain::doneMove ()
 double relativeMecanumDrivetrain::PIDGet ()
 {
     double distance = getDistance();
-    std::stringstream dist;
-    dist << "Distance: " << distance;
-    SmartDashboard::PutString("DB/String 4", dist.str());
+//    std::stringstream dist;
+//    dist << "Distance: " << distance;
+//    SmartDashboard::PutString("DB/String 4", dist.str());
 
-    LOGI << dist.str();
+//    LOGI << dist.str();
 
     return distance;
 }

@@ -27,44 +27,44 @@ class Robot: public SampleRobot
     SmartTalon m_BRDrive;
     SmartTalon m_BLDrive;
     relativeMecanumDrivetrain m_drivetrain;
-    SmartTalon m_rightFlyWheelMotor;
-    SmartTalon m_leftFlyWheelMotor;
-    SmartTalon m_turretRotateMotor;
-    DigitalInput m_leftLimitSwitch;
-    DigitalInput m_rightLimitSwitch;
+//    SmartTalon m_rightFlyWheelMotor;
+//    SmartTalon m_leftFlyWheelMotor;
+//    SmartTalon m_turretRotateMotor;
+//    DigitalInput m_leftLimitSwitch;
+//    DigitalInput m_rightLimitSwitch;
     Joystick m_joystick;
     Joystick m_gamepad;
     ADIS16448_IMU m_gyro;
-    FlyWheels m_flywheel;
-    Turret m_turret;
+//    FlyWheels m_flywheel;
+//    Turret m_turret;
     LoggerController m_loggerController;
-    ShooterController m_shooterController;
-    ConfigEditor m_configEditor;
-    AutoController m_autoController;
-    Lidar m_lidar;
+//    ShooterController m_shooterController;
+//    ConfigEditor m_configEditor;
+//    AutoController m_autoController;
+//    Lidar m_lidar;
 
 public:
     Robot() :
-            m_FRDrive(3, CANTalon::FeedbackDevice::QuadEncoder),
-            m_FLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
-            m_BRDrive(4, CANTalon::FeedbackDevice::QuadEncoder),
-            m_BLDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
+            m_FRDrive(7, CANTalon::FeedbackDevice::QuadEncoder),
+            m_FLDrive(8, CANTalon::FeedbackDevice::QuadEncoder),
+            m_BRDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
+            m_BLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
             m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_gyro, HeadingControl::GyroAxes::x),
-            m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-			m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-			m_turretRotateMotor(PortAssign::turretRotationMotor, CANTalon::FeedbackDevice::QuadEncoder),
-			m_leftLimitSwitch(PortAssign::leftLimitSwitch),
-			m_rightLimitSwitch(PortAssign::rightLimitSwitch),
+//            m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
+//			m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
+//			m_turretRotateMotor(PortAssign::turretRotationMotor, CANTalon::FeedbackDevice::QuadEncoder),
+//			m_leftLimitSwitch(PortAssign::leftLimitSwitch),
+//			m_rightLimitSwitch(PortAssign::rightLimitSwitch),
 			m_joystick(PortAssign::joystick),
 			m_gamepad(PortAssign::gamepad),
 			m_gyro(),
-			m_flywheel(m_rightFlyWheelMotor,m_leftFlyWheelMotor, m_gamepad),
-			m_turret(m_turretRotateMotor, m_leftLimitSwitch, m_rightLimitSwitch, m_gamepad),
-            m_loggerController(),
-			m_shooterController(m_flywheel, m_turret),
-            m_configEditor(),
-            m_autoController(),
-            m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0)
+//			m_flywheel(m_rightFlyWheelMotor,m_leftFlyWheelMotor, m_gamepad),
+//			m_turret(m_turretRotateMotor, m_leftLimitSwitch, m_rightLimitSwitch, m_gamepad),
+            m_loggerController()
+//			m_shooterController(m_flywheel, m_turret),
+//            m_configEditor(),
+//            m_autoController(),
+//            m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0)
 		{
     	}
 
@@ -99,65 +99,58 @@ public:
             LOGI << "Start Teleop";
         	int count = 0;
 
+        	int maxSpeed = 0;
+
             while (IsEnabled() && IsOperatorControl())
             {
-//				m_FLDrive.SetControlMode(CANSpeedController::kPosition);
-//				m_BRDrive.SetControlMode(CANSpeedController::kPosition);
-//				m_BLDrive.SetControlMode(CANSpeedController::kPosition);
-				if(count < 10){
-					m_drivetrain.moveDistance(20000, 0, 0.4);
 
+//            	m_FRDrive.SetControlMode(CANSpeedController::kPercentVbus);
+//            	m_FLDrive.SetControlMode(CANSpeedController::kPercentVbus);
+//            	m_BRDrive.SetControlMode(CANSpeedController::kPercentVbus);
+//            	m_BLDrive.SetControlMode(CANSpeedController::kPercentVbus);
 
-    //            		m_FRDrive.SetControlMode(CANSpeedController::kPosition);
-    //                	m_FRDrive.Set(2000);
-					count ++;
+				double FrontBack = -m_joystick.GetY();
+				double LeftRight = m_joystick.GetX();
+				double rotation = m_joystick.GetZ();
+				if (fabs(FrontBack) < 0.2)
+				{
+					FrontBack = 0;
 				}
-    //            	m_FRDrive.Get();
-    //				m_FLDrive.Get();
-    //				m_BRDrive.Get();
-    //				m_BLDrive.Get();
+				if (fabs(LeftRight) < 0.2)
+				{
+					LeftRight = 0;
+				}
+				if (fabs(rotation) < 0.2)
+				{
+					rotation = 0;
+				}
 
-    //                m_autoController.run ();
+				FrontBack /= 4;
+				LeftRight /= 4;
+				rotation /= 4;
+
+				m_drivetrain.moveRelative(FrontBack, LeftRight, rotation);
 
 
 
+				std::stringstream FR;
+				FR << "FR Speed: " << m_FRDrive.GetSpeed();
+				SmartDashboard::PutString("DB/String 5", FR.str());
 
-//                double FrontBack = -m_gamepad.GetY();
-//                double LeftRight = m_gamepad.GetX();
-//                double rotation = m_gamepad.GetZ();
-//                std::ostringstream outputX;
-//                outputX << "Weird Gyro X: ";
-//                outputX << (weirdBoardThing.GetAngleX());
-//                SmartDashboard::PutString("DB/String 5", outputX.str());
-//
-//                std::ostringstream outputY;
-//                outputY << "Weird Gyro Y: ";
-//                outputY << (weirdBoardThing.GetAngleY());
-//                SmartDashboard::PutString("DB/String 6", outputY.str());
-//
-//                std::ostringstream outputZ;
-//                outputZ << "Weird Gyro Z: ";
-//                outputZ << (weirdBoardThing.GetAngleZ());
-//                SmartDashboard::PutString("DB/String 7", outputZ.str());
-//
-//                if (fabs(FrontBack) < 0.2)
-//                {
-//                    FrontBack = 0;
-//                }
-//                if (fabs(LeftRight) < 0.2)
-//                {
-//                    LeftRight = 0;
-//                }
-//                if (fabs(rotation) < 0.2)
-//                {
-//                    rotation = 0;
-//                }
-//
-//                FrontBack /= 4;
-//                LeftRight /= 4;
-//                rotation /= 4;
-//
-//                m_drivetrain.moveRelative(FrontBack, LeftRight, rotation);
+				std::stringstream FL;
+				FL << "FL Speed: " << m_FLDrive.GetSpeed();
+				SmartDashboard::PutString("DB/String 6", FL.str());
+
+				std::stringstream BR;
+				BR << "BR Speed: " << m_BRDrive.GetSpeed();
+				SmartDashboard::PutString("DB/String 7", BR.str());
+
+				std::stringstream BL;
+				BL << "BL Speed: " << m_BLDrive.GetSpeed();
+				SmartDashboard::PutString("DB/String 8", BL.str());
+//				}
+
+
             }    
         
     }
