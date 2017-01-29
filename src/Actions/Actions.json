@@ -1,0 +1,22 @@
+{
+  "description": "",
+  "lasted_edited": "",
+
+  "type": "ActionGroup",
+  "name": "All Actions",
+  "startingCondition": "0",
+  "containedActions": [
+    {
+      "type": "CountUp",
+      "name": "Log UP",
+      "startingCondition": "0",
+      "start": 0,
+      "end": 20,
+      "dependencies": []
+    }
+
+  ],
+  "dependencies": [],
+  "doneDependencies": [{"place": 2, "requiredCondition": 2}]
+
+}
