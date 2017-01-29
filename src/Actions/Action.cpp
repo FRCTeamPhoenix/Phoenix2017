@@ -1,29 +1,110 @@
+//
+// Created by William Gebhardt on 1/23/17.
+//
+
 #include "Action.h"
+#include <memory>
+#include <fstream>
 
-/*
- * Default constructor.
- * In initializer list for derived classes, do the following:
- *
- * ActionNone::ActionNone(void)
- *    : Action()
- *
- * so that this default constructor is called.
- */
-Action::Action(void)
+
+
+Action::Action (vector<shared_ptr<dependency>> dependencies):
+    m_dependencies(dependencies),
+    m_currentCondition(dependency::NotStarted)
+
 {
-   m_initialized = false;
+
 }
 
-/*
- * Added for safety reasons.
- * It is always good to have a destructor.
- */
-Action::~Action(void)
+Action::Action (json& action):
+    m_dependencies()
 {
+    try
+    {
+        for (json::iterator d = action["dependencies"].begin (); d != action["dependencies"].end (); d++)
+        {
+            m_dependencies.push_back (make_shared<dependency> (*d));
+        }
+        m_currentCondition = (dependency::condition)(int)action["startingCondition"];
+        m_name = action["name"];
+    }
+    catch (...)
+    {
+        std::cout << "dependency not passed as array" << std::endl;
+        m_name = "unnamed";
+    }
 }
 
-bool
-Action::isInitialized(void) const
+Action::Action ():
+    m_dependencies()
 {
-   return m_initialized;
+
+
+    ifstream json_file;
+    json_file.open("/home/lvuser/Actions.json");
+
+    json action;
+    json_file >> action;
+    json_file.close ();
+
+    try
+    {
+        for (json::iterator d = action["dependencies"].begin (); d != action["dependencies"].end (); d++)
+        {
+            m_dependencies.push_back (make_shared<dependency> (*d));
+        }
+        m_currentCondition = (dependency::condition)(int)action["startingCondition"];
+        m_name = action["name"];
+    }
+    catch (...)
+    {
+        std::cout << "dependency not passed as array" << std::endl;
+        m_name = "unnamed";
+    }
+
+
 }
+
+bool Action::issuable (vector<shared_ptr<Action>> &allActions)
+{
+    bool dependenciesMet = true;
+    vector<shared_ptr<dependency>>::iterator dependencyIterator;
+    for(dependencyIterator = m_dependencies.begin(); dependencyIterator != m_dependencies.end(); dependencyIterator++)
+    {
+        dependency::condition dependantCondition = dependencyIterator->get ()->getCondition ();
+        dependency::condition targetActionCondition = allActions[dependencyIterator->get ()->getPlace ()]->getCondition ();
+
+        if(targetActionCondition < dependantCondition)
+        {
+            dependenciesMet = false;
+        }
+    }
+
+    return dependenciesMet;
+}
+
+dependency::condition Action::getCondition ()
+{
+    return m_currentCondition;
+}
+
+void Action::execute (vector<shared_ptr<Action>>& allActions)
+{
+    if(dependency::condition::Disabled == getCondition()){
+        return;
+    }
+
+    if(dependency::condition::Finished == getCondition())
+    {
+        return;
+    }
+
+
+    if(issuable (allActions))
+    {
+        run();
+    }
+
+
+}
+
