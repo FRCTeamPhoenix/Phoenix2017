@@ -35,3 +35,4 @@ CMakeLists.txt
 
 # For emacs auto-save files
 *~
+*.xml
