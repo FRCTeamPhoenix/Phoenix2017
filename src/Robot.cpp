@@ -116,12 +116,18 @@ public:
         LOGI << "Start Test Mode";
         while (IsEnabled() && IsTest())
         {
-
-            //m_rightFlyWheelMotor.goAt(m_joystick.GetY());
-            //m_leftFlyWheelMotor.goAt(m_joystick.GetY());
-        	m_climber.run();
-            m_configEditor.update();
-
+            // TODO MODES AND ALSO ASK MR.BEWLEY ABOUT THE MODE SWITCHING ON THE DRIVER STATION
+            /*
+             * mode 1: all talons forward and backwards
+             * Mode 2: shooter head, voltage, pid
+             * Mode 3: feeder
+             * Mode 4: indexer
+             * Mode 5: gatherer - no pid
+             * Mode 6: turret
+             * Mode 7: climber
+             * Mode 8: shooter calibration, indexer, feeder, shooter head
+             * Mode 9: drive strain
+             */
         }
 
     }
