@@ -35,6 +35,7 @@ class Robot: public SampleRobot
     Joystick m_joystick;
     Joystick m_gamepad;
     ADIS16448_IMU m_gyro;
+    Timer m_timer;
 //    FlyWheels m_flywheel;
 //    Turret m_turret;
     LoggerController m_loggerController;
@@ -52,6 +53,7 @@ public:
             m_BLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
 
             m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_gyro, HeadingControl::GyroAxes::x),
+
 //            m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
 //			m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
 //			m_turretRotateMotor(PortAssign::turretRotationMotor, CANTalon::FeedbackDevice::QuadEncoder),
@@ -59,6 +61,7 @@ public:
 //			m_rightLimitSwitch(PortAssign::rightLimitSwitch),
 			m_joystick(PortAssign::joystick),
 			m_gamepad(PortAssign::gamepad),
+			m_timer(),
 //			m_gyro(),
 //			m_flywheel(m_rightFlyWheelMotor,m_leftFlyWheelMotor, m_gamepad),
 //			m_turret(m_turretRotateMotor, m_leftLimitSwitch, m_rightLimitSwitch, m_gamepad),
@@ -103,6 +106,17 @@ public:
 
         	int maxSpeed = 0;
 
+        	double xPos = 0;
+        	double yPos = 0;
+        	double zPos = 0;
+
+        	double xVel = 0;
+			double yVel = 0;
+			double zVel = 0;
+
+        	double lastTime = 0;
+        	m_timer.Start();
+
             while (IsEnabled() && IsOperatorControl())
             {
 
@@ -127,34 +141,63 @@ public:
 					rotation = 0;
 				}
 
-				FrontBack /= 4;
-				LeftRight /= 4;
-				rotation /= 4;
+				FrontBack /= 3;
+				LeftRight /= 3;
+				rotation /= 3;
 
 				m_drivetrain.moveRelative(FrontBack, LeftRight, rotation);
 
+				double newTime = m_timer.Get();
+				double deltaTime = newTime - lastTime;
+				lastTime = newTime;
 
+				double xAccel = (m_gyro.GetAccelX()) * 32.2;
+				double yAccel = (m_gyro.GetAccelY()) * 32.2;
+				double zAccel = (m_gyro.GetAccelZ()) * 32.2;
+
+				xVel += deltaTime * xAccel;
+				yVel += deltaTime * yAccel;
+				zVel += deltaTime * zAccel;
+
+				xPos += deltaTime * deltaTime * xAccel * 0.5 * xVel;
+				yPos += deltaTime * deltaTime * yAccel * 0.5 * yVel;
+				zPos += deltaTime * deltaTime * zAccel * 0.5 * zVel;
 
 				std::stringstream FR;
-				FR << "FR Speed: " << m_FRDrive.GetSpeed();
-				SmartDashboard::PutString("DB/String 5", FR.str());
+				FR << "X Vel: " << xVel;
+				SmartDashboard::PutString("DB/String 0", FR.str());
 
 				std::stringstream FL;
-				FL << "FL Speed: " << m_FLDrive.GetSpeed();
-				SmartDashboard::PutString("DB/String 6", FL.str());
+				FL << "Y Vel: " << yVel;
+				SmartDashboard::PutString("DB/String 1", FL.str());
 
 				std::stringstream BR;
-				BR << "BR Speed: " << m_BRDrive.GetSpeed();
-				SmartDashboard::PutString("DB/String 7", BR.str());
+				BR << "Z Vel: " << zVel;
+				SmartDashboard::PutString("DB/String 2", BR.str());
 
-				std::stringstream BL;
-				BL << "BL Speed: " << m_BLDrive.GetSpeed();
-				SmartDashboard::PutString("DB/String 8", BL.str());
+
+            	std::stringstream FRdist;
+            	FRdist << "X Accel: " << xAccel;
+            	SmartDashboard::PutString("DB/String 5", FRdist.str());
+
+            	std::stringstream FLdist;
+            	FLdist << "Y Accel: " << yAccel;
+            	SmartDashboard::PutString("DB/String 6", FLdist.str());
+
+            	std::stringstream BRdist;
+            	BRdist << "Z Accel: " << zAccel;
+            	SmartDashboard::PutString("DB/String 7", BRdist.str());
+
+            	std::stringstream timestr;
+				timestr << "Cycle Time: " << deltaTime;
+				SmartDashboard::PutString("DB/String 8", timestr.str());
+
 //				}
 
 
             }    
-        
+            m_timer.Stop();
+
     }
 
     void Test()

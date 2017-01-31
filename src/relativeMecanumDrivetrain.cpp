@@ -20,7 +20,7 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
     m_BRTalon(BRTalon),
     m_BLTalon(BLTalon),
 //    m_driveTrain(FLTalon, BLTalon, FRTalon, BLTalon),
-    m_distanceController(0.00005, 0, 0.0, this, this)
+    m_distanceController(0.00004, 0, 0.00, this, this)
 
 {
     m_gyroSensitivity = 1;
