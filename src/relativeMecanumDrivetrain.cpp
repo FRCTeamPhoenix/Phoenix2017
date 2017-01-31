@@ -20,7 +20,7 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
     m_BRTalon(BRTalon),
     m_BLTalon(BLTalon),
 //    m_driveTrain(FLTalon, BLTalon, FRTalon, BLTalon),
-    m_distanceController(0.001, 0, 0.000, this, this)
+    m_distanceController(0.00005, 0, 0.0, this, this)
 
 {
     m_gyroSensitivity = 1;
@@ -32,7 +32,6 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
     m_mode = CANSpeedController::ControlMode::kSpeed;
 
     m_distanceController.Enable();
-    m_distanceController.SetAbsoluteTolerance (800);
 }
 
 
@@ -87,13 +86,13 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
     double distanceY = getYComponent(distance, angle);
 
 
-//    std::stringstream gX;
-//    gX << "Goal X: " << distanceX;
-//    SmartDashboard::PutString("DB/String 0", gX.str());
-//
-//    std::stringstream gY;
-//    gY << "Goal Y: " << distanceY;
-//    SmartDashboard::PutString("DB/String 1", gY.str());
+    std::stringstream gX;
+    gX << "Goal X: " << distanceX;
+    SmartDashboard::PutString("DB/String 0", gX.str());
+
+    std::stringstream gY;
+    gY << "Goal Y: " << distanceY;
+    SmartDashboard::PutString("DB/String 1", gY.str());
 
     m_maxSpeed = fabs(speed);
     m_goalX = distanceX;
@@ -103,9 +102,25 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
     m_headingControl.changeAngle (rotation);
 
     m_FLTalon.SetEncPosition (0);
-    m_BRTalon.SetEncPosition (0);
     m_FRTalon.SetEncPosition (0);
+    m_BRTalon.SetEncPosition (0);
     m_BLTalon.SetEncPosition (0);
+
+//	std::stringstream FR;
+//	FR << "FR Speed: " << m_FRTalon.GetEncPosition();
+//	SmartDashboard::PutString("DB/String 5", FR.str());
+//
+//	std::stringstream FL;
+//	FL << "FL Speed: " << m_FLTalon.GetEncPosition();
+//	SmartDashboard::PutString("DB/String 6", FL.str());
+//
+//	std::stringstream BR;
+//	BR << "BR Speed: " << m_BRTalon.GetEncPosition();
+//	SmartDashboard::PutString("DB/String 7", BR.str());
+//
+//	std::stringstream BL;
+//	BL << "BL Speed: " << m_BLTalon.GetEncPosition();
+//	SmartDashboard::PutString("DB/String 8", BL.str());
 
     m_distanceController.SetSetpoint (sqrt((distanceX * distanceX) + (distanceY * distanceY)));
 
@@ -175,9 +190,9 @@ bool relativeMecanumDrivetrain::doneMove ()
 double relativeMecanumDrivetrain::PIDGet ()
 {
     double distance = getDistance();
-//    std::stringstream dist;
-//    dist << "Distance: " << distance;
-//    SmartDashboard::PutString("DB/String 4", dist.str());
+    std::stringstream dist;
+    dist << "Distance: " << distance;
+    SmartDashboard::PutString("DB/String 4", dist.str());
 
 //    LOGI << dist.str();
 
@@ -227,13 +242,13 @@ void relativeMecanumDrivetrain::PIDWrite (double output)
         m_FRTalon.goAt (speedY - (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity));
         m_BLTalon.goAt (speedY + (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity));
 
-        std::stringstream gX;
-        gX << "speed X: " << speedX;
-        SmartDashboard::PutString("DB/String 0", gX.str());
-
-        std::stringstream gY;
-        gY << "speed Y: " << speedY;
-        SmartDashboard::PutString("DB/String 1", gY.str());
+//        std::stringstream gX;
+//        gX << "speed X: " << speedX;
+//        SmartDashboard::PutString("DB/String 0", gX.str());
+//
+//        std::stringstream gY;
+//        gY << "speed Y: " << speedY;
+//        SmartDashboard::PutString("DB/String 1", gY.str());
 
         std::stringstream speeds;
         speeds << "Output Dist: " << output;
@@ -259,8 +274,8 @@ void relativeMecanumDrivetrain::SetPIDSourceType (PIDSourceType pidSource)
 double relativeMecanumDrivetrain::getDistance ()
 {
 
-    double xPos = (m_FLTalon.GetEncPosition () + m_BRTalon.GetEncPosition ()) / 2;
-    double yPos = (m_FRTalon.GetEncPosition () + m_BLTalon.GetEncPosition ()) / 2;
+    double xPos = (-m_FLTalon.GetEncPosition () + m_BRTalon.GetEncPosition ()) / 2;
+    double yPos = (m_FRTalon.GetEncPosition () + -m_BLTalon.GetEncPosition ()) / 2;
 
     return sqrt((xPos * xPos) + (yPos * yPos));
 }

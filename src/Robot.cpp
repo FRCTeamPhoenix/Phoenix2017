@@ -47,8 +47,10 @@ public:
     Robot() :
             m_FRDrive(7, CANTalon::FeedbackDevice::QuadEncoder),
             m_FLDrive(8, CANTalon::FeedbackDevice::QuadEncoder),
+
             m_BRDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
             m_BLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
+
             m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_gyro, HeadingControl::GyroAxes::x),
 //            m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
 //			m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
@@ -57,7 +59,7 @@ public:
 //			m_rightLimitSwitch(PortAssign::rightLimitSwitch),
 			m_joystick(PortAssign::joystick),
 			m_gamepad(PortAssign::gamepad),
-			m_gyro(),
+//			m_gyro(),
 //			m_flywheel(m_rightFlyWheelMotor,m_leftFlyWheelMotor, m_gamepad),
 //			m_turret(m_turretRotateMotor, m_leftLimitSwitch, m_rightLimitSwitch, m_gamepad),
             m_loggerController()
@@ -162,6 +164,22 @@ public:
             //LOGI << "Start Test Mode";
             while (IsEnabled() && IsTest())
             {
+            	std::stringstream FR;
+            	FR << "X: " << m_gyro.GetAngleX();
+            	SmartDashboard::PutString("DB/String 5", FR.str());
+
+            	std::stringstream FL;
+            	FL << "Y: " << m_gyro.GetAngleY();
+            	SmartDashboard::PutString("DB/String 6", FL.str());
+
+            	std::stringstream BR;
+            	BR << "Z: " << m_gyro.GetAngleZ();
+            	SmartDashboard::PutString("DB/String 7", BR.str());
+
+//            	std::stringstream BL;
+//            	BL << "Accel Y: " << m_gyro.GetAngleZ();
+//            	SmartDashboard::PutString("DB/String 8", BL.str());
+
 //                m_configEditor.update();
 //            	if(!init){
 //                    m_drivetrain.G(2000, 0, 0.4);
@@ -171,35 +189,35 @@ public:
             	mode << "Current Mode: " << m_drivetrain.m_mode;
             	SmartDashboard::PutString("DB/String 2", mode.str());
 
-                if (m_gamepad.GetRawButton(1))
+                if (m_joystick.GetRawButton(1))
                 {
-                    m_FRDrive.tunePosition(2, 3200, 0.5);
+//                    m_FRDrive.tunePosition(2, 3200, 0.5);
                 }
-                else if (m_gamepad.GetRawButton(2))
+                else if (m_joystick.GetRawButton(2))
                 {
-                    m_drivetrain.moveDistance(0, 0, 0.03, -120);
+//                    m_drivetrain.moveDistance(0, 0, 0.03, -120);
                 }
-                else if (m_gamepad.GetRawButton(5))
+                else if (m_joystick.GetRawButton(5))
                 {
-                    m_drivetrain.moveDistance(16000, 0, 0.03, 90);
+                    m_drivetrain.moveDistance(30000, 0, 0.5, 0);
                 }
-                else if (m_gamepad.GetRawButton(4))
+                else if (m_joystick.GetRawButton(4))
                 {
-                    m_drivetrain.moveDistance(0, 0, 0.03, 90);
+                    m_drivetrain.moveDistance(30000, 180, 0.5, 0);
                 }
-                else if (m_gamepad.GetRawButton(6))
+                else if (m_joystick.GetRawButton(6))
                 {
-                    m_drivetrain.moveDistance(8000, -90, 0.03);
+//                    m_drivetrain.moveDistance(8000, -90, 0.03);
                 }
-                else if (m_gamepad.GetRawButton(3))
+                else if (m_joystick.GetRawButton(3))
 				{
-					m_drivetrain.moveDistance(8000, -180, 0.03);
+//					m_drivetrain.moveDistance(8000, -180, 0.03);
 				}
-                else if (m_gamepad.GetRawButton(11))
+                else if (m_joystick.GetRawButton(11))
                 {
-					double FrontBack = -m_gamepad.GetY();
-					double LeftRight = m_gamepad.GetX();
-					double rotation = m_gamepad.GetZ();
+					double FrontBack = -m_joystick.GetY();
+					double LeftRight = m_joystick.GetX();
+					double rotation = m_joystick.GetZ();
 					if (fabs(FrontBack) < 0.2)
 					{
 						FrontBack = 0;
@@ -213,13 +231,14 @@ public:
 						rotation = 0;
 					}
 
-					FrontBack /= 4;
-					LeftRight /= 4;
-					rotation /= 4;
+					FrontBack /= 3;
+					LeftRight /= 3;
+					rotation /= 3;
 
 					m_drivetrain.moveRelative(FrontBack, LeftRight, rotation);
                 }
             }
+
     
     }
 
