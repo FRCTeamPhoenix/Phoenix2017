@@ -10,127 +10,56 @@
 
 #include <ShooterCalibrator.h>
 
-// Retrieve and organize reference distance/power values
 ShooterCalibrator::ShooterCalibrator()
 {
 
-   // Populate array of reference distance/power pairs with default values
-   // Column 0 holds distance (meters); column 1 holds power (fraction of total possible power)
+    // Create json object containing distance/power pairs
+    ifstream points_json;
+    points_json.open("/home/lvuser/shooterCalibrator.json");
+    json points;
+    points_json >> points;
+    points_json.close();
 
-   refVals[0][0] = 4;
-   refVals[0][1] = 0.1;
+    // Iterate over points from json file; read and store reference values
+    json::iterator jsonItr;
+    for (jsonItr = points.begin(); jsonItr != points.end(); jsonItr++)
+    {
+        dpPairs.push_back(DistancePowerPair(*jsonItr));
+    }
 
-   refVals[1][0] = 8;
-   refVals[1][1] = 0.3;
-
-   refVals[2][0] = 16;
-   refVals[2][1] = 0.5;
-
-   refVals[3][0] = 25;
-   refVals[3][1] = 0.8;
-
-   // Sort reference distance/power pairs in order of increasing distance (selection sort)
-   for (int i = 1; i < ShooterCalibrator::DP_PAIRS; i++)
-   {
-      double currentDistance = refVals[i][0];
-      double currentPower = refVals[i][1];
-      int j = i;
-      while (j > 0 && refVals[j - 1][0] > currentDistance)
-      {
-         refVals[j][0] = refVals[j - 1][0];
-         refVals[j][1] = refVals[j - 1][1];
-         j--;
-      }
-      refVals[j][0] = currentDistance;
-      refVals[j][1] = currentPower;
-   }
-
+    // Sort reference values
+    for (int i = 1; i < (int) dpPairs.size(); i++) {
+        double currentDistance = dpPairs[i].getDistance();
+        double currentPower = dpPairs[i].getPower();
+        int j = i;
+        while (j > 0 && dpPairs[j - 1].getDistance() > currentDistance)
+        {
+            dpPairs[j].setDistance(dpPairs[j - 1].getDistance());
+            dpPairs[j].setPower(dpPairs[j - 1].getPower());
+            j--;
+        }
+        dpPairs[j].setDistance(currentDistance);
+        dpPairs[j].setPower(currentPower);
+    }
 
 }
 
-double ShooterCalibrator::interpolateLinear(double distance) {
-
-   int lowerBound = -1;
-   for (int i = 0; i < ShooterCalibrator::DP_PAIRS; i++) {
-      if (distance >= refVals[i][0]) {
-         lowerBound = i;
-         break;
-      }
-   }
-
-   // Temporary ~ a [much] better method of extrapolation will be needed
-   // If distance is less than the lowest entry's, round up to lowest entry's power
-   if (lowerBound == -1) {
-      return refVals[0][1];
-   }
-   // If distance is greater than the highest entry's, round down to highest entry's power
-   else if (lowerBound == DP_PAIRS) {
-      return refVals[DP_PAIRS - 1][1];
-   }
-
-   else {
-
-      // Change in required power (% of total) per unit distance (m)
-      double slope = (refVals[lowerBound + 1][1] - refVals[lowerBound][1])
-            / (refVals[lowerBound + 1][0] - refVals[lowerBound][0]);
-
-      // Linear interpolation
-      return refVals[lowerBound + 1][1] + slope*(distance - refVals[lowerBound][0]);
-
-   }
-
+int ShooterCalibrator::getNumPairs()
+{
+    return dpPairs.size();
 }
 
-// Print array of reference distance-power value pairs to console
-void printRefVals(double (&referenceVals)[ShooterCalibrator::DP_PAIRS][2])
+// Print stored reference values
+void ShooterCalibrator::printRefVals()
 {
 
-   for (int x = 0; x < ShooterCalibrator::DP_PAIRS; x++) {
-      std::cout << "[";
-      for (int y = 0; y < 2; y++) {
-         std::cout << referenceVals[x][y] << " ";
-      }
-      std::cout << "]" << '\n';
-   }
+    vector<DistancePowerPair>::iterator dpItr;
+    for (dpItr = dpPairs.begin(); dpItr != dpPairs.end(); dpItr++)
+    {
+        cout << "(" << dpItr->getDistance() << ", " << dpItr->getPower() << ")" << endl;
+    }
 
 }
-
-/*
-// Required initial velocity to shoot from a given distance, when stationary
-// Lookup table will be used to convert velocity to power
-double getRequiredStartingVelocity(double distance, double shootingElevation, double height)
-{
-   return sqrt(distance*distance*ShooterCalibrator::g
-         /(cos(shootingElevation)*cos(shootingElevation)*(distance*tan(shootingElevation) - height)));
-}
-
-// TODO: Use encoder info to calculate current sideways velocity
-double getCurrentSidewaysVelocity()
-{
-   return 0;
-}
-
-double getRequiredFlywheelVelocity(double distance, double shootingElevation, double height)
-{
-   double vN = getRequiredStartingVelocity(distance, shootingElevation, height);
-   double vR = getCurrentSidewaysVelocity();
-   return sqrt((vN*vN - vR*vR)/(cos(shootingElevation)*cos(shootingElevation)));
-}
-
-double getStationaryDistance(double startingVelocity, double shootingElevation)
-{
-   return 2*startingVelocity*startingVelocity*cos(shootingElevation)*cos(shootingElevation)/ShooterCalibrator::g;
-}
-
-double ShooterCalibrator::getFlywheelPower(double distance, double shootingElevation, double height)
-{
-   //double v0 = getRequiredFlywheelVelocity(distance, shootingElevation, height);
-   //double dx = getStationaryDistance(v0, shootingElevation);
-   // Table lookup: required power for dx (interpolation)
-   // return required power
-   return 0;
-}
-*/
 
 ShooterCalibrator::~ShooterCalibrator()
 {

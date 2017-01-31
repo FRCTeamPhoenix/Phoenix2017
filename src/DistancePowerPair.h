@@ -11,6 +11,7 @@
 #include <iostream>
 #include "json.hpp"
 #include <fstream>
+
 #ifndef SRC_DISTANCEPOWERPAIR_H_
 #define SRC_DISTANCEPOWERPAIR_H_
 

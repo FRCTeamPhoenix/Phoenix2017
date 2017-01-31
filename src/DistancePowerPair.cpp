@@ -10,7 +10,8 @@
 #include <DistancePowerPair.h>
 
 // Directly pass in distance and power values
-DistancePowerPair::DistancePowerPair(double distance, double power) {
+DistancePowerPair::DistancePowerPair(double distance, double power)
+{
 
     m_distance = distance;
     m_power = power;
@@ -18,29 +19,35 @@ DistancePowerPair::DistancePowerPair(double distance, double power) {
 }
 
 // Obtain distance and power from a json point object
-DistancePowerPair::DistancePowerPair(json point) {
+DistancePowerPair::DistancePowerPair(json point)
+{
 
     m_distance = point["distance"];
     m_power = point["power"];
 
 }
 
-double DistancePowerPair::getDistance() {
+double DistancePowerPair::getDistance()
+{
     return m_distance;
 }
 
-void DistancePowerPair::setDistance(double distance) {
+void DistancePowerPair::setDistance(double distance)
+{
     m_distance = distance;
 }
 
-double DistancePowerPair::getPower() {
+double DistancePowerPair::getPower()
+{
     return m_power;
 }
 
-void DistancePowerPair::setPower(double power) {
+void DistancePowerPair::setPower(double power)
+{
     m_power = power;
 }
 
-DistancePowerPair::~DistancePowerPair() {
+DistancePowerPair::~DistancePowerPair()
+{
 
 }
