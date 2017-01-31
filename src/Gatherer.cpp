@@ -5,7 +5,7 @@
  *      Author: joshc
  */
 
-#include <Gatherer.h>
+#include "Gatherer.h"
 
 Gatherer::Gatherer(
 		Talon & motor,
@@ -27,17 +27,17 @@ void Gatherer::stop() {
 
 void Gatherer::Update() {
     std::stringstream btn;
-    btn << "Button B: " << m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonB + 1);
+    btn << "Button B: " << m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonB);
     SmartDashboard::PutString("DB/String 1", btn.str());
 }
 
-void Gatherer::run() {
+void Gatherer::run() { //If the button is pressed, the motor runs at 0.3 (change state to ON), if not, it stops (change state to OFF).
 	Update();
 	switch(m_state)
 	{
 	case OFF:
 		stop();
-		if (!m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonB + 1)) {
+		if (!m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonB)) {
 			break;
 		}
 		m_state = ON;
@@ -45,7 +45,7 @@ void Gatherer::run() {
 
 	case ON:
 		move(0.3);
-		if (m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonB + 1)) {
+		if (m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonB)) {
 			break;
 		}
 		m_state = OFF;
