@@ -12,12 +12,14 @@ resetAction::resetAction (vector<int> placeToReset, vector<shared_ptr<dependency
 
 resetAction::resetAction (json &action)
 try :
-    Action(action)
+    Action()
 {
     for (json::iterator it = action["placesToReset"].begin (); it != action["placesToReset"].end (); it++)
     {
         m_placesToReset.push_back (*it);
     }
+
+    initAction(action);
 
 }
 catch(...)

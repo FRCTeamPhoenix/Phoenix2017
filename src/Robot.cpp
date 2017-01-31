@@ -76,6 +76,22 @@ public:
     }
     void RobotInit() override
     {
+        ifstream json_file;
+        json_file.open("/home/lvuser/Actions.json");
+        try
+        {
+            json actionsJson;
+            json_file >> actionsJson;
+            json_file.close ();
+
+            m_mainAutoGroup.initActionGroup (actionsJson);
+        }
+        catch (std::domain_error(e))
+        {
+            cout << "Failed: ";
+        }
+
+
         LOGI << "Start Robot Init";
 
     }

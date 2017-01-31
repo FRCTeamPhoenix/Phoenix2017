@@ -20,7 +20,6 @@ public:
 
 
     Action(vector<shared_ptr<dependency>> dependencies);
-    Action(json& action);
     Action();
 
     dependency::condition getCondition();
@@ -31,7 +30,10 @@ public:
     {
         cout << "IN DEFAULT RESET" << endl;
     }
+
+    void initAction(json& action);
 protected:
+
     virtual bool issuable(vector<shared_ptr<Action>>& allActions);
 
     vector<shared_ptr<dependency>> m_dependencies;

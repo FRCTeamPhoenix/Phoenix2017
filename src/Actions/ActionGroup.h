@@ -26,6 +26,8 @@ public:
 
     void resetAction(int place);
 
+    void initActionGroup(json& actionGroup);
+
 private:
     vector<shared_ptr<Action>> m_containedActions;
 

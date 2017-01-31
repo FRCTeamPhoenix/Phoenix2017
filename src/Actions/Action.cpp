@@ -16,37 +16,14 @@ Action::Action (vector<shared_ptr<dependency>> dependencies):
 
 }
 
-Action::Action (json& action):
-    m_dependencies()
-{
-    try
-    {
-        for (json::iterator d = action["dependencies"].begin (); d != action["dependencies"].end (); d++)
-        {
-            m_dependencies.push_back (make_shared<dependency> (*d));
-        }
-        m_currentCondition = (dependency::condition)(int)action["startingCondition"];
-        m_name = action["name"];
-    }
-    catch (...)
-    {
-        std::cout << "dependency not passed as array" << std::endl;
-        m_name = "unnamed";
-    }
-}
-
 Action::Action ():
     m_dependencies()
 {
 
+}
 
-    ifstream json_file;
-    json_file.open("/home/lvuser/Actions.json");
-
-    json action;
-    json_file >> action;
-    json_file.close ();
-
+void Action::initAction (json &action)
+{
     try
     {
         for (json::iterator d = action["dependencies"].begin (); d != action["dependencies"].end (); d++)
@@ -61,7 +38,6 @@ Action::Action ():
         std::cout << "dependency not passed as array" << std::endl;
         m_name = "unnamed";
     }
-
 
 }
 

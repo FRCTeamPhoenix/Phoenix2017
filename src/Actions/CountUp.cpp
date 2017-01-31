@@ -14,11 +14,13 @@ CountUp::CountUp (int start, int end, vector<shared_ptr<dependency>> dependencie
 { }
 
 CountUp::CountUp (json& action)
-try :   Action(action),
+try :   Action(),
         m_current(action["start"]),
         m_start(action["start"]),
         m_end(action["end"])
 {
+
+    initAction(action);
 }
 catch (...)
 {

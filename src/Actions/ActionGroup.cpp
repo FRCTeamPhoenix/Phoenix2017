@@ -12,41 +12,32 @@ ActionGroup::ActionGroup (vector<shared_ptr<Action>> containedActions, vector<sh
 }
 
 ActionGroup::ActionGroup (json& actionGroup):
-    Action(actionGroup)
+    Action()
 {
+    initActionGroup(actionGroup);
+}
+
+ActionGroup::ActionGroup():
+    Action()
+{
+}
+
+void ActionGroup::initActionGroup (json &actionGroup)
+{
+
     json containedActions = actionGroup["containedActions"];
     for(json::iterator containedAction = containedActions.begin (); containedAction != containedActions.end (); containedAction++){
-       m_containedActions.push_back (Action::generateAction (*containedAction));
+        m_containedActions.push_back (Action::generateAction (*containedAction));
     }
 
     json doneDependencies = actionGroup["doneDependencies"];
     for(json::iterator doneDependency = doneDependencies.begin (); doneDependency != doneDependencies.end (); doneDependency++){
         m_doneDependencies.push_back (make_shared<dependency>(*doneDependency));
     }
+
+    initAction(actionGroup);
 }
 
-ActionGroup::ActionGroup():
-    Action()
-{
-        ifstream json_file;
-        json_file.open("/home/lvuser/Actions.json");
-
-        json action;
-        json_file >> action;
-        json_file.close ();
-
-        json containedActions = action["containedActions"];
-        for(json::iterator containedAction = containedActions.begin (); containedAction != containedActions.end (); containedAction++){
-            m_containedActions.push_back (Action::generateAction (*containedAction));
-        }
-
-        json doneDependencies = action["doneDependencies"];
-        for(json::iterator doneDependency = doneDependencies.begin (); doneDependency != doneDependencies.end (); doneDependency++){
-            m_doneDependencies.push_back (make_shared<dependency>(*doneDependency));
-        }
-
-
-}
 
 void ActionGroup::run ()
 {
