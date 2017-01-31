@@ -27,9 +27,10 @@ class Climber
                 Joystick & gamepad
         );
         virtual ~Climber();
-        void move(double distance); // moves motors at the amount of ticks.
-        void stop(); // stops motor
-        void run(); // the main function
+        void updateButton(); // Checks to see if the button is pressed on the Smart Train Dashboard console
+        void move(double speed);
+        void stop();
+        void run();
 
     private:
         SmartTalon & m_motor;

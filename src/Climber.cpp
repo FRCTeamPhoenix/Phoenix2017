@@ -12,41 +12,46 @@ Climber::Climber(
 		m_motor(motor),
 		m_gamepad(gamepad)
 {
+	m_state = OFF;
 }
 
 Climber::~Climber()
 {
 }
 
-// This functions allows you to move at a distance in ticks
-void Climber::move(double distance) {
-	m_motor.goAt(distance);
+void Climber::updateButton() {
+    std::stringstream btn;
+    btn << "Button A: " << m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonA + 1);
+    SmartDashboard::PutString("DB/String 0", btn.str());
 }
 
-// Stops the climber
+void Climber::move(double speed) {
+	m_motor.Set(speed); // GOAT will be later
+}
+
 void Climber::stop() {
-	m_motor.goAt(0.0);
+	m_motor.Set(0.0);
 }
 
-// The main function for the climber
 void Climber::run()
 {
+	updateButton();
     //bool m_climb = m_gamepad->GetRawButton(buttonNames::buttonA); //Reason why is because we need to setup buttons
     switch (m_state)
     {
         case OFF:
-            if (!m_gamepad.GetRawButton(DriveStationConstants::buttonA))
+        	stop();
+            if (!m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonA + 1))
             {
-            	stop();
                 break;
             }
             m_state = ON;
             break;
 
         case ON:
-            if (m_gamepad.GetRawButton(DriveStationConstants::buttonA))
+        	move(0.3);
+            if (m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonA + 1))
             {
-            	move(2000);
             	break;
             }
             m_state = OFF;

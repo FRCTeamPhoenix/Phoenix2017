@@ -1,34 +1,34 @@
 /*
- * Gather.h
+ * Gatherer.h
  *
- *  Created on: Jan 24, 2017
+ *  Created on: Jan 29, 2017
  *      Author: joshc
  */
 #include "WPILib.h"
 #include "constants.h"
-
-
+#include "SmartTalon.h"
 #ifndef SRC_GATHERER_H_
 #define SRC_GATHERER_H_
 
 class Gatherer {
 public:
-	enum State {
-		OFF,
-		ON
-	}; // State of the gatherer
 	Gatherer(Talon & motor,
-			Joystick & joystick);
+			Joystick & gamepad);
 	virtual ~Gatherer();
-	void run(); // This is the main function for the gatherer
-	void stop(); // Stops the gatherer
-	void start(); // Starts the gatherer
-	void move(double speed); // to test if the motor is working otherwise DONOT use
+	enum STATE {
+		OFF,
+		ON,
+		AUTO
+	};
+	void run();
+	void stop();
+	void move(double speed); // Move the gatherer
+	void Update(); // This is for testing only // Button check for the Smart Dashboard
 
 private:
 	Talon & m_motor;
-	Joystick & m_joystick;
-	State m_state;
+	Joystick & m_gamepad;
+	STATE m_state;
 };
 
 #endif /* SRC_GATHERER_H_ */
