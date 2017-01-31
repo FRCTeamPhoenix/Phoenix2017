@@ -44,6 +44,62 @@ ShooterCalibrator::ShooterCalibrator()
 
 }
 
+double ShooterCalibrator::interpolateLinear(double distance) {
+
+    // Lower and upper indices on dpPairs
+    int i1 = 0;
+    int i2 = 1;
+    // Lower and upper bounds on distance (start with first two reference values)
+    double d1 = dpPairs[i1].getDistance();
+    double d2 = dpPairs[i2].getDistance();
+
+    // Use last two reference values if distance exceeds greatest value
+    if (distance > dpPairs[dpPairs.size() - 1].getDistance())
+    {
+        i1 = dpPairs.size() - 2;
+        i2 = i1 + 1;
+    }
+    // Otherwise, if distance isn't below/between the first pair of reference values, choose greater values
+    else if (distance > dpPairs[1].getDistance())
+    {
+        i1++;
+        d1 = dpPairs[i1].getDistance();
+        i2++;
+        d2 = dpPairs[i2].getDistance();
+    }
+
+    // Lower and upper bounds on power
+    double p1 = dpPairs[i1].getPower();
+    double p2 = dpPairs[i2].getPower();
+
+    // Change in power per unit distance
+    double m = (p2 - p1)/(d2 - d1);
+
+    // Required power (linear interpolation)
+    double powerReq = m*(distance - d1) + p1;
+
+    // Don't shoot with power below 0.1 or above 0.85
+    if (powerReq < 0.1)
+    {
+        return 0.1;
+    }
+    else if (powerReq > 0.85)
+    {
+        return 0.85;
+    }
+    else
+    {
+        return powerReq;
+    }
+
+}
+
+double ShooterCalibrator::getPower(double distance) {
+
+    return interpolateLinear(distance);
+
+}
+
 int ShooterCalibrator::getNumPairs()
 {
     return dpPairs.size();
