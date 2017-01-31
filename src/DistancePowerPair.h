@@ -1,7 +1,7 @@
 /*
  * DistancePowerPair.h
  *
- * Stores a distance/power pair in an organized manner.
+ * Stores a measured distance/power pair (used by ShooterCalibrator)
  *
  *  Created on: Jan 28, 2017
  *      Author: Brin Harper
@@ -21,8 +21,12 @@ class DistancePowerPair
 {
 
     public:
+        // Directly pass in distance and power values
         DistancePowerPair(double distance, double power);
-        DistancePowerPair(json points);
+
+        // Obtain distance and power from a json point object
+        DistancePowerPair(json point);
+
         double getDistance();
         void setDistance(double distance);
         double getPower();

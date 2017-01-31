@@ -1,7 +1,7 @@
 /*
  * DistancePowerPair.cpp
  *
- * Stores a distance/power pair in an organized manner.
+ * Stores a measured distance/power pair (used by ShooterCalibrator)
  *
  *  Created on: Jan 28, 2017
  *      Author: Brin Harper
@@ -9,30 +9,21 @@
 
 #include <DistancePowerPair.h>
 
-//        DistancePowerPair(double d, double p);
-//        DistancePowerPair(json points);
-//        double getDistance();
-//        void setDistance(double d);
-//        double getPower();
-//        void setPower(double p);
-//        virtual ~DistancePowerPair();
+// Directly pass in distance and power values
+DistancePowerPair::DistancePowerPair(double distance, double power) {
 
+    m_distance = distance;
+    m_power = power;
 
-// Constructor that takes a distance value and a power value
-//DistancePowerPair::DistancePowerPair(double distance, double power) {
-//
-//    m_distance = distance;
-//    m_power = power;
-//
-//}
+}
 
-// Constructor that takes a json object (implement format checking)
-//DistancePowerPair::DistancePowerPair(json point) {
-//
-//    m_distance = point["distance"];
-//    m_power = point["power"];
-//
-//}
+// Obtain distance and power from a json point object
+DistancePowerPair::DistancePowerPair(json point) {
+
+    m_distance = point["distance"];
+    m_power = point["power"];
+
+}
 
 double DistancePowerPair::getDistance() {
     return m_distance;
@@ -40,4 +31,16 @@ double DistancePowerPair::getDistance() {
 
 void DistancePowerPair::setDistance(double distance) {
     m_distance = distance;
+}
+
+double DistancePowerPair::getPower() {
+    return m_power;
+}
+
+void DistancePowerPair::setPower(double power) {
+    m_power = power;
+}
+
+DistancePowerPair::~DistancePowerPair() {
+
 }
