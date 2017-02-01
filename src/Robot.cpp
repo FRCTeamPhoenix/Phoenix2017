@@ -43,7 +43,6 @@ class Robot: public SampleRobot
     AutoController m_autoController;
     Lidar m_lidar;
     SmartTalon m_feederMotor;
-    DigitalInput m_indexerLimitSwitch;
     SmartTalon m_indexerMotor;
 
 public:
@@ -69,7 +68,6 @@ public:
             m_autoController(),
             m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
             m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
-            m_indexerLimitSwitch(PortAssign::indexerLimitSwitch),
             m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder)
 
     {
@@ -102,7 +100,6 @@ public:
 
         m_expansionBoard.Reset();
         LOGI << "Start Teleop";
-        int count = 0;
 
         while (IsEnabled() && IsOperatorControl())
         {
@@ -117,12 +114,21 @@ public:
         LOGI << "Start Test Mode";
         while (IsEnabled() && IsTest())
         {
-           //feeder test
-            m_feederMotor.goAt(m_joystick.GetThrottle());
 
+
+           //feeder test
+
+           if (m_gamepad.GetRawButton(DriveStationConstants::buttonB)){
+              m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0",0.0));
+
+           }
+           else
+           {
+               m_feederMotor.goAt((m_joystick.GetThrottle()-1) / 2);
+           }
             std::ostringstream throttleValue;
             throttleValue << "Throttle: ";
-            throttleValue << m_joystick.GetThrottle();
+            throttleValue << ((m_joystick.GetThrottle()-1) / 2);
             SmartDashboard::PutString("DB/String 7", throttleValue.str());
 
             std::ostringstream feederEncoderValue;
@@ -134,7 +140,7 @@ public:
 
             //indexer test
             if (m_gamepad.GetRawButton(DriveStationConstants::buttonA)){
-                m_indexerMotor.goDistance(1000,0.5);
+                m_indexerMotor.goDistance(250,0.5);
 
            }
 
@@ -145,9 +151,15 @@ public:
 
 
 
-
-            m_rightFlyWheelMotor.goAt(m_joystick.GetY());
-            m_leftFlyWheelMotor.goAt(m_joystick.GetY());
+           if (m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
+               m_rightFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1",0.0));
+               m_leftFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2",0.0));
+           }
+           else
+           {
+               m_rightFlyWheelMotor.goAt(m_joystick.GetY());
+               m_leftFlyWheelMotor.goAt(m_joystick.GetY());
+           }
             m_configEditor.update();
 
         }
