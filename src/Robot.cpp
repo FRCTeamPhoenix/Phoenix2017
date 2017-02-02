@@ -126,7 +126,7 @@ public:
             //m_leftFlyWheelMotor.goAt(m_joystick.GetYa());
         	//m_climberMotor.SetControlMode(CANTalon::ControlMode::kPercentVbus);
         	//m_climber.run();
-        	m_gatherer.run();
+        	//m_gatherer.run();
             m_configEditor.update();
 
         }
