@@ -22,11 +22,11 @@ using json=nlohmann::json;
 
 class Robot: public SampleRobot
 {
-    SmartTalon m_FRDrive;
-    SmartTalon m_FLDrive;
-    SmartTalon m_BRDrive;
-    SmartTalon m_BLDrive;
-    relativeMecanumDrivetrain m_drivetrain;
+//    SmartTalon m_FRDrive;
+//    SmartTalon m_FLDrive;
+//    SmartTalon m_BRDrive;
+//    SmartTalon m_BLDrive;
+//    relativeMecanumDrivetrain m_drivetrain;
     SmartTalon m_rightFlyWheelMotor;
     SmartTalon m_leftFlyWheelMotor;
     SmartTalon m_turretRotateMotor;
@@ -47,11 +47,11 @@ class Robot: public SampleRobot
 
 public:
     Robot() :
-            m_FRDrive(3, CANTalon::FeedbackDevice::QuadEncoder),
-            m_FLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
-            m_BRDrive(4, CANTalon::FeedbackDevice::QuadEncoder),
-            m_BLDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
-            m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive),
+//            m_FRDrive(3, CANTalon::FeedbackDevice::QuadEncoder),
+//            m_FLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
+//            m_BRDrive(4, CANTalon::FeedbackDevice::QuadEncoder),
+//            m_BLDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
+//            m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive),
             m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
             m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
             m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
@@ -115,6 +115,7 @@ public:
 
         m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
         m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+
         m_rightFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
         m_leftFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
 
