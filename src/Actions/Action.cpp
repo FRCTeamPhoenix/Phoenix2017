@@ -10,34 +10,54 @@
 
 Action::Action (vector<shared_ptr<dependency>> dependencies):
     m_dependencies(dependencies),
-    m_currentCondition(dependency::NotStarted)
+    m_currentCondition(dependency::NotStarted),
+    m_robot(NULL)
 
 {
 
 }
 
 Action::Action ():
-    m_dependencies()
+    m_dependencies(),
+    m_robot(NULL)
 {
 
 }
 
-void Action::initAction (json &action)
+void Action::initAction (json &action, Robot* robot)
 {
+    m_name = "unnamed";
+    m_robot = robot;
+
     try
     {
-        for (json::iterator d = action["dependencies"].begin (); d != action["dependencies"].end (); d++)
+    	json deps = action["dependencies"];
+//    	std::cout << action.dump() << std::endl;
+//    	std::cout << deps.dump() << std::endl;
+        for (json::iterator d = deps.begin (); d != deps.end (); d++)
         {
             m_dependencies.push_back (make_shared<dependency> (*d));
         }
-        m_currentCondition = (dependency::condition)(int)action["startingCondition"];
+//        m_currentCondition = dependency::NotStarted;
+        m_currentCondition = (dependency::condition)action["startingCondition"].get<int>();
         m_name = action["name"];
+    }
+    catch (domain_error(e)){
+        std::cout << "Domain Error\t" /*<< e.what ()*/ << std::endl;
+    }
+    catch (out_of_range(e)){
+        std::cout << "Out Of Range Error\t" /*<< e.what ()*/ << std::endl;
+    }
+    catch (bad_alloc(e)){
+        std::cout << "Bad Alloc Error\t" /*<< e.what ()*/ << std::endl;
     }
     catch (...)
     {
-        std::cout << "dependency not passed as array" << std::endl;
-        m_name = "unnamed";
+        std::cout << "Unknown Exception" << std::endl;
+//        m_name = "unnamed";
     }
+
+
 
 }
 
@@ -50,7 +70,7 @@ bool Action::issuable (vector<shared_ptr<Action>> &allActions)
         dependency::condition dependantCondition = dependencyIterator->get ()->getCondition ();
         dependency::condition targetActionCondition = allActions[dependencyIterator->get ()->getPlace ()]->getCondition ();
 
-        if(targetActionCondition < dependantCondition)
+        if(targetActionCondition == dependantCondition)
         {
             dependenciesMet = false;
         }

@@ -10,12 +10,15 @@
 #include <memory>
 #include "../json.hpp"
 #include "AllActions.h"
+#include "../Robot.h"
+
 
 using namespace std;
 using json=nlohmann::json;
 
+class Robot;
 
-shared_ptr<Action> Action::generateAction (json &action)
+shared_ptr<Action> Action::generateAction (json &action, Robot* robot)
 {
     string type = "";
     try
@@ -30,15 +33,15 @@ shared_ptr<Action> Action::generateAction (json &action)
 
     if ("ActionGroup" == type)
     {
-        return make_shared<ActionGroup>(action);
+        return make_shared<ActionGroup>(action, robot);
     }
     else if("CountUp" == type)
     {
-        return make_shared<CountUp>(action);
+        return make_shared<CountUp>(action, robot);
     }
     else if("resetAction" == type)
     {
-        return make_shared<resetAction>(action);
+        return make_shared<resetAction>(action, robot);
     }
     else{
         cout << "Type Not Found" << endl;

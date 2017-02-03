@@ -10,6 +10,8 @@
 #include <vector>
 #include <iostream>
 #include "../plog/Log.h"
+#include "../Robot.h"
+
 
 using namespace std;
 class CountUp : public Action
@@ -17,7 +19,7 @@ class CountUp : public Action
 public:
     CountUp(int start, int end, vector<shared_ptr<dependency>> dependencies);
 
-    CountUp(json& action);
+    CountUp(json& action, Robot* robot);
 
 
 private:

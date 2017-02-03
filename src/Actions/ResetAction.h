@@ -9,16 +9,20 @@
 #include "dependency.h"
 #include <vector>
 #include <iostream>
+#include "../plog/Log.h"
+#include "../Robot.h"
+
 
 using namespace std;
 using json=nlohmann::json;
+
 
 class resetAction : public Action
 {
 public:
     resetAction(vector<int> placesToReset, vector<shared_ptr<dependency>> dependencies);
 
-    resetAction(json& action);
+    resetAction(json& action, Robot* robot);
 
     virtual void execute(vector<shared_ptr<Action>>& allActions);
 private:

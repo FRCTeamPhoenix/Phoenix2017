@@ -8,15 +8,19 @@
 #include "Action.h"
 #include "../json.hpp"
 #include <fstream>
+#include "../plog/Log.h"
+#include "../Robot.h"
+
 
 using namespace std;
 using json=nlohmann::json;
+
 
 class ActionGroup : public Action
 {
 public:
     ActionGroup(vector<shared_ptr<Action>> containedActions, vector<shared_ptr<dependency>> dependencies, vector<shared_ptr<dependency>> doneDependencies);
-    ActionGroup(json& Action);
+    ActionGroup(json& Action, Robot* robot);
     ActionGroup();
 
     vector<shared_ptr<Action>>& getContainedActions()
@@ -26,9 +30,11 @@ public:
 
     void resetAction(int place);
 
-    void initActionGroup(json& actionGroup);
+    void initActionGroup(json& actionGroup, Robot* robot);
 
 private:
+
+
     vector<shared_ptr<Action>> m_containedActions;
 
     vector<shared_ptr<dependency>> m_doneDependencies;

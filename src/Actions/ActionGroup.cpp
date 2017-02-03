@@ -11,10 +11,10 @@ ActionGroup::ActionGroup (vector<shared_ptr<Action>> containedActions, vector<sh
 {
 }
 
-ActionGroup::ActionGroup (json& actionGroup):
+ActionGroup::ActionGroup (json& actionGroup, Robot* robot):
     Action()
 {
-    initActionGroup(actionGroup);
+    initActionGroup(actionGroup, robot);
 }
 
 ActionGroup::ActionGroup():
@@ -22,12 +22,12 @@ ActionGroup::ActionGroup():
 {
 }
 
-void ActionGroup::initActionGroup (json &actionGroup)
+void ActionGroup::initActionGroup (json &actionGroup, Robot* robot)
 {
 
     json containedActions = actionGroup["containedActions"];
     for(json::iterator containedAction = containedActions.begin (); containedAction != containedActions.end (); containedAction++){
-        m_containedActions.push_back (Action::generateAction (*containedAction));
+        m_containedActions.push_back (Action::generateAction (*containedAction, robot));
     }
 
     json doneDependencies = actionGroup["doneDependencies"];
@@ -35,12 +35,14 @@ void ActionGroup::initActionGroup (json &actionGroup)
         m_doneDependencies.push_back (make_shared<dependency>(*doneDependency));
     }
 
-    initAction(actionGroup);
+    initAction(actionGroup, robot);
 }
 
 
 void ActionGroup::run ()
 {
+    LOGI << m_name << ":\t has run";
+
     vector<shared_ptr<Action>>::iterator ActionsIterator;
     for(ActionsIterator = m_containedActions.begin(); ActionsIterator != m_containedActions.end(); ActionsIterator++)
     {

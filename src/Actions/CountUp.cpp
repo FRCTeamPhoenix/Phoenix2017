@@ -13,14 +13,14 @@ CountUp::CountUp (int start, int end, vector<shared_ptr<dependency>> dependencie
 
 { }
 
-CountUp::CountUp (json& action)
+CountUp::CountUp (json& action, Robot* robot)
 try :   Action(),
         m_current(action["start"]),
         m_start(action["start"]),
         m_end(action["end"])
 {
 
-    initAction(action);
+    initAction(action, robot);
 }
 catch (...)
 {
@@ -37,7 +37,7 @@ void CountUp::run ()
     if(m_current > m_start)
         start();
 
-    if(m_current > m_end)
+    if(m_current >= m_end)
         finish();
 }
 

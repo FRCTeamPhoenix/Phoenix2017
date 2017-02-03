@@ -4,8 +4,8 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/ADIS16448_IMU.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ADIS16448_IMU.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ActionGroupController.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ActionGroupController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Actions/DriveAt.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Actions/DriveAt.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Actions/GroupContents.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Climber.cpp" isTestSource="false" />
@@ -21,6 +21,7 @@
       <sourceFolder url="file://$MODULE_DIR$/PIDGains.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/PIDGains.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Robot.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Robot.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Shooter.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ShooterCalibrator.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ShooterCalibrator.h" isTestSource="false" />
@@ -393,6 +394,8 @@
           <root url="file://$USER_HOME$/wpilib/user/cpp/include" />
         </SOURCES>
         <excluded>
+          <root url="file://$MODULE_DIR$/Actions/DriveAt.h" />
+          <root url="file://$MODULE_DIR$/Actions/DriveAt.cpp" />
           <root url="file://$MODULE_DIR$/Actions/GroupContents.h" />
         </excluded>
       </library>
