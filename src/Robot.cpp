@@ -114,6 +114,12 @@ public:
         LOGI << "Start Test Mode";
         while (IsEnabled() && IsTest())
         {
+            //A = indexer quarter rotation
+            //B = feeder run of dashboard from slider 0 input
+            //joystick throttle = run feeder
+            //joystick Y = run flywheels
+            //gamepad Y -= run indexer
+            // X = run flywheels off driverstation from slider 1 and 2 input
 
 
            //feeder test
@@ -143,6 +149,9 @@ public:
                 m_indexerMotor.goDistance(250,0.5);
 
            }
+            else{
+                m_indexerMotor.goAt(m_gamepad.GetY());
+            }
 
            std::ostringstream indexerEncoderValue;
            indexerEncoderValue << "EncoderI: ";
@@ -157,10 +166,31 @@ public:
            }
            else
            {
-               m_rightFlyWheelMotor.goAt(m_joystick.GetY());
-               m_leftFlyWheelMotor.goAt(m_joystick.GetY());
+               m_rightFlyWheelMotor.goAt(-m_joystick.GetY());
+               m_leftFlyWheelMotor.goAt(-m_joystick.GetY());
            }
-            m_configEditor.update();
+
+
+
+           std::ostringstream shooterRightEncoderString;
+           shooterRightEncoderString << "EncoderShR: ";
+           shooterRightEncoderString << m_rightFlyWheelMotor.GetEncPosition();
+           SmartDashboard::PutString("DB/String 4", shooterRightEncoderString.str());
+
+           std::ostringstream shooterLeftEncoderString;
+           shooterLeftEncoderString << "EncoderShL: ";
+           shooterLeftEncoderString << m_leftFlyWheelMotor.GetEncPosition();
+           SmartDashboard::PutString("DB/String 5", shooterLeftEncoderString.str());
+
+           std::ostringstream lidarString;
+           lidarString << "Distance: ";
+           lidarString << m_lidar.getFastAverage();
+           SmartDashboard::PutString("DB/String 9", lidarString.str());
+
+
+           m_configEditor.update();
+
+
 
         }
 
