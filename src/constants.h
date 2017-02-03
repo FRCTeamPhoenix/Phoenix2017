@@ -14,14 +14,14 @@ struct PortAssign
     // CANTalon ID's
     const static uint32_t backLeftWheelMotor = 1;
     const static uint32_t frontLeftWheelMotor = 2;
-    const static uint32_t frontRightWheelMotor = 3;
-    const static uint32_t backRightWheelMotor = 4;
-    const static uint32_t leftFlyWheelMotor = 5;
-    const static uint32_t rightFlyWheelMotor = 6;
+    const static uint32_t frontRightWheelMotor = 7; //4
+    const static uint32_t backRightWheelMotor = 8; //3
+    const static uint32_t leftFlyWheelMotor = 3; //5
+    const static uint32_t rightFlyWheelMotor = 4; //6
     const static uint32_t climber = 7;
-    const static uint32_t feeder = 8;
+    const static uint32_t feeder = 5; //8
     const static uint32_t turret = 9;
-    const static uint32_t indexer = 10;
+    const static uint32_t indexer = 6; //10
 
     // Talon Ports
     const static uint32_t loader = 0;
