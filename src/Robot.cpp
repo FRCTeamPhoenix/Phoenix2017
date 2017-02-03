@@ -112,6 +112,13 @@ public:
     {
 
         LOGI << "Start Test Mode";
+
+        m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
+        m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+        m_rightFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
+        m_leftFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
+
+
         while (IsEnabled() && IsTest())
         {
             //A = indexer quarter rotation
@@ -125,12 +132,12 @@ public:
            //feeder test
 
            if (m_gamepad.GetRawButton(DriveStationConstants::buttonB)){
-              m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0",0.0));
+              m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0",0.0));
 
            }
            else
            {
-               m_feederMotor.goAt((m_joystick.GetThrottle()-1) / 2);
+               m_feederMotor.Set((m_joystick.GetThrottle()-1) / 2);
            }
             std::ostringstream throttleValue;
             throttleValue << "Throttle: ";
@@ -150,7 +157,7 @@ public:
 
            }
             else{
-                m_indexerMotor.goAt(m_gamepad.GetY());
+                m_indexerMotor.Set(m_gamepad.GetY());
             }
 
            std::ostringstream indexerEncoderValue;
@@ -161,13 +168,13 @@ public:
 
 
            if (m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
-               m_rightFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1",0.0));
-               m_leftFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2",0.0));
+               m_rightFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1",0.0));
+               m_leftFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
            }
            else
            {
-               m_rightFlyWheelMotor.goAt(-m_joystick.GetY());
-               m_leftFlyWheelMotor.goAt(-m_joystick.GetY());
+               m_rightFlyWheelMotor.Set(-m_joystick.GetY());
+               m_leftFlyWheelMotor.Set(-m_joystick.GetY());
            }
 
 
