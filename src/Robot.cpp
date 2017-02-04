@@ -77,7 +77,7 @@ public:
 		m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
 		m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
 		m_leftLimitSwitch(PortAssign::leftLimitSwitch),
-		m_rightLimitSwitch( PortAssign::rightLimitSwitch),
+		m_rightLimitSwitch(PortAssign::rightLimitSwitch),
 		m_joystick(PortAssign::joystick),
 		m_gamepad(PortAssign::gamepad),
 		m_expansionBoard(),
@@ -240,12 +240,15 @@ public:
 		std::ostringstream encoderIndexer;
 		encoderIndexer << m_indexerMotor.GetEncPosition();
 		SmartDashboard::PutString("DB/String 2", "Indexer ENC: " + encoderIndexer.str());
+		encoderIndexer.clear();
+		encoderIndexer << m_indexerMotor.IsFwdLimitSwitchClosed();
+		SmartDashboard::PutString("DB/String 3", "Indexer Limit: " + encoderIndexer.str());
 		std::ostringstream encoderLG; // Encoder for the Lidar and the Gyro
 		encoderLG << m_lidar.getFastAverage();
-		SmartDashboard::PutString("DB/String 3", "Distance: " + encoderLG.str());
+		SmartDashboard::PutString("DB/String 4", "Distance: " + encoderLG.str());
 		encoderLG.clear();
 		encoderLG << m_expansionBoard.GetAngleX();
-		SmartDashboard::PutString("DB/String 4", "Gyro ENC: " + encoderLG.str());
+		SmartDashboard::PutString("DB/String 5", "Gyro ENC: " + encoderLG.str());
 	}
 
 	void gathererText() {
@@ -273,12 +276,18 @@ public:
 		std::ostringstream encoderTurret;
 		encoderTurret << m_turretRotateMotor.GetEncPosition();
 		SmartDashboard::PutString("DB/String 2", "Turret ENC: " + encoderTurret.str());
+		encoderTurret.clear();
+		encoderTurret << m_turretRotateMotor.IsFwdLimitSwitchClosed();
+		SmartDashboard::PutString("DB/String 3", "Turret Limit Switch 1: " + encoderTurret.str());
+		encoderTurret.clear();
+		encoderTurret << m_turretRotateMotor.IsRevLimitSwitchClosed();
+		SmartDashboard::PutString("DB/String 4", "Turret Limit Switch 2: " + encoderTurret.str());
 		std::ostringstream encoderLG; // Encoder for the Lidar and the Gyro
 		encoderLG << m_lidar.getFastAverage();
-		SmartDashboard::PutString("DB/String 3", "Distance: " + encoderLG.str());
+		SmartDashboard::PutString("DB/String 5", "Distance: " + encoderLG.str());
 		encoderLG.clear();
 		encoderLG << m_expansionBoard.GetAngleX();
-		SmartDashboard::PutString("DB/String 4", "Gyro ENC: " + encoderLG.str());
+		SmartDashboard::PutString("DB/String 6", "Gyro ENC: " + encoderLG.str());
 	}
 
 	void allShooterText() {
@@ -331,6 +340,7 @@ public:
 
 	void Test()
 	{
+		// TODO ADD LIMITS
 		LOGI << "Start Test Mode";
 		m_pidState = PID;
 		while (IsEnabled() && IsTest())
