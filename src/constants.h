@@ -21,6 +21,7 @@ struct PortAssign
     const static uint32_t feeder = 8;
     const static uint32_t turret = 9;
     const static uint32_t indexer = 10;
+    const static uint32_t gatherer = 11; // TODO NEED ACTUALL GATHERER NUMBER
 
     // Talon Ports
     const static uint32_t loader = 0;
