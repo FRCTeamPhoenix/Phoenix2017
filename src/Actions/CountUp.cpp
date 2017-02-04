@@ -13,7 +13,7 @@ CountUp::CountUp (int start, int end, vector<shared_ptr<dependency>> dependencie
 
 { }
 
-CountUp::CountUp (json& action, Robot* robot)
+CountUp::CountUp (json& action, shared_ptr<Robot> robot)
 try :   Action(),
         m_current(action["start"]),
         m_start(action["start"]),

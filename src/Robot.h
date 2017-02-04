@@ -1,71 +1,75 @@
 #ifndef ACTIONGRAPHS_ROBOT_H
 #define ACTIONGRAPHS_ROBOT_H
-    #include "WPILib.h"
-    #include "constants.h"
-    #include "SmartTalon.h"
-    #include "relativeMecanumDrivetrain.h"
-    #include "plog/Log.h"
-    #include "sys/stat.h"
-    #include "ADIS16448_IMU.h"
-    #include "ConfigEditor.h"
-    #include "LoggerController.h"
-    #include "FlyWheels.h"
-    #include "Turret.h"
-    #include "ShooterController.h"
-    #include "ConfigEditor.h"
-    #include <fstream>
-    #include "json.hpp"
-    #include "Lidar.h"
-    #include "Climber.h"
+#include "WPILib.h"
+#include "constants.h"
+#include "SmartTalon.h"
+#include "relativeMecanumDrivetrain.h"
+#include "plog/Log.h"
+#include "sys/stat.h"
+#include "ADIS16448_IMU.h"
+#include "ConfigEditor.h"
+#include "LoggerController.h"
+#include "FlyWheels.h"
+#include "Turret.h"
+#include "ShooterController.h"
+#include "ConfigEditor.h"
+#include <fstream>
+#include "json.hpp"
+#include "Lidar.h"
+#include "Climber.h"
 
 
-    using namespace std;
-    using json=nlohmann::json;
+using namespace std;
+using json=nlohmann::json;
 
-    class ActionGroup;
+class ActionGroup;
 
-    class Robot: public SampleRobot
+class Robot: public SampleRobot
 
-    {
+{
 
-        SmartTalon m_FRDrive;
-        SmartTalon m_FLDrive;
-        SmartTalon m_BRDrive;
-        SmartTalon m_BLDrive;
-        ActionGroup* m_mainAutoGroup;
-        relativeMecanumDrivetrain m_drivetrain;
-    //    SmartTalon m_rightFlyWheelMotor;
-    //    SmartTalon m_leftFlyWheelMotor;
-    //    SmartTalon m_turretRotateMotor;
-    //    DigitalInput m_leftLimitSwitch;
-    //    DigitalInput m_rightLimitSwitch;
-        Joystick m_joystick;
-    //    Joystick m_gamepad;
-    //    ADIS16448_IMU m_expansionBoard;
-    //    FlyWheels m_flywheel;
-    //    Turret m_turret;
-        LoggerController m_loggerController;
-    //    ShooterController m_shooterController;
-    //    ConfigEditor m_configEditor;
-    //    Lidar m_lidar;
-    //    SmartTalon m_climberMotor;
-    //    Climber m_climber;
+    SmartTalon m_FRDrive;
+    SmartTalon m_FLDrive;
+    SmartTalon m_BRDrive;
+    SmartTalon m_BLDrive;
+    ActionGroup* m_mainAutoGroup;
+    relativeMecanumDrivetrain m_drivetrain;
+//    SmartTalon m_rightFlyWheelMotor;
+//    SmartTalon m_leftFlyWheelMotor;
+//    SmartTalon m_turretRotateMotor;
+//    DigitalInput m_leftLimitSwitch;
+//    DigitalInput m_rightLimitSwitch;
+    Joystick m_joystick;
+//    Joystick m_gamepad;
+//    ADIS16448_IMU m_expansionBoard;
+//    FlyWheels m_flywheel;
+//    Turret m_turret;
+    LoggerController m_loggerController;
+//    ShooterController m_shooterController;
+//    ConfigEditor m_configEditor;
+//    Lidar m_lidar;
+//    SmartTalon m_climberMotor;
+//    Climber m_climber;
 
-    public:
-        Robot();
+public:
+    Robot();
 
-        void RobotInit() override;
+    void RobotInit() override;
 
-        void Autonomous();
+    void Autonomous();
 
-        void OperatorControl();
+    void OperatorControl();
 
-        void Test();
+    void Test();
 
-        //Functions For Robot Actions
-        void driveAt(double speed, double angle);
+    //Functions For Robot Actions
+    void driveAt(double speed, double angle);
 
-        //End of Functions for Actions
+    void driveDistance(double distance, double angle, double speed);
 
-    };
+    bool doneDriveMove(double tolerance);
+
+    //End of Functions for Actions
+
+};
 #endif

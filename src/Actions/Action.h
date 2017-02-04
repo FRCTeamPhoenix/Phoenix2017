@@ -76,16 +76,18 @@ public:
         cout << "IN DEFAULT RESET" << endl;
     }
 
-    void initAction(json& action, Robot* robot);
+    void initAction(json& action, shared_ptr<Robot> robot);
 protected:
 
-    Robot* m_robot;
 
     virtual bool issuable(vector<shared_ptr<Action>>& allActions);
 
     vector<shared_ptr<dependency>> m_dependencies;
 
     dependency::condition m_currentCondition;
+
+    shared_ptr<Robot> m_robot;
+
 
     string m_name;
 
@@ -107,7 +109,7 @@ protected:
         m_currentCondition = dependency::NotStarted;
     }
 
-    static shared_ptr<Action> generateAction(json& action, Robot* robot);
+    static shared_ptr<Action> generateAction(json& action, shared_ptr<Robot> robot);
 
 
 };

@@ -19,7 +19,7 @@ class CountUp : public Action
 public:
     CountUp(int start, int end, vector<shared_ptr<dependency>> dependencies);
 
-    CountUp(json& action, Robot* robot);
+    CountUp(json& action, shared_ptr<Robot> robot);
 
 
 private:

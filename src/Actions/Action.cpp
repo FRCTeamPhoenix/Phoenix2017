@@ -19,25 +19,26 @@ Action::Action (vector<shared_ptr<dependency>> dependencies):
 
 Action::Action ():
     m_dependencies(),
+    m_currentCondition(dependency::NotStarted),
     m_robot(NULL)
 {
 
 }
 
-void Action::initAction (json &action, Robot* robot)
+void Action::initAction (json &action, shared_ptr<Robot> robot)
 {
+
     m_name = "unnamed";
     m_robot = robot;
-
     try
     {
     	json deps = action["dependencies"];
-//    	std::cout << action.dump() << std::endl;
-//    	std::cout << deps.dump() << std::endl;
+
         for (json::iterator d = deps.begin (); d != deps.end (); d++)
         {
             m_dependencies.push_back (make_shared<dependency> (*d));
         }
+        cout << "done with dependencies" << endl;
 //        m_currentCondition = dependency::NotStarted;
         m_currentCondition = (dependency::condition)action["startingCondition"].get<int>();
         m_name = action["name"];
@@ -57,7 +58,7 @@ void Action::initAction (json &action, Robot* robot)
 //        m_name = "unnamed";
     }
 
-
+    cout << "Done with initAction" << endl;
 
 }
 

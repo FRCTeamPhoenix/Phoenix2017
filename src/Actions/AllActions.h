@@ -10,6 +10,7 @@
 #include "ActionGroup.h"
 #include "resetAction.h"
 #include "DriveAt.h"
+#include "GoDistance.h"
 
 
 #endif //ACTIONGRAPHS_ALLACTIONS_H

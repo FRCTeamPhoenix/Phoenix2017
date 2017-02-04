@@ -20,7 +20,7 @@ class ActionGroup : public Action
 {
 public:
     ActionGroup(vector<shared_ptr<Action>> containedActions, vector<shared_ptr<dependency>> dependencies, vector<shared_ptr<dependency>> doneDependencies);
-    ActionGroup(json& Action, Robot* robot);
+    ActionGroup(json& Action, shared_ptr<Robot> robot);
     ActionGroup();
 
     vector<shared_ptr<Action>>& getContainedActions()
@@ -30,7 +30,7 @@ public:
 
     void resetAction(int place);
 
-    void initActionGroup(json& actionGroup, Robot* robot);
+    void initActionGroup(json& actionGroup, shared_ptr<Robot> robot);
 
 private:
 

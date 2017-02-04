@@ -44,6 +44,8 @@ public:
     void PIDWrite(double output);
     double PIDGet();
 
+    bool doneMove(double tolerancePercentage);
+
     void SetPIDSourceType(PIDSourceType pidSource);
 
     double getAvgError();
@@ -59,6 +61,9 @@ private:
     double m_goalY;
     double m_goalGyro;
     double m_maxSpeed;
+
+    double m_distance;
+    double m_goalDistance;
 
     double getXComponent(double magnitude, double angle);
     double getYComponent(double magnitude, double angle);

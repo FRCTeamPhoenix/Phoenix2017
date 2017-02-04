@@ -92,13 +92,14 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
     m_maxSpeed = fabs(speed);
     m_goalX = distanceX;
     m_goalY = distanceY;
+    m_goalDistance = distance;
 
     m_FLTalon.SetEncPosition (0);
     m_BRTalon.SetEncPosition (0);
     m_FRTalon.SetEncPosition (0);
     m_BLTalon.SetEncPosition (0);
 
-    m_distanceController->SetSetpoint (sqrt((distanceX * distanceX) + (distanceY * distanceY)));
+    m_distanceController->SetSetpoint (distance);
 
     std::stringstream sP;
     sP << "SetPoint: " << m_distanceController->GetSetpoint ();
@@ -151,6 +152,13 @@ double relativeMecanumDrivetrain::getAvgError ()
 }
 
 
+bool relativeMecanumDrivetrain::doneMove (double tolerancePercentage)
+{
+    double difference = m_distance - m_goalDistance;
+
+    return (fabs(difference) < fabs((tolerancePercentage * m_goalDistance)));
+}
+
 double relativeMecanumDrivetrain::PIDGet ()
 {
     double xPos = (m_FLTalon.GetEncPosition () + m_BRTalon.GetEncPosition ()) / 2;
@@ -163,6 +171,8 @@ double relativeMecanumDrivetrain::PIDGet ()
     SmartDashboard::PutString("DB/String 4", dist.str());
 
     LOGI << dist.str();
+
+    m_distance = distance;
 
     return distance;
 }

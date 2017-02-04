@@ -11,23 +11,32 @@ ActionGroup::ActionGroup (vector<shared_ptr<Action>> containedActions, vector<sh
 {
 }
 
-ActionGroup::ActionGroup (json& actionGroup, Robot* robot):
-    Action()
+ActionGroup::ActionGroup (json& actionGroup, shared_ptr<Robot> robot):
+    Action(),
+    m_containedActions(),
+    m_doneDependencies()
+
+
+
 {
+
     initActionGroup(actionGroup, robot);
 }
 
 ActionGroup::ActionGroup():
-    Action()
+    Action(),
+    m_containedActions(),
+    m_doneDependencies()
 {
 }
 
-void ActionGroup::initActionGroup (json &actionGroup, Robot* robot)
+void ActionGroup::initActionGroup (json &actionGroup, shared_ptr<Robot> robot)
 {
 
     json containedActions = actionGroup["containedActions"];
     for(json::iterator containedAction = containedActions.begin (); containedAction != containedActions.end (); containedAction++){
-        m_containedActions.push_back (Action::generateAction (*containedAction, robot));
+        shared_ptr<Action> newAction = Action::generateAction (*containedAction, robot);
+        m_containedActions.push_back (newAction);
     }
 
     json doneDependencies = actionGroup["doneDependencies"];

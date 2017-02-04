@@ -7,41 +7,21 @@
   "startingCondition": 0,
   "containedActions": [
     {
-      "type": "CountUp",
-      "name": "Wait UP",
+      "type": "GoDistance",
+      "name": "Drive Forward",
       "startingCondition": 0,
-      "start": 0,
-      "end": 20,
+
+      "distance": 10000,
+      "angle": 0,
+      "speed": 0.3,
+      "tolerance": 0.05,
+
       "dependencies": []
-    },
 
-    {
-      "type": "CountUp",
-      "name": "Run UP",
-      "startingCondition": 0,
-      "start": 0,
-      "end": 5,
-      "dependencies": [{"place": 0, "requiredCondition": 2}]
-    },
-
-    {
-      "type": "CountUp",
-      "name": "Main Up",
-      "startingCondition": 0,
-      "start": 30,
-      "end": 0,
-      "dependencies": [{"place": 0, "requiredCondition": 2}]
-    },
-
-    {
-      "type": "resetAction",
-      "name": "Reset",
-      "startingCondition": 0,
-      "placesToReset": [0, 1],
-      "dependencies": [{"place": 1, "requiredCondition": 2}]
     }
+
   ],
   "dependencies": [],
-  "doneDependencies": [{"place": 2, "requiredCondition": 2}]
+  "doneDependencies": [{"place": 0, "requiredCondition": 2}]
 
 }

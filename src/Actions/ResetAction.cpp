@@ -10,7 +10,7 @@ resetAction::resetAction (vector<int> placeToReset, vector<shared_ptr<dependency
     m_placesToReset(placeToReset)
 { }
 
-resetAction::resetAction (json &action, Robot* robot)
+resetAction::resetAction (json &action, shared_ptr<Robot> robot)
 try :
     Action()
 {

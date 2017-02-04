@@ -7,7 +7,7 @@ Robot::Robot() :
         m_FLDrive(8, CANTalon::FeedbackDevice::QuadEncoder),
         m_BRDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
         m_BLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
-        m_mainAutoGroup(),
+        m_mainAutoGroup(new ActionGroup),
         m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive),
         //            m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
         //            m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
@@ -40,13 +40,16 @@ void Robot::RobotInit()
         json_file >> actionsJson;
         json_file.close ();
 
-        m_mainAutoGroup->initActionGroup (actionsJson, this);
+        shared_ptr<Robot> m_bot(this);
+
+        m_mainAutoGroup->initActionGroup (actionsJson, m_bot);
     }
     catch (std::domain_error(e))
     {
         cout << "Failed: ";
     }
 
+    cout << "Done With Loading Actions" << endl;
 
     LOGI << "Start Robot Init";
 
@@ -55,7 +58,7 @@ void Robot::RobotInit()
 void Robot::Autonomous()
 {
 
-    bool init = false;
+//    bool init = false;
 
     LOGI << "Start Auto";
     while (IsEnabled() && IsAutonomous())
@@ -114,8 +117,19 @@ void Robot::Test()
 
 }
 
-void Robot::driveAt(double speed, double angle){
+void Robot::driveAt(double speed, double angle)
+{
     m_drivetrain.moveAt (speed, angle);
+}
+
+void Robot::driveDistance (double distance, double angle, double speed)
+{
+    m_drivetrain.moveDistance (distance, angle, speed);
+}
+
+bool Robot::doneDriveMove (double tolerance)
+{
+    return m_drivetrain.doneMove (tolerance);
 }
 
 

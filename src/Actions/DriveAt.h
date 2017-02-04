@@ -19,7 +19,7 @@ class DriveAt : public Action
 public:
     DriveAt(double speed, double angle, vector<shared_ptr<dependency>> dependencies);
 
-    DriveAt(json& action, Robot* robot);
+    DriveAt(json& action, shared_ptr<Robot> robot);
 
 private:
     void run();
