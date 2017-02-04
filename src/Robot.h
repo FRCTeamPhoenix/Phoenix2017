@@ -33,6 +33,7 @@ class Robot: public SampleRobot
     SmartTalon m_BRDrive;
     SmartTalon m_BLDrive;
     ActionGroup* m_mainAutoGroup;
+    ADIS16448_IMU m_expansionBoard;
     relativeMecanumDrivetrain m_drivetrain;
 //    SmartTalon m_rightFlyWheelMotor;
 //    SmartTalon m_leftFlyWheelMotor;
@@ -41,7 +42,7 @@ class Robot: public SampleRobot
 //    DigitalInput m_rightLimitSwitch;
     Joystick m_joystick;
 //    Joystick m_gamepad;
-//    ADIS16448_IMU m_expansionBoard;
+
 //    FlyWheels m_flywheel;
 //    Turret m_turret;
     LoggerController m_loggerController;

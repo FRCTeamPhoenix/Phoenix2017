@@ -11,6 +11,8 @@
       <sourceFolder url="file://$MODULE_DIR$/ConfigEditor.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/FlyWheels.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/FlyWheels.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/HeadingControl.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/HeadingControl.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Lidar.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Lidar.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/LoggerController.cpp" isTestSource="false" />

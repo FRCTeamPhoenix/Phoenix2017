@@ -31,12 +31,15 @@ catch (...)
 
 void GoDistance::run ()
 {
+
+    LOGI << m_name << ": is running";
+
     if(getCondition() == dependency::NotStarted)
     {
         m_robot->driveDistance (m_distance, m_angle, m_speed);
         start ();
     }
-    else if(m_count < 5)
+    else if(m_count < 100)
     {
         m_count ++;
     }

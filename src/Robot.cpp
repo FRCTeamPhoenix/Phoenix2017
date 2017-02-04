@@ -8,7 +8,8 @@ Robot::Robot() :
         m_BRDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
         m_BLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
         m_mainAutoGroup(new ActionGroup),
-        m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive),
+		m_expansionBoard(),
+        m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_expansionBoard, HeadingControl::GyroAxes::x),
         //            m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
         //            m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
         //            m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
@@ -16,7 +17,7 @@ Robot::Robot() :
         //            m_rightLimitSwitch( PortAssign::rightLimitSwitch),
         m_joystick(PortAssign::joystick),
         //            m_gamepad(PortAssign::gamepad),
-        //            m_expansionBoard(),
+
         //            m_flywheel(m_rightFlyWheelMotor, m_leftFlyWheelMotor, m_gamepad),
         //            m_turret(m_turretRotateMotor,m_leftLimitSwitch, m_rightLimitSwitch, m_gamepad),
         m_loggerController()

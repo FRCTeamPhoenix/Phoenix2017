@@ -22,8 +22,11 @@ dependency::dependency (json dependency)
     }
     catch (...)
     {
-        std::cout << "dependency failed to load" << std::endl;
+        LOGI << "dependency failed to load";
     }
+
+    LOGI << "Place:\t" << m_place;
+    LOGI << "RCondition:\t" << m_requiredCondition;
 
 }
 
