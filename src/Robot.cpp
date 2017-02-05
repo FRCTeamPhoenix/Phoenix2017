@@ -16,6 +16,7 @@
 #include <fstream>
 #include "json.hpp"
 #include "Lidar.h"
+#include "IterativeRobot.h"
 
 using namespace std;
 using json=nlohmann::json;
@@ -73,9 +74,9 @@ public:
     void RobotInit() override
     {
         LOGI << "Start Robot Init";
-
+        CameraServer::GetInstance()->StartAutomaticCapture("Drive Cam", 0);
+        CameraServer::GetInstance()->StartAutomaticCapture("Gear Cam", 1);
     }
-
     void Autonomous()
     {
     
