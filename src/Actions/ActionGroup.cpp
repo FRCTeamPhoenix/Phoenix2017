@@ -50,7 +50,7 @@ void ActionGroup::initActionGroup (json &actionGroup, shared_ptr<Robot> robot)
 
 void ActionGroup::run ()
 {
-    LOGI << m_name << ":\t has run";
+//    LOGI << m_name << ":\t has run";
 
     vector<shared_ptr<Action>>::iterator ActionsIterator;
     for(ActionsIterator = m_containedActions.begin(); ActionsIterator != m_containedActions.end(); ActionsIterator++)

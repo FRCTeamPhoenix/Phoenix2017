@@ -128,6 +128,11 @@ void Robot::driveDistance (double distance, double angle, double speed)
     m_drivetrain.moveDistance (distance, angle, speed);
 }
 
+void Robot::rotateAngle (double angle, double speed)
+{
+    m_drivetrain.moveDistance (0, 0, speed, angle);
+}
+
 bool Robot::doneDriveMove (double tolerance)
 {
     return m_drivetrain.doneMove (tolerance);

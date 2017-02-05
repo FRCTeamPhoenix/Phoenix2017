@@ -26,12 +26,12 @@ private:
     void run();
     void reset();
 
+    Timer m_timer;
     double m_distance;
     double m_angle;
     double m_speed;
     double m_tolerance;
 
-    double m_count;
 
 };
 

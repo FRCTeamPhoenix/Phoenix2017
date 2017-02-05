@@ -68,7 +68,11 @@ public:
 
     void driveDistance(double distance, double angle, double speed);
 
+    void rotateAngle(double angle, double speed);
+
     bool doneDriveMove(double tolerance);
+
+
 
     //End of Functions for Actions
 

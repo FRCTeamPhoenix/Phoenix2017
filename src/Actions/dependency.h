@@ -6,6 +6,8 @@
 #define ACTIONGRAPHS_DEPENDENCY_H
 
 #include "../json.hpp"
+#include "plog/Log.h"
+
 
 
 using json=nlohmann::json;

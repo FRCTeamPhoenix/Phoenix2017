@@ -11,6 +11,7 @@
 #include "resetAction.h"
 #include "DriveAt.h"
 #include "GoDistance.h"
+#include "Rotate.h"
 
 
 #endif //ACTIONGRAPHS_ALLACTIONS_H

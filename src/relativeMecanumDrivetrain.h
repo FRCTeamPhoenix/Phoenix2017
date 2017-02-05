@@ -73,6 +73,12 @@ private:
     double m_distance;
     double m_goalDistance;
 
+
+    int m_FRenc;
+    int m_FLenc;
+    int m_BRenc;
+    int m_BLenc;
+
     double getXComponent(double magnitude, double angle);
     double getYComponent(double magnitude, double angle);
 

@@ -64,16 +64,16 @@ void Action::initAction (json &action, shared_ptr<Robot> robot)
 
 bool Action::issuable (vector<shared_ptr<Action>> &allActions)
 {
-    bool dependenciesMet = false;
+    bool dependenciesMet = true;
     vector<shared_ptr<dependency>>::iterator dependencyIterator;
     for(dependencyIterator = m_dependencies.begin(); dependencyIterator != m_dependencies.end(); dependencyIterator++)
     {
         dependency::condition dependantCondition = dependencyIterator->get ()->getCondition ();
         dependency::condition targetActionCondition = allActions[dependencyIterator->get ()->getPlace ()]->getCondition ();
 
-        if(targetActionCondition == dependantCondition)
+        if(targetActionCondition != dependantCondition)
         {
-            dependenciesMet = true;
+            dependenciesMet = false;
         }
     }
 

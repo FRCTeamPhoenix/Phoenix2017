@@ -29,6 +29,11 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
     m_goalGyro = 0;
     m_maxSpeed = 0;
 
+    m_FRenc = 0;
+    m_FLenc = 0;
+    m_BRenc = 0;
+    m_BLenc = 0;
+
     m_mode = CANSpeedController::ControlMode::kSpeed;
 
     m_distanceController.Enable();
@@ -102,10 +107,10 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
 //    m_headingControl.keepAt ();
     m_headingControl.changeAngle (rotation);
 
-    m_FLTalon.SetEncPosition (0);
-    m_FRTalon.SetEncPosition (0);
-    m_BRTalon.SetEncPosition (0);
-    m_BLTalon.SetEncPosition (0);
+    m_FRenc = m_FRTalon.GetEncPosition ();
+    m_FLenc = m_FLTalon.GetEncPosition ();
+    m_BRenc = m_BRTalon.GetEncPosition ();
+    m_BLenc = m_BLTalon.GetEncPosition ();
 
     m_distanceController.SetSetpoint (distance);
 
@@ -151,34 +156,13 @@ void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotat
 
 }
 
-bool relativeMecanumDrivetrain::doneMove ()
-{
-    bool angleDone = m_headingControl.isDone ();
-
-    bool distDone = false;
-
-    double distance = getDistance();
-    double goal = m_distanceController.GetSetpoint();
-
-    if(fabs(goal - distance) < 0.05 * goal)
-    {
-        distDone = true;
-    }
-
-    if(angleDone && distDone)
-    {
-        return true;
-    }
-    return false;
-
-}
 
 
 bool relativeMecanumDrivetrain::doneMove (double tolerancePercentage)
 {
     double difference = m_distance - m_goalDistance;
 
-    return (fabs(difference) < fabs((tolerancePercentage * m_goalDistance)));
+    return (fabs(difference) < fabs((tolerancePercentage * m_goalDistance))) && m_headingControl.isDone ();
 }
 
 double relativeMecanumDrivetrain::PIDGet ()
@@ -188,7 +172,7 @@ double relativeMecanumDrivetrain::PIDGet ()
     dist << "Distance: " << distance;
     SmartDashboard::PutString("DB/String 4", dist.str());
 
-    LOGI << dist.str();
+//    LOGI << dist.str();
 
     m_distance = distance;
 
@@ -253,12 +237,12 @@ void relativeMecanumDrivetrain::PIDWrite (double output)
         std::stringstream rot;
         rot << "Rotation Spd: " << (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity);
         SmartDashboard::PutString("DB/String 2", rot.str());
-        LOGI << speeds.str();
+//        LOGI << speeds.str();
 
         std::stringstream rotation;
         rotation << "Rotation: " << m_headingControl.getOutput ();
         SmartDashboard::PutString("DB/String 9", rotation.str());
-        LOGI << speeds.str();
+//        LOGI << speeds.str();
     }
 }
 
@@ -270,8 +254,8 @@ void relativeMecanumDrivetrain::SetPIDSourceType (PIDSourceType pidSource)
 double relativeMecanumDrivetrain::getDistance ()
 {
 
-    double xPos = (-m_FLTalon.GetEncPosition () + m_BRTalon.GetEncPosition ()) / 2;
-    double yPos = (m_FRTalon.GetEncPosition () + -m_BLTalon.GetEncPosition ()) / 2;
+    double xPos = (-(m_FLTalon.GetEncPosition () - m_FLenc)  + (m_BRTalon.GetEncPosition () - m_BRenc)) / 2;
+    double yPos = ((m_FRTalon.GetEncPosition () - m_FRenc) + -(m_BLTalon.GetEncPosition () - m_BLenc)) / 2;
 
     return sqrt((xPos * xPos) + (yPos * yPos));
 }

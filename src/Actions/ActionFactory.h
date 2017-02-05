@@ -57,6 +57,12 @@ shared_ptr<Action> Action::generateAction (json &action, shared_ptr<Robot> robot
         cout << "Created Go Distance" << endl;
         return newAction;
     }
+    else if("Rotate" == type)
+    {
+        cout << "Create Rotate" << endl;
+        shared_ptr<Action> newAction = make_shared<Rotate>(action, robot);
+        return newAction;
+    }
     else{
         cout << "Type Not Found" << endl;
         return NULL;
