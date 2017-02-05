@@ -9,22 +9,20 @@ Robot::Robot() :
         m_BLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
         m_mainAutoGroup(),
         m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive),
-        //            m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-        //            m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-        //            m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
-        //            m_leftLimitSwitch(PortAssign::leftLimitSwitch),
-        //            m_rightLimitSwitch( PortAssign::rightLimitSwitch),
+        m_topFlyWheelMotor(PortAssign::topFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
+        m_lowerFlyWheelMotor(PortAssign::lowerFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
+        m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
         m_joystick(PortAssign::joystick),
-        //            m_gamepad(PortAssign::gamepad),
-        //            m_expansionBoard(),
-        //            m_flywheel(m_rightFlyWheelMotor, m_leftFlyWheelMotor, m_gamepad),
-        //            m_turret(m_turretRotateMotor,m_leftLimitSwitch, m_rightLimitSwitch, m_gamepad),
-        m_loggerController()
-//            m_shooterController(m_flywheel, m_turret),
-//            m_configEditor(),
-//            m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
-//			m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
-//			m_climber(m_climberMotor, m_joystick)
+        m_gamepad(PortAssign::gamepad),
+        m_expansionBoard(),
+        m_flywheel(m_topFlyWheelMotor, m_lowerFlyWheelMotor, m_gamepad),
+        m_turret(m_turretRotateMotor, m_gamepad),
+        m_loggerController(),
+        m_shooterController(m_flywheel, m_turret),
+        m_configEditor(),
+        m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
+        m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
+        m_climber(m_climberMotor, m_joystick)
 {
 
 }

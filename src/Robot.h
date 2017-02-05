@@ -34,22 +34,20 @@
         SmartTalon m_BLDrive;
         ActionGroup* m_mainAutoGroup;
         relativeMecanumDrivetrain m_drivetrain;
-    //    SmartTalon m_rightFlyWheelMotor;
-    //    SmartTalon m_leftFlyWheelMotor;
-    //    SmartTalon m_turretRotateMotor;
-    //    DigitalInput m_leftLimitSwitch;
-    //    DigitalInput m_rightLimitSwitch;
+        SmartTalon m_topFlyWheelMotor;
+        SmartTalon m_lowerFlyWheelMotor;
+        SmartTalon m_turretRotateMotor;
         Joystick m_joystick;
-    //    Joystick m_gamepad;
-    //    ADIS16448_IMU m_expansionBoard;
-    //    FlyWheels m_flywheel;
-    //    Turret m_turret;
+        Joystick m_gamepad;
+        ADIS16448_IMU m_expansionBoard;
+        FlyWheels m_flywheel;
+        Turret m_turret;
         LoggerController m_loggerController;
-    //    ShooterController m_shooterController;
-    //    ConfigEditor m_configEditor;
-    //    Lidar m_lidar;
-    //    SmartTalon m_climberMotor;
-    //    Climber m_climber;
+        ShooterController m_shooterController;
+        ConfigEditor m_configEditor;
+        Lidar m_lidar;
+        SmartTalon m_climberMotor;
+        Climber m_climber;
 
     public:
         Robot();

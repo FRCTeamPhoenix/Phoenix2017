@@ -31,16 +31,12 @@ public:
 
     Turret(
             SmartTalon& turretRotatorMotor,
-            DigitalInput& leftLimitSwitch,
-            DigitalInput& rightLimitSwitch,
             Joystick& gamepad
     );
     virtual ~Turret();
 
 private:
     SmartTalon& m_turretRotatorMotor; //Turret Motor for rotating the turret
-    DigitalInput& m_leftLimitSwitch;
-    DigitalInput& m_rightLimitSwitch;
     Joystick& m_gamepad; //Turret uses a joystick on the gamepad
     float m_gamepadJoystick; //Variable for the gamepad joystick value that is out putted
     STATE m_state; //State variable for the Turret

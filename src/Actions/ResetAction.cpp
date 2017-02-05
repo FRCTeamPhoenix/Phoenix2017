@@ -2,7 +2,7 @@
 // Created by William Gebhardt on 1/28/17.
 //
 
-#include "resetAction.h"
+#include "ResetAction.h"
 
 
 resetAction::resetAction (vector<int> placeToReset, vector<shared_ptr<dependency>> dependencies):

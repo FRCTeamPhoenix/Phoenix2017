@@ -9,12 +9,8 @@
 
 Turret::Turret(
         SmartTalon& turretRotatorMotor,
-        DigitalInput& leftLimitSwitch,
-        DigitalInput& rightLimitSwitch,
         Joystick& gamepad):
         m_turretRotatorMotor(turretRotatorMotor),
-        m_leftLimitSwitch(leftLimitSwitch),
-        m_rightLimitSwitch(rightLimitSwitch),
         m_gamepad(gamepad)
 {
     m_state = HOMING;
@@ -31,7 +27,7 @@ void Turret::run()
     //Returns Turret to right limit.
     if(m_state == HOMING){
         m_turretRotatorMotor.goAt(0.5);//will need to be changed. temp number.
-        if(m_rightLimitSwitch.Get() || m_leftLimitSwitch.Get())
+        if(1) // empty because no limit switches exist
         {
             setState(IDLE);
         }
@@ -55,7 +51,7 @@ void Turret::run()
             case MOVING:
                 m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
 
-                if(m_rightLimitSwitch.Get() || m_leftLimitSwitch.Get())
+                if(1)
                 {
                     setState(IDLE);
                 }
