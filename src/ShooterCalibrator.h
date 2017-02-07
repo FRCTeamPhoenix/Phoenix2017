@@ -29,7 +29,9 @@ public:
         ShooterCalibrator();
 
         // Calculate required flywheel power, given shooting distance
-        double getPower(double distance);
+        double getFlywheelPower(double distance);
+        // Estimate resultant distance from a given flywheel power
+        double getDistance(double power);
 
         // Number of distance/power pairings in config file
         int getNumPairs();
@@ -43,7 +45,8 @@ private:
         // Store distance/power pairs (read in from json)
         vector<DistancePowerPair> dpPairs;
 
-        double interpolateLinear(double distance);
+        double interpolatePowerLinear(double distance);
+        double interpolateDistanceLinear(double power);
 
 };
 

@@ -44,7 +44,7 @@ ShooterCalibrator::ShooterCalibrator()
 
 }
 
-double ShooterCalibrator::interpolateLinear(double distance) {
+double ShooterCalibrator::interpolatePowerLinear(double distance) {
 
     // Lower and upper indices on dpPairs
     int i1 = 0;
@@ -94,9 +94,53 @@ double ShooterCalibrator::interpolateLinear(double distance) {
 
 }
 
-double ShooterCalibrator::getPower(double distance) {
+double ShooterCalibrator::interpolateDistanceLinear(double power) {
 
-    return interpolateLinear(distance);
+    // Lower and upper indices on dpPairs
+    int i1 = 0;
+    int i2 = 1;
+    // Lower and upper bounds on power (start with first two reference values)
+    double p1 = dpPairs[i1].getPower();
+    double p2 = dpPairs[i2].getPower();
+
+    // Use last two reference values if power exceeds greatest value
+    if (power > dpPairs[dpPairs.size() - 1].getPower())
+    {
+        i1 = dpPairs.size() - 2;
+        i2 = i1 + 1;
+    }
+    // Otherwise, if power isn't below/between the first pair of reference values, choose greater values
+    else if (power > dpPairs[1].getPower())
+    {
+        i1++;
+        p1 = dpPairs[i1].getPower();
+        i2++;
+        p2 = dpPairs[i2].getPower();
+    }
+
+    // Lower and upper bounds on distance
+    double d1 = dpPairs[i1].getDistance();
+    double d2 = dpPairs[i2].getDistance();
+
+    // Change in power per unit distance
+    double m = (d2 - d1)/(p2 - p1);
+
+    // Estimated distance (linear interpolation)
+    double distanceEst = m*(power - p1) + d1;
+
+    return distanceEst;
+
+}
+
+double ShooterCalibrator::getFlywheelPower(double distance) {
+
+    return interpolatePowerLinear(distance);
+
+}
+
+double ShooterCalibrator::getDistance(double power) {
+
+    return interpolateDistanceLinear(power);
 
 }
 
