@@ -7,7 +7,7 @@
 
 #include <Indexer.h>
 
-Indexer::Indexer(SmartTalon* indexerMotor, Joystick* gamepad):
+Indexer::Indexer(SmartTalon& indexerMotor, Joystick& gamepad):
     m_indexerMotor(indexerMotor),
     m_gamepad(gamepad)
 {
@@ -30,21 +30,18 @@ void Indexer::setState(Indexer::State state)
 
 void Indexer::run()
 {
-    switch (m_state)
-    { 
-    case ON:
-        m_indexerMotor->goAt(0.5);
-        break;
-    case OFF:
-        if (m_gamepad->GetRawButton(DriveStationConstants::buttonX))
-            m_indexerMotor->goAt(0.5);
-        else
-            m_indexerMotor->goAt(0.0);
-        break;
-    case QUARTER_TURN:
-        m_indexerMotor->goDistance(1024, 0.5);
-        if (m_indexerMotor->GetSpeed() == 0.0)
-            m_state = OFF;
-        break;
+    switch(m_state) {
+        case TELEOP:
+            if (m_gamepad.GetRawButton(DriveStationConstants::buttonX))
+                m_indexerMotor.goAt(1.0);
+            else
+                m_indexerMotor.goAt(0.0);
+            break;
+        case ON:
+            m_indexerMotor.goAt(1.0);
+            break;
+        case OFF:
+            m_indexerMotor.goAt(0.0);
+            break;
     }
 }

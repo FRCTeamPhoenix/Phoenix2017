@@ -51,6 +51,7 @@ class Robot: public SampleRobot
     Talon m_gathererMotor;
     SmartTalon m_feederMotor;
     SmartTalon m_indexerMotor;
+    Indexer m_indexer;
 
 public:
     Robot() :
@@ -78,7 +79,8 @@ public:
             m_climber(m_climberMotor, m_joystick),
             m_gathererMotor(PortAssign::loader),
             m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
-            m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder)
+            m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder),
+            m_indexer(m_indexerMotor, m_gamepad)
     {
     }
     void RobotInit() override
