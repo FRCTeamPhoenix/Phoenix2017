@@ -9,16 +9,17 @@
 
 Turret::Turret(
         SmartTalon& turretRotatorMotor,
-        DigitalInput& leftLimitSwitch,
-        DigitalInput& rightLimitSwitch,
+        Communications& visionComs,
         Joystick& gamepad):
+
         m_turretRotatorMotor(turretRotatorMotor),
-        m_leftLimitSwitch(leftLimitSwitch),
-        m_rightLimitSwitch(rightLimitSwitch),
+        m_visionComs(visionComs),
         m_gamepad(gamepad)
+
 {
     m_state = HOMING;
     m_gamepadJoystick = 0;
+    m_visionTimeStamp = 0;
 }
 
 Turret::~Turret()
@@ -31,7 +32,7 @@ void Turret::run()
     //Returns Turret to right limit.
     if(m_state == HOMING){
         m_turretRotatorMotor.goAt(0.5);//will need to be changed. temp number.
-        if(m_rightLimitSwitch.Get() || m_leftLimitSwitch.Get())
+        if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
         {
             setState(IDLE);
         }
@@ -47,19 +48,45 @@ void Turret::run()
 
                 if(gamepadJoystickWithDeadZone() != 0)
                 {
-                    setState(MOVING);
+                    setState(TELEOP);
+                }
+                if(m_gamepad.GetRawButton(DriveStationConstants::buttonX))
+                {
+                    setState(AUTO);
                 }
                 break;
                 //Moving state of Turret
                 //Changes to Idle when there is no joystick movement
-            case MOVING:
-                m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
+            case TELEOP:
+                gamepadJoystickWithDeadZone();
 
-                if(m_rightLimitSwitch.Get() || m_leftLimitSwitch.Get())
+                if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
                 {
-                    setState(IDLE);
+                    if (gamepadJoystickWithDeadZone() > 0)
+                    {
+                        m_turretRotatorMotor.goAt(0.0);
+                    }
+                    else
+                    {
+                        m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
+                    }
                 }
+                else if (m_turretRotatorMotor.IsRevLimitSwitchClosed())
+                {
+                    if (gamepadJoystickWithDeadZone() < 0)
+                    {
+                        m_turretRotatorMotor.goAt(0.0);
+                    }
+                    else
+                    {
+                        m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
+                    }
 
+                }
+                else
+                {
+                    m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
+                }
                 if(gamepadJoystickWithDeadZone() == 0)
                 {
                     setState(IDLE);
@@ -67,12 +94,26 @@ void Turret::run()
                 break;
             case HOMING:
                 break;
+            case AUTO:
+                long long int tempTime = m_visionComs.getAngleTimestamp();
+
+                if (tempTime != m_visionTimeStamp){
+                    m_visionTimeStamp = tempTime;
+
+                    autoTarget(m_visionComs.getAngle());
+                }
+                if(!m_gamepad.GetRawButton(DriveStationConstants::buttonX))
+                {
+                    setState(IDLE);
+                }
+
+                break;
         }
     }
 }
 
 void Turret::autoTarget(float degrees){
-    m_turretRotatorMotor.goDistance(degreeToTicks(degrees), 0.1);
+    m_turretRotatorMotor.goDistance(degreeToTicks(degrees), 0.5);
 }
 
 float Turret::degreeToTicks(float angle){
@@ -83,7 +124,7 @@ float Turret::degreeToTicks(float angle){
 //Has a damping effect because we do not want the turret moving at full speed
 float Turret::gamepadJoystickWithDeadZone()
 {
-    float power = -m_gamepadJoystick;
+    float power = -m_gamepad.GetY();
 
     if (fabs(power) < 0.05f){
         power = 0;
