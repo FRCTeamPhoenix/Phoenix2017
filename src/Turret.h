@@ -10,6 +10,7 @@
 #include "WPILib.h"
 #include "SmartTalon.h"
 #include "constants.h"
+#include "Communications.h"
 
 class Turret
 {
@@ -19,7 +20,8 @@ public:
     {
         IDLE, //State of the Turret when it is not moving
         HOMING,
-        MOVING //State of the Turret when it is moving/aiming
+        TELEOP, //State of the Turret when it is moving/aiming
+        AUTO
     };
     void run();
     float gamepadJoystickWithDeadZone(); //Creates a deadzone for the gamepad joystick
@@ -31,15 +33,18 @@ public:
 
     Turret(
             SmartTalon& turretRotatorMotor,
+            Communications& visionComs,
             Joystick& gamepad
     );
     virtual ~Turret();
 
 private:
-    SmartTalon& m_turretRotatorMotor; //Turret Motor for rotating the turret
+    SmartTalon& m_turretRotatorMotor;
+    Communications& m_visionComs;
     Joystick& m_gamepad; //Turret uses a joystick on the gamepad
     float m_gamepadJoystick; //Variable for the gamepad joystick value that is out putted
     STATE m_state; //State variable for the Turret
+    long long int m_visionTimeStamp;
 };
 
 #endif /* SRC_TURRET_H_ */

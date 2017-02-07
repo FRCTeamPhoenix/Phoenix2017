@@ -18,7 +18,6 @@
     #include "Lidar.h"
     #include "Climber.h"
 
-
     using namespace std;
     using json=nlohmann::json;
 
@@ -39,13 +38,15 @@
         SmartTalon m_turretRotateMotor;
         Joystick m_joystick;
         Joystick m_gamepad;
+        Lidar m_lidar;
         ADIS16448_IMU m_expansionBoard;
+        Communications m_visionComs;
+        ShooterCalibrator m_shooterCalibrator;
         FlyWheels m_flywheel;
         Turret m_turret;
         LoggerController m_loggerController;
         ShooterController m_shooterController;
         ConfigEditor m_configEditor;
-        Lidar m_lidar;
         SmartTalon m_climberMotor;
         Climber m_climber;
 

@@ -1,7 +1,6 @@
 #include "Robot.h"
 #include "Actions/ActionFactory.h"
 
-
 Robot::Robot() :
         m_FRDrive(7, CANTalon::FeedbackDevice::QuadEncoder),
         m_FLDrive(8, CANTalon::FeedbackDevice::QuadEncoder),
@@ -14,19 +13,21 @@ Robot::Robot() :
         m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
         m_joystick(PortAssign::joystick),
         m_gamepad(PortAssign::gamepad),
+        m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
         m_expansionBoard(),
-        m_flywheel(m_topFlyWheelMotor, m_lowerFlyWheelMotor, m_gamepad),
-        m_turret(m_turretRotateMotor, m_gamepad),
+        m_visionComs(),
+        m_shooterCalibrator(),
+        m_flywheel(m_topFlyWheelMotor, m_lowerFlyWheelMotor, m_shooterCalibrator, m_lidar, m_gamepad, m_joystick),
+        m_turret(m_turretRotateMotor, m_visionComs, m_gamepad),
         m_loggerController(),
         m_shooterController(m_flywheel, m_turret),
         m_configEditor(),
-        m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
-        m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
-        m_climber(m_climberMotor, m_joystick)
+	    m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
+	    m_climber(m_climberMotor, m_joystick)
+	    
 {
 
 }
-
 
 void Robot::RobotInit()
 {
