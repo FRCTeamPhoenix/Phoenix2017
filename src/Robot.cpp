@@ -76,6 +76,7 @@ public:
         LOGI << "Start Robot Init";
         CameraServer::GetInstance()->StartAutomaticCapture("Drive Cam", 0);
         CameraServer::GetInstance()->StartAutomaticCapture("Gear Cam", 1);
+        CameraServer::GetInstance()->StartAutomaticCapture("Turret Cam", 2);
     }
     void Autonomous()
     {
