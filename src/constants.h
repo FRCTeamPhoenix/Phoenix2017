@@ -11,16 +11,16 @@
 struct PortAssign
 {
     // CANTalon ID's
-    const static uint32_t backLeftWheelMotor = 1;
-    const static uint32_t frontLeftWheelMotor = 2;
-    const static uint32_t frontRightWheelMotor = 3;
-    const static uint32_t backRightWheelMotor = 4;
-    const static uint32_t leftFlyWheelMotor = 5;
-    const static uint32_t rightFlyWheelMotor = 6;
-    const static uint32_t climber = 6; // Climber Motor is 7
-    const static uint32_t feeder = 8;
+    const static uint32_t backLeftWheelMotor = 2; //updated values to reflect control boxes
+    const static uint32_t frontLeftWheelMotor = 8;
+    const static uint32_t frontRightWheelMotor = 7;
+    const static uint32_t backRightWheelMotor = 1;
+    const static uint32_t topFlyWheelMotor = 4;
+    const static uint32_t lowerFlyWheelMotor = 3;
+    const static uint32_t climber = 10;
+    const static uint32_t feeder = 5;
     const static uint32_t turret = 9;
-    const static uint32_t indexer = 10;
+    const static uint32_t indexer = 6;
 
     // Talon Ports
     const static uint32_t loader = 0;
@@ -77,18 +77,18 @@ namespace DriveStationConstants
 {
     enum buttonNames
     {
-        buttonX = 0,
-        buttonA = 1, // Start/Stop Climber
-        buttonB = 2,
-        buttonY = 3,
-        buttonLB = 4,
-        buttonRB = 5,
-        triggerLT = 6, // Stop Shooter
-        triggerRT = 7, // Start Shooter
-        buttonBack = 8,
-        buttonStart = 9,
-        joystickLeftButton = 10,
-        joystickRightButton = 11
+        buttonX = 1,
+        buttonA = 2, // Start/Stop Climber
+        buttonB = 3,
+        buttonY = 4,
+        buttonLB = 5,
+        buttonRB = 6,
+        triggerLT = 7, // Stop Shooter
+        triggerRT = 8, // Start Shooter
+        buttonBack = 9,
+        buttonStart = 10,
+        joystickLeftButton = 11,
+        joystickRightButton = 12
     };
     const static std::string dashButtonNames[6] =
     {
