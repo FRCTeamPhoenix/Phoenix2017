@@ -25,9 +25,6 @@ dependency::dependency (json dependency)
         LOGI << "dependency failed to load";
     }
 
-    LOGI << "Place:\t" << m_place;
-    LOGI << "RCondition:\t" << m_requiredCondition;
-
 }
 
 

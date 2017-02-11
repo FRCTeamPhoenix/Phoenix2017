@@ -8,7 +8,7 @@
 #include "Action.h"
 #include "CountUp.h"
 #include "ActionGroup.h"
-#include "resetAction.h"
+#include "ResetAction.h"
 #include "DriveAt.h"
 #include "GoDistance.h"
 #include "Rotate.h"

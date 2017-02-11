@@ -17,6 +17,9 @@
 #include "json.hpp"
 #include "Lidar.h"
 #include "Climber.h"
+#include "Gatherer.h"
+#include "Feeder.h"
+#include "Indexer.h"
 #include "valijson/adapters/nlohmann_json_adapter.hpp"
 #include "valijson/utils/nlohmann_json_utils.hpp"
 #include "valijson/schema.hpp"
@@ -30,6 +33,7 @@ using valijson::adapters::NlohmannJsonAdapter;
 
 using namespace std;
 using json=nlohmann::json;
+class ActionGroup;
 
 class ActionGroup;
 
@@ -42,24 +46,31 @@ class Robot: public SampleRobot
     SmartTalon m_BRDrive;
     SmartTalon m_BLDrive;
     ActionGroup* m_mainAutoGroup;
-    ADIS16448_IMU m_expansionBoard;
     relativeMecanumDrivetrain m_drivetrain;
-//    SmartTalon m_rightFlyWheelMotor;
-//    SmartTalon m_leftFlyWheelMotor;
-//    SmartTalon m_turretRotateMotor;
-//    DigitalInput m_leftLimitSwitch;
-//    DigitalInput m_rightLimitSwitch;
+    SmartTalon m_topFlyWheelMotor;
+    SmartTalon m_lowerFlyWheelMotor;
+    SmartTalon m_turretRotateMotor;
+    DigitalInput m_leftLimitSwitch;
+    DigitalInput m_rightLimitSwitch;
     Joystick m_joystick;
-//    Joystick m_gamepad;
-
-//    FlyWheels m_flywheel;
-//    Turret m_turret;
+    Joystick m_gamepad;
+    Lidar m_lidar;
+    ADIS16448_IMU m_expansionBoard;
+    Communications m_visionComs;
+    ShooterCalibrator m_shooterCalibrator;
+    FlyWheels m_flywheel;
+    Turret m_turret;
     LoggerController m_loggerController;
-//    ShooterController m_shooterController;
-//    ConfigEditor m_configEditor;
-//    Lidar m_lidar;
-//    SmartTalon m_climberMotor;
-//    Climber m_climber;
+    ShooterController m_shooterController;
+    ConfigEditor m_configEditor;
+    SmartTalon m_climberMotor;
+    Climber m_climber;
+    Talon m_gathererMotor;
+    SmartTalon m_feederMotor;
+    SmartTalon m_indexerMotor;
+    Indexer m_indexer;
+    Feeder m_feeder;
+    Gatherer m_gatherer;
 
 public:
     Robot();
@@ -71,7 +82,7 @@ public:
     void OperatorControl();
 
     void Test();
-
+    
     void initMainActionGroup();
 
     void initAutoMode();

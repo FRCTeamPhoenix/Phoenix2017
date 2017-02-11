@@ -1,35 +1,43 @@
 #include "Robot.h"
 #include "Actions/ActionFactory.h"
 
+using namespace std;
+using json=nlohmann::json;
 
 Robot::Robot() :
         m_FRDrive(7, CANTalon::FeedbackDevice::QuadEncoder),
         m_FLDrive(8, CANTalon::FeedbackDevice::QuadEncoder),
         m_BRDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
         m_BLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
-        m_mainAutoGroup(new ActionGroup),
-		m_expansionBoard(),
+        m_mainAutoGroup(),
         m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_expansionBoard, HeadingControl::GyroAxes::x),
-        //            m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-        //            m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-        //            m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
-        //            m_leftLimitSwitch(PortAssign::leftLimitSwitch),
-        //            m_rightLimitSwitch( PortAssign::rightLimitSwitch),
+        m_topFlyWheelMotor(PortAssign::topFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
+        m_lowerFlyWheelMotor(PortAssign::lowerFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
+        m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
+        m_leftLimitSwitch(PortAssign::leftLimitSwitch),
+        m_rightLimitSwitch( PortAssign::rightLimitSwitch),
         m_joystick(PortAssign::joystick),
-        //            m_gamepad(PortAssign::gamepad),
-
-        //            m_flywheel(m_rightFlyWheelMotor, m_leftFlyWheelMotor, m_gamepad),
-        //            m_turret(m_turretRotateMotor,m_leftLimitSwitch, m_rightLimitSwitch, m_gamepad),
-        m_loggerController()
-//            m_shooterController(m_flywheel, m_turret),
-//            m_configEditor(),
-//            m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
-//			m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
-//			m_climber(m_climberMotor, m_joystick)
+        m_gamepad(PortAssign::gamepad),
+        m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0),
+        m_expansionBoard(),
+        m_visionComs(),
+        m_shooterCalibrator(),
+        m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_gamepad, m_joystick),
+        m_turret(m_turretRotateMotor,m_visionComs, m_gamepad),
+        m_loggerController(),
+        m_shooterController(m_flywheel, m_turret),
+        m_configEditor(),
+        m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
+        m_climber(m_climberMotor, m_joystick),
+        m_gathererMotor(PortAssign::loader),
+        m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
+        m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder),
+        m_indexer(m_indexerMotor, m_gamepad),
+        m_feeder(m_feederMotor, m_gamepad),
+        m_gatherer(m_gathererMotor, m_gamepad)
 {
 
 }
-
 
 void Robot::RobotInit()
 {
@@ -51,7 +59,7 @@ void Robot::Autonomous()
 
 void Robot::OperatorControl()
 {
-
+    m_expansionBoard.Reset();
     LOGI << "Start Teleop";
     //int count = 0;
 
@@ -60,11 +68,11 @@ void Robot::OperatorControl()
         string mode = SmartDashboard::GetString("Auto Selector", "None");
     	SmartDashboard::PutString("DB/String 7", mode);
     }
-
 }
 
 void Robot::Test()
 {
+
     m_FRDrive.SetControlMode(CANSpeedController::kPercentVbus);
     m_FLDrive.SetControlMode(CANSpeedController::kPercentVbus);
     m_BRDrive.SetControlMode(CANSpeedController::kPercentVbus);
@@ -92,11 +100,7 @@ void Robot::Test()
             m_BLDrive.Set (0.2);
         else
             m_BLDrive.Set (0);
-
-
-
     }
-
 }
 
 void Robot::initMainActionGroup ()
@@ -127,7 +131,7 @@ void Robot::initMainActionGroup ()
 
         Validator validator;
         NlohmannJsonAdapter myTargetAdapter (myJsonDoc);
-        if (!validator.validate (mySchema, myTargetAdapter, NULL))s
+        if (!validator.validate (mySchema, myTargetAdapter, NULL))
         {
             throw std::runtime_error ("Validation failed.");
         }
@@ -227,6 +231,5 @@ bool Robot::doneDriveMove (double tolerance)
 {
     return m_drivetrain.doneMove (tolerance);
 }
-
 
 START_ROBOT_CLASS(Robot)
