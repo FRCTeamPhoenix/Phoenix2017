@@ -137,14 +137,14 @@ void Robot::Test()
            if (m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
 
                // Power-based
-               m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1",0.0));
-               m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
+//               m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1",0.0));
+//               m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
 
-               // Velocity-based
-               /*
+               // Velocity-based (implement only after PID tuning of flywheel motors)
+
                m_topFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1",0.0));
-               m_lowerFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2",0.0))
-               */
+               m_lowerFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2",0.0));
+
 
            }
            else
@@ -173,12 +173,14 @@ void Robot::Test()
            std::ostringstream shooterTopVel;
            shooterTopVel << "VelTop: ";
            shooterTopVel << m_topFlyWheelMotor.GetEncVel();
+           //shooterTopVel << SmartDashboard::GetNumber("DB/Slider 1", 0.0);
            SmartDashboard::PutString("DB/String 10", shooterTopVel.str());
 
            std::ostringstream shooterLowVel;
-           shooterTopVel << "VelLow: ";
-           shooterTopVel << m_lowerFlyWheelMotor.GetEncVel();
-           SmartDashboard::PutString("DB/String 10", shooterLowVel.str());
+           shooterLowVel << "VelLow: ";
+           shooterLowVel << m_lowerFlyWheelMotor.GetEncVel();
+           //shooterLowVel << SmartDashboard::GetNumber("DB/Slider 2", 0.0);
+           SmartDashboard::PutString("DB/String 11", shooterLowVel.str());
 
 
            m_configEditor.update();
