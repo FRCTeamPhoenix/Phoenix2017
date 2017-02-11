@@ -22,7 +22,7 @@ class resetAction : public Action
 public:
     resetAction(vector<int> placesToReset, vector<shared_ptr<dependency>> dependencies);
 
-    resetAction(json& action, Robot* robot);
+    resetAction(json& action, shared_ptr<Robot> robot);
 
     virtual void execute(vector<shared_ptr<Action>>& allActions);
 private:

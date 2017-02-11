@@ -10,7 +10,7 @@ resetAction::resetAction (vector<int> placeToReset, vector<shared_ptr<dependency
     m_placesToReset(placeToReset)
 { }
 
-resetAction::resetAction (json &action, Robot* robot)
+resetAction::resetAction (json &action, shared_ptr<Robot> robot)
 try :
     Action()
 {
@@ -34,6 +34,8 @@ void resetAction::execute (vector<shared_ptr<Action>> &allActions)
     if(issuable(allActions)){
         LOGI << m_name << ":\t has reset actions";
 
+        disable();
+
         for (vector<int>::iterator it = m_placesToReset.begin(); it != m_placesToReset.end(); it++)
         {
             allActions[*it].get ()->reset ();
@@ -43,5 +45,7 @@ void resetAction::execute (vector<shared_ptr<Action>> &allActions)
     }
 
 }
+
+
 
 

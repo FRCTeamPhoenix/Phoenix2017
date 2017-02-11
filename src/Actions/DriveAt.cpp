@@ -10,7 +10,7 @@ DriveAt::DriveAt (double speed, double angle, vector<shared_ptr<dependency>> dep
     m_angle(angle)
 { }
 
-DriveAt::DriveAt (json &action, Robot *robot)
+DriveAt::DriveAt (json &action, shared_ptr<Robot> robot)
 try : Action(),
       m_speed(action["speed"]),
       m_angle(action["angle"])

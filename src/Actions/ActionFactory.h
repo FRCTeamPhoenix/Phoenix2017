@@ -18,7 +18,7 @@ using json=nlohmann::json;
 
 class Robot;
 
-shared_ptr<Action> Action::generateAction (json &action, Robot* robot)
+shared_ptr<Action> Action::generateAction (json &action, shared_ptr<Robot> robot)
 {
     string type = "";
     try
@@ -33,15 +33,35 @@ shared_ptr<Action> Action::generateAction (json &action, Robot* robot)
 
     if ("ActionGroup" == type)
     {
+        cout << "Create Action Group" << endl;
+
         return make_shared<ActionGroup>(action, robot);
     }
     else if("CountUp" == type)
     {
+        cout << "Create Count Up" << endl;
+
         return make_shared<CountUp>(action, robot);
     }
     else if("resetAction" == type)
     {
+        cout << "Create Reset Action" << endl;
+
         return make_shared<resetAction>(action, robot);
+    }
+    else if("GoDistance" == type)
+    {
+        cout << "Create Go Distance" << endl;
+        shared_ptr<Action> newAction = make_shared<GoDistance>(action, robot);
+
+        cout << "Created Go Distance" << endl;
+        return newAction;
+    }
+    else if("Rotate" == type)
+    {
+        cout << "Create Rotate" << endl;
+        shared_ptr<Action> newAction = make_shared<Rotate>(action, robot);
+        return newAction;
     }
     else{
         cout << "Type Not Found" << endl;

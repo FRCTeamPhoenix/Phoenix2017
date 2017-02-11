@@ -42,6 +42,8 @@ private:
 
     Timer m_tuneTimer;
 
+    bool m_inverted;
+
     PIDGains m_distanceGains;
     PIDGains m_speedGains;
 

@@ -22,7 +22,7 @@ dependency::dependency (json dependency)
     }
     catch (...)
     {
-        std::cout << "dependency failed to load" << std::endl;
+        LOGI << "dependency failed to load";
     }
 
 }
