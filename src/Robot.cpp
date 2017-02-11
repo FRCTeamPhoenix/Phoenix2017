@@ -135,8 +135,17 @@ void Robot::Test()
            // X: Run flywheels off driverstation from slider 1 and 2 input
            // Joystick Y: Run flywheels
            if (m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
+
+               // Power-based
                m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1",0.0));
                m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
+
+               // Velocity-based
+               /*
+               m_topFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1",0.0));
+               m_lowerFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2",0.0))
+               */
+
            }
            else
            {
