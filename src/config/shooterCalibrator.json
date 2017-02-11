@@ -1,0 +1,22 @@
+[
+  {
+    "distance": 1,
+    "power": 0.11
+  },
+  {
+    "distance": 10,
+    "power": 0.8
+  },
+  {
+    "distance": 2,
+    "power": 0.156
+  },
+  {
+    "distance": 4,
+    "power": 0.3
+  },
+  {
+    "distance": 6,
+    "power": 0.65
+  }
+]
