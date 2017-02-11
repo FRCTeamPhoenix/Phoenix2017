@@ -19,11 +19,19 @@ DistancePowerPair::DistancePowerPair(double distance, double power)
 }
 
 // Obtain distance and power from a json point object
-DistancePowerPair::DistancePowerPair(json point)
+DistancePowerPair::DistancePowerPair(json point, bool isTop)
 {
 
     m_distance = point["distance"];
-    m_power = point["power"];
+
+    if (isTop)
+    {
+        m_power = point["powerTop"];
+    }
+    else
+    {
+        m_power = point["powerLow"];
+    }
 
 }
 

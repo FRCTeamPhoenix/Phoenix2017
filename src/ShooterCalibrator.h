@@ -45,6 +45,9 @@ private:
         // Store distance/power pairs (read in from json)
         vector<DistancePowerPair> dpPairs;
 
+        vector<DistancePowerPair> dpPairsLow;
+        vector<DistancePowerPair> dpPairsTop;
+
         double interpolatePowerLinear(double distance);
         double interpolateDistanceLinear(double power);
 

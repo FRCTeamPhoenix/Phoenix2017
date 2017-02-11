@@ -26,7 +26,7 @@ class DistancePowerPair
         DistancePowerPair(double distance, double power);
 
         // Obtain distance and power from a json point object
-        DistancePowerPair(json point);
+        DistancePowerPair(json point, bool isTop);
 
         double getDistance();
         void setDistance(double distance);

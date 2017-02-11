@@ -24,7 +24,9 @@ ShooterCalibrator::ShooterCalibrator()
     json::iterator jsonItr;
     for (jsonItr = points.begin(); jsonItr != points.end(); jsonItr++)
     {
-        dpPairs.push_back(DistancePowerPair(*jsonItr));
+        dpPairs.push_back(DistancePowerPair(*jsonItr, true));
+        dpPairsLow.push_back(DistancePowerPair(*jsonItr, false));
+        dpPairsTop.push_back(DistancePowerPair(*jsonItr, true));
     }
 
     // Sort reference values
@@ -41,6 +43,35 @@ ShooterCalibrator::ShooterCalibrator()
         dpPairs[j].setDistance(currentDistance);
         dpPairs[j].setPower(currentPower);
     }
+
+    for (int i = 1; i < (int) dpPairsLow.size(); i++) {
+        double currentDistance = dpPairsLow[i].getDistance();
+        double currentPower = dpPairsLow[i].getPower();
+        int j = i;
+        while (j > 0 && dpPairsLow[j - 1].getDistance() > currentDistance)
+        {
+            dpPairsLow[j].setDistance(dpPairsLow[j - 1].getDistance());
+            dpPairsLow[j].setPower(dpPairsLow[j - 1].getPower());
+            j--;
+        }
+        dpPairsLow[j].setDistance(currentDistance);
+        dpPairsLow[j].setPower(currentPower);
+    }
+
+    for (int i = 1; i < (int) dpPairsLow.size(); i++) {
+        double currentDistance = dpPairsLow[i].getDistance();
+        double currentPower = dpPairsLow[i].getPower();
+        int j = i;
+        while (j > 0 && dpPairsLow[j - 1].getDistance() > currentDistance)
+        {
+            dpPairsLow[j].setDistance(dpPairsLow[j - 1].getDistance());
+            dpPairsLow[j].setPower(dpPairsLow[j - 1].getPower());
+            j--;
+        }
+        dpPairsLow[j].setDistance(currentDistance);
+        dpPairsLow[j].setPower(currentPower);
+    }
+
 
 }
 
