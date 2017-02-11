@@ -34,6 +34,8 @@ void resetAction::execute (vector<shared_ptr<Action>> &allActions)
     if(issuable(allActions)){
         LOGI << m_name << ":\t has reset actions";
 
+        disable();
+
         for (vector<int>::iterator it = m_placesToReset.begin(); it != m_placesToReset.end(); it++)
         {
             allActions[*it].get ()->reset ();

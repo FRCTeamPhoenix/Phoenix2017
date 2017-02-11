@@ -76,6 +76,7 @@ public:
         cout << "IN DEFAULT RESET" << endl;
     }
 
+    string getName();
     void initAction(json& action, shared_ptr<Robot> robot);
 protected:
 
@@ -107,6 +108,10 @@ protected:
 
     void resetCondition(){
         m_currentCondition = dependency::NotStarted;
+    }
+
+    void disable(){
+        m_currentCondition = dependency::Disabled;
     }
 
     static shared_ptr<Action> generateAction(json& action, shared_ptr<Robot> robot);

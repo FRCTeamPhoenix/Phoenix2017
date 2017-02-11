@@ -105,3 +105,7 @@ void Action::execute (vector<shared_ptr<Action>>& allActions)
 
 }
 
+string Action::getName ()
+{
+    return m_name;
+}

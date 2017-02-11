@@ -17,7 +17,16 @@
 #include "json.hpp"
 #include "Lidar.h"
 #include "Climber.h"
+#include "valijson/adapters/nlohmann_json_adapter.hpp"
+#include "valijson/utils/nlohmann_json_utils.hpp"
+#include "valijson/schema.hpp"
+#include "valijson/schema_parser.hpp"
+#include "valijson/validator.hpp"
 
+using valijson::Schema;
+using valijson::SchemaParser;
+using valijson::Validator;
+using valijson::adapters::NlohmannJsonAdapter;
 
 using namespace std;
 using json=nlohmann::json;
@@ -62,6 +71,10 @@ public:
     void OperatorControl();
 
     void Test();
+
+    void initMainActionGroup();
+
+    void initAutoMode();
 
     //Functions For Robot Actions
     void driveAt(double speed, double angle);

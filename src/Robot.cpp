@@ -33,37 +33,17 @@ Robot::Robot() :
 
 void Robot::RobotInit()
 {
-    ifstream json_file;
-    json_file.open("/home/lvuser/actions.json");
-    try
-    {
-        json actionsJson;
-        json_file >> actionsJson;
-        json_file.close ();
-
-        shared_ptr<Robot> m_bot(this);
-
-        m_mainAutoGroup->initActionGroup (actionsJson, m_bot);
-    }
-    catch (std::domain_error(e))
-    {
-        cout << "Failed: ";
-    }
-
-    cout << "Done With Loading Actions" << endl;
-
-    LOGI << "Start Robot Init";
-
+    initMainActionGroup();
 }
 
 void Robot::Autonomous()
 {
-
-//    bool init = false;
-
     LOGI << "Start Auto";
+	initAutoMode();
+
     while (IsEnabled() && IsAutonomous())
     {
+
         m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
     }
 
@@ -77,7 +57,8 @@ void Robot::OperatorControl()
 
     while (IsEnabled() && IsOperatorControl())
     {
-
+        string mode = SmartDashboard::GetString("Auto Selector", "None");
+    	SmartDashboard::PutString("DB/String 7", mode);
     }
 
 }
@@ -114,6 +95,115 @@ void Robot::Test()
 
 
 
+    }
+
+}
+
+void Robot::initMainActionGroup ()
+{
+    bool validJson = true;
+    json myJsonDoc;
+
+    try
+    {
+        json mySchemaDoc;
+
+        if (!valijson::utils::loadDocument ("/home/lvuser/config/actions.json",
+                                            mySchemaDoc))
+        {
+            throw std::runtime_error ("Failed to load schema document");
+        }
+
+        Schema mySchema;
+        SchemaParser parser;
+        NlohmannJsonAdapter mySchemaAdapter (mySchemaDoc);
+        parser.populateSchema (mySchemaAdapter, mySchema);
+
+        if (!valijson::utils::loadDocument ("/home/lvuser/schemas/actions.schema",
+                                            myJsonDoc))
+        {
+            throw std::runtime_error ("Failed to load Json document");
+        }
+
+        Validator validator;
+        NlohmannJsonAdapter myTargetAdapter (myJsonDoc);
+        if (!validator.validate (mySchema, myTargetAdapter, NULL))s
+        {
+            throw std::runtime_error ("Validation failed.");
+        }
+        else
+        {
+            cout << "Validated" << endl;
+        }
+
+        m_mainAutoGroup->initActionGroup (myJsonDoc, shared_ptr<Robot>(this));
+
+    }
+    catch(runtime_error runtime){
+        cout << runtime.what () << endl;
+
+        vector<string> failureMessage = {"NO VALID ACTION JSON FOUND"};
+        SmartDashboard::PutStringArray ("Auto List", failureMessage);
+        return;
+    }
+    catch (domain_error(e)){
+        std::cout << "Domain Error\t" /*<< e.what ()*/ << std::endl;
+        vector<string> failureMessage = {"NO VALID ACTION JSON FOUND"};
+        SmartDashboard::PutStringArray ("Auto List", failureMessage);
+        return;
+    }
+    catch (out_of_range(e)){
+        std::cout << "Out Of Range Error\t" /*<< e.what ()*/ << std::endl;
+        vector<string> failureMessage = {"NO VALID ACTION JSON FOUND"};
+        SmartDashboard::PutStringArray ("Auto List", failureMessage);
+        return;
+    }
+    catch (bad_alloc(e)){
+        std::cout << "Bad Alloc Error\t" /*<< e.what ()*/ << std::endl;
+        vector<string> failureMessage = {"NO VALID ACTION JSON FOUND"};
+        SmartDashboard::PutStringArray ("Auto List", failureMessage);
+        return;
+    }
+    catch (...)
+    {
+        std::cout << "Unknown Exception" << std::endl;
+        vector<string> failureMessage = {"NO VALID ACTION JSON FOUND"};
+        SmartDashboard::PutStringArray ("Auto List", failureMessage);
+        return;
+    }
+
+    vector<string> topGroupNames;
+
+    vector<shared_ptr<Action>> allActions = m_mainAutoGroup->getContainedActions ();
+
+    vector<shared_ptr<Action>>::iterator actionIterator;
+    for (actionIterator = allActions.begin (); actionIterator != allActions.end (); actionIterator++)
+    {
+        string name = actionIterator->get ()->getName ();
+        if (name.find ("Auto") != string::npos)
+        {
+            topGroupNames.push_back (name);
+        }
+    }
+    SmartDashboard::PutStringArray ("Auto List", topGroupNames);
+
+}
+
+void Robot::initAutoMode ()
+{
+    string mode = SmartDashboard::GetString ("Auto Selector", "None");
+
+    vector<shared_ptr<Action>> allActions = m_mainAutoGroup->getContainedActions ();
+
+    SmartDashboard::PutString("DB/String 6", mode);
+
+    vector<shared_ptr<Action>>::iterator actionIterator;
+    for(actionIterator = allActions.begin(); actionIterator != allActions.end(); actionIterator++)
+    {
+        if(actionIterator->get ()->getName () == mode)
+        {
+            actionIterator->get ()->reset ();
+        }
     }
 
 }

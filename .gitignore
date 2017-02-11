@@ -36,5 +36,7 @@ CMakeLists.txt
 # For emacs auto-save files
 *~
 *.xml
-.idea/
-.settings/
+.idea
+src/.idea
+.settings
+
