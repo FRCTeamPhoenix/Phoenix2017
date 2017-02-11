@@ -157,7 +157,8 @@ public:
                     // A: Indexer quarter rotation
                     // Gamepad Y: Run indexer
                     if (m_gamepad.GetRawButton(DriveStationConstants::buttonA)){
-                        m_indexerMotor.goDistance(250,0.5);
+                        //m_indexerMotor.goDistance(250,0.5);
+                        m_indexerMotor.goAt(1);
 
                    }
                     else{
@@ -185,11 +186,11 @@ public:
 
 
                    }
-                   else
-                   {
-                       m_topFlyWheelMotor.Set(-m_joystick.GetY());
-                       m_lowerFlyWheelMotor.Set(-m_joystick.GetY());
-                   }
+//                   else
+//                   {
+//                       m_topFlyWheelMotor.Set(-m_joystick.GetY());
+//                       m_lowerFlyWheelMotor.Set(-m_joystick.GetY());
+//                   }
 
 
 
