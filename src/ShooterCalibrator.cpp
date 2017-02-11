@@ -58,24 +58,24 @@ ShooterCalibrator::ShooterCalibrator()
         dpPairsLow[j].setPower(currentPower);
     }
 
-    for (int i = 1; i < (int) dpPairsLow.size(); i++) {
-        double currentDistance = dpPairsLow[i].getDistance();
-        double currentPower = dpPairsLow[i].getPower();
+    for (int i = 1; i < (int) dpPairsTop.size(); i++) {
+        double currentDistance = dpPairsTop[i].getDistance();
+        double currentPower = dpPairsTop[i].getPower();
         int j = i;
-        while (j > 0 && dpPairsLow[j - 1].getDistance() > currentDistance)
+        while (j > 0 && dpPairsTop[j - 1].getDistance() > currentDistance)
         {
-            dpPairsLow[j].setDistance(dpPairsLow[j - 1].getDistance());
-            dpPairsLow[j].setPower(dpPairsLow[j - 1].getPower());
+            dpPairsTop[j].setDistance(dpPairsTop[j - 1].getDistance());
+            dpPairsTop[j].setPower(dpPairsTop[j - 1].getPower());
             j--;
         }
-        dpPairsLow[j].setDistance(currentDistance);
-        dpPairsLow[j].setPower(currentPower);
+        dpPairsTop[j].setDistance(currentDistance);
+        dpPairsTop[j].setPower(currentPower);
     }
 
 
 }
 
-double ShooterCalibrator::interpolatePowerLinear(double distance) {
+double ShooterCalibrator::interpolatePowerLinear(double distance, vector<DistancePowerPair> dpPairs) {
 
     // Lower and upper indices on dpPairs
     int i1 = 0;
@@ -125,7 +125,7 @@ double ShooterCalibrator::interpolatePowerLinear(double distance) {
 
 }
 
-double ShooterCalibrator::interpolateDistanceLinear(double power) {
+double ShooterCalibrator::interpolateDistanceLinear(double power, vector<DistancePowerPair> dpPairs) {
 
     // Lower and upper indices on dpPairs
     int i1 = 0;
@@ -163,15 +163,21 @@ double ShooterCalibrator::interpolateDistanceLinear(double power) {
 
 }
 
-double ShooterCalibrator::getFlywheelPower(double distance) {
+double ShooterCalibrator::getTopFlywheelPower(double distance) {
 
-    return interpolatePowerLinear(distance);
+    return interpolatePowerLinear(distance, dpPairsTop);
+
+}
+
+double ShooterCalibrator::getLowFlywheelPower(double distance) {
+
+    return interpolatePowerLinear(distance, dpPairsLow);
 
 }
 
 double ShooterCalibrator::getDistance(double power) {
 
-    return interpolateDistanceLinear(power);
+    return interpolateDistanceLinear(power, dpPairsTop);
 
 }
 

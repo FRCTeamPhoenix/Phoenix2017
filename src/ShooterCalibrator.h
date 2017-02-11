@@ -29,7 +29,8 @@ public:
         ShooterCalibrator();
 
         // Calculate required flywheel power, given shooting distance
-        double getFlywheelPower(double distance);
+        double getTopFlywheelPower(double distance);
+        double getLowFlywheelPower(double distance);
         // Estimate resultant distance from a given flywheel power
         double getDistance(double power);
 
@@ -48,8 +49,8 @@ private:
         vector<DistancePowerPair> dpPairsLow;
         vector<DistancePowerPair> dpPairsTop;
 
-        double interpolatePowerLinear(double distance);
-        double interpolateDistanceLinear(double power);
+        double interpolatePowerLinear(double distance, vector<DistancePowerPair> dpPairs);
+        double interpolateDistanceLinear(double power, vector<DistancePowerPair> dpPairs);
 
 };
 
