@@ -118,4 +118,16 @@ namespace DriveStationConstants
     const static uint32_t gamepadButtons = 12;
 };
 
+namespace JetsonComms {
+    const static tableName = "datatable";
+
+    const static stateId = "jetson_state";
+    const static modeId = "jetson_mode";
+
+    const static goalId = "high_goal";
+
+    const static gearRVecs = "gear_rvecs";
+    const static gearTVecs = "gear_tvecs";
+};
+
 #endif /* SRC_CONSTANTS_H_ */

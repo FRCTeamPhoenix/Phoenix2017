@@ -20,6 +20,12 @@ enum JetsonState {
 	POWERED_OFF
 };
 
+enum VisionMode {
+    HIGH_GOAL,
+    GEARS,
+    BOTH
+};
+
 
 class Communications {
 public:
@@ -29,15 +35,15 @@ public:
 	JetsonState getState();
 	long long int getStateTimestamp();
 
-	float getAngle();
-	long long int getAngleTimestamp();
+    bool setMode(VisionMode);
+
+    float getNumber(std::string);
+    long long getTimestampFor(std::string);
+
+    std::vector<int> getNumberArray(std::string);
 
 private:
-
-	long long getTimestamp(std::string);
-
 	std::shared_ptr<NetworkTable> m_table;
-
 };
 
 

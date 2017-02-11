@@ -11,6 +11,7 @@
 #include "SmartTalon.h"
 #include "constants.h"
 #include "Communications.h"
+#include <sys/time.h>
 
 class Turret
 {
@@ -28,23 +29,29 @@ public:
 
     STATE getState(); // Gets the current state of Turret
     void setState(STATE state); //Sets the state of Turret
-    void autoTarget(float); //Follows the target for the shooter
+    void autoTarget(); //Follows the target for the shooter
     float degreeToTicks(float);
 
     Turret(
             SmartTalon& turretRotatorMotor,
-            Communications& visionComs,
+            Communications& visionComms,
             Joystick& gamepad
     );
     virtual ~Turret();
 
 private:
     SmartTalon& m_turretRotatorMotor;
-    Communications& m_visionComs;
+    Communications& m_visionComms;
     Joystick& m_gamepad; //Turret uses a joystick on the gamepad
     float m_gamepadJoystick; //Variable for the gamepad joystick value that is out putted
     STATE m_state; //State variable for the Turret
     long long int m_visionTimeStamp;
+
+    // saved values for linear extrapolation
+    std::vector<float> m_prevAngles;
+    std::vector<float> m_prevTimes;
+    Timer m_timer;
+    long long int m_initialUTC;
 };
 
 #endif /* SRC_TURRET_H_ */
