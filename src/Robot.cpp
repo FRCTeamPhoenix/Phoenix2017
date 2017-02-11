@@ -29,31 +29,37 @@ Robot::Robot() :
         m_configEditor(),
         m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
         m_climber(m_climberMotor, m_joystick),
-        m_gathererMotor(PortAssign::loader, CANTalon::FeedbackDevice::QuadEncoder),
+        m_gathererMotor(PortAssign::loader),
         m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
         m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder),
-        m_indexer(m_indexerMotor, m_gamepad)
+        m_indexer(m_indexerMotor, m_gamepad),
+        m_feeder(m_feederMotor, m_gamepad),
+        m_gatherer(m_gathererMotor, m_gamepad)
 {
+
 }
 
 void Robot::RobotInit()
 {
+    LOGI << "Start Robot Init";
+
     ifstream json_file;
     json_file.open("/home/lvuser/actions.json");
+
     try
     {
         json actionsJson;
         json_file >> actionsJson;
         json_file.close ();
-        m_mainAutoGroup->initActionGroup (actionsJson, this);
+        //m_mainAutoGroup->initActionGroup (actionsJson, this);
     }
-    catch (std::domain_error(e))
+    catch (std::domain_error& e)
     {
         cout << "Failed: ";
     }
 
 
-    LOGI << "Start Robot Init";
+    LOGI << "Finish Robot Init";
 
 }
 

@@ -53,10 +53,12 @@ class Robot: public SampleRobot
     ConfigEditor m_configEditor;
     SmartTalon m_climberMotor;
     Climber m_climber;
-    SmartTalon m_gathererMotor;
+    Talon m_gathererMotor;
     SmartTalon m_feederMotor;
     SmartTalon m_indexerMotor;
     Indexer m_indexer;
+    Feeder m_feeder;
+    Gatherer m_gatherer;
 
 public:
     Robot();
