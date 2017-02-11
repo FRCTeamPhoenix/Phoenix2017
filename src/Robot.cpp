@@ -115,6 +115,7 @@ public:
 
                 m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+                m_indexerMotor.ConfigMaxOutputVoltage(3);
 
                 m_topFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
@@ -158,7 +159,7 @@ public:
                     // Gamepad Y: Run indexer
                     if (m_gamepad.GetRawButton(DriveStationConstants::buttonA)){
                         //m_indexerMotor.goDistance(250,0.5);
-                        m_indexerMotor.goAt(1);
+                        m_indexerMotor.goAt(0.75);
 
                    }
                     else{
@@ -176,8 +177,8 @@ public:
                    if (m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
 
                        // Power-based
-        //               m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1",0.0));
-        //               m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
+//                       m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1",0.0));
+//                       m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
 
                        // Velocity-based (implement only after PID tuning of flywheel motors)
 
@@ -186,11 +187,14 @@ public:
 
 
                    }
-//                   else
-//                   {
+
+                   else
+                   {
+                       m_topFlyWheelMotor.goAt(0);
+                       m_lowerFlyWheelMotor.goAt(0);
 //                       m_topFlyWheelMotor.Set(-m_joystick.GetY());
 //                       m_lowerFlyWheelMotor.Set(-m_joystick.GetY());
-//                   }
+                   }
 
 
 
@@ -213,13 +217,13 @@ public:
                    shooterTopVel << "VelTop: ";
                    shooterTopVel << m_topFlyWheelMotor.GetEncVel();
                    //shooterTopVel << SmartDashboard::GetNumber("DB/Slider 1", 0.0);
-                   SmartDashboard::PutString("DB/String 10", shooterTopVel.str());
+                   SmartDashboard::PutString("DB/String 2", shooterTopVel.str());
 
                    std::ostringstream shooterLowVel;
                    shooterLowVel << "VelLow: ";
                    shooterLowVel << m_lowerFlyWheelMotor.GetEncVel();
                    //shooterLowVel << SmartDashboard::GetNumber("DB/Slider 2", 0.0);
-                   SmartDashboard::PutString("DB/String 11", shooterLowVel.str());
+                   SmartDashboard::PutString("DB/String 3", shooterLowVel.str());
 
 
                    m_configEditor.update();
