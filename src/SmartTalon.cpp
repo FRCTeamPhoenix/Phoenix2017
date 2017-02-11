@@ -19,7 +19,7 @@ SmartTalon::SmartTalon (int deviceNumber, FeedbackDevice device) :
     string deviceNumberStr = ss.str();
 
 	ifstream json_file;
-	json_file.open("/home/lvuser/talons.json");
+	json_file.open("/home/lvuser/config/talons.json");
 	json talons;
 	json_file >> talons;
 	json_file.close();
@@ -38,7 +38,7 @@ SmartTalon::SmartTalon (int deviceNumber, FeedbackDevice device) :
 	m_maxForwardSpeed = talons[deviceNumberStr]["maxfvel"];
 	m_maxReverseSpeed = talons[deviceNumberStr]["maxrvel"];
 
-//	m_inverted = true;
+//    m_inverted = true;
     m_inverted = talons[deviceNumberStr]["inverted"];
 
 	SetSafetyEnabled(false);

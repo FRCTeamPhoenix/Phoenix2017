@@ -11,17 +11,13 @@ Rotate::Rotate (double angle, double speed, double tolerance, vector<shared_ptr<
     m_tolerance(tolerance)
 { }
 
-Rotate::Rotate (json &action, shared_ptr<Robot> robot)
-try : Action(),
-      m_angle(action["angle"]),
-      m_speed(action["speed"]),
-      m_tolerance(action["tolerance"])
+Rotate::Rotate (json &action, shared_ptr<Robot> robot):
+    Action(),
+    m_angle(action["angle"]),
+    m_speed(action["speed"]),
+    m_tolerance(action["tolerance"])
 {
     initAction(action, robot);
-}
-catch (...)
-{
-    std::cout << "Rotate Constuctor Fail" << std::endl;
 }
 
 void Rotate::run ()

@@ -9,7 +9,7 @@ Robot::Robot() :
         m_FLDrive(8, CANTalon::FeedbackDevice::QuadEncoder),
         m_BRDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
         m_BLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
-        m_mainAutoGroup(),
+        m_mainAutoGroup(new ActionGroup()),
         m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_expansionBoard, HeadingControl::GyroAxes::x),
         m_topFlyWheelMotor(PortAssign::topFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
         m_lowerFlyWheelMotor(PortAssign::lowerFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
@@ -41,6 +41,7 @@ Robot::Robot() :
 
 void Robot::RobotInit()
 {
+	cout << "In Robot INIT" << endl;
     initMainActionGroup();
 }
 
@@ -107,14 +108,16 @@ void Robot::initMainActionGroup ()
 {
     bool validJson = true;
     json myJsonDoc;
+    json mySchemaDoc;
 
     try
     {
-        json mySchemaDoc;
 
-        if (!valijson::utils::loadDocument ("/home/lvuser/config/actions.json",
+        if (!valijson::utils::loadDocument ("/home/lvuser/schemas/actions.schema",
                                             mySchemaDoc))
         {
+            cout << "Schema Failed Loading" << endl;
+
             throw std::runtime_error ("Failed to load schema document");
         }
 
@@ -123,9 +126,11 @@ void Robot::initMainActionGroup ()
         NlohmannJsonAdapter mySchemaAdapter (mySchemaDoc);
         parser.populateSchema (mySchemaAdapter, mySchema);
 
-        if (!valijson::utils::loadDocument ("/home/lvuser/schemas/actions.schema",
+        if (!valijson::utils::loadDocument ("/home/lvuser/config/actions.json",
                                             myJsonDoc))
         {
+            cout << "Json Failed Loading" << endl;
+
             throw std::runtime_error ("Failed to load Json document");
         }
 
@@ -133,6 +138,8 @@ void Robot::initMainActionGroup ()
         NlohmannJsonAdapter myTargetAdapter (myJsonDoc);
         if (!validator.validate (mySchema, myTargetAdapter, NULL))
         {
+            cout << "Validation Failed" << endl;
+
             throw std::runtime_error ("Validation failed.");
         }
         else
@@ -146,31 +153,6 @@ void Robot::initMainActionGroup ()
     catch(runtime_error runtime){
         cout << runtime.what () << endl;
 
-        vector<string> failureMessage = {"NO VALID ACTION JSON FOUND"};
-        SmartDashboard::PutStringArray ("Auto List", failureMessage);
-        return;
-    }
-    catch (domain_error(e)){
-        std::cout << "Domain Error\t" /*<< e.what ()*/ << std::endl;
-        vector<string> failureMessage = {"NO VALID ACTION JSON FOUND"};
-        SmartDashboard::PutStringArray ("Auto List", failureMessage);
-        return;
-    }
-    catch (out_of_range(e)){
-        std::cout << "Out Of Range Error\t" /*<< e.what ()*/ << std::endl;
-        vector<string> failureMessage = {"NO VALID ACTION JSON FOUND"};
-        SmartDashboard::PutStringArray ("Auto List", failureMessage);
-        return;
-    }
-    catch (bad_alloc(e)){
-        std::cout << "Bad Alloc Error\t" /*<< e.what ()*/ << std::endl;
-        vector<string> failureMessage = {"NO VALID ACTION JSON FOUND"};
-        SmartDashboard::PutStringArray ("Auto List", failureMessage);
-        return;
-    }
-    catch (...)
-    {
-        std::cout << "Unknown Exception" << std::endl;
         vector<string> failureMessage = {"NO VALID ACTION JSON FOUND"};
         SmartDashboard::PutStringArray ("Auto List", failureMessage);
         return;

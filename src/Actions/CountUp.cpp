@@ -13,18 +13,14 @@ CountUp::CountUp (int start, int end, vector<shared_ptr<dependency>> dependencie
 
 { }
 
-CountUp::CountUp (json& action, shared_ptr<Robot> robot)
-try :   Action(),
-        m_current(action["start"]),
-        m_start(action["start"]),
-        m_end(action["end"])
+CountUp::CountUp (json& action, shared_ptr<Robot> robot):
+    Action(),
+    m_current(action["start"]),
+    m_start(action["start"]),
+    m_end(action["end"])
 {
 
-    initAction(action, robot);
-}
-catch (...)
-{
-    std::cout << "CountDown Constuctor Fail" << std::endl;
+    initAction (action, robot);
 }
 
 

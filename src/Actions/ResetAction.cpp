@@ -10,8 +10,7 @@ resetAction::resetAction (vector<int> placeToReset, vector<shared_ptr<dependency
     m_placesToReset(placeToReset)
 { }
 
-resetAction::resetAction (json &action, shared_ptr<Robot> robot)
-try :
+resetAction::resetAction (json &action, shared_ptr<Robot> robot):
     Action()
 {
     for (json::iterator it = action["placesToReset"].begin (); it != action["placesToReset"].end (); it++)
@@ -21,10 +20,6 @@ try :
 
     initAction(action, robot);
 
-}
-catch(...)
-{
-    cout << "Reset Action Failed To Constuct" << endl;
 }
 
 
