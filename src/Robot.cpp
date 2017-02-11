@@ -92,8 +92,9 @@ void Robot::Test()
             // X = run flywheels off driverstation from slider 1 and 2 input
 
 
-           //feeder test
-
+           // FEEDER
+           // B: Run feeder off dashboard from slider 0 input
+           // Joystick throttle: Run feeder
            if (m_gamepad.GetRawButton(DriveStationConstants::buttonB)){
               m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0",0.0));
 
@@ -114,7 +115,9 @@ void Robot::Test()
 
 
 
-            //indexer test
+            // INDEXER
+            // A: Indexer quarter rotation
+            // Gamepad Y: Run indexer
             if (m_gamepad.GetRawButton(DriveStationConstants::buttonA)){
                 m_indexerMotor.goDistance(250,0.5);
 
@@ -128,8 +131,9 @@ void Robot::Test()
            indexerEncoderValue << m_feederMotor.GetEncPosition();
            SmartDashboard::PutString("DB/String 8", indexerEncoderValue.str());
 
-
-
+           // FLYWHEELS
+           // X: Run flywheels off driverstation from slider 1 and 2 input
+           // Joystick Y: Run flywheels
            if (m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
                m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1",0.0));
                m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
