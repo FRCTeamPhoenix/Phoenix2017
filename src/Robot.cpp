@@ -74,121 +74,120 @@ void Robot::OperatorControl()
 void Robot::Test()
 {
 
-        LOGI << "Start Test Mode";
 
-        m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
-        m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+    LOGI << "Start Test Mode";
 
-        m_topFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
-        m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
+            m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
+            m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+            m_indexerMotor.ConfigMaxOutputVoltage(3);
 
-
-        while (IsEnabled() && IsTest())
-        {
-            //A = indexer quarter rotation
-            //B = feeder run of dashboard from slider 0 input
-            //joystick throttle = run feeder
-            //joystick Y = run flywheels
-            //gamepad Y -= run indexer
-            // X = run flywheels off driverstation from slider 1 and 2 input
+            m_topFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
+            m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
 
 
-           // FEEDER
-           // B: Run feeder off dashboard from slider 0 input
-           // Joystick throttle: Run feeder
-           if (m_gamepad.GetRawButton(DriveStationConstants::buttonB)){
-              m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0",0.0));
+            while (IsEnabled() && IsTest())
+            {
 
-           }
-           else
-           {
-               m_feederMotor.Set((m_joystick.GetThrottle()-1) / 2);
-           }
-            std::ostringstream throttleValue;
-            throttleValue << "Throttle: ";
-            throttleValue << ((m_joystick.GetThrottle()-1) / 2);
-            SmartDashboard::PutString("DB/String 7", throttleValue.str());
+               // FEEDER
+               // B: Run feeder off dashboard from slider 0 input
+               // Joystick throttle: Run feeder
+               if (m_gamepad.GetRawButton(DriveStationConstants::buttonB)){
+                  m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0",0.0));
 
-            std::ostringstream feederEncoderValue;
-            feederEncoderValue << "EncoderF: ";
-            feederEncoderValue << m_feederMotor.GetEncPosition();
-            SmartDashboard::PutString("DB/String 6", feederEncoderValue.str());
+               }
+               else
+               {
+                   m_feederMotor.Set((m_joystick.GetThrottle()-1) / 2);
+               }
+                std::ostringstream throttleValue;
+                throttleValue << "Throttle: ";
+                throttleValue << ((m_joystick.GetThrottle()-1) / 2);
+                SmartDashboard::PutString("DB/String 7", throttleValue.str());
+
+                std::ostringstream feederEncoderValue;
+                feederEncoderValue << "EncoderF: ";
+                feederEncoderValue << m_feederMotor.GetEncPosition();
+                SmartDashboard::PutString("DB/String 6", feederEncoderValue.str());
 
 
 
-            // INDEXER
-            // A: Indexer quarter rotation
-            // Gamepad Y: Run indexer
-            if (m_gamepad.GetRawButton(DriveStationConstants::buttonA)){
-                m_indexerMotor.goDistance(250,0.5);
+                // INDEXER
+                // A: Indexer quarter rotation
+                // Gamepad Y: Run indexer
+                if (m_gamepad.GetRawButton(DriveStationConstants::buttonA)){
+                    //m_indexerMotor.goDistance(250,0.5);
+                    m_indexerMotor.goAt(0.75);
 
-           }
-            else{
-                m_indexerMotor.Set(m_gamepad.GetY());
+               }
+                else{
+                    m_indexerMotor.Set(m_gamepad.GetY());
+                }
+
+               std::ostringstream indexerEncoderValue;
+               indexerEncoderValue << "EncoderI: ";
+               indexerEncoderValue << m_feederMotor.GetEncPosition();
+               SmartDashboard::PutString("DB/String 8", indexerEncoderValue.str());
+
+               // FLYWHEELS
+               // X: Run flywheels off driverstation from slider 1 and 2 input
+               // Joystick Y: Run flywheels
+               if (m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
+
+                   // Power-based
+//                       m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1",0.0));
+//                       m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
+
+                   // Velocity-based (implement only after PID tuning of flywheel motors)
+
+                   m_topFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1",0.0));
+                   m_lowerFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2",0.0));
+
+
+               }
+
+               else
+               {
+                   m_topFlyWheelMotor.goAt(0);
+                   m_lowerFlyWheelMotor.goAt(0);
+//                       m_topFlyWheelMotor.Set(-m_joystick.GetY());
+//                       m_lowerFlyWheelMotor.Set(-m_joystick.GetY());
+               }
+
+
+
+               std::ostringstream shooterRightEncoderString;
+               shooterRightEncoderString << "EncoderTop: ";
+               shooterRightEncoderString << m_topFlyWheelMotor.GetEncPosition();
+               SmartDashboard::PutString("DB/String 4", shooterRightEncoderString.str());
+
+               std::ostringstream shooterLeftEncoderString;
+               shooterLeftEncoderString << "EncoderLow: ";
+               shooterLeftEncoderString << m_lowerFlyWheelMotor.GetEncPosition();
+               SmartDashboard::PutString("DB/String 5", shooterLeftEncoderString.str());
+
+               std::ostringstream lidarString;
+               lidarString << "Distance: ";
+               lidarString << m_lidar.getFastAverage();
+               SmartDashboard::PutString("DB/String 9", lidarString.str());
+
+               std::ostringstream shooterTopVel;
+               shooterTopVel << "VelTop: ";
+               shooterTopVel << m_topFlyWheelMotor.GetEncVel();
+               //shooterTopVel << SmartDashboard::GetNumber("DB/Slider 1", 0.0);
+               SmartDashboard::PutString("DB/String 2", shooterTopVel.str());
+
+               std::ostringstream shooterLowVel;
+               shooterLowVel << "VelLow: ";
+               shooterLowVel << m_lowerFlyWheelMotor.GetEncVel();
+               //shooterLowVel << SmartDashboard::GetNumber("DB/Slider 2", 0.0);
+               SmartDashboard::PutString("DB/String 3", shooterLowVel.str());
+
+
+               m_configEditor.update();
+
+
+
             }
-
-           std::ostringstream indexerEncoderValue;
-           indexerEncoderValue << "EncoderI: ";
-           indexerEncoderValue << m_feederMotor.GetEncPosition();
-           SmartDashboard::PutString("DB/String 8", indexerEncoderValue.str());
-
-           // FLYWHEELS
-           // X: Run flywheels off driverstation from slider 1 and 2 input
-           // Joystick Y: Run flywheels
-           if (m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
-
-               // Power-based
-//               m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1",0.0));
-//               m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
-
-               // Velocity-based (implement only after PID tuning of flywheel motors)
-
-               m_topFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1",0.0));
-               m_lowerFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2",0.0));
-
-
-           }
-           else
-           {
-               m_topFlyWheelMotor.Set(-m_joystick.GetY());
-               m_lowerFlyWheelMotor.Set(-m_joystick.GetY());
-           }
-
-
-
-           std::ostringstream shooterRightEncoderString;
-           shooterRightEncoderString << "EncoderTop: ";
-           shooterRightEncoderString << m_topFlyWheelMotor.GetEncPosition();
-           SmartDashboard::PutString("DB/String 4", shooterRightEncoderString.str());
-
-           std::ostringstream shooterLeftEncoderString;
-           shooterLeftEncoderString << "EncoderLow: ";
-           shooterLeftEncoderString << m_lowerFlyWheelMotor.GetEncPosition();
-           SmartDashboard::PutString("DB/String 5", shooterLeftEncoderString.str());
-
-           std::ostringstream lidarString;
-           lidarString << "Distance: ";
-           lidarString << m_lidar.getFastAverage();
-           SmartDashboard::PutString("DB/String 9", lidarString.str());
-
-           std::ostringstream shooterTopVel;
-           shooterTopVel << "VelTop: ";
-           shooterTopVel << m_topFlyWheelMotor.GetEncVel();
-           //shooterTopVel << SmartDashboard::GetNumber("DB/Slider 1", 0.0);
-           SmartDashboard::PutString("DB/String 10", shooterTopVel.str());
-
-           std::ostringstream shooterLowVel;
-           shooterLowVel << "VelLow: ";
-           shooterLowVel << m_lowerFlyWheelMotor.GetEncVel();
-           //shooterLowVel << SmartDashboard::GetNumber("DB/Slider 2", 0.0);
-           SmartDashboard::PutString("DB/String 11", shooterLowVel.str());
-
-
-           m_configEditor.update();
-
-
-
-        }
 
 }
 
