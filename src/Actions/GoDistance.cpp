@@ -12,19 +12,14 @@ GoDistance::GoDistance (double distance, double angle, double speed, double tole
     m_tolerance(tolerance)
 { }
 
-GoDistance::GoDistance (json &action, shared_ptr<Robot> robot)
-try : Action(),
-      m_distance(action["distance"]),
-      m_angle(action["angle"]),
-      m_speed(action["speed"]),
-      m_tolerance(action["tolerance"])
+GoDistance::GoDistance (json &action, shared_ptr<Robot> robot):
+    Action(),
+    m_distance(action["distance"]),
+    m_angle(action["angle"]),
+    m_speed(action["speed"]),
+    m_tolerance(action["tolerance"])
 {
-    cout << "Done with Go Distance Init" << endl;
     initAction(action, robot);
-}
-catch (...)
-{
-    std::cout << "GoDistance Constuctor Fail" << std::endl;
 }
 
 void GoDistance::run ()

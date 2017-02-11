@@ -30,35 +30,16 @@ void Action::initAction (json &action, shared_ptr<Robot> robot)
 
     m_name = "unnamed";
     m_robot = robot;
-    try
-    {
+
     	json deps = action["dependencies"];
 
         for (json::iterator d = deps.begin (); d != deps.end (); d++)
         {
             m_dependencies.push_back (make_shared<dependency> (*d));
         }
-        cout << "done with dependencies" << endl;
 //        m_currentCondition = dependency::NotStarted;
         m_currentCondition = (dependency::condition)action["startingCondition"].get<int>();
         m_name = action["name"];
-    }
-    catch (domain_error(e)){
-        std::cout << "Domain Error\t" /*<< e.what ()*/ << std::endl;
-    }
-    catch (out_of_range(e)){
-        std::cout << "Out Of Range Error\t" /*<< e.what ()*/ << std::endl;
-    }
-    catch (bad_alloc(e)){
-        std::cout << "Bad Alloc Error\t" /*<< e.what ()*/ << std::endl;
-    }
-    catch (...)
-    {
-        std::cout << "Unknown Exception" << std::endl;
-//        m_name = "unnamed";
-    }
-
-    cout << "Done with initAction" << endl;
 
 }
 

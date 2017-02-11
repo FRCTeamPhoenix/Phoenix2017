@@ -30,7 +30,7 @@
       "properties": {
 
         "name": {"type": "string"},
-        "actionType": {"type": "string"},
+        "type": {"type": "string"},
         "startingCondition": {"type": "number"},
 
         "dependencies": {
@@ -44,7 +44,7 @@
 
       "required": [
         "name",
-        "actionType",
+        "type",
         "startingCondition",
         "dependencies"
       ]
@@ -135,10 +135,10 @@
             "uniqueItems": true
           }
         },
-        "required": [
-          "containedActions",
-          "doneDependencies"
-        ]
+          "required": [
+            "containedActions",
+            "doneDependencies"
+          ]
         }
       ]
     }

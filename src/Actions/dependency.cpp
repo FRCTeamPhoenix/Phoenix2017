@@ -14,17 +14,8 @@ dependency::dependency (int p, condition rc):
 
 dependency::dependency (json dependency)
 {
-    try
-    {
-        m_place = dependency["place"];
-        m_requiredCondition = (dependency::condition)(int)dependency["requiredCondition"];
-
-    }
-    catch (...)
-    {
-        LOGI << "dependency failed to load";
-    }
-
+    m_place = dependency["place"];
+    m_requiredCondition = (dependency::condition) (int) dependency["requiredCondition"];
 }
 
 
