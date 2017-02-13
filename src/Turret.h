@@ -12,6 +12,8 @@
 #include "constants.h"
 #include "Communications.h"
 #include <sys/time.h>
+#include "plog/Log.h"
+#include "LoggerController.h"
 
 class Turret
 {

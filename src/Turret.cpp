@@ -36,6 +36,7 @@ Turret::~Turret()
 
 void Turret::run()
 {
+    m_state = AUTO;//TEMPORARY FOR TESTING
     //Homing State of Turret
     //Returns Turret to right limit.
     if(m_state == HOMING){
@@ -120,7 +121,7 @@ void Turret::run()
                 }
                 if(!m_gamepad.GetRawButton(DriveStationConstants::buttonX))
                 {
-                    setState(IDLE);
+                    //setState(IDLE);
                 }
 
                 break;
@@ -130,16 +131,21 @@ void Turret::run()
 
 void Turret::autoTarget()
 {
+    //If the last timestamp was long ago, clear the vector, as the data is no longer relevant
     if (m_prevAngles.size() > 1)
     {
         float slope = (m_prevAngles[0] - m_prevAngles[1]) / (m_prevTimes[0] - m_prevTimes[1]);
-        float predicted_angle = slope * m_timer.Get() + m_prevAngles[1];
-        m_turretRotatorMotor.goDistance(degreeToTicks(degrees), 0.5);
+        float predictedAngle = slope * m_timer.Get() + m_prevAngles[1];
+        printf("angle:%f\n", predictedAngle);
+        LOGI << "angle" << predictedAngle;
+        m_turretRotatorMotor.goDistance(degreeToTicks(predictedAngle), 0.5);
+        m_visionComms.setNumber("debug", predictedAngle);
     }
     else
     {
         m_turretRotatorMotor.goDistance(degreeToTicks(m_prevAngles[2]), 0.5);
     }
+    m_visionComms.setNumber("debug", -1.0);
 }
 
 float Turret::degreeToTicks(float angle){

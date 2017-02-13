@@ -38,6 +38,10 @@ float Communications::getNumber(std::string key){
             0;
 };
 
+bool Communications::setNumber(std::string key, float num){
+    return m_table->GetNumber(key, num);
+};
+
 long long Communications::getTimestampFor(std::string key){
     key += "_time";
 

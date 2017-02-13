@@ -10,6 +10,7 @@
 
 #include <string>
 #include "WPILib.h"
+#include "constants.h"
 
 
 enum JetsonState {
@@ -37,6 +38,7 @@ public:
 
     bool setMode(VisionMode);
 
+    bool setNumber(std::string, float);
     float getNumber(std::string);
     long long getTimestampFor(std::string);
 

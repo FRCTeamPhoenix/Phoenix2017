@@ -66,6 +66,9 @@ void Robot::OperatorControl()
 
     while (IsEnabled() && IsOperatorControl())
     {
+        printf("HELLO\n");
+        m_turret.run();
+        m_visionComs.setNumber("debug", -1.0);
         string mode = SmartDashboard::GetString("Auto Selector", "None");
     	SmartDashboard::PutString("DB/String 7", mode);
     }

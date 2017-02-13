@@ -119,15 +119,15 @@ namespace DriveStationConstants
 };
 
 namespace JetsonComms {
-    const static tableName = "datatable";
+    const static std::string tableName = "datatable";
 
-    const static stateId = "jetson_state";
-    const static modeId = "jetson_mode";
+    const static std::string stateId = "jetson_state";
+    const static std::string modeId = "jetson_mode";
 
-    const static goalId = "high_goal";
+    const static std::string goalId = "high_goal";
 
-    const static gearRVecs = "gear_rvecs";
-    const static gearTVecs = "gear_tvecs";
+    const static std::string gearRVecs = "gear_rvecs";
+    const static std::string gearTVecs = "gear_tvecs";
 };
 
 #endif /* SRC_CONSTANTS_H_ */
