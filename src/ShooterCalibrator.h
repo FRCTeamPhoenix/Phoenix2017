@@ -8,12 +8,12 @@
  *      Author: Brin Harper
  */
 
+#include <DistanceVelocityPair.h>
 #include "WPILib.h"
 #include <math.h>
 #include <iostream>
 #include "json.hpp"
 #include <fstream>
-#include "DistancePowerPair.h"
 
 #ifndef SRC_SHOOTERCALIBRATOR_H_
 #define SRC_SHOOTERCALIBRATOR_H_
@@ -29,28 +29,26 @@ public:
         ShooterCalibrator();
 
         // Calculate required flywheel power, given shooting distance
-        double getTopFlywheelPower(double distance);
-        double getLowFlywheelPower(double distance);
+        double getTopFlywheelVelocity(double distance);
+        double getLowFlywheelVelocity(double distance);
         // Estimate resultant distance from a given flywheel power
         double getDistance(double power);
 
-        // Number of distance/power pairings in config file
-        int getNumPairs();
+        void sortRefVals(vector<DistanceVelocityPair>& dvPairs);
 
-        void printRefVals();
         ~ShooterCalibrator();
 
 
 private:
 
         // Store distance/power pairs (read in from json)
-        vector<DistancePowerPair> dpPairs;
+        vector<DistanceVelocityPair> dvPairs;
 
-        vector<DistancePowerPair> dpPairsLow;
-        vector<DistancePowerPair> dpPairsTop;
+        vector<DistanceVelocityPair> dvPairsLow;
+        vector<DistanceVelocityPair> dvPairsTop;
 
-        double interpolatePowerLinear(double distance, vector<DistancePowerPair> dpPairs);
-        double interpolateDistanceLinear(double power, vector<DistancePowerPair> dpPairs);
+        double interpolateVelocityLinear(double distance, vector<DistanceVelocityPair> dvPairs);
+        double interpolateDistanceLinear(double power, vector<DistanceVelocityPair> dvPairs);
 
 };
 

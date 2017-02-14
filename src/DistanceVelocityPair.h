@@ -18,25 +18,25 @@
 using namespace std;
 using json=nlohmann::json;
 
-class DistancePowerPair
+class DistanceVelocityPair
 {
 
     public:
         // Directly pass in distance and power values
-        DistancePowerPair(double distance, double power);
+        DistanceVelocityPair(double distance, double velocity);
 
         // Obtain distance and power from a json point object
-        DistancePowerPair(json point, bool isTop);
+        DistanceVelocityPair(json point, bool isTop);
 
         double getDistance();
         void setDistance(double distance);
-        double getPower();
-        void setPower(double power);
-        virtual ~DistancePowerPair();
+        double getVelocity();
+        void setVelocity(double velocity);
+        virtual ~DistanceVelocityPair();
 
     private:
         double m_distance;
-        double m_power;
+        double m_velocity;
 
 };
 

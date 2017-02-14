@@ -64,8 +64,8 @@ void FlyWheels::run()
             }
             break;
         case LIDARRATE: //Speed based on lidar Distance
-            setRightSpeed(m_shooterCalibrator.getTopFlywheelPower(m_lidar.getFastAverage()));
-            setLeftSpeed(m_shooterCalibrator.getLowFlywheelPower(m_lidar.getFastAverage()));
+            setRightSpeed(m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getFastAverage()));
+            setLeftSpeed(m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getFastAverage()));
             if(!m_gamepad.GetRawButton(DriveStationConstants::buttonA))
             {
                 setState(OFF);
