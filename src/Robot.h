@@ -20,6 +20,7 @@
 #include "Gatherer.h"
 #include "Feeder.h"
 #include "Indexer.h"
+#include "Talons.h"
 #include "valijson/adapters/nlohmann_json_adapter.hpp"
 #include "valijson/utils/nlohmann_json_utils.hpp"
 #include "valijson/schema.hpp"
@@ -40,7 +41,7 @@ class ActionGroup;
 class Robot: public SampleRobot
 
 {
-
+    Talons m_talons;
     SmartTalon m_FRDrive;
     SmartTalon m_FLDrive;
     SmartTalon m_BRDrive;

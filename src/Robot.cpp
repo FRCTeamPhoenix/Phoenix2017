@@ -5,6 +5,7 @@ using namespace std;
 using json=nlohmann::json;
 
 Robot::Robot() :
+        m_talons("config/talons.json", "schemas/talons.schema"),
         m_FRDrive(7, CANTalon::FeedbackDevice::QuadEncoder),
         m_FLDrive(8, CANTalon::FeedbackDevice::QuadEncoder),
         m_BRDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
