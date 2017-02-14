@@ -1,27 +1,27 @@
 [
   {
     "distance": 1,
-    "powerTop": 0.11,
-    "powerLow": 0.5
+    "velocityTop": 0.11,
+    "velocityLow": 0.5
   },
   {
     "distance": 10,
-    "powerTop": 0.8,
-    "powerLow": 0.9
+    "velocityTop": 0.8,
+    "velocityLow": 0.9
   },
   {
     "distance": 2,
-    "powerTop": 0.156,
-    "powerLow": 0.6
+    "velocityTop": 0.156,
+    "velocityLow": 0.6
   },
   {
     "distance": 4,
-    "powerTop": 0.3,
-    "powerLow": 0.7
+    "velocityTop": 0.3,
+    "velocityLow": 0.7
   },
   {
     "distance": 6,
-    "power": 0.65,
-    "powerLow": 0.8
+    "velocityTop": 0.65,
+    "velocityLow": 0.8
   }
 ]
