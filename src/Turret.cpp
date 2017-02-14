@@ -47,34 +47,37 @@ void Turret::run()
             {
                 if (gamepadJoystickWithDeadZone() > 0)
                 {
-                    m_turretRotatorMotor.goAt(0.0);
+                    m_turretRotatorMotor.goDistance(0, 0.5);
                 }
                 else
                 {
-                    m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
+                    m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());
                 }
             }
             else if (m_turretRotatorMotor.IsRevLimitSwitchClosed())
             {
                 if (gamepadJoystickWithDeadZone() < 0)
                 {
-                    m_turretRotatorMotor.goAt(0.0);
+                    m_turretRotatorMotor.goDistance(0,0.5);
                 }
                 else
                 {
-                    m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
-                }
+                    m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());                }
 
             }
             else
             {
-                m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
+                m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());
             }
             break;
         case HOMING:
-            m_turretRotatorMotor.goAt(0.5);//will need to be changed. temp number.
+            m_turretRotatorMotor.SetControlMode(CANSpeedController::kPercentVbus);
+
+            m_turretRotatorMotor.Set(.2);//will need to be changed. temp number.
+
             if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
             {
+                m_turretRotatorMotor.SetEncPosition(0);
                 setState(IDLE);
             }
             break;
