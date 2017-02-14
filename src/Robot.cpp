@@ -6,13 +6,13 @@ using json=nlohmann::json;
 
 Robot::Robot() :
         m_talons("config/talons.json", "schemas/talons.schema"),
-        m_FRDrive(7, CANTalon::FeedbackDevice::QuadEncoder),
-        m_FLDrive(8, CANTalon::FeedbackDevice::QuadEncoder),
-        m_BRDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
-        m_BLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
+        m_FRDrive(7, m_talons.getTalonConfig(7), CANTalon::FeedbackDevice::QuadEncoder),
+        m_FLDrive(8, m_talons.getTalonConfig(8), CANTalon::FeedbackDevice::QuadEncoder),
+        m_BRDrive(1, m_talons.getTalonConfig(1), CANTalon::FeedbackDevice::QuadEncoder),
+        m_BLDrive(2, m_talons.getTalonConfig(2), CANTalon::FeedbackDevice::QuadEncoder),
         m_mainAutoGroup(new ActionGroup()),
         m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_expansionBoard, HeadingControl::GyroAxes::x),
-        m_topFlyWheelMotor(PortAssign::topFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
+        m_topFlyWheelMotor(PortAssign::topFlyWheelMotor, m_talons.getTalonConfig(PortAssign::topFlyWheelMotor), CANTalon::FeedbackDevice::QuadEncoder),
         m_lowerFlyWheelMotor(PortAssign::lowerFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
         m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
         m_leftLimitSwitch(PortAssign::leftLimitSwitch),

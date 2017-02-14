@@ -16,7 +16,7 @@ using json=nlohmann::json;
 class SmartTalon : public CANTalon
 {
 public:
-    SmartTalon(int deviceNumber, FeedbackDevice device);
+    SmartTalon(int deviceNumber, json config, FeedbackDevice device);
 
     void goTo(double position, double speed);
     void goAt(double speed);
