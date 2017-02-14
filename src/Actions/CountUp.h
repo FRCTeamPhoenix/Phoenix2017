@@ -25,9 +25,9 @@ public:
 private:
     void run();
     void reset();
+    int m_current;
     int m_start;
     int m_end;
-    int m_current;
 };
 
 
