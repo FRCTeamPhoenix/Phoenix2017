@@ -89,6 +89,22 @@ void SmartTalon::goAt (double speed)
 
 }
 
+void SmartTalon::goAtVelocity (int velocity)
+{
+    double percentPower = 0;
+
+    if(0 < velocity && 0 < m_maxForwardSpeed) {
+        percentPower = velocity / m_maxForwardSpeed;
+    }
+    else if(0 > velocity && 0 < m_maxReverseSpeed) {
+        percentPower = velocity / m_maxReverseSpeed;
+
+    }
+
+    goAt(percentPower);
+}
+
+
 void SmartTalon::goDistance (double distance, double speed)
 {
 
