@@ -33,7 +33,7 @@ void Climber::run() //Changes the states of the run function.
     {
     	stop();
         case OFF: //If the gamepad is not pressed, the state is set to OFF.
-            if (!m_gamepad.GetRawButton(DriveStationConstants::buttonA))
+            if (!m_gamepad.GetRawButton(DriveStationConstants::joystickLeftButton))
             {
                 break;
             }
@@ -42,7 +42,7 @@ void Climber::run() //Changes the states of the run function.
 
         case ON: //If the gamepad is pressed, the state is set to ON.
         	move(2000);
-            if (m_gamepad.GetRawButton(DriveStationConstants::buttonA))
+            if (m_gamepad.GetRawButton(DriveStationConstants::joystickLeftButton))
             {
             	break;
             }
