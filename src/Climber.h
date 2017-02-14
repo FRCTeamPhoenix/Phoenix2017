@@ -27,7 +27,7 @@ class Climber
                 Joystick & gamepad
         );
         virtual ~Climber();
-        void move(double speed);
+        void move(double speed); //Continues to move until the stop function is called.
         void stop();
         void run();
 

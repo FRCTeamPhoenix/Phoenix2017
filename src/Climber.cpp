@@ -18,7 +18,7 @@ Climber::~Climber()
 {
 }
 
-void Climber::move(double speed) {
+void Climber::move(double speed) { //Function to make the motor move at a certain speed.
 	m_motor.goAt(speed);
 }
 
@@ -26,13 +26,13 @@ void Climber::stop() {
 	m_motor.goAt(0.0);
 }
 
-void Climber::run()
+void Climber::run() //Changes the states of the run function.
 {
     //bool m_climb = m_gamepad->GetRawButton(buttonNames::buttonA); //Reason why is because we need to setup buttons
     switch (m_state)
     {
     	stop();
-        case OFF:
+        case OFF: //If the gamepad is not pressed, the state is set to OFF.
             if (!m_gamepad.GetRawButton(DriveStationConstants::buttonA))
             {
                 break;
@@ -40,7 +40,7 @@ void Climber::run()
             m_state = ON;
             break;
 
-        case ON:
+        case ON: //If the gamepad is pressed, the state is set to ON.
         	move(2000);
             if (m_gamepad.GetRawButton(DriveStationConstants::buttonA))
             {
