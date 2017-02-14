@@ -21,7 +21,7 @@ JetsonState Communications::getState(){
     if (!m_table->ContainsKey(JetsonComms::stateId))
         return JetsonState::POWERED_OFF;
 
-    return (JetsonState) m_table->GetNumber(JetsonComms::stateId);
+    return (JetsonState) (int) m_table->GetNumber(JetsonComms::stateId, 4);
 };
 
 long long Communications::getStateTimestamp(){
@@ -34,7 +34,7 @@ bool Communications::setMode(VisionMode mode){
 
 float Communications::getNumber(std::string key){
     return  m_table->ContainsKey(key) ?
-            m_table->GetNumber(key) :
+            m_table->GetNumber(key, 0) :
             0;
 };
 
@@ -46,6 +46,6 @@ long long Communications::getTimestampFor(std::string key){
     key += "_time";
 
     return m_table->ContainsKey(key) ?
-            m_table->GetNumber(key) :
+            m_table->GetNumber(key, 0) :
             0;
 };
