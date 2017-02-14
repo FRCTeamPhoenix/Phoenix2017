@@ -5,7 +5,7 @@
  *      Author: cbadu
  */
 
-#include <Gatherer.h>
+#include "Gatherer.h"
 
 Gatherer::Gatherer(Talon& gathererMotor, Joystick& gamepad):
     m_gathererMotor(gathererMotor),

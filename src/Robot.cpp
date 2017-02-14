@@ -28,7 +28,7 @@ Robot::Robot() :
 				m_loggerController(),
 				m_configEditor(),
 				m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
-				m_climber(m_climberMotor),
+				m_climber(m_climberMotor, m_gamepad),
 				m_gathererMotor(PortAssign::loader),
 				m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
 				m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder),
@@ -85,7 +85,7 @@ void Robot::OperatorControl()
 
 		m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
 		m_robotController.run();
-
+		m_climber.run();
 
 	}
 }
@@ -104,6 +104,16 @@ void Robot::Test()
 	testModeSelector = t_Talons;
 	while (IsEnabled() && IsTest())
 	{
+		/*
+		 * Inside of the Drive Station the Control Mode is where you want to check.
+		 * Weather or not you are in PID/VOLTAGE
+		 * 1 is VOLTAGE 0 is PID
+		 * EXAMPLE:
+		 * Control Mode: 0
+		 * That is PID
+		 * Control Mode: 1
+		 * That is Voltage
+		 */
 		switch(m_pidState) {
 		case PID:
 			if (m_gamepad.GetRawButton(DriveStationConstants::buttonB)) {
@@ -124,8 +134,17 @@ void Robot::Test()
 			power = 0.0f;
 		}
 		else{
-			power = m_joystick.GetY(); // You can get Full Power So BE CAREFUL!
+			/*
+			 * You can get Full Power So BE CAREFUL!
+			 * Also if you need to you can set this to a specific value that can be changed at any time.
+			 * Just remember that when you change a variable all other functions that use that variable can cause some issues.
+			 * Otherwise be safe and have fun!
+			 */
+			power = m_joystick.GetY();
 		}
+		// Also you have full throttle controll SO BE CAREFUL!
+		float throttle = m_joystick.GetThrottle();
+
 		// updates the state of the TALONS as PID or VOLTAGE
 		string mode = SmartDashboard::GetString("Test Selector", "none");
 		for (int x=t_Talons; x <= t_DriveTrain; x++) {
@@ -134,6 +153,13 @@ void Robot::Test()
 			}
 		}
 
+		/*
+		 * So some of the Test Modes have a way that you can controll them with a
+		 * Throttle on the Joystick. The way that you can do that is by pressing
+		 * Button Y and also moving the throttle at the same time.
+		 * Otherwise it won't work. Also some of the Talons can be moved with a
+		 * joystick on the gamepad so look for that...
+		 */
 		switch(testModeSelector)
 		//switch(testModes)
 		{
@@ -183,6 +209,7 @@ void Robot::Test()
 
 		case t_Feeder: //Test Feeder
 		{
+			// Feeder Can be controlled with Throttle as well look bellow for more info
 			printMSG("0", "Feeder Testing Mode");
 			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
 			printMSG("2", "Feeder ENC: " + std::to_string(m_feederMotor.GetEncPosition()));
@@ -190,8 +217,9 @@ void Robot::Test()
 			printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
 			if (m_pidState == PID) {
 				m_feederMotor.SetControlMode(CANSpeedController::kSpeed);
+				// Feeder Can be controlled with buttonY and also Throttle
 				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
-					m_feederMotor.Set(m_joystick.GetThrottle());
+					m_feederMotor.goAt(throttle);
 				}
 				else {
 					m_feederMotor.goAt(power);
@@ -200,7 +228,7 @@ void Robot::Test()
 			else if (m_pidState == VOLTAGE){
 				m_feederMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
 				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
-					m_feederMotor.Set(m_joystick.GetThrottle());
+					m_feederMotor.Set(throttle);
 				}
 				else {
 					m_feederMotor.Set(power);
@@ -220,16 +248,16 @@ void Robot::Test()
 			if (m_pidState == PID) {
 				m_indexerMotor.SetControlMode(CANSpeedController::kSpeed);
 				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
-					m_feederMotor.goAt(m_joystick.GetThrottle());
+					m_indexerMotor.goAt(throttle);
 				}
 				else {
-					m_feederMotor.goAt(power);
+					m_indexerMotor.goAt(power);
 				}
 			}
 			else if (m_pidState == VOLTAGE){
 				m_indexerMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
 				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
-					m_feederMotor.Set(m_joystick.GetThrottle());
+					m_feederMotor.Set(throttle);
 				}
 				else {
 					m_feederMotor.Set(power);
@@ -258,7 +286,7 @@ void Robot::Test()
 			if (m_pidState == PID) {
 				m_turretRotateMotor.SetControlMode(CANSpeedController::kSpeed);
 				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
-					m_turretRotateMotor.goAt(m_joystick.GetThrottle());
+					m_turretRotateMotor.goAt(throttle);
 				}
 				else {
 					m_turretRotateMotor.goAt(power);
@@ -267,7 +295,7 @@ void Robot::Test()
 			else {
 				m_turretRotateMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
 				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
-					m_turretRotateMotor.Set(m_joystick.GetThrottle());
+					m_turretRotateMotor.Set(throttle);
 				}
 				else {
 					m_turretRotateMotor.Set(power);
@@ -301,29 +329,30 @@ void Robot::Test()
 			printMSG("4", "EncoderShR: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
 			printMSG("5", "EncoderShL: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
 			printMSG("6", "EncoderF: " + std::to_string(m_feederMotor.GetEncPosition()));
-			printMSG("7", "Throttle: " + std::to_string(((m_joystick.GetThrottle()-1) / 2)));
+			printMSG("7", "Throttle: " + std::to_string(((throttle-1) / 2)));
 			printMSG("8", "EncoderI: " + std::to_string(m_feederMotor.GetEncPosition()));
 			printMSG("9", "Distance: " + std::to_string(m_lidar.getFastAverage()));
-			if ((m_pidState == VOLTAGE) && m_gamepad.GetRawButton(DriveStationConstants::buttonB)){
+			if ((m_pidState == VOLTAGE) && m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
 				m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0",0.0));
 				m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0",0.0));
 			}
 			else if ((m_pidState == VOLTAGE))
 			{
-				m_feederMotor.Set((m_joystick.GetThrottle()-1) / 2);
+				m_feederMotor.Set((throttle-1) / 2);
 			}
-			else if ((m_pidState == PID) && m_gamepad.GetRawButton(DriveStationConstants::buttonB)){
+			else if ((m_pidState == PID) && m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
 				m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0",0.0));
 				m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0",0.0));
 			}
 			else if ((m_pidState == PID)) {
-				m_feederMotor.goAt((m_joystick.GetThrottle()-1) / 2);
+				m_feederMotor.goAt((throttle-1) / 2);
 			}
 
 			//indexer test
-			if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonA))){
+			if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonY))){
 				m_indexerMotor.goDistance(250,0.5);
 			}
+			// Shooter Test
 			else if ((m_pidState == PID)) {
 				m_feederMotor.SetControlMode(CANSpeedController::kSpeed);
 				m_indexerMotor.SetControlMode(CANSpeedController::kSpeed);
@@ -391,8 +420,9 @@ void Robot::Test()
 
 void Robot::initMainActionGroup ()
 {
-    json myJsonDoc;
-    json mySchemaDoc;
+	bool validJson = true;
+	json myJsonDoc;
+	json mySchemaDoc;
 
 	try
 	{
