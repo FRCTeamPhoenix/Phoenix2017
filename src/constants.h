@@ -11,17 +11,16 @@
 struct PortAssign
 {
     // CANTalon ID's
-    const static uint32_t backLeftWheelMotor = 1;
-    const static uint32_t frontLeftWheelMotor = 2;
-    const static uint32_t frontRightWheelMotor = 3;
-    const static uint32_t backRightWheelMotor = 4;
-    const static uint32_t leftFlyWheelMotor = 5;
-    const static uint32_t rightFlyWheelMotor = 6;
-    const static uint32_t climber = 2; // Climber Motor is 7
-    const static uint32_t feeder = 1; // Feeder Motor is 8
+    const static uint32_t backLeftWheelMotor = 2; //updated values to reflect control boxes
+    const static uint32_t frontLeftWheelMotor = 8;
+    const static uint32_t frontRightWheelMotor = 7;
+    const static uint32_t backRightWheelMotor = 1;
+    const static uint32_t topFlyWheelMotor = 4;
+    const static uint32_t lowerFlyWheelMotor = 3;
+    const static uint32_t climber = 10;
+    const static uint32_t feeder = 5;
     const static uint32_t turret = 9;
-    const static uint32_t indexer = 10;
-    const static uint32_t gatherer = 1; // TODO Figure out the gatherer motor
+    const static uint32_t indexer = 6;
 
     // Talon Ports
     const static uint32_t loader = 0;
@@ -29,6 +28,7 @@ struct PortAssign
     // Controllers
     const static uint32_t joystick = 0;
     const static uint32_t gamepad = 1;
+    const static uint32_t controlBox = 2;
 
     // Limit Switches
     const static uint32_t rightLimitSwitch = 1;
@@ -80,7 +80,7 @@ namespace DriveStationConstants
     {
         buttonX = 1,
         buttonA = 2, // Start/Stop Climber
-        buttonB = 3, // Gatherer
+        buttonB = 3,
         buttonY = 4,
         buttonLB = 5,
         buttonRB = 6,

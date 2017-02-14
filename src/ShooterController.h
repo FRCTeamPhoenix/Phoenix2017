@@ -16,26 +16,26 @@ class ShooterController
 {
 
 public:
-    enum STATE
-    {
-        IDLE, //State of the ShooterController when it is not doing anything
-        AUTO, //State of the ShooterController when the game is in Autonomous mode
-        TELEOP //State of the ShooterController when the game is in Tele Operated mode
-    };
+//    enum STATE
+//    {
+//        IDLE, //State of the ShooterController when it is not doing anything
+//        AUTO, //State of the ShooterController when the game is in Autonomous mode
+//        TELEOP //State of the ShooterController when the game is in Tele Operated mode
+//    };
 
     void run();
-    void setState(STATE state); //Sets the state of the ShooterController
-    STATE getState(); //Gets the current state of the ShooterController
+//    void setState(STATE state); //Sets the state of the ShooterController
+//    STATE getState(); //Gets the current state of the ShooterController
 
-    ShooterController
+   ShooterController
     (
             FlyWheels& flywheel, //Takes in the FlyWheels
             Turret& turret //Takes in the Turret
     );
     virtual ~ShooterController();
-
+//
 private:
-    STATE m_state; //State variable for the ShooterController
+//    STATE m_state; //State variable for the ShooterController
     FlyWheels& m_flywheel;
     Turret& m_turret;
 };

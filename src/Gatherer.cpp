@@ -1,62 +1,41 @@
 /*
  * Gatherer.cpp
  *
- *  Created on: Jan 29, 2017
- *      Author: joshc
+ *  Created on: Jan 14, 2017
+ *      Author: cbadu
  */
 
 #include "Gatherer.h"
 
-Gatherer::Gatherer(
-		Talon & motor,
-		Joystick & gamepad):
-		m_motor(motor),
-		m_gamepad(gamepad)
+Gatherer::Gatherer(Talon& gathererMotor, Joystick& gamepad):
+    m_gathererMotor(gathererMotor),
+    m_gamepad(gamepad)
 {
-	// TODO Auto-generated constructor stub
-	m_state = OFF;
+    m_state = OFF;
 }
 
-void Gatherer::move(double speed) {
-	m_motor.Set(speed);
+Gatherer::~Gatherer()
+{
 }
 
-void Gatherer::stop() {
-	m_motor.Set(0.0);
+Gatherer::State Gatherer::getState()
+{
+    return m_state;
 }
 
-void Gatherer::Update() {
-    std::stringstream btn;
-    btn << "Button B: " << m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonB);
-    SmartDashboard::PutString("DB/String 1", btn.str());
+void Gatherer::setState(Gatherer::State state)
+{
+    m_state = state;
 }
 
-void Gatherer::run() { //If the button is pressed, the motor runs at 0.3 (change state to ON), if not, it stops (change state to OFF).
-	Update();
-	switch(m_state)
-	{
-	case OFF:
-		stop();
-		if (!m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonB)) {
-			break;
-		}
-		m_state = ON;
-		break;
-
-	case ON:
-		move(0.3);
-		if (m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonB)) {
-			break;
-		}
-		m_state = OFF;
-		break;
-
-	case AUTO:
-		break;
-	}
+void Gatherer::run()
+{
+    switch (m_state)
+    {
+    case ON:
+        m_gathererMotor.Set(0.5);
+        break;
+    case OFF:
+        m_gathererMotor.Set(0.0);
+    }
 }
-
-Gatherer::~Gatherer() {
-	// TODO Auto-generated destructor stub
-}
-

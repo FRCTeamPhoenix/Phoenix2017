@@ -14,7 +14,7 @@
 class Feeder
 {
 public:
-    Feeder(SmartTalon* feederMotor, Joystick* gamepad);
+    Feeder(SmartTalon& feederMotor, Joystick& gamepad);
     virtual ~Feeder();
 
     enum State
@@ -29,8 +29,8 @@ public:
 
 private:
     State m_state;
-    SmartTalon* m_feederMotor;
-    Joystick* m_gamepad;
+    SmartTalon& m_feederMotor;
+    Joystick& m_gamepad;
 };
 
 #endif /* SRC_FEEDER_H_ */

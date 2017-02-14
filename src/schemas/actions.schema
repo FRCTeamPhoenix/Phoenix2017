@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+
+  "allOf": [
+    {"$ref": "#/definitions/ActionGroup"}
+  ],
+
+
+  "definitions": {
+
+    "Dependency": {
+      "type": "object",
+
+      "properties": {
+        "place": {
+          "type": "number"
+        },
+        "requiredCondition": {
+          "type": "number"
+        }
+      },
+
+      "required": [
+        "place",
+        "requiredCondition"
+      ]
+    },
+
+    "BaseAction": {
+      "properties": {
+
+        "name": {"type": "string"},
+        "type": {"type": "string"},
+        "startingCondition": {"type": "number"},
+
+        "dependencies": {
+          "type": "array",
+          "minItems": 0,
+          "items": { "$ref": "#/definitions/Dependency" },
+          "uniqueItems": true
+        }
+
+      },
+
+      "required": [
+        "name",
+        "type",
+        "startingCondition",
+        "dependencies"
+      ]
+    },
+
+    "GoDistance": {
+      "allOf": [
+        {"$ref": "#/definitions/BaseAction"},
+        {
+          "properties":
+          {
+            "distance": {"type": "number"},
+            "angle": {"type": "number"},
+            "speed": {"type": "number"},
+            "tolerance": {"type": "number"}
+          },
+          "required": [
+            "distance",
+            "angle",
+            "speed",
+            "tolerance"
+          ]
+        }
+      ]
+    },
+
+    "Rotate": {
+      "allOf": [
+        {"$ref": "#/definitions/BaseAction"},
+        {
+          "properties":
+          {
+            "angle": {"type": "number"},
+            "speed": {"type": "number"},
+            "tolerance": {"type": "number"}
+          },
+          "required": [
+            "angle",
+            "speed",
+            "tolerance"
+          ]
+        }
+      ]
+    },
+
+    "ResetAction": {
+      "allOf": [
+        {"$ref": "#/definitions/BaseAction"},
+        {
+          "properties":
+          {
+            "placesToReset": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"type": "number"},
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "placesToReset"
+          ]
+        }
+      ]
+    },
+
+    "ActionGroup": {
+      "allOf": [
+        {"$ref": "#/definitions/BaseAction"},
+        {"properties": {
+          "containedActions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                { "$ref": "#/definitions/GoDistance" },
+                { "$ref": "#/definitions/Rotate" },
+                { "$ref": "#/definitions/ActionGroup" },
+                { "$ref": "#/definitions/ResetAction" }
+
+              ]
+            },
+            "uniqueItems": false
+          },
+          "doneDependencies": {
+            "type": "array",
+            "minItems": 0,
+            "items": { "$ref": "#/definitions/Dependency" },
+            "uniqueItems": true
+          }
+        },
+          "required": [
+            "containedActions",
+            "doneDependencies"
+          ]
+        }
+      ]
+    }
+
+
+  }
+}

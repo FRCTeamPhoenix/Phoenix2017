@@ -21,8 +21,9 @@ Climber::~Climber()
 
 void Climber::updateButton() { //Updates button
     std::stringstream btn;
-    btn << "Button A: " << m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonA);
+    btn << "Button : " << m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonA);
     SmartDashboard::PutString("DB/String 0", btn.str());
+    btn.clear();
 }
 
 void Climber::move(double speed) {
@@ -35,13 +36,13 @@ void Climber::stop() {
 
 void Climber::run()
 {
-	updateButton();
+	//updateButton(); This was for testing Button Input
     //bool m_climb = m_gamepad->GetRawButton(buttonNames::buttonA); //Reason why is because we need to setup buttons
     switch (m_state)
     { //Case OFF checks to see if button isn't pressed. if it's pressed, state changes.
         case OFF:
         	stop();
-            if (!m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonA))
+            if (!m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonLB))
             {
                 break;
             }
@@ -51,7 +52,7 @@ void Climber::run()
             //Case ON sets motor speed to 0.3 when button is pressed. If button isn't pressed, state changes.
         case ON:
         	move(0.3);
-            if (m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonA))
+            if (m_gamepad.GetRawButton(DriveStationConstants::buttonNames::buttonLB))
             {
             	break;
             }

@@ -10,6 +10,8 @@
 #include "WPILib.h"
 #include "SmartTalon.h"
 #include "constants.h"
+#include "ShooterCalibrator.h"
+#include "Lidar.h"
 
 class FlyWheels
 {
@@ -19,7 +21,9 @@ public:
     enum STATE
     {
         OFF, //State of the FLywheels when it is off
-        ON //State of the Flywheel when it is on
+        FLATRATE, //Speed based on given number.
+        LIDARRATE, //Speed based on lidar Distance
+        JOYSTICKRATE, //The position that the joystick is in determines the speed.
     };
 
     void run();
@@ -30,6 +34,8 @@ public:
     FlyWheels(
             SmartTalon& rightFlyWheelMotor, //Smart Talon of the right flywheel
             SmartTalon& leftFlyWheelMotor, // Smart Talon of the left flywheel
+            ShooterCalibrator& shooterCalibrator, //Lidar based flywheel speed
+            Lidar& lidar,
             Joystick& gamepad //Uses gamepad for the right trigger and the left trigger
     );
     virtual ~FlyWheels();
@@ -37,10 +43,15 @@ public:
 
 private:
     STATE m_state; //State variable for the FlyWheels
-    float motorSpeed = 0.5; //Value is subject for change, only for testing purposes
     SmartTalon& m_rightFlyWheelMotor; //Right FlyWheel Motor
     SmartTalon& m_leftFlyWheelMotor; // Left FlyWheel Motor
+    ShooterCalibrator& m_shooterCalibrator;
+    Lidar& m_lidar;
     Joystick& m_gamepad; //Gamepad
+
+    void setRightSpeed(double speed);
+    void setLeftSpeed(double speed);
+    void setBothSpeed(double speed);
 
 };
 
