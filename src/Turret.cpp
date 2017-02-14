@@ -30,85 +30,64 @@ void Turret::run()
 {
     //Homing State of Turret
     //Returns Turret to right limit.
-    if(m_state == HOMING){
-        m_turretRotatorMotor.goAt(0.5);//will need to be changed. temp number.
-        if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
-        {
-            setState(IDLE);
-        }
-    }
-    else{
-        switch (m_state)
-        {
+    switch (m_state)
+    {
 
-            //Idle state of Turret
-            //Changes to Moving when there is joystick movement that is not in the deadzone
-            case IDLE:
-                m_turretRotatorMotor.goAt(0.0);
+        //Idle state of Turret
+        //Changes to Moving when there is joystick movement that is not in the deadzone
+        case IDLE:
+            m_turretRotatorMotor.goAt(0.0);
+            break;
+            //Moving state of Turret
+            //Changes to Idle when there is no joystick movement
+        case TELEOP:
+            gamepadJoystickWithDeadZone();
 
-                if(gamepadJoystickWithDeadZone() != 0)
+            if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
+            {
+                if (gamepadJoystickWithDeadZone() > 0)
                 {
-                    setState(TELEOP);
-                }
-                if(m_gamepad.GetRawButton(DriveStationConstants::buttonX))
-                {
-                    setState(AUTO);
-                }
-                break;
-                //Moving state of Turret
-                //Changes to Idle when there is no joystick movement
-            case TELEOP:
-                gamepadJoystickWithDeadZone();
-
-                if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
-                {
-                    if (gamepadJoystickWithDeadZone() > 0)
-                    {
-                        m_turretRotatorMotor.goAt(0.0);
-                    }
-                    else
-                    {
-                        m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
-                    }
-                }
-                else if (m_turretRotatorMotor.IsRevLimitSwitchClosed())
-                {
-                    if (gamepadJoystickWithDeadZone() < 0)
-                    {
-                        m_turretRotatorMotor.goAt(0.0);
-                    }
-                    else
-                    {
-                        m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
-                    }
-
+                    m_turretRotatorMotor.goAt(0.0);
                 }
                 else
                 {
                     m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
                 }
-                if(gamepadJoystickWithDeadZone() == 0)
+            }
+            else if (m_turretRotatorMotor.IsRevLimitSwitchClosed())
+            {
+                if (gamepadJoystickWithDeadZone() < 0)
                 {
-                    setState(IDLE);
+                    m_turretRotatorMotor.goAt(0.0);
                 }
-                break;
-            case HOMING:
-                break;
-            case AUTO:
-                long long int tempTime = m_visionComs.getAngleTimestamp();
-
-                if (tempTime != m_visionTimeStamp){
-                    m_visionTimeStamp = tempTime;
-
-                    autoTarget(m_visionComs.getAngle());
-                }
-                if(!m_gamepad.GetRawButton(DriveStationConstants::buttonX))
+                else
                 {
-                    setState(IDLE);
+                    m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
                 }
 
-                break;
-        }
+            }
+            else
+            {
+                m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
+            }
+            break;
+        case HOMING:
+            m_turretRotatorMotor.goAt(0.5);//will need to be changed. temp number.
+            if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
+            {
+                setState(IDLE);
+            }
+            break;
+        case AUTO:
+            long long int tempTime = m_visionComs.getAngleTimestamp();
+
+            if (tempTime != m_visionTimeStamp){
+                m_visionTimeStamp = tempTime;
+
+                autoTarget(m_visionComs.getAngle());
+            }
+            break;
+
     }
 }
 

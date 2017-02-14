@@ -23,17 +23,15 @@ class Climber
              OFF,
              ON
          };
-        Climber(SmartTalon & motor,
-                Joystick & gamepad
-        );
+        Climber(SmartTalon & motor);
+
+        void setState(STATE state);
+        STATE getState();
         virtual ~Climber();
-        void move(double speed);
-        void stop();
         void run();
 
     private:
         SmartTalon & m_motor;
-        Joystick & m_gamepad;
         STATE m_state;
 
 

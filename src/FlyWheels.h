@@ -36,8 +36,7 @@ public:
             SmartTalon& leftFlyWheelMotor, // Smart Talon of the left flywheel
             ShooterCalibrator& shooterCalibrator, //Lidar based flywheel speed
             Lidar& lidar,
-            Joystick& gamepad, //Uses gamepad for the right trigger and the left trigger
-            Joystick& joystick
+            Joystick& gamepad //Uses gamepad for the right trigger and the left trigger
     );
     virtual ~FlyWheels();
 
@@ -49,7 +48,6 @@ private:
     ShooterCalibrator& m_shooterCalibrator;
     Lidar& m_lidar;
     Joystick& m_gamepad; //Gamepad
-    Joystick& m_joystick;
 
     void setRightSpeed(double speed);
     void setLeftSpeed(double speed);

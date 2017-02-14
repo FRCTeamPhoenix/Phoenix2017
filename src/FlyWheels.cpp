@@ -12,14 +12,12 @@ FlyWheels::FlyWheels(
         SmartTalon& leftFlyWheelMotor,
         ShooterCalibrator& shooterCalibrator,
         Lidar& lidar,
-        Joystick& gamepad,
-        Joystick& joystick):
+        Joystick& gamepad):
         m_rightFlyWheelMotor(rightFlyWheelMotor),
         m_leftFlyWheelMotor(leftFlyWheelMotor),
         m_shooterCalibrator(shooterCalibrator),
         m_lidar(lidar),
-        m_gamepad(gamepad),
-        m_joystick(joystick)
+        m_gamepad(gamepad)
 {
     m_state = STATE::OFF;
 }
@@ -40,45 +38,18 @@ void FlyWheels::run()
         case OFF: //
             m_rightFlyWheelMotor.goAt(0.0); //stop right FlyWheel
             m_leftFlyWheelMotor.goAt(0.0); //stop left FlyWheel
-
-            if (m_gamepad.GetRawButton(DriveStationConstants::triggerRT))
-            {
-                setState(FLATRATE);
-            }
-            if(m_gamepad.GetRawButton(DriveStationConstants::buttonA))
-            {
-                setState(LIDARRATE);
-            }
-            if(m_gamepad.GetRawButton(DriveStationConstants::buttonB))
-            {
-                setState(JOYSTICKRATE);
-            }
             break;
-
         case FLATRATE: //Speed based on given number.
             setLeftSpeed(0.5);
             setRightSpeed(0.5);
-            if (!m_gamepad.GetRawButton(DriveStationConstants::triggerRT))
-            {
-                setState(OFF);
-            }
             break;
         case LIDARRATE: //Speed based on lidar Distance
             setRightSpeed(m_shooterCalibrator.getFlywheelPower(m_lidar.getFastAverage()));
             setLeftSpeed(m_shooterCalibrator.getFlywheelPower(m_lidar.getFastAverage()));
-            if(!m_gamepad.GetRawButton(DriveStationConstants::buttonA))
-            {
-                setState(OFF);
-            }
             break;
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.
-            setRightSpeed(m_joystick.GetThrottle());
-            setRightSpeed(m_joystick.GetThrottle());
-//            setBothSpeed(m_joystick.GetThrottle());
-            if(!m_gamepad.GetRawButton(DriveStationConstants::buttonB))
-            {
-                setState(OFF);
-            }
+            setRightSpeed(m_gamepad.GetY());
+            setRightSpeed(m_gamepad.GetY());
             break;
     }
 }

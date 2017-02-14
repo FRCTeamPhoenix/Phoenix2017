@@ -1,5 +1,6 @@
 #ifndef ACTIONGRAPHS_ROBOT_H
 #define ACTIONGRAPHS_ROBOT_H
+#include <RobotController.h>
 #include "WPILib.h"
 #include "constants.h"
 #include "SmartTalon.h"
@@ -11,7 +12,6 @@
 #include "LoggerController.h"
 #include "FlyWheels.h"
 #include "Turret.h"
-#include "ShooterController.h"
 #include "ConfigEditor.h"
 #include <fstream>
 #include "json.hpp"
@@ -54,6 +54,7 @@ class Robot: public SampleRobot
     DigitalInput m_rightLimitSwitch;
     Joystick m_joystick;
     Joystick m_gamepad;
+//    Joystick m_controlBox;
     Lidar m_lidar;
     ADIS16448_IMU m_expansionBoard;
     Communications m_visionComs;
@@ -61,7 +62,6 @@ class Robot: public SampleRobot
     FlyWheels m_flywheel;
     Turret m_turret;
     LoggerController m_loggerController;
-    ShooterController m_shooterController;
     ConfigEditor m_configEditor;
     SmartTalon m_climberMotor;
     Climber m_climber;
@@ -71,6 +71,7 @@ class Robot: public SampleRobot
     Indexer m_indexer;
     Feeder m_feeder;
     Gatherer m_gatherer;
+    RobotController m_robotController;
 
 public:
     Robot();

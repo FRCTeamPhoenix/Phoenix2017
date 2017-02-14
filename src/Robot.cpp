@@ -5,10 +5,10 @@ using namespace std;
 using json=nlohmann::json;
 
 Robot::Robot() :
-        m_FRDrive(7, CANTalon::FeedbackDevice::QuadEncoder),
-        m_FLDrive(8, CANTalon::FeedbackDevice::QuadEncoder),
-        m_BRDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
-        m_BLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
+        m_FRDrive(PortAssign::frontRightWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
+        m_FLDrive(PortAssign::frontLeftWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
+        m_BRDrive(PortAssign::backRightWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
+        m_BLDrive(PortAssign::backLeftWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
         m_mainAutoGroup(new ActionGroup()),
         m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_expansionBoard, HeadingControl::GyroAxes::x),
         m_topFlyWheelMotor(PortAssign::topFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
@@ -18,23 +18,24 @@ Robot::Robot() :
         m_rightLimitSwitch( PortAssign::rightLimitSwitch),
         m_joystick(PortAssign::joystick),
         m_gamepad(PortAssign::gamepad),
+//        m_controlBox(PortAssign::controlBox),
         m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0),
         m_expansionBoard(),
         m_visionComs(),
         m_shooterCalibrator(),
-        m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_gamepad, m_joystick),
+        m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_gamepad),
         m_turret(m_turretRotateMotor,m_visionComs, m_gamepad),
         m_loggerController(),
-        m_shooterController(m_flywheel, m_turret),
         m_configEditor(),
         m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
-        m_climber(m_climberMotor, m_joystick),
+        m_climber(m_climberMotor),
         m_gathererMotor(PortAssign::loader),
         m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
         m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder),
         m_indexer(m_indexerMotor, m_gamepad),
         m_feeder(m_feederMotor, m_gamepad),
-        m_gatherer(m_gathererMotor, m_gamepad)
+        m_gatherer(m_gathererMotor, m_gamepad),
+        m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_gamepad,m_climber,m_gatherer)
 {
 
 }
@@ -66,8 +67,25 @@ void Robot::OperatorControl()
 
     while (IsEnabled() && IsOperatorControl())
     {
-        string mode = SmartDashboard::GetString("Auto Selector", "None");
-    	SmartDashboard::PutString("DB/String 7", mode);
+
+
+        /*
+           * Robot Teleop Controls:
+           * Button A held: Feeder and Flywheels on, flywheels at joystick rate or lidar rate
+           * Button B pressed: turret auto on
+           * Button X pressed: turret auto off
+           * Button Y held: indexer on
+           * Button LB held: climber on
+           * Button RB held: Gatherer on
+           * Gamepad left joystick: turret Control
+           * Joystick: Control drivetrain
+           *
+           */
+
+        m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
+        m_robotController.run();
+
+
     }
 }
 
