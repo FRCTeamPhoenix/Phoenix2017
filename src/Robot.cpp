@@ -1,470 +1,491 @@
-#include "WPILib.h"
-#include "constants.h"
-#include "SmartTalon.h"
-#include "relativeMecanumDrivetrain.h"
-#include "plog/Log.h"
-#include "sys/stat.h"
-#include "ADIS16448_IMU.h"
-#include "ConfigEditor.h"
-#include "LoggerController.h"
-#include "FlyWheels.h"
-#include "Turret.h"
-#include "ShooterController.h"
-#include "ConfigEditor.h"
-#include "AutoController.h"
-#include "Actions/Actions.h"
-#include <fstream>
-#include "json.hpp"
-#include "Lidar.h"
-#include "Climber.h"
-
-//Test mode includes
-#include <LiveWindow/LiveWindow.h>
-#include <SmartDashboard/SendableChooser.h>
-#include <SmartDashboard/SmartDashboard.h>
-
+#include "Robot.h"
+#include "Actions/ActionFactory.h"
 
 using namespace std;
 using json=nlohmann::json;
 
-class Robot: public SampleRobot
+Robot::Robot() :
+        												m_FRDrive(7, CANTalon::FeedbackDevice::QuadEncoder),
+														m_FLDrive(8, CANTalon::FeedbackDevice::QuadEncoder),
+														m_BRDrive(1, CANTalon::FeedbackDevice::QuadEncoder),
+														m_BLDrive(2, CANTalon::FeedbackDevice::QuadEncoder),
+														m_mainAutoGroup(new ActionGroup()),
+														m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_expansionBoard, HeadingControl::GyroAxes::x),
+														m_topFlyWheelMotor(PortAssign::topFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
+														m_lowerFlyWheelMotor(PortAssign::lowerFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
+														m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
+														m_leftLimitSwitch(PortAssign::leftLimitSwitch),
+														m_rightLimitSwitch( PortAssign::rightLimitSwitch),
+														m_joystick(PortAssign::joystick),
+														m_gamepad(PortAssign::gamepad),
+														m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0),
+														m_expansionBoard(),
+														m_visionComs(),
+														m_shooterCalibrator(),
+														m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_gamepad, m_joystick),
+														m_turret(m_turretRotateMotor,m_visionComs, m_gamepad),
+														m_loggerController(),
+														m_shooterController(m_flywheel, m_turret),
+														m_configEditor(),
+														m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
+														m_climber(m_climberMotor, m_joystick),
+														m_gathererMotor(PortAssign::loader),
+														m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
+														m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder),
+														m_indexer(m_indexerMotor, m_gamepad),
+														m_feeder(m_feederMotor, m_gamepad),
+														m_gatherer(m_gathererMotor, m_gamepad),
+														m_climberLimit(1)
 {
-        // TODO NEED ALL OF THE ACTUAL PIN NUMBERS CHECKED AND NEEDS FIX.
-        // CHECK CONSTANTS.H
-        // TODO NEEDS TO BE TESTED
-        SmartTalon m_FRDrive;
-        SmartTalon m_FLDrive;
-        SmartTalon m_BRDrive;
-        SmartTalon m_BLDrive;
-        relativeMecanumDrivetrain m_drivetrain;
-        SmartTalon m_rightFlyWheelMotor;
-        SmartTalon m_leftFlyWheelMotor;
-        SmartTalon m_turretRotateMotor;
-        Joystick m_joystick;
-        Joystick m_gamepad;
-        ADIS16448_IMU m_expansionBoard;
-        FlyWheels m_flywheel;
-        //	Turret m_turret;
-        LoggerController m_loggerController;
-        //	ShooterController m_shooterController;
-        ConfigEditor m_configEditor;
-        AutoController m_autoController;
-        Lidar m_lidar;
-        SmartTalon m_climberMotor;
-        Climber m_climber;
-        SmartTalon m_feederMotor;
-        SmartTalon m_indexerMotor;
-        Talon m_gathererMotor;
-        DigitalInput m_climberLimit;
+
+}
+
+void Robot::RobotInit()
+{
+	cout << "In Robot INIT" << endl;
+	initMainActionGroup();
+	SmartDashboard::PutStringArray("Test List", testModes);
+}
+
+void Robot::Autonomous()
+{
+	LOGI << "Start Auto";
+	initAutoMode();
+
+	while (IsEnabled() && IsAutonomous())
+	{
+
+		m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
+	}
+
+}
+
+void Robot::OperatorControl()
+{
+	m_expansionBoard.Reset();
+	LOGI << "Start Teleop";
+	//int count = 0;
+
+	while (IsEnabled() && IsOperatorControl())
+	{
+		string mode = SmartDashboard::GetString("Auto Selector", "None");
+		SmartDashboard::PutString("DB/String 7", mode);
+	}
+}
+
+// Print the Message on the Drive Station
+void printMSG(string place, string msg) {
+	std::ostringstream stream;
+	stream << msg;
+	SmartDashboard::PutString("DB/String " + place, stream.str());
+	stream.clear();
+}
 
 
 
-    public:
+void Robot::Test()
+{
+	LOGI << "Start Test Mode";
+	m_pidState = PID;
+	testModeSelector = t_Talons;
+	while (IsEnabled() && IsTest())
+	{
+		switch(m_pidState) {
+		case PID:
+			if (m_gamepad.GetRawButton(DriveStationConstants::buttonB)) {
+				m_pidState = VOLTAGE;
+				break;
+			}
+			break;
+		case VOLTAGE:
+			if (m_gamepad.GetRawButton(DriveStationConstants::buttonA)) {
+				m_pidState = PID;
+				break;
+			}
+			break;
+		}
+		// IMPORTANT You have Full Joystick Controll So Be Careful
+		float power = m_joystick.GetY();
+		if (fabs(power) < 0.05f){
+			power = 0.0f;
+		}
+		else{
+			power = m_joystick.GetY(); // You can get Full Power So BE CAREFUL!
+		}
+		// updates the state of the TALONS as PID or VOLTAGE
+		string mode = SmartDashboard::GetString("Test Selector", "none");
+		for (int x=t_Talons; x <= t_DriveTrain; x++) {
+			if (mode == testModes[x]) {
+				testModeSelector = static_cast<TestMode>(x);
+			}
+		}
 
-        enum TestMode{
-            t_Talons,
-            t_ShooterHead,
-            t_Feeder,
-            t_Indexer,
-            t_Climber,
-            t_Turret,
-            t_Gatherer,
-            t_Shooter,
-            t_DriveTrain
-        };
-        vector<string> testModes = {
-                "Talons",
-                "ShooterHead",
-                "Feeder",
-                "Indexer",
-                "Climber",
-                "Turret",
-                "Gatherer",
-                "Shooter",
-                "DriveTrain"};
+		switch(testModeSelector)
+		//switch(testModes)
+		{
+		case t_Talons: //Test all Talons on robot
+		{
+			printMSG("0", "All Talons");
+			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+			printMSG("2", "FRD ENC: " + std::to_string(m_FRDrive.GetEncPosition()));
+			printMSG("3", "FLD ENC: " + std::to_string(m_FLDrive.GetEncPosition()));
+			printMSG("4", "BRD ENC: " + std::to_string(m_BRDrive.GetEncPosition()));
+			printMSG("5", "BLD ENC: " + std::to_string(m_BLDrive.GetEncPosition()));
+			printMSG("6", "RFW ENC: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
+			printMSG("7", "LFW ENC: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
+			printMSG("8", "TRM ENC: " + std::to_string(m_turretRotateMotor.GetEncPosition()));
+			m_FRDrive.goAt(power);
+			m_FLDrive.goAt(power);
+			m_BRDrive.goAt(power);
+			m_BLDrive.goAt(power);
+			m_lowerFlyWheelMotor.goAt(power);
+			m_topFlyWheelMotor.goAt(power);
+			m_turretRotateMotor.goAt(power);
+			break;
+		}
 
+		case t_ShooterHead: //Test Shooter Head
+		{
+			printMSG("0", "Shooter Testing Mode");
+			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+			printMSG("2", "RFW ENC: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
+			printMSG("3", "LFW ENC: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
+			printMSG("4", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+			printMSG("5", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
+			if (m_pidState == PID) {
+				m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
+				m_topFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
+				m_lowerFlyWheelMotor.goAt(power);
+				m_topFlyWheelMotor.goAt(power);
+			}
+			else {
+				m_lowerFlyWheelMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+				m_topFlyWheelMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+				m_lowerFlyWheelMotor.Set(power);
+				m_topFlyWheelMotor.Set(power);
+			}
+			break;
+		}
 
-        Robot() :
-            m_FRDrive(PortAssign::frontRightWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-            m_FLDrive(PortAssign::frontLeftWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-            m_BRDrive(PortAssign::backRightWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-            m_BLDrive(PortAssign::backLeftWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-            m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive),
-            m_rightFlyWheelMotor(PortAssign::rightFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-            m_leftFlyWheelMotor(PortAssign::leftFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-            m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
-            m_joystick(PortAssign::joystick),
-            m_gamepad(PortAssign::gamepad),
-            m_expansionBoard(),
-            m_flywheel(m_rightFlyWheelMotor, m_leftFlyWheelMotor, m_gamepad),
-            //		m_turret(m_turretRotateMotor,m_leftLimitSwitch, m_rightLimitSwitch, m_gamepad),
-            m_loggerController(),
-            //		m_shooterController(m_flywheel, m_turret),
-            m_configEditor(),
-            m_autoController(),
-            m_lidar(PortAssign::lidarTriggerPin,PortAssign::lidarMonitorPin, 0),
-            m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
-            m_climber(m_climberMotor, m_joystick),
-            m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
-            m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder),
-            m_gathererMotor(PortAssign::gatherer),
-            m_climberLimit(1)
-        {
-        }
-        void RobotInit() override
-                {
-            LOGI << "Start Robot Init";
+		case t_Feeder: //Test Feeder
+		{
+			printMSG("0", "Feeder Testing Mode");
+			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+			printMSG("2", "Feeder ENC: " + std::to_string(m_feederMotor.GetEncPosition()));
+			printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+			printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
+			if (m_pidState == PID) {
+				m_feederMotor.SetControlMode(CANSpeedController::kSpeed);
+				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
+					m_feederMotor.Set(m_joystick.GetThrottle());
+				}
+				else {
+					m_feederMotor.goAt(power);
+				}
+			}
+			else if (m_pidState == VOLTAGE){
+				m_feederMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
+					m_feederMotor.Set(m_joystick.GetThrottle());
+				}
+				else {
+					m_feederMotor.Set(power);
+				}
+			}
+			break;
+		}
 
-            SmartDashboard::PutStringArray("/TestMode/TestList", testModes);
-            LOGI << "Finish init";
+		case t_Indexer: //Test Indexer
+		{
+			printMSG("0", "Indexer Testing Mode");
+			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+			printMSG("2", "Indexer ENC: " + std::to_string(m_indexerMotor.GetEncPosition()));
+			printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+			printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
 
-                }
+			if (m_pidState == PID) {
+				m_indexerMotor.SetControlMode(CANSpeedController::kSpeed);
+				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
+					m_feederMotor.goAt(m_joystick.GetThrottle());
+				}
+				else {
+					m_feederMotor.goAt(power);
+				}
+			}
+			else if (m_pidState == VOLTAGE){
+				m_indexerMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
+					m_feederMotor.Set(m_joystick.GetThrottle());
+				}
+				else {
+					m_feederMotor.Set(power);
+				}
+			}
+			break;
+		}
 
-        void Autonomous()
-        {
+		case t_Gatherer: //Test Gather
+		{
+			printMSG("0", "Gather Testing Mode");
+			printMSG("1", "Gatherer Speed: " + std::to_string(m_gathererMotor.GetSpeed()));
+			printMSG("2", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+			printMSG("3", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
+			m_gathererMotor.Set(power);
+			break;
+		}
 
-            bool init = false;
+		case t_Turret: //Test Turret
+		{
+			printMSG("0", "Turret Testing Mode");
+			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+			printMSG("2", "Turret ENC: " + std::to_string(m_turretRotateMotor.GetEncPosition()));
+			printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+			printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
+			if (m_pidState == PID) {
+				m_turretRotateMotor.SetControlMode(CANSpeedController::kSpeed);
+				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
+					m_turretRotateMotor.goAt(m_joystick.GetThrottle());
+				}
+				else {
+					m_turretRotateMotor.goAt(power);
+				}
+			}
+			else {
+				m_turretRotateMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
+					m_turretRotateMotor.Set(m_joystick.GetThrottle());
+				}
+				else {
+					m_turretRotateMotor.Set(power);
+				}
+			}
+			break;
+		}
 
-            LOGI << "Start Auto";
-            while (IsEnabled() && IsAutonomous())
-            {
-                if (!init)
-                {
-                    init = true;
-                }
+		case t_Climber: //Test Climber
+		{
+			printMSG("0", "Climber Testing Mode");
+			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+			printMSG("2", "Climber ENC: " + std::to_string(m_climberMotor.GetEncPosition()));
+			printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+			printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
+			if (m_pidState == PID) {
+				m_climberMotor.SetControlMode(CANSpeedController::kSpeed);
+				m_climberMotor.goAt(power);
+			}
+			else if (m_pidState == VOLTAGE){
+				m_climberMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+				m_climberMotor.Set(power);
+			}
+			break;
+		}
 
-                m_autoController.run();
-            }
+		case t_Shooter: //Test all Shooter Components
+		{
+			printMSG("0", "All Shooter Test Mode");
+			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+			printMSG("4", "EncoderShR: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
+			printMSG("5", "EncoderShL: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
+			printMSG("6", "EncoderF: " + std::to_string(m_feederMotor.GetEncPosition()));
+			printMSG("7", "Throttle: " + std::to_string(((m_joystick.GetThrottle()-1) / 2)));
+			printMSG("8", "EncoderI: " + std::to_string(m_feederMotor.GetEncPosition()));
+			printMSG("9", "Distance: " + std::to_string(m_lidar.getFastAverage()));
+			if ((m_pidState == VOLTAGE) && m_gamepad.GetRawButton(DriveStationConstants::buttonB)){
+				m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0",0.0));
+				m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0",0.0));
+			}
+			else if ((m_pidState == VOLTAGE))
+			{
+				m_feederMotor.Set((m_joystick.GetThrottle()-1) / 2);
+			}
+			else if ((m_pidState == PID) && m_gamepad.GetRawButton(DriveStationConstants::buttonB)){
+				m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0",0.0));
+				m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0",0.0));
+			}
+			else if ((m_pidState == PID)) {
+				m_feederMotor.goAt((m_joystick.GetThrottle()-1) / 2);
+			}
 
-        }
-        void OperatorControl()
-        {
+			//indexer test
+			if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonA))){
+				m_indexerMotor.goDistance(250,0.5);
+			}
+			else if ((m_pidState == PID)) {
+				m_feederMotor.SetControlMode(CANSpeedController::kSpeed);
+				m_indexerMotor.SetControlMode(CANSpeedController::kSpeed);
+				m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
+				m_topFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
+				m_indexerMotor.goAt(power);
+				m_lowerFlyWheelMotor.goAt(m_gamepad.GetY());
+				m_topFlyWheelMotor.goAt(m_gamepad.GetY());
+			}
+			else if (m_pidState == VOLTAGE) {
+				m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
+				m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+				m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
+				m_topFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
+				m_indexerMotor.Set(power);
+				m_lowerFlyWheelMotor.Set(m_gamepad.GetY());
+				m_topFlyWheelMotor.Set(m_gamepad.GetY());
+			}
+			// Fly wheel Test
+			if ((m_pidState == VOLTAGE) && (m_gamepad.GetRawButton(DriveStationConstants::buttonX))){
+				m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1",0.0));
+				m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
+			}
+			else if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonX))){
+				m_lowerFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1",0.0));
+				m_topFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2",0.0));
+			}
+			m_configEditor.update();
+			break;
+		}
 
-            m_expansionBoard.Reset();
-            LOGI << "Start Teleop";
-            //int count = 0;
-
-            while (IsEnabled() && IsOperatorControl())
-            {
-
-            }
-
-        }
-        void printMessage(string place, string message)
-        {
-            std::ostringstream stream;
-            stream << message;
-            SmartDashboard::PutString("DB/String " + place, stream.str());
-        }
-
-        void Test()
-        {
-            // TODO ADD LIMITS
-            LOGI << "Start Test Mode";
-            bool isPID = false;
-            float joystickPower = 0.0;
-            float gamepadPower = 0.0;
-
-            while (IsEnabled() && IsTest())
-            {
-
-                joystickPower = -m_joystick.GetY();
-                if (fabs(joystickPower) < 0.05f)
-                {
-                    joystickPower = 0.0f;
-                }
-
-                gamepadPower = -m_gamepad.GetY();
-                if (fabs(gamepadPower) < 0.05f)
-                {
-                    gamepadPower = 0.0f;
-                }
-
-                if (m_gamepad.GetRawButton(DriveStationConstants::buttonA))
-                {
-                    isPID = true;
-                }
-                else if (m_gamepad.GetRawButton(DriveStationConstants::buttonB))
-                {
-                    isPID = false;
-                }
-
-                printMessage("8", "Gyro: " + std::to_string(m_expansionBoard.GetAngleX()));
-                printMessage("9", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
-                string mode = SmartDashboard::GetString("Test Selector", "none");
-
-                if (mode == testModes[t_Talons])  //Test all Talons on robot
-                {
-                    printMessage("0", "All Talons"); //mode
-                    printMessage("1", "FRD ENC " + std::to_string(m_FRDrive.GetEncPosition()));
-                    printMessage("2", "FLD ENC " + std::to_string(m_FLDrive.GetEncPosition()));
-                    printMessage("3", "BRD ENC " + std::to_string(m_BRDrive.GetEncPosition()));
-                    printMessage("4", "BLD ENC " + std::to_string(m_BLDrive.GetEncPosition()));
-                    printMessage("5", "TFW ENC " + std::to_string(m_rightFlyWheelMotor.GetEncPosition()));
-                    printMessage("6", "BFW ENC " + std::to_string(m_leftFlyWheelMotor.GetEncPosition()));
-                    printMessage("7", "TRM ENC " + std::to_string(m_turretRotateMotor.GetEncPosition()));
-
-
-                    if(isPID)
-                    {
-                        m_rightFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
-                        m_leftFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
-                        m_FRDrive.SetControlMode(CANSpeedController::kSpeed);
-                        m_FLDrive.SetControlMode(CANSpeedController::kSpeed);
-                        m_BRDrive.SetControlMode(CANSpeedController::kSpeed);
-                        m_BLDrive.SetControlMode(CANSpeedController::kSpeed);
-                        m_turretRotateMotor.SetControlMode(CANSpeedController::kSpeed);
-                        m_climberMotor.SetControlMode(CANSpeedController::kSpeed);
-
-                        m_FRDrive.goAt(joystickPower);
-                        m_FLDrive.goAt(joystickPower);
-                        m_BRDrive.goAt(joystickPower);
-                        m_BLDrive.goAt(joystickPower);
-                        m_rightFlyWheelMotor.goAt(joystickPower);
-                        m_leftFlyWheelMotor.goAt(joystickPower);
-                        m_turretRotateMotor.goAt(joystickPower);
-                        m_climberMotor.goAt(joystickPower);
-                    }
-                    else
-                    {
-                        m_rightFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
-                        m_leftFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
-                        m_FRDrive.SetControlMode(CANSpeedController::kPercentVbus);
-                        m_FLDrive.SetControlMode(CANSpeedController::kPercentVbus);
-                        m_BRDrive.SetControlMode(CANSpeedController::kPercentVbus);
-                        m_BLDrive.SetControlMode(CANSpeedController::kPercentVbus);
-                        m_turretRotateMotor.SetControlMode(CANSpeedController::kPercentVbus);
-                        m_climberMotor.SetControlMode(CANSpeedController::kPercentVbus);
-
-                        m_FRDrive.Set(joystickPower);
-                        m_FLDrive.Set(joystickPower);
-                        m_BRDrive.Set(joystickPower);
-                        m_BLDrive.Set(joystickPower);
-                        m_rightFlyWheelMotor.Set(joystickPower);
-                        m_leftFlyWheelMotor.Set(joystickPower);
-                        m_turretRotateMotor.Set(joystickPower);
-                        m_climberMotor.Set(joystickPower);
-                    }
-
-                }
-
-                else if (mode == testModes[t_ShooterHead]) //Test Shooter Head
-                {
-                    printMessage("0", "Shooter Head");
-                    printMessage("1", "TFW ENC " + std::to_string(m_rightFlyWheelMotor.GetEncPosition()));
-                    printMessage("2", "BFW ENC " + std::to_string(m_leftFlyWheelMotor.GetEncPosition()));
-                    switch (isPID)
-                    {
-                        case true:
-                            m_rightFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
-                            m_leftFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
-                            m_rightFlyWheelMotor.goAt(joystickPower);
-                            m_leftFlyWheelMotor.goAt(joystickPower);
-                            break;
-                        case false:
-                            m_rightFlyWheelMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-                            m_leftFlyWheelMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-                            m_rightFlyWheelMotor.Set(joystickPower);
-                            m_leftFlyWheelMotor.Set(joystickPower);
-                            break;
-                    }
-                }
-
-                else if (mode == testModes[t_Feeder]) //Test Feeder
-                {
-                    printMessage("0", "Feeder");
-                    printMessage("1", "Feed ENC " + std::to_string(m_feederMotor.GetEncPosition()));
-                    switch (isPID)
-                    {
-                        case true:
-                            m_feederMotor.SetControlMode(CANSpeedController::kSpeed);
-                            m_feederMotor.goAt(joystickPower);
-                            break;
-                        case false:
-                            m_feederMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-                            m_feederMotor.Set(joystickPower);
-                            break;
-                    }
-                }
-
-                else if (mode == testModes[t_Indexer]) //Test Indexer
-                {
-                    printMessage("0", "Indexer");
-                    printMessage("1", "Index ENC " + std::to_string(m_indexerMotor.GetEncPosition()));
-                    switch (isPID)
-                    {
-                        case true:
-                            m_indexerMotor.SetControlMode(CANSpeedController::kSpeed);
-                            m_indexerMotor.goAt(joystickPower);
-                            break;
-                        case false:
-                            m_indexerMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-                            m_indexerMotor.Set(joystickPower);
-                            break;
-                    }
-                }
-
-                else if (mode == testModes[t_Gatherer]) //Test Gatherer
-                {
-                    printMessage("0", "Gatherer");
-                    m_gathererMotor.Set(joystickPower);
-                    break;
-                }
-
-                else if (mode == testModes[t_Turret]) //Test Turret
-                {
-                    printMessage("0", "Turret");
-                    printMessage("1", "TUR ENC " + std::to_string(m_turretRotateMotor.GetEncPosition()));
-                    printMessage("2", "TUR LIM1 " + std::to_string(m_turretRotateMotor.IsFwdLimitSwitchClosed()));
-                    printMessage("3", "TUR LIM2 " + std::to_string(m_turretRotateMotor.IsRevLimitSwitchClosed()));
-                    switch (isPID)
-                    {
-                        case true:
-                            m_turretRotateMotor.SetControlMode(CANSpeedController::kSpeed);
-                            m_turretRotateMotor.goAt(joystickPower);
-                            break;
-                        case false:
-                            m_turretRotateMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-                            m_turretRotateMotor.Set(joystickPower);
-                            break;
-                    }
-                }
-
-                else if (mode == testModes[t_Climber]) //Test Climber
-                {
-                    printMessage("0", "Climber");
-                    printMessage("1", "CLimb ENC " + std::to_string(m_climberMotor.GetEncPosition()));
-                    printMessage("2", "Limit " + std::to_string(m_climberLimit.Get()));
-
-                    switch (isPID)
-                    {
-                        case true:
-                            m_indexerMotor.SetControlMode(CANSpeedController::kSpeed);
-                            m_indexerMotor.goAt(joystickPower);
-                            break;
-                        case false:
-                            m_indexerMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-                            m_indexerMotor.Set(joystickPower);
-                            break;
-                    }
-                }
-
-                else if (mode == testModes[t_Shooter]) //Test all Shooter Components
-                {
-
-                    printMessage("0", "Full Shooter");
-                    printMessage("1", "TFly ENC " + std::to_string(m_rightFlyWheelMotor.GetEncPosition()));
-                    printMessage("2", "BFly ENC " + std::to_string(m_leftFlyWheelMotor.GetEncPosition()));
-                    printMessage("3", "Feed ENC " + std::to_string(m_feederMotor.GetEncPosition()));
-                    printMessage("4", "Index ENC " + std::to_string(m_indexerMotor.GetEncPosition()));
-
-                    switch (isPID)
-                    {
-                        case true:
-                            m_indexerMotor.SetControlMode(CANSpeedController::kSpeed);
-                            m_feederMotor.SetControlMode(CANSpeedController::kSpeed);
-                            m_leftFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
-                            m_rightFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
-
-                            if (m_gamepad.GetRawButton(DriveStationConstants::buttonX))
-                            {
-                                m_rightFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1", 0.0));
-                                m_leftFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2", 0.0));
-                            }
-                            else
-                            {
-                                m_rightFlyWheelMotor.goAt(joystickPower);
-                                m_leftFlyWheelMotor.goAt(joystickPower);
-                            }
-
-                            if (m_gamepad.GetRawButton(DriveStationConstants::buttonY))
-                            {
-                                m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
-                            }
-                            else
-                            {
-                                m_feederMotor.goAt((m_joystick.GetThrottle() - 1) / 2);
-
-                            }
-                            m_indexerMotor.goAt(gamepadPower);
-                            break;
-                        case false:
-
-                            m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
-                            m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
-                            m_leftFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
-                            m_rightFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
-
-                            if (m_gamepad.GetRawButton(DriveStationConstants::buttonX))
-                            {
-                                m_rightFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1", 0.0));
-                                m_leftFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2", 0.0));
-                            }
-                            else
-                            {
-                                m_rightFlyWheelMotor.Set(joystickPower);
-                                m_leftFlyWheelMotor.Set(joystickPower);
-                            }
-
-                            if (m_gamepad.GetRawButton(DriveStationConstants::buttonY))
-                            {
-                                m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
-                            }
-                            else
-                            {
-                                m_feederMotor.Set((m_joystick.GetThrottle() - 1) / 2);
-                            }
+		case t_DriveTrain: //Test all 4 Drive Train Motors
+		{
+			printMSG("0", "Drive Train Motors Test");
+			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+			printMSG("2", "FRD ENC: " + std::to_string(m_FRDrive.GetEncPosition()));
+			printMSG("3", "FLD ENC: " + std::to_string(m_FLDrive.GetEncPosition()));
+			printMSG("4", "BRD ENC: " + std::to_string(m_BRDrive.GetEncPosition()));
+			printMSG("5", "BLD ENC: " + std::to_string(m_BLDrive.GetEncPosition()));
+			if (m_pidState == PID) {
+				m_FRDrive.SetControlMode(CANSpeedController::kSpeed);
+				m_FLDrive.SetControlMode(CANSpeedController::kSpeed);
+				m_BRDrive.SetControlMode(CANSpeedController::kSpeed);
+				m_BLDrive.SetControlMode(CANSpeedController::kSpeed);
+				m_FRDrive.goAt(power);
+				m_FLDrive.goAt(power);
+				m_BRDrive.goAt(power);
+				m_BLDrive.goAt(power);
+			}
+			if (m_pidState == VOLTAGE) {
+				m_FRDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+				m_FLDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+				m_BRDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+				m_BLDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+				m_FRDrive.Set(power);
+				m_FLDrive.Set(power);
+				m_BRDrive.Set(power);
+				m_BLDrive.Set(power);
+			}
+			break;
+		}
+		}
+	}
+}
 
 
-                            m_indexerMotor.goAt(gamepadPower);
-                            break;
-                    }
-                }
 
-                else if (mode == testModes[t_DriveTrain]) //Test all 4 Drive Train Motors
-                {
-                    printMessage("0", "DriveTrain");
-                    printMessage("1", "FRD ENC " + std::to_string(m_FRDrive.GetEncPosition()));
-                    printMessage("2", "FLD ENC " + std::to_string(m_FLDrive.GetEncPosition()));
-                    printMessage("3", "BRD ENC " + std::to_string(m_BRDrive.GetEncPosition()));
-                    printMessage("4", "BLD ENC " + std::to_string(m_BLDrive.GetEncPosition()));
 
-                    switch (isPID)
-                    {
-                        case true:
-                            m_FRDrive.SetControlMode(CANSpeedController::kSpeed);
-                            m_FLDrive.SetControlMode(CANSpeedController::kSpeed);
-                            m_BRDrive.SetControlMode(CANSpeedController::kSpeed);
-                            m_BLDrive.SetControlMode(CANSpeedController::kSpeed);
+void Robot::initMainActionGroup ()
+{
+	bool validJson = true;
+	json myJsonDoc;
+	json mySchemaDoc;
 
-                            m_FRDrive.goAt(joystickPower);
-                            m_FLDrive.goAt(joystickPower);
-                            m_BRDrive.goAt(joystickPower);
-                            m_BLDrive.goAt(joystickPower);
-                            break;
-                        case false:
-                            m_FRDrive.SetControlMode(CANSpeedController::kPercentVbus);
-                            m_FLDrive.SetControlMode(CANSpeedController::kPercentVbus);
-                            m_BRDrive.SetControlMode(CANSpeedController::kPercentVbus);
-                            m_BLDrive.SetControlMode(CANSpeedController::kPercentVbus);
+	try
+	{
 
-                            m_FRDrive.Set(joystickPower);
-                            m_FLDrive.Set(joystickPower);
-                            m_BRDrive.Set(joystickPower);
-                            m_BLDrive.Set(joystickPower);
-                            break;
-                    }
-                    break;
+		if (!valijson::utils::loadDocument ("/home/lvuser/schemas/actions.schema",
+				mySchemaDoc))
+		{
+			cout << "Schema Failed Loading" << endl;
 
-                }
-                else
-                {
+			throw std::runtime_error ("Failed to load schema document");
+		}
 
-                    LOGD << "In case default";
+		Schema mySchema;
+		SchemaParser parser;
+		NlohmannJsonAdapter mySchemaAdapter (mySchemaDoc);
+		parser.populateSchema (mySchemaAdapter, mySchema);
 
-                }
-            }
-        }
-};
+		if (!valijson::utils::loadDocument ("/home/lvuser/config/actions.json",
+				myJsonDoc))
+		{
+			cout << "Json Failed Loading" << endl;
 
-START_ROBOT_CLASS(Robot);
+			throw std::runtime_error ("Failed to load Json document");
+		}
+
+		Validator validator;
+		NlohmannJsonAdapter myTargetAdapter (myJsonDoc);
+		if (!validator.validate (mySchema, myTargetAdapter, NULL))
+		{
+			cout << "Validation Failed" << endl;
+
+			throw std::runtime_error ("Validation failed.");
+		}
+		else
+		{
+			cout << "Validated" << endl;
+		}
+
+		m_mainAutoGroup->initActionGroup (myJsonDoc, shared_ptr<Robot>(this));
+
+	}
+	catch(runtime_error runtime){
+		cout << runtime.what () << endl;
+
+		vector<string> failureMessage = {"NO VALID ACTION JSON FOUND"};
+		SmartDashboard::PutStringArray ("Auto List", failureMessage);
+		return;
+	}
+
+	vector<string> topGroupNames;
+
+	vector<shared_ptr<Action>> allActions = m_mainAutoGroup->getContainedActions ();
+
+	vector<shared_ptr<Action>>::iterator actionIterator;
+	for (actionIterator = allActions.begin (); actionIterator != allActions.end (); actionIterator++)
+	{
+		string name = actionIterator->get ()->getName ();
+		if (name.find ("Auto") != string::npos)
+		{
+			topGroupNames.push_back (name);
+		}
+	}
+	SmartDashboard::PutStringArray ("Auto List", topGroupNames);
+
+}
+
+void Robot::initAutoMode ()
+{
+	string mode = SmartDashboard::GetString ("Auto Selector", "None");
+
+	vector<shared_ptr<Action>> allActions = m_mainAutoGroup->getContainedActions ();
+
+	SmartDashboard::PutString("DB/String 6", mode);
+
+	vector<shared_ptr<Action>>::iterator actionIterator;
+	for(actionIterator = allActions.begin(); actionIterator != allActions.end(); actionIterator++)
+	{
+		if(actionIterator->get ()->getName () == mode)
+		{
+			actionIterator->get ()->reset ();
+		}
+	}
+
+}
+
+void Robot::driveAt(double speed, double angle)
+{
+	m_drivetrain.moveAt (speed, angle);
+}
+
+void Robot::driveDistance (double distance, double angle, double speed)
+{
+	m_drivetrain.moveDistance (distance, angle, speed);
+}
+
+void Robot::rotateAngle (double angle, double speed)
+{
+	m_drivetrain.moveDistance (0, 0, speed, angle);
+}
+
+bool Robot::doneDriveMove (double tolerance)
+{
+	return m_drivetrain.doneMove (tolerance);
+}
+
+START_ROBOT_CLASS(Robot)

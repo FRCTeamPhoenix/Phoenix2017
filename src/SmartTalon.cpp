@@ -19,7 +19,7 @@ SmartTalon::SmartTalon (int deviceNumber, FeedbackDevice device) :
     string deviceNumberStr = ss.str();
 
 	ifstream json_file;
-	json_file.open("/home/lvuser/talons.json");
+	json_file.open("/home/lvuser/config/talons.json");
 	json talons;
 	json_file >> talons;
 	json_file.close();
@@ -37,6 +37,9 @@ SmartTalon::SmartTalon (int deviceNumber, FeedbackDevice device) :
 
 	m_maxForwardSpeed = talons[deviceNumberStr]["maxfvel"];
 	m_maxReverseSpeed = talons[deviceNumberStr]["maxrvel"];
+
+//    m_inverted = true;
+    m_inverted = talons[deviceNumberStr]["inverted"];
 
 	SetSafetyEnabled(false);
 }
@@ -60,7 +63,10 @@ void SmartTalon::goTo (double position, double speed)
     switchToGain (m_distanceGains);
     SetControlMode (CANSpeedController::kPosition);
 	ConfigMaxOutputVoltage(speed * 12);
-	Set (position);
+    if(m_inverted)
+	    Set (-position);
+    else
+        Set (position);
 
 }
 
@@ -75,7 +81,11 @@ void SmartTalon::goAt (double speed)
 	SetControlMode (CANSpeedController::kSpeed);
 	ConfigMaxOutputVoltage(12);
 //	SetEncPosition(0);
-	SetSetpoint(speed);
+    if(m_inverted)
+        SetSetpoint(-speed);
+    else
+        SetSetpoint(speed);
+
 
 }
 
@@ -91,7 +101,10 @@ void SmartTalon::goDistance (double distance, double speed)
     ConfigMaxOutputVoltage(12);
     SetEncPosition(0);
 	Set(0);
-	SetSetpoint (fPos);
+    if(m_inverted)
+        SetSetpoint(-fPos);
+    else
+        SetSetpoint(fPos);
 
 }
 
