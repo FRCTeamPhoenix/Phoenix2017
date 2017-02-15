@@ -12,7 +12,7 @@ Feeder::Feeder(SmartTalon& feederMotor, Joystick& gamepad):
     m_gamepad(gamepad)
 {
     m_state = OFF;
-    m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus)
+    m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
 }
 
 Feeder::~Feeder()
