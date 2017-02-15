@@ -6,9 +6,10 @@
  */
 #include "Climber.h"
 
-Climber::Climber(
-        SmartTalon& motor):
-        m_motor(motor)
+Climber::Climber(SmartTalon& motor,
+		Joystick & gamepad):
+        m_motor(motor),
+		m_gamepad(gamepad)
 {
     m_state = OFF;
 }
@@ -18,13 +19,12 @@ Climber::~Climber()
 }
 
 //Gets the current state of the FlyWheels state machine
-Climber::STATE Climber::getState()
-{
+Climber::STATE Climber::getState(){
     return m_state;
 }
 
 //Sets the state when there is a change in the FlyWheels state machine
-void Climber::setState(STATE state)
+void Climber::setState(Climber::STATE state)
 {
     m_state = state;
 

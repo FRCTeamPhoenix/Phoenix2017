@@ -12,6 +12,7 @@ Feeder::Feeder(SmartTalon& feederMotor, Joystick& gamepad):
     m_gamepad(gamepad)
 {
     m_state = OFF;
+    m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus)
 }
 
 Feeder::~Feeder()
@@ -33,10 +34,10 @@ void Feeder::run()
     switch (m_state)
     {
     case ON:
-        m_feederMotor.goAt(1.0);
+        m_feederMotor.Set(.85);
         break;
     case OFF:
-        m_feederMotor.goAt(0.0);
+        m_feederMotor.Set(0.0);
         break;
     }
 }

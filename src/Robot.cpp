@@ -28,7 +28,7 @@ Robot::Robot() :
 				m_loggerController(),
 				m_configEditor(),
 				m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
-				m_climber(m_climberMotor),
+				m_climber(m_climberMotor, m_gamepad),
 				m_gathererMotor(PortAssign::loader),
 				m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
 				m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder),
@@ -85,7 +85,7 @@ void Robot::OperatorControl()
 
 		m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
 		m_robotController.run();
-
+		m_climber.run();
 
 	}
 }
@@ -100,293 +100,356 @@ void printMSG(string place, string msg) {
 
 void Robot::Test()
 {
-	m_pidState = PID;
-	testModeSelector = t_Talons;
-	while (IsEnabled() && IsTest())
-	{
-		switch(m_pidState) {
-		case PID:
-			if (m_gamepad.GetRawButton(DriveStationConstants::buttonB)) {
-				m_pidState = VOLTAGE;
-				break;
-			}
-			break;
-		case VOLTAGE:
-			if (m_gamepad.GetRawButton(DriveStationConstants::buttonA)) {
-				m_pidState = PID;
-				break;
-			}
-			break;
-		}
-		// IMPORTANT You have Full Joystick Controll So Be Careful
-		float power = m_joystick.GetY();
-		if (fabs(power) < 0.05f){
-			power = 0.0f;
-		}
-		else{
-			power = m_joystick.GetY(); // You can get Full Power So BE CAREFUL!
-		}
-		// updates the state of the TALONS as PID or VOLTAGE
-		string mode = SmartDashboard::GetString("Test Selector", "none");
-		for (int x=t_Talons; x <= t_DriveTrain; x++) {
-			if (mode == testModes[x]) {
-				testModeSelector = static_cast<TestMode>(x);
-			}
-		}
+    m_pidState = PID;
+    testModeSelector = t_Talons;
+    while (IsEnabled() && IsTest())
+    {
+        /*
+         * Inside of the Drive Station the Control Mode is where you want to check.
+         * Weather or not you are in PID/VOLTAGE
+         * 1 is VOLTAGE 0 is PID
+         * EXAMPLE:
+         * Control Mode: 0
+         * That is PID
+         * Control Mode: 1
+         * That is Voltage
+         */
+        switch (m_pidState)
+        {
+        case PID:
+            if (m_gamepad.GetRawButton(DriveStationConstants::buttonB))
+            {
+                m_pidState = VOLTAGE;
+                break;
+            }
+            break;
+        case VOLTAGE:
+            if (m_gamepad.GetRawButton(DriveStationConstants::buttonA))
+            {
+                m_pidState = PID;
+                break;
+            }
+            break;
+        }
+        // IMPORTANT You have Full Joystick Controll So Be Careful
+        float power = m_joystick.GetY();
+        if (fabs(power) < 0.05f)
+        {
+            power = 0.0f;
+        }
+        else
+        {
+            /*
+             * You can get Full Power So BE CAREFUL!
+             * Also if you need to you can set this to a specific value that can be changed at any time.
+             * Just remember that when you change a variable all other functions that use that variable can cause some issues.
+             * Otherwise be safe and have fun!
+             */
+            power = m_joystick.GetY();
+        }
+        // Also you have full throttle controll SO BE CAREFUL!
+        float throttle = m_joystick.GetThrottle();
 
-		switch(testModeSelector)
-		//switch(testModes)
-		{
-		case t_Talons: //Test all Talons on robot
-		{
-			printMSG("0", "All Talons");
-			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
-			printMSG("2", "FRD ENC: " + std::to_string(m_FRDrive.GetEncPosition()));
-			printMSG("3", "FLD ENC: " + std::to_string(m_FLDrive.GetEncPosition()));
-			printMSG("4", "BRD ENC: " + std::to_string(m_BRDrive.GetEncPosition()));
-			printMSG("5", "BLD ENC: " + std::to_string(m_BLDrive.GetEncPosition()));
-			printMSG("6", "RFW ENC: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
-			printMSG("7", "LFW ENC: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
-			printMSG("8", "TRM ENC: " + std::to_string(m_turretRotateMotor.GetEncPosition()));
-			m_FRDrive.goAt(power);
-			m_FLDrive.goAt(power);
-			m_BRDrive.goAt(power);
-			m_BLDrive.goAt(power);
-			m_lowerFlyWheelMotor.goAt(power);
-			m_topFlyWheelMotor.goAt(power);
-			m_turretRotateMotor.goAt(power);
-			break;
-		}
+        // updates the state of the TALONS as PID or VOLTAGE
+        string mode = SmartDashboard::GetString("Test Selector", "none");
+        for (int x = t_Talons; x <= t_DriveTrain; x++)
+        {
+            if (mode == testModes[x])
+            {
+                testModeSelector = static_cast<TestMode>(x);
+            }
+        }
 
-		case t_ShooterHead: //Test Shooter Head
-		{
-			printMSG("0", "Shooter Testing Mode");
-			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
-			printMSG("2", "RFW ENC: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
-			printMSG("3", "LFW ENC: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
-			printMSG("4", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
-			printMSG("5", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
-			if (m_pidState == PID) {
-				m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
-				m_topFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
-				m_lowerFlyWheelMotor.goAt(power);
-				m_topFlyWheelMotor.goAt(power);
-			}
-			else {
-				m_lowerFlyWheelMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-				m_topFlyWheelMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-				m_lowerFlyWheelMotor.Set(power);
-				m_topFlyWheelMotor.Set(power);
-			}
-			break;
-		}
+        /*
+         * So some of the Test Modes have a way that you can controll them with a
+         * Throttle on the Joystick. The way that you can do that is by pressing
+         * Button Y and also moving the throttle at the same time.
+         * Otherwise it won't work. Also some of the Talons can be moved with a
+         * joystick on the gamepad so look for that...
+         */
+        switch (testModeSelector)
+        //switch(testModes)
+        {
+        case t_Talons: //Test all Talons on robot
+        {
+            printMSG("0", "All Talons");
+            printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+            printMSG("2", "FRD ENC: " + std::to_string(m_FRDrive.GetEncPosition()));
+            printMSG("3", "FLD ENC: " + std::to_string(m_FLDrive.GetEncPosition()));
+            printMSG("4", "BRD ENC: " + std::to_string(m_BRDrive.GetEncPosition()));
+            printMSG("5", "BLD ENC: " + std::to_string(m_BLDrive.GetEncPosition()));
+            printMSG("6", "RFW ENC: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
+            printMSG("7", "LFW ENC: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
+            printMSG("8", "TRM ENC: " + std::to_string(m_turretRotateMotor.GetEncPosition()));
+            m_FRDrive.goAt(power);
+            m_FLDrive.goAt(power);
+            m_BRDrive.goAt(power);
+            m_BLDrive.goAt(power);
+            m_lowerFlyWheelMotor.goAt(power);
+            m_topFlyWheelMotor.goAt(power);
+            m_turretRotateMotor.goAt(power);
+            break;
+        }
 
-		case t_Feeder: //Test Feeder
-		{
-			printMSG("0", "Feeder Testing Mode");
-			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
-			printMSG("2", "Feeder ENC: " + std::to_string(m_feederMotor.GetEncPosition()));
-			printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
-			printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
-			if (m_pidState == PID) {
-				m_feederMotor.SetControlMode(CANSpeedController::kSpeed);
-				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
-					m_feederMotor.Set(m_joystick.GetThrottle());
-				}
-				else {
-					m_feederMotor.goAt(power);
-				}
-			}
-			else if (m_pidState == VOLTAGE){
-				m_feederMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
-					m_feederMotor.Set(m_joystick.GetThrottle());
-				}
-				else {
-					m_feederMotor.Set(power);
-				}
-			}
-			break;
-		}
+        case t_ShooterHead: //Test Shooter Head
+        {
+            printMSG("0", "Shooter Testing Mode");
+            printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+            printMSG("2", "RFW ENC: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
+            printMSG("3", "LFW ENC: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
+            printMSG("4", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("5", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
+            if (m_pidState == PID)
+            {
+                m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
+                m_topFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
+                m_lowerFlyWheelMotor.goAt(power);
+                m_topFlyWheelMotor.goAt(power);
+            }
+            else
+            {
+                m_lowerFlyWheelMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_topFlyWheelMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_lowerFlyWheelMotor.Set(power);
+                m_topFlyWheelMotor.Set(power);
+            }
+            break;
+        }
 
-		case t_Indexer: //Test Indexer
-		{
-			printMSG("0", "Indexer Testing Mode");
-			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
-			printMSG("2", "Indexer ENC: " + std::to_string(m_indexerMotor.GetEncPosition()));
-			printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
-			printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
+        case t_Feeder: //Test Feeder
+        {
+            // Feeder Can be controlled with Throttle as well look bellow for more info
+            printMSG("0", "Feeder Testing Mode");
+            printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+            printMSG("2", "Feeder ENC: " + std::to_string(m_feederMotor.GetEncPosition()));
+            printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
+            if (m_pidState == PID)
+            {
+                m_feederMotor.SetControlMode(CANSpeedController::kSpeed);
+                // Feeder Can be controlled with buttonY and also Throttle
+                if (m_gamepad.GetRawButton(DriveStationConstants::buttonY))
+                {
+                    m_feederMotor.goAt(throttle);
+                }
+                else
+                {
+                    m_feederMotor.goAt(power);
+                }
+            }
+            else if (m_pidState == VOLTAGE)
+            {
+                m_feederMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                if (m_gamepad.GetRawButton(DriveStationConstants::buttonY))
+                {
+                    m_feederMotor.Set(throttle);
+                }
+                else
+                {
+                    m_feederMotor.Set(power);
+                }
+            }
+            break;
+        }
 
-			if (m_pidState == PID) {
-				m_indexerMotor.SetControlMode(CANSpeedController::kSpeed);
-				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
-					m_indexerMotor.goAt(m_joystick.GetThrottle());
-				}
-				else {
-					m_indexerMotor.goAt(power);
-				}
-			}
-			else if (m_pidState == VOLTAGE){
-				m_indexerMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
-					m_feederMotor.Set(m_joystick.GetThrottle());
-				}
-				else {
-					m_feederMotor.Set(power);
-				}
-			}
-			break;
-		}
+        case t_Indexer: //Test Indexer
+        {
+            printMSG("0", "Indexer Testing Mode");
+            printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+            printMSG("2", "Indexer ENC: " + std::to_string(m_indexerMotor.GetEncPosition()));
+            printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
 
-		case t_Gatherer: //Test Gather
-		{
-			printMSG("0", "Gather Testing Mode");
-			printMSG("1", "Gatherer Speed: " + std::to_string(m_gathererMotor.GetSpeed()));
-			printMSG("2", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
-			printMSG("3", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
-			m_gathererMotor.Set(power);
-			break;
-		}
+            if (m_pidState == PID)
+            {
+                m_indexerMotor.SetControlMode(CANSpeedController::kSpeed);
+                if (m_gamepad.GetRawButton(DriveStationConstants::buttonY))
+                {
 
-		case t_Turret: //Test Turret
-		{
-			printMSG("0", "Turret Testing Mode");
-			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
-			printMSG("2", "Turret ENC: " + std::to_string(m_turretRotateMotor.GetEncPosition()));
-			printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
-			printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
-			if (m_pidState == PID) {
-				m_turretRotateMotor.SetControlMode(CANSpeedController::kSpeed);
-				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
-					m_turretRotateMotor.goDistance(m_joystick.GetThrottle(),0.5);
-				}
-				else {
-					m_turretRotateMotor.goAt(power);
-				}
-			}
-			else {
-				m_turretRotateMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-				if (m_gamepad.GetRawButton(DriveStationConstants::buttonY)) {
-					m_turretRotateMotor.Set(m_joystick.GetThrottle());
-				}
-				else {
-					m_turretRotateMotor.Set(power);
-				}
-			}
-			break;
-		}
+                    m_indexerMotor.goAt(throttle);
+                }
+                else
+                {
+                    m_indexerMotor.goAt(power);
+                }
+            }
+            else if (m_pidState == VOLTAGE)
+            {
+                m_indexerMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                if (m_gamepad.GetRawButton(DriveStationConstants::buttonY))
+                {
+                    m_feederMotor.Set(throttle);
+                }
+                else
+                {
+                    m_feederMotor.Set(power);
+                }
+            }
+            break;
+        }
 
-		case t_Climber: //Test Climber
-		{
-			printMSG("0", "Climber Testing Mode");
-			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
-			printMSG("2", "Climber ENC: " + std::to_string(m_climberMotor.GetEncPosition()));
-			printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
-			printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
-			if (m_pidState == PID) {
-				m_climberMotor.SetControlMode(CANSpeedController::kSpeed);
-				m_climberMotor.goAt(power);
-			}
-			else if (m_pidState == VOLTAGE){
-				m_climberMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-				m_climberMotor.Set(power);
-			}
-			break;
-		}
+        case t_Gatherer: //Test Gather
+        {
+            printMSG("0", "Gather Testing Mode");
+            printMSG("1", "Gatherer Speed: " + std::to_string(m_gathererMotor.GetSpeed()));
+            printMSG("2", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("3", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
+            m_gathererMotor.Set(power);
+            break;
+        }
 
-		case t_Shooter: //Test all Shooter Components
-		{
-			printMSG("0", "All Shooter Test Mode");
-			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
-			printMSG("4", "EncoderShR: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
-			printMSG("5", "EncoderShL: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
-			printMSG("6", "EncoderF: " + std::to_string(m_feederMotor.GetEncPosition()));
-			printMSG("7", "Throttle: " + std::to_string(((m_joystick.GetThrottle()-1) / 2)));
-			printMSG("8", "EncoderI: " + std::to_string(m_feederMotor.GetEncPosition()));
-			printMSG("9", "Distance: " + std::to_string(m_lidar.getFastAverage()));
-			if ((m_pidState == VOLTAGE) && m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
-				m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0",0.0));
-				m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0",0.0));
-			}
-			else if ((m_pidState == VOLTAGE))
-			{
-				m_feederMotor.Set((m_joystick.GetThrottle()-1) / 2);
-			}
-			else if ((m_pidState == PID) && m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
-				m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0",0.0));
-				m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0",0.0));
-			}
-			else if ((m_pidState == PID)) {
-				m_feederMotor.goAt((m_joystick.GetThrottle()-1) / 2);
-			}
+        case t_Turret: //Test Turret
+        {
+            printMSG("0", "Turret Testing Mode");
+            printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+            printMSG("2", "Turret ENC: " + std::to_string(m_turretRotateMotor.GetEncPosition()));
+            printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
+            if (m_pidState == PID)
+            {
+                m_turretRotateMotor.SetControlMode(CANSpeedController::kSpeed);
+                m_turretRotateMotor.goDistance(power * 25, 0.5);
 
-			//indexer test
-			if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonY))){
-				m_indexerMotor.goDistance(250,0.5);
-			}
-			else if ((m_pidState == PID)) {
-				m_feederMotor.SetControlMode(CANSpeedController::kSpeed);
-				m_indexerMotor.SetControlMode(CANSpeedController::kSpeed);
-				m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
-				m_topFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
-				m_indexerMotor.goAt(power/5);
-				m_lowerFlyWheelMotor.goAt(m_gamepad.GetY());
-				m_topFlyWheelMotor.goAt(m_gamepad.GetY());
-			}
-			else if (m_pidState == VOLTAGE) {
-				m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
-				m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
-				m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
-				m_topFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
-				m_indexerMotor.Set(power/5);
-				m_lowerFlyWheelMotor.Set(m_gamepad.GetY());
-				m_topFlyWheelMotor.Set(m_gamepad.GetY());
-			}
-			// Fly wheel Test
-			if ((m_pidState == VOLTAGE) && (m_gamepad.GetRawButton(DriveStationConstants::buttonRB))){
-				m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1",0.0));
-				m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
-			}
-			else if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonRB))){
-				m_lowerFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1",0.0));
-				m_topFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2",0.0));
-			}
-			m_configEditor.update();
-			break;
-		}
+            }
+            else
+            {
+                m_turretRotateMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                if (m_gamepad.GetRawButton(DriveStationConstants::buttonY))
+                {
+                    m_turretRotateMotor.Set(throttle);
+                }
+                else
+                {
+                    m_turretRotateMotor.Set(power);
+                }
+            }
+            break;
+        }
 
-		case t_DriveTrain: //Test all 4 Drive Train Motors
-		{
-			printMSG("0", "Drive Train Motors Test");
-			printMSG("1", "Control Mode: " + std::to_string(m_pidState));
-			printMSG("2", "FRD ENC: " + std::to_string(m_FRDrive.GetEncPosition()));
-			printMSG("3", "FLD ENC: " + std::to_string(m_FLDrive.GetEncPosition()));
-			printMSG("4", "BRD ENC: " + std::to_string(m_BRDrive.GetEncPosition()));
-			printMSG("5", "BLD ENC: " + std::to_string(m_BLDrive.GetEncPosition()));
-			if (m_pidState == PID) {
-				m_FRDrive.SetControlMode(CANSpeedController::kSpeed);
-				m_FLDrive.SetControlMode(CANSpeedController::kSpeed);
-				m_BRDrive.SetControlMode(CANSpeedController::kSpeed);
-				m_BLDrive.SetControlMode(CANSpeedController::kSpeed);
-				m_FRDrive.goAt(power);
-				m_FLDrive.goAt(power);
-				m_BRDrive.goAt(power);
-				m_BLDrive.goAt(power);
-			}
-			if (m_pidState == VOLTAGE) {
-				m_FRDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-				m_FLDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-				m_BRDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-				m_BLDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-				m_FRDrive.Set(power);
-				m_FLDrive.Set(power);
-				m_BRDrive.Set(power);
-				m_BLDrive.Set(power);
-			}
-			break;
-		}
-		}
-	}
+        case t_Climber: //Test Climber
+        {
+            printMSG("0", "Climber Testing Mode");
+            printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+            printMSG("2", "Climber ENC: " + std::to_string(m_climberMotor.GetEncPosition()));
+            printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
+            if (m_pidState == PID)
+            {
+                m_climberMotor.SetControlMode(CANSpeedController::kSpeed);
+                m_climberMotor.goAt(power);
+            }
+            else if (m_pidState == VOLTAGE)
+            {
+                m_climberMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_climberMotor.Set(power);
+            }
+            break;
+        }
+
+        case t_Shooter: //Test all Shooter Components
+        {
+            printMSG("0", "All Shooter Test Mode");
+            printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+            printMSG("4", "EncoderShR: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
+            printMSG("5", "EncoderShL: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
+            printMSG("6", "EncoderF: " + std::to_string(m_feederMotor.GetEncPosition()));
+            printMSG("7", "Throttle: " + std::to_string(((throttle - 1) / 2)));
+            printMSG("8", "EncoderI: " + std::to_string(m_feederMotor.GetEncPosition()));
+            printMSG("9", "Distance: " + std::to_string(m_lidar.getFastAverage()));
+            if ((m_pidState == VOLTAGE) && m_gamepad.GetRawButton(DriveStationConstants::buttonX))
+            {
+                m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
+                m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
+            }
+            else if ((m_pidState == VOLTAGE))
+            {
+                m_feederMotor.Set((throttle - 1) / 2);
+            }
+            else if ((m_pidState == PID) && m_gamepad.GetRawButton(DriveStationConstants::buttonX))
+            {
+                m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
+                m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
+            }
+            else if ((m_pidState == PID))
+            {
+                m_feederMotor.goAt((throttle - 1) / 2);
+            }
+
+            //indexer test
+            if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonY)))
+            {
+                m_indexerMotor.goDistance(250, 0.5);
+            }
+            // Shooter Test
+            else if ((m_pidState == PID))
+            {
+                m_feederMotor.SetControlMode(CANSpeedController::kSpeed);
+                m_indexerMotor.SetControlMode(CANSpeedController::kSpeed);
+                m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
+                m_topFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
+                m_indexerMotor.goAt(power / 5);
+                m_lowerFlyWheelMotor.goAt(m_gamepad.GetY());
+                m_topFlyWheelMotor.goAt(m_gamepad.GetY());
+            }
+            else if (m_pidState == VOLTAGE)
+            {
+                m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
+                m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+                m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
+                m_topFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
+                m_indexerMotor.Set(power / 5);
+                m_lowerFlyWheelMotor.Set(m_gamepad.GetY());
+                m_topFlyWheelMotor.Set(m_gamepad.GetY());
+            }
+            // Fly wheel Test
+            if ((m_pidState == VOLTAGE) && (m_gamepad.GetRawButton(DriveStationConstants::buttonRB)))
+            {
+                m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1", 0.0));
+                m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2", 0.0));
+            }
+            else if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonRB)))
+            {
+                m_lowerFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1", 0.0));
+                m_topFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2", 0.0));
+            }
+            m_configEditor.update();
+            break;
+        }
+
+        case t_DriveTrain: //Test all 4 Drive Train Motors
+        {
+            printMSG("0", "Drive Train Motors Test");
+            printMSG("1", "Control Mode: " + std::to_string(m_pidState));
+            printMSG("2", "FRD ENC: " + std::to_string(m_FRDrive.GetEncPosition()));
+            printMSG("3", "FLD ENC: " + std::to_string(m_FLDrive.GetEncPosition()));
+            printMSG("4", "BRD ENC: " + std::to_string(m_BRDrive.GetEncPosition()));
+            printMSG("5", "BLD ENC: " + std::to_string(m_BLDrive.GetEncPosition()));
+            if (m_pidState == PID)
+            {
+                m_FRDrive.SetControlMode(CANSpeedController::kSpeed);
+                m_FLDrive.SetControlMode(CANSpeedController::kSpeed);
+                m_BRDrive.SetControlMode(CANSpeedController::kSpeed);
+                m_BLDrive.SetControlMode(CANSpeedController::kSpeed);
+                m_FRDrive.goAt(power);
+                m_FLDrive.goAt(power);
+                m_BRDrive.goAt(power);
+                m_BLDrive.goAt(power);
+            }
+            if (m_pidState == VOLTAGE)
+            {
+                m_FRDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_FLDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_BRDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_BLDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_FRDrive.Set(power);
+                m_FLDrive.Set(power);
+                m_BRDrive.Set(power);
+                m_BLDrive.Set(power);
+            }
+            break;
+        }
+        }
+    }
 }
 
 void Robot::initMainActionGroup ()

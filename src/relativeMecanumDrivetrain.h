@@ -58,8 +58,13 @@ public:
 
 private:
 
-    PIDController m_distanceController;
     HeadingControl m_headingControl;
+    SmartTalon& m_FRTalon;
+    SmartTalon& m_FLTalon;
+    SmartTalon& m_BRTalon;
+    SmartTalon& m_BLTalon;
+    PIDController m_distanceController;
+
 
     double m_distanceOutput;
 
@@ -86,10 +91,7 @@ private:
 
 
 
-    SmartTalon& m_FRTalon;
-    SmartTalon& m_FLTalon;
-    SmartTalon& m_BRTalon;
-    SmartTalon& m_BLTalon;
+
 
 //    RobotDrive m_driveTrain;
 
