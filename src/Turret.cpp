@@ -108,6 +108,9 @@ void Turret::run()
 
                 if (tempTime != m_visionTimeStamp){
                     m_visionTimeStamp = tempTime;
+
+                    //m_prevAngles[0] = m_visionComms.getNumber(JetsonComms::goalId);
+
                     m_prevAngles.push_back(m_visionComms.getNumber(JetsonComms::goalId));
                     m_prevTimes.push_back(m_visionTimeStamp);
                     autoTarget();
@@ -136,7 +139,7 @@ void Turret::autoTarget()
     {
         float slope = (m_prevAngles[0] - m_prevAngles[1]) / (m_prevTimes[0] - m_prevTimes[1]);
         float predictedAngle = slope * m_timer.Get() + m_prevAngles[1];
-        printf("angle:%f\n", predictedAngle);
+        //printf("angle:%f\n", predictedAngle);
         LOGI << "angle " << predictedAngle;
         m_turretRotatorMotor.goDistance(degreeToTicks(predictedAngle), 0.5);
         m_visionComms.setNumber("debug", predictedAngle);
@@ -144,9 +147,9 @@ void Turret::autoTarget()
     else
     {
         std::ostringstream visionDebug;
-        visionDebug << m_prevAngles[2];
+        visionDebug << m_prevAngles[0];
         SmartDashboard::PutString("DB/String 0", visionDebug.str());
-        //m_turretRotatorMotor.goDistance(degreeToTicks(m_prevAngles[2]), 0.5);
+        m_turretRotatorMotor.goDistance(degreeToTicks(m_prevAngles[0]), 0.15);
     }
     m_visionComms.setNumber("debug", -1.0);
 }

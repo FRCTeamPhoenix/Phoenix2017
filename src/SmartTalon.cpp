@@ -98,9 +98,9 @@ void SmartTalon::goDistance (double distance, double speed)
 
     switchToGain (m_distanceGains);
     SetControlMode (CANSpeedController::kPosition);
-    ConfigMaxOutputVoltage(12);
-    SetEncPosition(0);
-	Set(0);
+    ConfigMaxOutputVoltage(12 * speed);
+    //SetEncPosition(0);
+	//Set(0);
     if(m_inverted)
         SetSetpoint(-fPos);
     else
