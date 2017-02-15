@@ -41,7 +41,7 @@ struct PortAssign
 struct RobotConstants
 {
     constexpr static float turretDamp = 0.6f;
-    constexpr static float degreesToTicks = 0.5f; // THIS IS WRONG. NEEDS TO BE CHANGED
+    constexpr static float degreesToTicks = 200.0f / 3.0f;
 };
 
 namespace ConfigVariables
