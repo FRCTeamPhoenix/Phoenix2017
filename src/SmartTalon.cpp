@@ -18,13 +18,15 @@ SmartTalon::SmartTalon (int deviceNumber, json config, FeedbackDevice device) :
 	                     config["distance"]["i"],
                         config["distance"]["d"],
                         config["distance"]["izone"],
-                        config["distance"]["ff"]);
+                        config["distance"]["ff"],
+                        config["distance"]["rr"]);
 
 	m_speedGains.set (config["speed"]["p"],
                      config["speed"]["i"],
                      config["speed"]["d"],
                      config["speed"]["izone"],
-                     config["speed"]["ff"]);
+                     config["speed"]["ff"],
+                     config["speed"]["rr"]);
 
 	m_maxForwardSpeed = config["maxfvel"];
 	m_maxReverseSpeed = config["maxrvel"];
@@ -47,6 +49,7 @@ void SmartTalon::switchToGain (PIDGains gains)
 	SetD (gains.getD ());
 	SetIzone (gains.getIZone ());
 	SetF (gains.getFeedForward ());
+	SetVoltageRampRate(gains.getRampRate ());
 }
 
 void SmartTalon::goTo (double position, double speed)
@@ -186,7 +189,7 @@ void SmartTalon::tunePosition (double pInit, double tuneDistance, double F)
 	}
 	SmartDashboard::PutString ("DB/String 5", "Tuned");
 
-	m_distanceGains.set (GetP(), GetI (), GetD (), 0, GetF ());
+	m_distanceGains.set (GetP(), GetI (), GetD (), 0, GetF (), 0);
 
 	return;
 }
@@ -408,7 +411,7 @@ void SmartTalon::tuneRate (double pInit, double goalRate, int IZone, double F)
 		}
 	}
 
-	m_speedGains.set (GetP(), GetI (), GetD (), GetIzone (), GetF ());
+	m_speedGains.set (GetP(), GetI (), GetD (), GetIzone (), GetF (), 0);
 
 	SmartDashboard::PutString ("DB/String 3", "Tuned");
 	return;
