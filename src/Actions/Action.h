@@ -78,6 +78,11 @@ public:
 
     string getName();
     void initAction(json& action, shared_ptr<Robot> robot);
+
+    void disable(){
+        m_currentCondition = dependency::Disabled;
+    }
+
 protected:
 
 
@@ -97,7 +102,6 @@ protected:
         cout << "IN DEFAULT RUN" << endl;
     }
 
-
     void start(){
         m_currentCondition = dependency::Started;
     }
@@ -108,10 +112,6 @@ protected:
 
     void resetCondition(){
         m_currentCondition = dependency::NotStarted;
-    }
-
-    void disable(){
-        m_currentCondition = dependency::Disabled;
     }
 
     static shared_ptr<Action> generateAction(json& action, shared_ptr<Robot> robot);

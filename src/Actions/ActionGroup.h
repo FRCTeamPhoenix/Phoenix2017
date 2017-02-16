@@ -30,6 +30,8 @@ public:
 
     void resetAction(int place);
 
+    void disableAction(int place);
+
     void initActionGroup(json& actionGroup, shared_ptr<Robot> robot);
 
 private:

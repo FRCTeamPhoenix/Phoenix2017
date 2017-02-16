@@ -94,6 +94,8 @@ public:
 
 	void initAutoMode();
 
+	void switchToTeleoperated();
+
 	//Functions For Robot Actions
 	void driveAt(double speed, double angle);
 

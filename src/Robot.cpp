@@ -66,6 +66,9 @@ void Robot::OperatorControl()
 	LOGI << "Start Teleop";
 	//int count = 0;
 
+	m_mainAutoGroup->disableAction(0);
+	m_mainAutoGroup->resetAction(1);
+
 	while (IsEnabled() && IsOperatorControl())
 	{
 
@@ -540,6 +543,25 @@ void Robot::initAutoMode ()
 		}
 	}
 
+}
+
+void Robot::switchToTeleoperated()
+{
+	vector<shared_ptr<Action>> allActions = m_mainAutoGroup->getContainedActions ();
+	vector<shared_ptr<Action>>::iterator actionIterator;
+	for(actionIterator = allActions.begin(); actionIterator != allActions.end(); actionIterator++)
+	{
+		string name = actionIterator->get ()->getName ();
+
+		if ("Teleoperated" == name)
+		{
+			actionIterator->get ()->reset ();
+		}
+		else
+		{
+			actionIterator->get ()->disable ();
+		}
+	}
 }
 
 void Robot::driveAt(double speed, double angle)
