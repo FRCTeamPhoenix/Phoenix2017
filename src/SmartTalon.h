@@ -32,6 +32,7 @@ public:
     void tunePosition(double pInit, double tuneDistance, double F);
 
     void tuneRate(double pInit, double goalRate, int IZone, double F);
+    bool test();
 
 private:
 
