@@ -16,12 +16,14 @@
 #include "valijson/schema_parser.hpp"
 #include "valijson/validator.hpp"
 
+#include "plog/Log.h"
+
 using valijson::Schema;
 using valijson::SchemaParser;
 using valijson::Validator;
 using valijson::adapters::NlohmannJsonAdapter;
 
-using json=nlohmann::json;
+using namespace nlohmann;
 using namespace std;
 
 class Talons {
@@ -29,14 +31,13 @@ class Talons {
    json m_talonJson;
    json m_schemaJson;
 
-   bool m_status;
-
-   string m_default;
+   json m_default;
 
    public:
       Talons(string jsonPath, string schemaPath);
       json getTalonConfig(int talonId);
       virtual ~Talons();
+      bool m_status;
 };
 
 #endif /* SRC_TALONS_H_ */

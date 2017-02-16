@@ -80,6 +80,10 @@ void Robot::Test()
     m_BRDrive.SetControlMode(CANSpeedController::kPercentVbus);
     m_BLDrive.SetControlMode(CANSpeedController::kPercentVbus);
 
+    stringstream ss;
+    ss << m_talons.m_status;
+    SmartDashboard::PutString("DB/String 7", ss.str());
+
     LOGI << "Start Test Mode";
     while (IsEnabled() && IsTest())
     {

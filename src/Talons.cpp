@@ -5,13 +5,13 @@
  *      Author: Ian
  */
 
-#include <Talons.h>
+#include "Talons.h"
 
 Talons::Talons(string jsonPath, string schemaPath) {
    ifstream jsonStream;
    ifstream schemaStream;
 
-   m_default = "\"speed\": {"
+   m_default = "{\"speed\": {"
          "\"p\": 0,"
          "\"i\": 0,"
          "\"d\": 0,"
@@ -29,8 +29,8 @@ Talons::Talons(string jsonPath, string schemaPath) {
       "},"
       "\"maxfvel\": 0,"
       "\"maxrvel\": 0,"
-      "\"inverted\": false";
-   m_status = false;
+      "\"inverted\": false}"_json;
+   m_status = true;
 
    try
    {
@@ -67,8 +67,10 @@ Talons::Talons(string jsonPath, string schemaPath) {
    {
       cout << runtime.what() << endl;
 
-      return;
+      m_status = false;
    }
+
+
 }
 
 json Talons::getTalonConfig(int talonId) {
@@ -76,10 +78,10 @@ json Talons::getTalonConfig(int talonId) {
       if(m_status)
          return m_talonJson[talonId - 1];
       else
-         return json(m_default);
+         return m_default;
    } catch(out_of_range& error) {
       cout << error.what() << endl;
-      return json(m_default);
+      return m_default;
    }
 }
 
