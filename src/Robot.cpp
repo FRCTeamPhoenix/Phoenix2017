@@ -562,4 +562,13 @@ bool Robot::doneDriveMove (double tolerance)
 	return m_drivetrain.doneMove (tolerance);
 }
 
+void Robot::driveJoystick()
+{
+	double FB = -m_joystick.GetX();
+	double LF = m_joystick.GetY();
+	double rot = m_joystick.GetZ();
+
+	m_drivetrain.moveRelative(FB, LF, rot);
+}
+
 START_ROBOT_CLASS(Robot)

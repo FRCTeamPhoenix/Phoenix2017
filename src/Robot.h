@@ -103,7 +103,7 @@ public:
 
 	bool doneDriveMove(double tolerance);
 
-
+	void driveJoystick();
 
 	//End of Functions for Actions
 
