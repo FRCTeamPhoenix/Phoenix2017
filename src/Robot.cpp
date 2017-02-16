@@ -116,7 +116,6 @@ public:
                 m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 m_indexerMotor.ConfigMaxOutputVoltage(3);
-
                 m_topFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
 
@@ -142,6 +141,7 @@ public:
                    {
                        m_feederMotor.Set((m_joystick.GetThrottle()-1) / 2);
                    }
+
                     std::ostringstream throttleValue;
                     throttleValue << "Throttle: ";
                     throttleValue << ((m_joystick.GetThrottle()-1) / 2);
@@ -182,18 +182,20 @@ public:
 
                        // Velocity-based (implement only after PID tuning of flywheel motors)
 
-                       m_topFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1",0.0));
-                       m_lowerFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2",0.0));
+                       m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1",0.0));
+                       m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
 
 
                    }
 
                    else
                    {
-                       m_topFlyWheelMotor.goAt(0);
-                       m_lowerFlyWheelMotor.goAt(0);
-//                       m_topFlyWheelMotor.Set(-m_joystick.GetY());
-//                       m_lowerFlyWheelMotor.Set(-m_joystick.GetY());
+//                       m_topFlyWheelMotor.goAt(0);
+//                       m_lowerFlyWheelMotor.goAt(0);
+//                       m_topFlyWheelMotor.goAt(m_joystick.GetY());
+//                       m_lowerFlyWheelMotor.goAt(m_joystick.GetY());
+                      m_topFlyWheelMotor.Set(m_joystick.GetY());
+                      m_lowerFlyWheelMotor.Set(m_joystick.GetY());
                    }
 
 
