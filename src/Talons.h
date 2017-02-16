@@ -31,6 +31,8 @@ class Talons {
 
    bool m_status;
 
+   string m_default;
+
    public:
       Talons(string jsonPath, string schemaPath);
       json getTalonConfig(int talonId);

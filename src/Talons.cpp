@@ -11,6 +11,25 @@ Talons::Talons(string jsonPath, string schemaPath) {
    ifstream jsonStream;
    ifstream schemaStream;
 
+   m_default = "\"speed\": {"
+         "\"p\": 0,"
+         "\"i\": 0,"
+         "\"d\": 0,"
+         "\"izone\": 0,"
+         "\"ff\": 0,"
+         "\"rr\": 0"
+      "},"
+      "\"distance\": {"
+         "\"p\": 0,"
+         "\"i\": 0,"
+         "\"d\": 0,"
+         "\"izone\": 0,"
+         "\"ff\": 0,"
+         "\"rr\": 0"
+      "},"
+      "\"maxfvel\": 0,"
+      "\"maxrvel\": 0,"
+      "\"inverted\": false";
    m_status = false;
 
    try
@@ -57,10 +76,10 @@ json Talons::getTalonConfig(int talonId) {
       if(m_status)
          return m_talonJson[talonId - 1];
       else
-         return json("{}");
+         return json(m_default);
    } catch(out_of_range& error) {
       cout << error.what() << endl;
-      return json("{}");
+      return json(m_default);
    }
 }
 
