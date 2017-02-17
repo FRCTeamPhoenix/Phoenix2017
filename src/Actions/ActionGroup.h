@@ -48,7 +48,7 @@ public:
      * "doneDependencies": an array of dependency objects [leave empty to run forever]
      * All Base Action Json
      *
-     */
+     * /
     void initActionGroup(json& actionGroup, shared_ptr<Robot> robot);
 
     /*
