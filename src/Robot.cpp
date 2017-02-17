@@ -457,7 +457,6 @@ void Robot::Test()
 
 void Robot::initMainActionGroup ()
 {
-	bool validJson = true;
 	json myJsonDoc;
 	json mySchemaDoc;
 

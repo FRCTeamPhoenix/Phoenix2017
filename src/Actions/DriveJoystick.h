@@ -22,10 +22,10 @@ public:
 	DriveJoystick(vector<shared_ptr<dependency>> dependencies);
 	DriveJoystick(json& action, shared_ptr<Robot> robot);
 
+    virtual ~DriveJoystick();
 private:
 	void run();
 	void reset();
-	virtual ~DriveJoystick();
 };
 
 #endif /* SRC_ACTIONS_DRIVEJOYSTICK_H_ */
