@@ -7,15 +7,41 @@
   "startingCondition": 0,
   "containedActions": [
     {
-      "type": "GoDistance",
-      "name": "Drive Forward Auto",
+      "type": "ActionGroup",
+      "name": "Gear Auto",
       "startingCondition": -1,
-      "dependencies": [],
-
-      "distance": 10000,
-      "angle": 0,
-      "speed": 0.5,
-      "tolerance": 0.05
+      "containedActions":[
+      	{
+	      	"type": "GoDistance",
+	      	"name": "First gear move",
+	      	"startingCondition": 0,
+	      	
+	      	"distance": 20000,
+	      	"angle": 0,
+	      	"speed": 0.5,
+	      	"tolerance": 0.05,
+	      	
+	      	"dependencies": []
+      	}
+      ],
+        "dependencies": [],
+  		"doneDependencies": []
+    },
+    
+    {
+      "type": "ActionGroup",
+      "name": "Teleoperated",
+      "startingCondition": -1,
+      "containedActions":[
+      	{
+	      	"type": "DriveJoystick",
+	      	"name": "joystick":,
+	      	"startingCondition": 0,	      	
+	      	"dependencies": []
+      	}
+      ]
+        "dependencies": [],
+  		"doneDependencies": []
     }
   ],
   "dependencies": [],

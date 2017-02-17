@@ -94,6 +94,8 @@ public:
 
 	void initAutoMode();
 
+	void switchToTeleoperated();
+
 	//Functions For Robot Actions
 	void driveAt(double speed, double angle);
 
@@ -103,7 +105,7 @@ public:
 
 	bool doneDriveMove(double tolerance);
 
-
+	void driveJoystick();
 
 	//End of Functions for Actions
 

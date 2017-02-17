@@ -101,3 +101,8 @@ void ActionGroup::resetAction (int place)
 {
     m_containedActions[place].get ()->reset ();
 }
+
+void ActionGroup::disableAction (int place)
+{
+    m_containedActions[place].get ()->disable();
+}

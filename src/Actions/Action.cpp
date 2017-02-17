@@ -25,21 +25,21 @@ Action::Action ():
 
 }
 
+
 void Action::initAction (json &action, shared_ptr<Robot> robot)
 {
 
     m_name = "unnamed";
     m_robot = robot;
 
-    	json deps = action["dependencies"];
+    json deps = action["dependencies"];
 
-        for (json::iterator d = deps.begin (); d != deps.end (); d++)
-        {
-            m_dependencies.push_back (make_shared<dependency> (*d));
-        }
-//        m_currentCondition = dependency::NotStarted;
-        m_currentCondition = (dependency::condition)action["startingCondition"].get<int>();
-        m_name = action["name"];
+    for (json::iterator d = deps.begin (); d != deps.end (); d++)
+    {
+        m_dependencies.push_back (make_shared<dependency> (*d));
+    }
+    m_currentCondition = (dependency::condition)action["startingCondition"].get<int>();
+    m_name = action["name"];
 
 }
 
@@ -61,11 +61,6 @@ bool Action::issuable (vector<shared_ptr<Action>> &allActions)
     return dependenciesMet;
 }
 
-dependency::condition Action::getCondition ()
-{
-    return m_currentCondition;
-}
-
 void Action::execute (vector<shared_ptr<Action>>& allActions)
 {
     if(dependency::condition::Disabled == getCondition()){
@@ -84,6 +79,23 @@ void Action::execute (vector<shared_ptr<Action>>& allActions)
     }
 
 
+}
+
+void Action::reset()
+{
+    cout << "IN DEFAULT RESET" << endl;
+    resetCondition();
+}
+
+
+dependency::condition Action::getCondition ()
+{
+    return m_currentCondition;
+}
+
+void Action::disable()
+{
+    m_currentCondition = dependency::Disabled;
 }
 
 string Action::getName ()

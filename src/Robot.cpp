@@ -66,6 +66,9 @@ void Robot::OperatorControl()
 	LOGI << "Start Teleop";
 	//int count = 0;
 
+	m_mainAutoGroup->disableAction(0);
+	m_mainAutoGroup->resetAction(1);
+
 	while (IsEnabled() && IsOperatorControl())
 	{
 
@@ -542,6 +545,25 @@ void Robot::initAutoMode ()
 
 }
 
+void Robot::switchToTeleoperated()
+{
+	vector<shared_ptr<Action>> allActions = m_mainAutoGroup->getContainedActions ();
+	vector<shared_ptr<Action>>::iterator actionIterator;
+	for(actionIterator = allActions.begin(); actionIterator != allActions.end(); actionIterator++)
+	{
+		string name = actionIterator->get ()->getName ();
+
+		if ("Teleoperated" == name)
+		{
+			actionIterator->get ()->reset ();
+		}
+		else
+		{
+			actionIterator->get ()->disable ();
+		}
+	}
+}
+
 void Robot::driveAt(double speed, double angle)
 {
 	m_drivetrain.moveAt (speed, angle);
@@ -560,6 +582,15 @@ void Robot::rotateAngle (double angle, double speed)
 bool Robot::doneDriveMove (double tolerance)
 {
 	return m_drivetrain.doneMove (tolerance);
+}
+
+void Robot::driveJoystick()
+{
+	double FB = -m_joystick.GetX();
+	double LF = m_joystick.GetY();
+	double rot = m_joystick.GetZ();
+
+	m_drivetrain.moveRelative(FB, LF, rot);
 }
 
 START_ROBOT_CLASS(Robot)
