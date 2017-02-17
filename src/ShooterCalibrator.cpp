@@ -52,10 +52,12 @@ double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<Dist
     // Otherwise, if distance isn't below/between the first pair of reference values, choose greater values
     else if (distance > dvPairs[1].getDistance())
     {
-        i1++;
-        d1 = dvPairs[i1].getDistance();
-        i2++;
-        d2 = dvPairs[i2].getDistance();
+        while (d2 <= distance) {
+            i1++;
+            d1 = dvPairs[i1].getDistance();
+            i2++;
+            d2 = dvPairs[i2].getDistance();
+        }
     }
 
     // Lower and upper bounds on power
@@ -69,13 +71,13 @@ double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<Dist
     double vReq = m*(distance - d1) + v1;
 
     // Don't shoot with power below 0.1 or above 0.85
-    if (vReq < 0.1)
+    if (vReq < 0.15)
     {
-        return 0.1;
+        return 0.15;
     }
-    else if (vReq > 0.85)
+    else if (vReq > 0.75)
     {
-        return 0.85;
+        return 0.75;
     }
     else
     {
@@ -156,6 +158,12 @@ void ShooterCalibrator::sortRefVals(vector<DistanceVelocityPair>& dvPairs) {
         dvPairs[j].setDistance(currentDistance);
         dvPairs[j].setVelocity(currentVelocity);
     }
+
+}
+
+void ShooterCalibrator::initialize() {
+
+
 
 }
 

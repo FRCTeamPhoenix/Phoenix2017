@@ -12,8 +12,8 @@
 #include "json.hpp"
 #include <fstream>
 
-#ifndef SRC_DISTANCEPOWERPAIR_H_
-#define SRC_DISTANCEPOWERPAIR_H_
+#ifndef SRC_DISTANCEVELOCITYPAIR_H_
+#define SRC_DISTANCEVELOCITYPAIR_H_
 
 using namespace std;
 using json=nlohmann::json;
@@ -42,4 +42,4 @@ class DistanceVelocityPair
 
 
 
-#endif /* SRC_DISTANCEPOWERPAIR_H_ */
+#endif /* SRC_DISTANCEVELOCITYPAIR_H_ */

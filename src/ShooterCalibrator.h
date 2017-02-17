@@ -35,6 +35,7 @@ public:
         double getDistance(double power);
 
         void sortRefVals(vector<DistanceVelocityPair>& dvPairs);
+        void initialize();
 
         ~ShooterCalibrator();
 
