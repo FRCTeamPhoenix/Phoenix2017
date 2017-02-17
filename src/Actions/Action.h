@@ -67,36 +67,70 @@ public:
     Action(vector<shared_ptr<dependency>> dependencies);
     Action();
 
-    dependency::condition getCondition();
 
+
+    /*
+     * Default:
+     * Used to check if an action can be run through checking the Dependencies and if the condition of
+     * the action it not Disabled or Finished
+     *
+     * Override:
+     * Should not be overridden unless a move complex check of if the action is needed.
+     */
     virtual void execute(vector<shared_ptr<Action>>& allActions);
 
-    virtual void reset()
-    {
-        cout << "IN DEFAULT RESET" << endl;
-    }
+    /*
+     * Default:
+     * Sets the condition of the action to NotStarted(0), will bring actions out of disabled
+     *
+     * Override:
+     * Should be overridden to set the action back to its NotStarted condition, as well as calling
+     * resetCondition
+     */
+    virtual void reset();
 
-    string getName();
+    /*
+     * Used to populate the base action from the json file
+     * Expected to be called in the constructor of the higher
+     * level action
+     *
+     * Expected Json Values
+     *
+     * "dependencies": array of dependency objects
+     * "startingCondition": int
+     * "name": string
+     *
+     */
     void initAction(json& action, shared_ptr<Robot> robot);
 
-    void disable(){
-        m_currentCondition = dependency::Disabled;
-    }
+    void disable();
+
+    dependency::condition getCondition();
+
+    string getName();
 
 protected:
 
-
+    /*
+     * Default:
+     * Checks if the passed in dependencies are met and if they are return true
+     *
+     * Override:
+     * Should not be overridden unless a more complex check of dependencies is needed
+     */
     virtual bool issuable(vector<shared_ptr<Action>>& allActions);
 
-    vector<shared_ptr<dependency>> m_dependencies;
-
-    dependency::condition m_currentCondition;
-
-    shared_ptr<Robot> m_robot;
-
-
-    string m_name;
-
+    /*
+     * Default:
+     * Does nothing
+     *
+     * Override:
+     * Should be overriden and all the logic that is needed to run the action should be put in this funciton
+     * as well as controlling its condition
+     *
+     * Note:
+     * This funciton will not be called it Issuable returns false or the condition is Finished(2) or Disabled(-1)
+     */
     virtual void run()
     {
         cout << "IN DEFAULT RUN" << endl;
@@ -114,7 +148,15 @@ protected:
         m_currentCondition = dependency::NotStarted;
     }
 
+    /*
+     * Forward delcarationg for the actionFactory, more indepth explanation can be found in Actions/actionFactory
+     */
     static shared_ptr<Action> generateAction(json& action, shared_ptr<Robot> robot);
+
+    vector<shared_ptr<dependency>> m_dependencies;
+    dependency::condition m_currentCondition;
+    shared_ptr<Robot> m_robot;
+    string m_name;
 
 
 };

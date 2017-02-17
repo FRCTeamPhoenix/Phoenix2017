@@ -18,6 +18,18 @@ using json=nlohmann::json;
 
 class Robot;
 
+/*
+ * This is where the actions are created in the heep and then pushed to an action group.
+ * All the actions that come out of this factory need to be created through their Json
+ * constructor. When a new action type is created it needs to be added to the factory,
+ * if the type of an action can not be determained or is not found an empty action is returned.
+ *
+ * Expected Json Values
+ *
+ * "type": one of the types below as a string
+ * All expected Json values for the desired action and for a base action
+ */
+
 shared_ptr<Action> Action::generateAction (json &action, shared_ptr<Robot> robot)
 {
     string type = "";
@@ -28,50 +40,36 @@ shared_ptr<Action> Action::generateAction (json &action, shared_ptr<Robot> robot
     catch (...)
     {
         std::cout << "No type declared" << std::endl;
-        return NULL;
+        return make_shared<Action>();
     }
 
     if ("ActionGroup" == type)
     {
-        cout << "Create Action Group" << endl;
-
         return make_shared<ActionGroup>(action, robot);
     }
     else if("CountUp" == type)
     {
-        cout << "Create Count Up" << endl;
-
         return make_shared<CountUp>(action, robot);
     }
     else if("resetAction" == type)
     {
-        cout << "Create Reset Action" << endl;
-
         return make_shared<resetAction>(action, robot);
     }
     else if("GoDistance" == type)
     {
-        cout << "Create Go Distance" << endl;
-        shared_ptr<Action> newAction = make_shared<GoDistance>(action, robot);
-
-        cout << "Created Go Distance" << endl;
-        return newAction;
+        return make_shared<GoDistance>(action, robot);
     }
     else if("Rotate" == type)
     {
-        cout << "Create Rotate" << endl;
-        shared_ptr<Action> newAction = make_shared<Rotate>(action, robot);
-        return newAction;
+        return make_shared<Rotate>(action, robot);
     }
     else if("DriveJoystick" == type)
     {
-        cout << "Create Rotate" << endl;
-        shared_ptr<Action> newAction = make_shared<DriveJoystick>(action, robot);
-        return newAction;
+        return make_shared<DriveJoystick>(action, robot);
     }
     else{
         cout << "Type Not Found" << endl;
-        return NULL;
+        return make_shared<Action>();
     }
 
 }
