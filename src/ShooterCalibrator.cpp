@@ -34,7 +34,7 @@ ShooterCalibrator::ShooterCalibrator()
 
 }
 
-double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<DistanceVelocityPair> dvPairs) {
+double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<DistanceVelocityPair>& dvPairs) {
 
     // Lower and upper indices on dpPairs
     int i1 = 0;
@@ -44,13 +44,15 @@ double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<Dist
     double d2 = dvPairs[i2].getDistance();
 
     // Use last two reference values if distance exceeds greatest value
-    if (distance > dvPairs[dvPairs.size() - 1].getDistance())
+    if (distance >= dvPairs[dvPairs.size() - 1].getDistance())
     {
         i1 = dvPairs.size() - 2;
+        d1 = dvPairs[i1].getDistance();
         i2 = i1 + 1;
+        d2 = dvPairs[i2].getDistance();
     }
     // Otherwise, if distance isn't below/between the first pair of reference values, choose greater values
-    else if (distance > dvPairs[1].getDistance())
+    else if (distance >= dvPairs[1].getDistance())
     {
         while (d2 <= distance) {
             i1++;
@@ -70,57 +72,7 @@ double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<Dist
     // Required power (linear interpolation)
     double vReq = m*(distance - d1) + v1;
 
-    // Don't shoot with power below 0.1 or above 0.85
-    if (vReq < 0.15)
-    {
-        return 0.15;
-    }
-    else if (vReq > 0.75)
-    {
-        return 0.75;
-    }
-    else
-    {
-        return vReq;
-    }
-
-}
-
-double ShooterCalibrator::interpolateDistanceLinear(double velocity, vector<DistanceVelocityPair> dvPairs) {
-
-    // Lower and upper indices on dpPairs
-    int i1 = 0;
-    int i2 = 1;
-    // Lower and upper bounds on power (start with first two reference values)
-    double p1 = dvPairs[i1].getVelocity();
-    double p2 = dvPairs[i2].getVelocity();
-
-    // Use last two reference values if power exceeds greatest value
-    if (velocity > dvPairs[dvPairs.size() - 1].getVelocity())
-    {
-        i1 = dvPairs.size() - 2;
-        i2 = i1 + 1;
-    }
-    // Otherwise, if power isn't below/between the first pair of reference values, choose greater values
-    else if (velocity > dvPairs[1].getVelocity())
-    {
-        i1++;
-        p1 = dvPairs[i1].getVelocity();
-        i2++;
-        p2 = dvPairs[i2].getVelocity();
-    }
-
-    // Lower and upper bounds on distance
-    double d1 = dvPairs[i1].getDistance();
-    double d2 = dvPairs[i2].getDistance();
-
-    // Change in power per unit distance
-    double m = (d2 - d1)/(p2 - p1);
-
-    // Estimated distance (linear interpolation)
-    double distanceEst = m*(velocity - p1) + d1;
-
-    return distanceEst;
+    return vReq;
 
 }
 

@@ -48,8 +48,7 @@ private:
         vector<DistanceVelocityPair> dvPairsLow;
         vector<DistanceVelocityPair> dvPairsTop;
 
-        double interpolateVelocityLinear(double distance, vector<DistanceVelocityPair> dvPairs);
-        double interpolateDistanceLinear(double power, vector<DistanceVelocityPair> dvPairs);
+        double interpolateVelocityLinear(double distance, vector<DistanceVelocityPair>& dvPairs);
 
 };
 
