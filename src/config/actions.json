@@ -1,0 +1,24 @@
+{
+  "description": "",
+  "lasted_edited": "",
+
+  "type": "ActionGroup",
+  "name": "All Actions",
+  "startingCondition": 0,
+  "containedActions": [
+    {
+      "type": "GoDistance",
+      "name": "Drive Forward Auto",
+      "startingCondition": -1,
+      "dependencies": [],
+
+      "distance": 10000,
+      "angle": 0,
+      "speed": 0.5,
+      "tolerance": 0.05
+    }
+  ],
+  "dependencies": [],
+  "doneDependencies": []
+
+}

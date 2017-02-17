@@ -10,9 +10,13 @@
 FlyWheels::FlyWheels(
         SmartTalon& rightFlyWheelMotor,
         SmartTalon& leftFlyWheelMotor,
+        ShooterCalibrator& shooterCalibrator,
+        Lidar& lidar,
         Joystick& gamepad):
         m_rightFlyWheelMotor(rightFlyWheelMotor),
         m_leftFlyWheelMotor(leftFlyWheelMotor),
+        m_shooterCalibrator(shooterCalibrator),
+        m_lidar(lidar),
         m_gamepad(gamepad)
 {
     m_state = STATE::OFF;
@@ -28,31 +32,25 @@ void FlyWheels::run()
     switch (m_state)
     {
 
-    //Off State for the FlyWheels
-    //Motors are given 0.0f to stop the flywheels
-    //Changes state to On if the right trigger is pressed
-    case OFF:
-        m_rightFlyWheelMotor.goAt(0.0); //stop right FlyWheel
-        m_leftFlyWheelMotor.goAt(0.0); //stop left FlyWheel
-
-        if (m_gamepad.GetRawButton(DriveStationConstants::triggerRT))
-        {
-            setState(ON);
-        }
-        break;
-
-        //On state for the FlyWheels
-        //Motors are given a fixed value
-        //Changes state to Off if the left trigger is pressed
-    case ON:
-        m_rightFlyWheelMotor.goAt(motorSpeed); // set right FlyWheel speed
-        m_leftFlyWheelMotor.goAt(motorSpeed); //set left FlyWheel speed
-
-        if (m_gamepad.GetRawButton(DriveStationConstants::triggerLT))
-        {
-            setState(OFF);
-        }
-        break;
+        //Off State for the FlyWheels
+        //Motors are given 0.0f to stop the flywheels
+        //Changes state to On if the right trigger is pressed
+        case OFF: //
+            m_rightFlyWheelMotor.goAt(0.0); //stop right FlyWheel
+            m_leftFlyWheelMotor.goAt(0.0); //stop left FlyWheel
+            break;
+        case FLATRATE: //Speed based on given number.
+            setLeftSpeed(0.5);
+            setRightSpeed(0.5);
+            break;
+        case LIDARRATE: //Speed based on lidar Distance
+            setRightSpeed(m_shooterCalibrator.getFlywheelPower(m_lidar.getFastAverage()));
+            setLeftSpeed(m_shooterCalibrator.getFlywheelPower(m_lidar.getFastAverage()));
+            break;
+        case JOYSTICKRATE: //The position that the joystick is in determines the speed.
+            setRightSpeed(m_gamepad.GetY());
+            setRightSpeed(m_gamepad.GetY());
+            break;
     }
 }
 
@@ -67,4 +65,20 @@ void FlyWheels::setState(STATE state)
 {
     m_state = state;
 
+}
+
+void FlyWheels::setLeftSpeed(double speed)
+{
+    m_leftFlyWheelMotor.goAt(speed);
+}
+
+void FlyWheels::setRightSpeed(double speed)
+{
+    m_rightFlyWheelMotor.goAt(speed);
+}
+
+void FlyWheels::setBothSpeed(double speed)
+{
+    m_leftFlyWheelMotor.goAt(speed);
+    m_rightFlyWheelMotor.goAt(speed);
 }

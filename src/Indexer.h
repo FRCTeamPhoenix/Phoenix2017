@@ -14,24 +14,24 @@
 class Indexer
 {
 public:
-    Indexer(SmartTalon* indexerMotor, Joystick* gamepad);
+    Indexer(SmartTalon& indexerMotor, Joystick& gamepad);
     virtual ~Indexer();
 
-    enum State
-    {
+    enum State {
+        TELEOP,
         ON,
-        OFF,
-        QUARTER_TURN
+        OFF
     };
 
+    //true is TELEOP, false is AUTO
     State getState();
     void setState(State state);
     void run();
 
 private:
     State m_state;
-    SmartTalon* m_indexerMotor;
-    Joystick* m_gamepad;
+    SmartTalon& m_indexerMotor;
+    Joystick& m_gamepad;
 };
 
 #endif /* SRC_INDEXER_H_ */

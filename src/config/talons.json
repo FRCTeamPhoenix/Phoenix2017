@@ -1,0 +1,193 @@
+{
+	"1": {
+		"speed": {
+			"p": 0.2,
+			"i": 0.0005,
+			"d": 0,
+			"izone": 14000,
+			"ff": 0.25
+		},
+		"distance": {
+			"p": 5.4,
+			"i": 0,
+			"d": 108,
+			"izone": 14000,
+			"ff": 0.5
+		},
+		"maxfvel": 6500,
+		"maxrvel": 6500,
+		"inverted": false
+	},
+	"2": {
+		"speed": {
+			"p": 0.2,
+			"i": 0.0005,
+			"d": 0,
+			"izone": 14000,
+			"ff": 0.25
+		},
+		"distance": {
+			"p": 5.4,
+			"i": 0,
+			"d": 108,
+			"izone": 14000,
+			"ff": 0.5
+		},
+		"maxfvel": 6500,
+		"maxrvel": 6500,
+		"inverted": true
+	},
+	"3": {
+		"speed": {
+			"p": 0.0325,
+			"i": 0.00006,
+			"d": 0,
+			"izone": 80000,
+			"ff": 0.005
+		},
+		"distance": {
+			"p": 5.4,
+			"i": 0,
+			"d": 108,
+			"izone": 4000,
+			"ff": 0.5
+		},
+		"maxfvel": 40000,
+		"maxrvel": 40000,
+		"inverted": false
+	},
+	"4": {
+		"speed": {
+			"p": 0.024,
+			"i": 0.00007,
+			"d": 0,
+			"izone": 80000,
+			"ff": 0.005
+		},
+		"distance": {
+			"p": 5.4,
+			"i": 0,
+			"d": 108,
+			"izone": 4000,
+			"ff": 0.5
+		},
+		"maxfvel": 40000,
+		"maxrvel": 40000,
+		"inverted": false
+	},
+	"5": {
+		"speed": {
+			"p": 0.0122,
+			"i": 0.000061,
+			"d": 0,
+			"izone": 58000,
+			"ff": 0.5
+		},
+		"distance": {
+			"p": 0.048,
+			"i": 0,
+			"d": 0,
+			"izone": 4000,
+			"ff": 0.5
+		},
+		"maxfvel": 29000,
+		"maxrvel": 29000,
+		"inverted": false
+	},
+	"6": {
+		"speed": {
+			"p": 0.5,
+			"i": 0.00015,
+			"d": 0,
+			"izone": 1600,
+			"ff": 0.0
+		},
+		"distance": {
+			"p": 1,
+			"i": 0,
+			"d": 0,
+			"izone": 4000,
+			"ff": 0.5
+		},
+		"maxfvel": 800,
+		"maxrvel": 800,
+		"inverted": false
+	},
+	"7": {
+		"speed": {
+			"p": 0.2,
+			"i": 0.0005,
+			"d": 0,
+			"izone": 14000,
+			"ff": 0.25
+		},
+		"distance": {
+			"p": 0,
+			"i": 0,
+			"d": 0,
+			"izone": 14000,
+			"ff": 0
+
+		},
+		"maxfvel": 6500,
+		"maxrvel": 6500,
+		"inverted": false
+	},
+	"8": {
+		"speed": {
+			"p": 0.2,
+			"i": 0.0005,
+			"d": 0,
+			"izone": 14000,
+			"ff": 0.25
+		},
+		"distance": {
+			"p": 1,
+			"i": 0,
+			"d": 0,
+			"izone": 4000,
+			"ff": 0.5
+		},
+		"maxfvel": 6500,
+		"maxrvel": 6500,
+		"inverted": true
+	},
+	"9": {
+		"speed": {
+			"p": 1,
+			"i": 0,
+			"d": 0,
+			"izone": 4000,
+			"ff": 0.5
+		},
+		"distance": {
+			"p": 1,
+			"i": 0,
+			"d": 0,
+			"izone": 4000,
+			"ff": 0.5
+		},
+		"maxfvel": 2000,
+		"maxrvel": 2000,
+		"inverted": false
+	},
+    "10": {
+        "speed": {
+             "p": 0.2,
+             "i": 0.0005,
+             "d": 0,
+             "izone": 14000,
+             "ff": 0.25
+         },
+        "distance": {
+            "p": 1,
+            "i": 0,
+            "d": 0,
+            "izone": 4000,
+            "ff": 0.5
+        },
+        "maxfvel": 6500,
+        "maxrvel": 6500,
+        "inverted": true
+    }
+}

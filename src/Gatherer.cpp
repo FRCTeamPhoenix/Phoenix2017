@@ -5,9 +5,9 @@
  *      Author: cbadu
  */
 
-#include <Gatherer.h>
+#include "Gatherer.h"
 
-Gatherer::Gatherer(Talon* gathererMotor, Joystick* gamepad):
+Gatherer::Gatherer(Talon& gathererMotor, Joystick& gamepad):
     m_gathererMotor(gathererMotor),
     m_gamepad(gamepad)
 {
@@ -33,13 +33,9 @@ void Gatherer::run()
     switch (m_state)
     {
     case ON:
-        m_gathererMotor->Set(0.5);
+        m_gathererMotor.Set(0.5);
         break;
     case OFF:
-        if (m_gamepad->GetRawButton(DriveStationConstants::buttonX))
-            m_gathererMotor->Set(0.5);
-        else
-            m_gathererMotor->Set(0.0);
-        break;
+        m_gathererMotor.Set(0.0);
     }
 }

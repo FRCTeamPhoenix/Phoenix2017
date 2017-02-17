@@ -2,7 +2,7 @@
  * Climber.h
  *
  *  Created on: Jan 10, 2017
- *      Author: evsci_000
+ *      Author: Joshua Calzadillas
  */
 #include "WPILib.h"
 #include "SmartTalon.h"
@@ -17,25 +17,27 @@
 
 class Climber
 {
-    public:
-        enum STATE
-         {
-             OFF,
-             ON
-         };
-        Climber(SmartTalon & motor,
-                Joystick & gamepad
-        );
-        virtual ~Climber();
-        void move(double speed);
-        void stop();
-        void run();
+public:
+	Climber(SmartTalon & motor,
+			Joystick & gamepad
+	);
+	virtual ~Climber();
+	enum STATE
+	{
+		OFF,
+		ON
+	};
+	void updateButton(); // Checks to see if the button is pressed on the Smart Train Dashboard console
+	void move(double speed);
+	void stop();
+	void run();
+	STATE getState();
+	void setState(STATE state);
 
-    private:
-        SmartTalon & m_motor;
-        Joystick & m_gamepad;
-        STATE m_state;
-
+private:
+	SmartTalon & m_motor;
+	Joystick & m_gamepad;
+	STATE m_state;
 
 };
 

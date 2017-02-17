@@ -6,6 +6,8 @@
 #define PHOENIX2017_RELATIVEMECANUMDRIVETRAIN_H
 
 #include "SmartTalon.h"
+#include "HeadingControl.h"
+#include "ADIS16448_IMU.h"
 #include "WPILib.h"
 
 class relativeMecanumDrivetrain : public PIDOutput, public PIDSource
@@ -33,9 +35,9 @@ class relativeMecanumDrivetrain : public PIDOutput, public PIDSource
  */
 
 public:
-    relativeMecanumDrivetrain(SmartTalon& FRTalon, SmartTalon& FLTalon, SmartTalon& BRTalon, SmartTalon& BLTalon);
+    relativeMecanumDrivetrain(SmartTalon& FRTalon, SmartTalon& FLTalon, SmartTalon& BRTalon, SmartTalon& BLTalon, ADIS16448_IMU& gyro, HeadingControl::GyroAxes axis);
 
-    void moveDistance(double distance, double angle, double speed);
+    void moveDistance(double distance, double angle, double speed, double rotation = 0);
     void moveAt(double speed, double angle);
     void rotate(double angle, double speed);
     void moveRelative(double FB, double LR, double rotation);
@@ -44,33 +46,54 @@ public:
     void PIDWrite(double output);
     double PIDGet();
 
+    bool doneMove(double tolerancePercentage);
+
     void SetPIDSourceType(PIDSourceType pidSource);
 
-    double getAvgError();
+    bool doneMove();
+
 
     CANSpeedController::ControlMode m_mode;
 
-    PIDController* m_distanceController;
 
 private:
 
+    HeadingControl m_headingControl;
+    SmartTalon& m_FRTalon;
+    SmartTalon& m_FLTalon;
+    SmartTalon& m_BRTalon;
+    SmartTalon& m_BLTalon;
+    PIDController m_distanceController;
+
+
+    double m_distanceOutput;
+
+    double m_gyroSensitivity;
 
     double m_goalX;
     double m_goalY;
     double m_goalGyro;
     double m_maxSpeed;
 
+    double m_distance;
+    double m_goalDistance;
+
+
+    int m_FRenc;
+    int m_FLenc;
+    int m_BRenc;
+    int m_BLenc;
+
     double getXComponent(double magnitude, double angle);
     double getYComponent(double magnitude, double angle);
 
+    double getDistance();
 
 
-    SmartTalon& m_FRTalon;
-    SmartTalon& m_FLTalon;
-    SmartTalon& m_BRTalon;
-    SmartTalon& m_BLTalon;
 
-    RobotDrive m_driveTrain;
+
+
+//    RobotDrive m_driveTrain;
 
 };
 

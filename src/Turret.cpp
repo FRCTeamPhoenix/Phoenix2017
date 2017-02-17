@@ -9,16 +9,17 @@
 
 Turret::Turret(
         SmartTalon& turretRotatorMotor,
-        DigitalInput& leftLimitSwitch,
-        DigitalInput& rightLimitSwitch,
+        Communications& visionComs,
         Joystick& gamepad):
+
         m_turretRotatorMotor(turretRotatorMotor),
-        m_leftLimitSwitch(leftLimitSwitch),
-        m_rightLimitSwitch(rightLimitSwitch),
+        m_visionComs(visionComs),
         m_gamepad(gamepad)
+
 {
     m_state = HOMING;
     m_gamepadJoystick = 0;
+    m_visionTimeStamp = 0;
 }
 
 Turret::~Turret()
@@ -29,50 +30,72 @@ void Turret::run()
 {
     //Homing State of Turret
     //Returns Turret to right limit.
-    if(m_state == HOMING){
-        m_turretRotatorMotor.goAt(0.5);//will need to be changed. temp number.
-        if(m_rightLimitSwitch.Get() || m_leftLimitSwitch.Get())
-        {
-            setState(IDLE);
-        }
-    }
-    else{
-        switch (m_state)
-        {
+    switch (m_state)
+    {
 
-            //Idle state of Turret
-            //Changes to Moving when there is joystick movement that is not in the deadzone
-            case IDLE:
-                m_turretRotatorMotor.goAt(0.0);
+        //Idle state of Turret
+        //Changes to Moving when there is joystick movement that is not in the deadzone
+        case IDLE:
+            m_turretRotatorMotor.goAt(0.0);
+            break;
+            //Moving state of Turret
+            //Changes to Idle when there is no joystick movement
+        case TELEOP:
+            gamepadJoystickWithDeadZone();
 
-                if(gamepadJoystickWithDeadZone() != 0)
+            if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
+            {
+                if (gamepadJoystickWithDeadZone() > 0)
                 {
-                    setState(MOVING);
+                    m_turretRotatorMotor.goDistance(0, 0.5);
                 }
-                break;
-                //Moving state of Turret
-                //Changes to Idle when there is no joystick movement
-            case MOVING:
-                m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
-
-                if(m_rightLimitSwitch.Get() || m_leftLimitSwitch.Get())
+                else
                 {
-                    setState(IDLE);
+                    m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());
                 }
-
-                if(gamepadJoystickWithDeadZone() == 0)
+            }
+            else if (m_turretRotatorMotor.IsRevLimitSwitchClosed())
+            {
+                if (gamepadJoystickWithDeadZone() < 0)
                 {
-                    setState(IDLE);
+                    m_turretRotatorMotor.goDistance(0,0.5);
                 }
-                break;
-            case HOMING:
-                break;
-        }
+                else
+                {
+                    m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());                }
+
+            }
+            else
+            {
+                m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());
+            }
+            break;
+        case HOMING:
+            m_turretRotatorMotor.SetControlMode(CANSpeedController::kPercentVbus);
+
+            m_turretRotatorMotor.Set(.2);//will need to be changed. temp number.
+
+            if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
+            {
+                m_turretRotatorMotor.SetEncPosition(0);
+                setState(IDLE);
+            }
+            break;
+        case AUTO:
+            long long int tempTime = m_visionComs.getAngleTimestamp();
+
+            if (tempTime != m_visionTimeStamp){
+                m_visionTimeStamp = tempTime;
+
+                autoTarget(m_visionComs.getAngle());
+            }
+            break;
+
     }
 }
 
 void Turret::autoTarget(float degrees){
-    m_turretRotatorMotor.goDistance(degreeToTicks(degrees), 0.1);
+    m_turretRotatorMotor.goDistance(degreeToTicks(degrees), 0.5);
 }
 
 float Turret::degreeToTicks(float angle){
@@ -83,7 +106,7 @@ float Turret::degreeToTicks(float angle){
 //Has a damping effect because we do not want the turret moving at full speed
 float Turret::gamepadJoystickWithDeadZone()
 {
-    float power = -m_gamepadJoystick;
+    float power = -m_gamepad.GetY();
 
     if (fabs(power) < 0.05f){
         power = 0;

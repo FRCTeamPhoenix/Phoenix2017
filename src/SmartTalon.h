@@ -20,6 +20,7 @@ public:
 
     void goTo(double position, double speed);
     void goAt(double speed);
+    void goAtVelocity(int velocity);
     void goDistance(double distance, double speed);
 
     double getGoal();
@@ -31,6 +32,7 @@ public:
     void tunePosition(double pInit, double tuneDistance, double F);
 
     void tuneRate(double pInit, double goalRate, int IZone, double F);
+    bool test();
 
 private:
 
@@ -41,6 +43,8 @@ private:
     double m_maxReverseSpeed;
 
     Timer m_tuneTimer;
+
+    bool m_inverted;
 
     PIDGains m_distanceGains;
     PIDGains m_speedGains;
