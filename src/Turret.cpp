@@ -17,7 +17,7 @@ Turret::Turret(
         m_gamepad(gamepad)
 
 {
-    m_state = HOMING;
+    m_state = TELEOP;
     m_gamepadJoystick = 0;
     m_visionTimeStamp = 0;
 }
@@ -41,34 +41,34 @@ void Turret::run()
             //Moving state of Turret
             //Changes to Idle when there is no joystick movement
         case TELEOP:
-            gamepadJoystickWithDeadZone();
+//            gamepadJoystickWithDeadZone();
 
-            if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
-            {
-                if (gamepadJoystickWithDeadZone() > 0)
-                {
-                    m_turretRotatorMotor.goDistance(0, 0.5);
-                }
-                else
-                {
-                    m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());
-                }
-            }
-            else if (m_turretRotatorMotor.IsRevLimitSwitchClosed())
-            {
-                if (gamepadJoystickWithDeadZone() < 0)
-                {
-                    m_turretRotatorMotor.goDistance(0,0.5);
-                }
-                else
-                {
-                    m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());                }
-
-            }
-            else
-            {
-                m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());
-            }
+//            if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
+//            {
+//                if (gamepadJoystickWithDeadZone() > 0)
+//                {
+//                    m_turretRotatorMotor.goDistance(0, 0.5);
+//                }
+//                else
+//                {
+//                    m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());
+//                }
+//            }
+//            else if (m_turretRotatorMotor.IsRevLimitSwitchClosed())
+//            {
+//                if (gamepadJoystickWithDeadZone() < 0)
+//                {
+//                    m_turretRotatorMotor.goDistance(0,0.5);
+//                }
+//                else
+//                {
+//                    m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());                }
+//
+//            }
+//            else
+//            {
+                m_turretRotatorMotor.goDistance(25 * gamepadJoystickWithDeadZone(),0.5);
+//            }
             break;
         case HOMING:
             m_turretRotatorMotor.SetControlMode(CANSpeedController::kPercentVbus);

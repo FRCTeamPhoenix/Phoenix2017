@@ -114,7 +114,7 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
 
     m_distanceController.SetSetpoint (distance);
 
-    m_distanceController.SetSetpoint (sqrt((distanceX * distanceX) + (distanceY * distanceY)));
+//    m_distanceController.SetSetpoint (sqrt((distanceX * distanceX) + (distanceY * distanceY)));
 
 //    std::stringstream sP;
 //    sP << "SetPoint: " << m_distanceController.GetSetpoint ();

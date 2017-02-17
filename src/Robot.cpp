@@ -64,11 +64,8 @@ void Robot::OperatorControl()
 {
 	m_expansionBoard.Reset();
 	LOGI << "Start Teleop";
-	//int count = 0;
 
-	m_mainAutoGroup->disableAction(0);
-	m_mainAutoGroup->resetAction(1);
-
+	switchToTeleoperated();
 	while (IsEnabled() && IsOperatorControl())
 	{
 
@@ -85,10 +82,9 @@ void Robot::OperatorControl()
 		 * Joystick: Control drivetrain
 		 *
 		 */
-
-		m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
+//	    driveJoystick();
+            m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
 		m_robotController.run();
-		m_climber.run();
 
 	}
 }
@@ -120,7 +116,7 @@ void Robot::Test()
         switch (m_pidState)
         {
         case PID:
-            if (m_gamepad.GetRawButton(DriveStationConstants::buttonB))
+            if (m_joystick.GetRawButton(12))
             {
                 m_pidState = VOLTAGE;
                 break;
@@ -311,7 +307,7 @@ void Robot::Test()
             if (m_pidState == PID)
             {
                 m_turretRotateMotor.SetControlMode(CANSpeedController::kSpeed);
-                m_turretRotateMotor.goDistance(power * 25, 0.5);
+                m_turretRotateMotor.goDistance(power * 200, 0.5);
 
             }
             else
@@ -538,6 +534,7 @@ void Robot::initAutoMode ()
 	{
 		if(actionIterator->get ()->getName () == mode)
 		{
+		        SmartDashboard::PutString("DB/String 7","auto init");
 			actionIterator->get ()->reset ();
 		}
 	}
@@ -555,6 +552,7 @@ void Robot::switchToTeleoperated()
 		if ("Teleoperated" == name)
 		{
 			actionIterator->get ()->reset ();
+			cout << "teleop init" <<endl;
 		}
 		else
 		{
@@ -585,9 +583,14 @@ bool Robot::doneDriveMove (double tolerance)
 
 void Robot::driveJoystick()
 {
-	double FB = -m_joystick.GetX();
-	double LF = m_joystick.GetY();
-	double rot = m_joystick.GetZ();
+	double FB = -m_joystick.GetY();
+
+	double LF = m_joystick.GetX();
+	double rot = m_joystick.GetZ() / 4;
+
+	FB = (fabs(FB) < 0.1) ? 0 : FB;
+	LF = (fabs(LF) < 0.1) ? 0 : LF;
+	rot = (fabs(rot) < 0.1) ? 0 : rot;
 
 	m_drivetrain.moveRelative(FB, LF, rot);
 }

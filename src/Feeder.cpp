@@ -34,7 +34,7 @@ void Feeder::run()
     switch (m_state)
     {
     case ON:
-        m_feederMotor.Set(.85);
+        m_feederMotor.Set(.65);
         break;
     case OFF:
         m_feederMotor.Set(0.0);

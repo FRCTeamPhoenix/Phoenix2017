@@ -12,6 +12,8 @@ Climber::Climber(SmartTalon& motor,
 		m_gamepad(gamepad)
 {
     m_state = OFF;
+    m_motor.SetControlMode(CANSpeedController::kPercentVbus);
+
 }
 
 Climber::~Climber()
@@ -35,11 +37,11 @@ void Climber::run()
     switch (m_state)
     {
         case OFF:
-            m_motor.goAt(0.0);
+            m_motor.Set(0.0);
             break;
 
         case ON:
-            m_motor.goAt(1.0);
+            m_motor.Set(1.0);
             break;
     }
 
