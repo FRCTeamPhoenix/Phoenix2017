@@ -17,16 +17,15 @@ public:
     Indexer(SmartTalon& indexerMotor, Joystick& gamepad);
     virtual ~Indexer();
 
-    enum State {
-        TELEOP,
+    enum State
+    {
         ON,
-        OFF
+        OFF,
+        QUARTER_TURN
     };
 
-    //true is TELEOP, false is AUTO
-    State getState();
-    void setState(State state);
     void run();
+    void setState(State state);
 
 private:
     State m_state;

@@ -23,9 +23,8 @@ public:
         OFF
     };
 
-    State getState();
-    void setState(State state);
     void run();
+    void setState(State state);
 
 private:
     State m_state;

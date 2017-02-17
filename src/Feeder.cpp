@@ -5,26 +5,20 @@
  *      Author: cbadu
  */
 
-#include <Feeder.h>
+#include "Feeder.h"
 
 Feeder::Feeder(SmartTalon& feederMotor, Joystick& gamepad):
     m_feederMotor(feederMotor),
     m_gamepad(gamepad)
 {
     m_state = OFF;
-    m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
 }
 
 Feeder::~Feeder()
 {
 }
 
-Feeder::State Feeder::getState()
-{
-    return m_state;
-}
-
-void Feeder::setState(Feeder::State state)
+void Feeder::setState(State state)
 {
     m_state = state;
 }
@@ -34,10 +28,11 @@ void Feeder::run()
     switch (m_state)
     {
     case ON:
-        m_feederMotor.Set(.85);
+        m_feederMotor.goAt(0.3);
         break;
+
     case OFF:
-        m_feederMotor.Set(0.0);
+        m_feederMotor.goAt(0.0);
         break;
     }
 }

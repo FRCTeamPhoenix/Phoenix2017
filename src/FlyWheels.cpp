@@ -5,7 +5,7 @@
  *      Author: lukec
  */
 
-#include <FlyWheels.h>
+#include "FlyWheels.h"
 
 FlyWheels::FlyWheels(
         SmartTalon& rightFlyWheelMotor,

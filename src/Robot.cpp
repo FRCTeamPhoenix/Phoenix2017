@@ -35,7 +35,7 @@ Robot::Robot() :
 				m_indexer(m_indexerMotor, m_gamepad),
 				m_feeder(m_feederMotor, m_gamepad),
 				m_gatherer(m_gathererMotor, m_gamepad),
-				m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_gamepad,m_climber,m_gatherer)
+				m_robotController(m_flywheel, m_turret, m_feeder, m_indexer, m_gamepad, m_climber, m_gatherer)
 {
 
 }
