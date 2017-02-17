@@ -34,6 +34,8 @@ ShooterCalibrator::ShooterCalibrator()
 
 }
 
+// Calculate required flywheel power, given shooting distance
+// IMPORTANT: Upper/lower velocity limits must be controlled externally!
 double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<DistanceVelocityPair>& dvPairs) {
 
     // Lower and upper indices on dpPairs

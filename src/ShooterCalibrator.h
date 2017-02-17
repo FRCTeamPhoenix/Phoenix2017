@@ -29,6 +29,7 @@ public:
         ShooterCalibrator();
 
         // Calculate required flywheel power, given shooting distance
+        // IMPORTANT: Upper/lower velocity limits must be controlled externally!
         double getTopFlywheelVelocity(double distance);
         double getLowFlywheelVelocity(double distance);
 
