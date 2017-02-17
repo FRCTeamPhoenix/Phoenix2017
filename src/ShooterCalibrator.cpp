@@ -88,12 +88,6 @@ double ShooterCalibrator::getLowFlywheelVelocity(double distance) {
 
 }
 
-double ShooterCalibrator::getDistance(double power) {
-
-    return interpolateDistanceLinear(power, dvPairsTop);
-
-}
-
 void ShooterCalibrator::sortRefVals(vector<DistanceVelocityPair>& dvPairs) {
 
     // Sort reference values

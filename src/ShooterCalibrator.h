@@ -31,8 +31,6 @@ public:
         // Calculate required flywheel power, given shooting distance
         double getTopFlywheelVelocity(double distance);
         double getLowFlywheelVelocity(double distance);
-        // Estimate resultant distance from a given flywheel power
-        double getDistance(double power);
 
         void sortRefVals(vector<DistanceVelocityPair>& dvPairs);
         void initialize();
