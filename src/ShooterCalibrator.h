@@ -14,6 +14,11 @@
 #include <iostream>
 #include "json.hpp"
 #include <fstream>
+#include "valijson/adapters/nlohmann_json_adapter.hpp"
+#include "valijson/utils/nlohmann_json_utils.hpp"
+#include "valijson/schema.hpp"
+#include "valijson/schema_parser.hpp"
+#include "valijson/validator.hpp"
 
 #ifndef SRC_SHOOTERCALIBRATOR_H_
 #define SRC_SHOOTERCALIBRATOR_H_

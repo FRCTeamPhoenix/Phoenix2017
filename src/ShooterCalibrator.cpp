@@ -13,6 +13,31 @@
 ShooterCalibrator::ShooterCalibrator()
 {
 
+//    bool validJson = true;
+//    json scJsonDoc;
+//    json scSchemaDoc;
+//
+//    try
+//    {
+//
+//        if (!valijson::utils::loadDocument("/home/lvuser/config/shooterCalibrator.json", scSchemaDoc))
+//        {
+//
+//            cout << "Schema Failed Loading" << endl;
+//
+//            throw std::runtime_error("Failed to load schema document");
+//
+//        }
+//
+//    }
+//
+//    catch (runtime_error runtime) {
+//        cout << runtime.what() << endl;
+//
+//        // LOAD IN DEFAULT VALUES
+//
+//    }
+
     // Create json object containing distance/power pairs
     ifstream points_json;
     points_json.open("/home/lvuser/config/shooterCalibrator.json");
