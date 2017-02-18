@@ -34,6 +34,8 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
     m_BRenc = 0;
     m_BLenc = 0;
 
+    m_isDistanceMove = false;
+
     m_mode = CANSpeedController::ControlMode::kSpeed;
 
     m_distanceController.Enable();
@@ -87,6 +89,12 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
 {
     m_mode = CANSpeedController::ControlMode::kPosition;
 
+    if(fabs(distance) <= 0.05){
+        m_isDistanceMove = false;
+    }
+    else{
+        m_isDistanceMove = true;
+    }
     double distanceX = getXComponent(distance, angle);
     double distanceY = getYComponent(distance, angle);
 
@@ -160,9 +168,13 @@ void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotat
 
 bool relativeMecanumDrivetrain::doneMove (double tolerancePercentage)
 {
-    double difference = m_distance - m_goalDistance;
 
-    return (fabs(difference) < fabs((tolerancePercentage * m_goalDistance))) && m_headingControl.isDone ();
+    if(m_isDistanceMove)
+    {
+        double difference = m_distance - m_goalDistance;
+        return (fabs(difference) < fabs((tolerancePercentage * m_goalDistance))) && m_headingControl.isDone();
+    }
+    return m_headingControl.isDone();
 }
 
 double relativeMecanumDrivetrain::PIDGet ()
