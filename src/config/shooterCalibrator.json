@@ -1,0 +1,42 @@
+[
+  {
+    "distance": 0,
+    "velocityTop": 40000,
+    "velocityLow": 4000
+  },
+  {
+   	"distance": 72,
+    "velocityTop": 41000,
+    "velocityLow": 12000
+  },
+  {
+    "distance": 96,
+    "velocityTop": 41000,
+    "velocityLow": 12000
+  },
+  {
+    "distance": 120,
+    "velocityTop": 41000,
+    "velocityLow": 12000
+  },
+  {
+    "distance": 144,
+    "velocityTop": 41000,
+    "velocityLow": 12000
+  },
+  {
+    "distance": 168,
+    "velocityTop": 41000,
+    "velocityLow": 12000
+  },
+  {
+    "distance": 192,
+    "velocityTop": 41000,
+    "velocityLow": 12000
+  },
+  {
+    "distance": 480,
+    "velocityTop": 41000,
+    "velocityLow": 12000
+  }
+]
