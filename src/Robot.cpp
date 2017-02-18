@@ -128,7 +128,7 @@ public:
 
                 while (IsEnabled() && IsTest())
                 {
-                    //A = indexer quarter rotation
+                /*    //A = indexer quarter rotation
                     //B = feeder run of dashboard from slider 0 input
                     //joystick throttle = run feeder
                     //joystick Y = run flywheels
@@ -237,7 +237,7 @@ public:
                    m_configEditor.update();
 
 
-
+                  */
                 }
 
                 runLidar.join();

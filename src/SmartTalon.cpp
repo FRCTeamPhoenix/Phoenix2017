@@ -18,26 +18,26 @@ SmartTalon::SmartTalon (int deviceNumber, FeedbackDevice device) :
     ss << deviceNumber;
     string deviceNumberStr = ss.str();
 
-	ifstream json_file;
-	json_file.open("/home/lvuser/talons.json");
-	json talons;
-	json_file >> talons;
-	json_file.close();
-	m_distanceGains.set (talons[deviceNumberStr]["distance"]["p"],
-                         talons[deviceNumberStr]["distance"]["i"],
-                         talons[deviceNumberStr]["distance"]["d"],
-                         talons[deviceNumberStr]["distance"]["izone"],
-                         talons[deviceNumberStr]["distance"]["ff"]);
-
-	m_speedGains.set (talons[deviceNumberStr]["speed"]["p"],
-                      talons[deviceNumberStr]["speed"]["i"],
-                      talons[deviceNumberStr]["speed"]["d"],
-                      talons[deviceNumberStr]["speed"]["izone"],
-                      talons[deviceNumberStr]["speed"]["ff"]);
-
-	m_maxForwardSpeed = talons[deviceNumberStr]["maxfvel"];
-	m_maxReverseSpeed = talons[deviceNumberStr]["maxrvel"];
-
+//	ifstream json_file;
+//	json_file.open("/home/lvuser/talons.json");
+//	json talons;
+//	json_file >> talons;
+//	json_file.close();
+//	m_distanceGains.set (talons[deviceNumberStr]["distance"]["p"],
+//                         talons[deviceNumberStr]["distance"]["i"],
+//                         talons[deviceNumberStr]["distance"]["d"],
+//                         talons[deviceNumberStr]["distance"]["izone"],
+//                         talons[deviceNumberStr]["distance"]["ff"]);
+//
+//	m_speedGains.set (talons[deviceNumberStr]["speed"]["p"],
+//                      talons[deviceNumberStr]["speed"]["i"],
+//                      talons[deviceNumberStr]["speed"]["d"],
+//                      talons[deviceNumberStr]["speed"]["izone"],
+//                      talons[deviceNumberStr]["speed"]["ff"]);
+//
+//	m_maxForwardSpeed = talons[deviceNumberStr]["maxfvel"];
+//	m_maxReverseSpeed = talons[deviceNumberStr]["maxrvel"];
+//
 	SetSafetyEnabled(false);
 }
 

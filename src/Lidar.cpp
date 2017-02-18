@@ -39,28 +39,33 @@ double Lidar::getSlowAverage() {
 }
 
 void Lidar::run() {
-    //I2C code
-    if (m_mode == 0) {
-        byte distanceArray[2];
-        while (m_I2C->Write(0x00, 0x04));
-        byte distanceRegister_1st[1];
-        distanceRegister_1st[0] = 0x8f;
-        //Read and Write don't work, use WriteBulk and ReadOnly whenever you
-        //use I2C
-        m_I2C->WriteBulk(distanceRegister_1st, 0x01);
-        m_I2C->ReadOnly(2, distanceArray);
-        m_distance = (distanceArray[0] << 8) + distanceArray[1];
-        m_distance /= 2.54;
-        Wait(0.004);
-    }
-    //PWM code
-    if (m_mode == 1) {
-        m_distance = m_monitorPin.GetPeriod() * 39370.0787;
-    }
-    double fast = 5.0;
-    m_fastAverage = (fast * m_fastAverage + m_distance) / (fast + 1.0);
-    double slow = 25.0;
-    m_slowAverage = (slow * m_slowAverage + m_distance) / (slow + 1.0);
+   //I2C code
+byte distanceArray[2];
+//   byte otherArray[1];
+//   otherArray[0] = 0x04;
+//   while(m_I2C->WriteBulk(otherArray, 1));
+   m_I2C->Write(0x00, 0x04);
+   Wait(0.05);
+   byte distanceRegister_1st[1];
+   distanceRegister_1st[0] = 0x8f;
+   //Read and Write don't work, use WriteBulk and ReadOnly whenever you
+   //use I2C
+   m_I2C->WriteBulk(distanceRegister_1st, 0x01);
+   m_I2C->ReadOnly(2, distanceArray);
+   m_distance = (distanceArray[0] << 8) + distanceArray[1];
+   m_distance /= 2.54;
+
+//   byte distanceArray[2];
+//   m_I2C->Write(0x00, 0x04);
+//   Wait(0.04);
+//   m_I2C->Read(0x8f, 2, distanceArray);
+//   Wait(0.05);
+//   m_distance = ((distanceArray[0] << 8) + distanceArray[1]) / 2.54;
+
+   double fast = 5.0;
+   m_fastAverage = (fast * m_fastAverage + m_distance) / (fast + 1.0);
+   double slow = 25.0;
+   m_slowAverage = (slow * m_slowAverage + m_distance) / (slow + 1.0);
 }
 
 Lidar::~Lidar()
