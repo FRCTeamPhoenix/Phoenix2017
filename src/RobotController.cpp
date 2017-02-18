@@ -66,9 +66,13 @@ void RobotController::run()
 		else{
             m_feeder.setState(Feeder::OFF);
 		}
-        if(m_controlBox.GetRawButton(DriveStationConstants::buttonFlywheel))
+        if(m_controlBox.GetRawButton(DriveStationConstants::buttonFlywheelAuto))
         {
-            m_flywheels.setState(FlyWheels::FLATRATE); //TODO set to lidarRate when lidar tuning is done
+            m_flywheels.setState(FlyWheels::LIDARRATE); //TODO set to lidarRate when lidar tuning is done
+        }
+        else if(m_controlBox.GetRawButton(DriveStationConstants::buttonFlywheelManual))
+        {
+            m_flywheels.setState(FlyWheels::JOYSTICKRATE); //TODO set to lidarRate when lidar tuning is done
         }
         else
         {
@@ -90,9 +94,6 @@ void RobotController::run()
         //Climber
         if(m_controlBox.GetRawButton(DriveStationConstants::buttonClimberUP)){
             m_climber.setState(Climber::ON);
-        }
-        else if(m_controlBox.GetRawButton(DriveStationConstants::buttonClimberDOWN)){
-            m_climber.setState(Climber::REVERSE);
         }
         else{
             m_climber.setState(Climber::OFF);
