@@ -64,8 +64,11 @@ void FlyWheels::run()
             break;
 
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.
-            setRightSpeed(m_gamepad.GetThrottle());
-            setLeftSpeed(m_gamepad.GetThrottle());
+
+        	double speed = ((m_gamepad.GetRawAxis(3) + 1) / 2) * 0.6;
+
+            setRightSpeed(speed);
+            setLeftSpeed(speed);
             break;
     }
 }

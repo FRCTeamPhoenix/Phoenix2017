@@ -67,8 +67,12 @@ void Turret::run()
 //            }
 //            else
 //            {
-                m_turretRotatorMotor.goDistance(25 * m_gamepad.GetZ(),0.5);
+//                m_turretRotatorMotor.goDistance(100 * m_gamepad.GetZ(), 0.5);
 //            }
+
+            m_turretRotatorMotor.SetControlMode(CANSpeedController::kPercentVbus);
+            m_turretRotatorMotor.Set(m_gamepad.GetZ() * 0.1);
+
             break;
         case HOMING:
             m_turretRotatorMotor.SetControlMode(CANSpeedController::kPercentVbus);
