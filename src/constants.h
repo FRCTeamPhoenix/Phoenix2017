@@ -77,7 +77,7 @@ namespace ConfigVariables
 namespace ShooterConstants
 {
     const static double maxFlywheelVelocity = 75000;
-    const static double minFlywheelVelocity = 40000;
+    const static double minFlywheelVelocity = 2000;
 
 };
 
