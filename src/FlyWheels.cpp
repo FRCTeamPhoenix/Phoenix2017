@@ -44,8 +44,8 @@ void FlyWheels::run()
             setRightSpeed(0.5);
             break;
         case LIDARRATE: //Speed based on lidar Distance
-            setRightSpeed(m_shooterCalibrator.getFlywheelPower(m_lidar.getFastAverage()));
-            setLeftSpeed(m_shooterCalibrator.getFlywheelPower(m_lidar.getFastAverage()));
+            setRightSpeed(m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getFastAverage()));
+            setLeftSpeed(m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getFastAverage()));
             break;
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.
             setRightSpeed(m_gamepad.GetY());

@@ -8,24 +8,51 @@
  *      Author: Brin Harper
  */
 
+#include <DistanceVelocityPair.h>
 #include "WPILib.h"
+#include <math.h>
+#include <iostream>
+#include "json.hpp"
+#include <fstream>
+#include "valijson/adapters/nlohmann_json_adapter.hpp"
+#include "valijson/utils/nlohmann_json_utils.hpp"
+#include "valijson/schema.hpp"
+#include "valijson/schema_parser.hpp"
+#include "valijson/validator.hpp"
+
 #ifndef SRC_SHOOTERCALIBRATOR_H_
 #define SRC_SHOOTERCALIBRATOR_H_
+
+using namespace std;
+using json=nlohmann::json;
 
 class ShooterCalibrator
 {
 
 public:
 
-   /* Constructor will eventually be changed to take in a file containing a table of
-    * measured distance/power pairings, for use in interpolation. */
-   ShooterCalibrator();
+        ShooterCalibrator();
 
-   double getFlywheelPower(double distance);
+        // Calculate required flywheel power, given shooting distance
+        // IMPORTANT: Upper/lower velocity limits must be controlled externally!
+        double getTopFlywheelVelocity(double distance);
+        double getLowFlywheelVelocity(double distance);
 
-   virtual ~ShooterCalibrator();
+        void sortRefVals(vector<DistanceVelocityPair>& dvPairs);
+        void initialize();
+
+        ~ShooterCalibrator();
+
 
 private:
+
+        // Store distance/power pairs (read in from json)
+        vector<DistanceVelocityPair> dvPairs;
+
+        vector<DistanceVelocityPair> dvPairsLow;
+        vector<DistanceVelocityPair> dvPairsTop;
+
+        double interpolateVelocityLinear(double distance, vector<DistanceVelocityPair>& dvPairs);
 
 };
 
