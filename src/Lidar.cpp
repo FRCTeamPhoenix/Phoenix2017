@@ -26,6 +26,10 @@ int Lidar::getStatus() {
     return (int)m_status;
 }
 
+double Lidar::getDistance() {
+   return m_distance;
+}
+
 double Lidar::getFastAverage() {
    return m_fastAverage;
 }

@@ -20,6 +20,10 @@
 using namespace std;
 using json=nlohmann::json;
 
+class Robot;
+
+void lidarThread(Robot * robot, Lidar * lidar);
+
 class Robot: public SampleRobot
 {
 //    SmartTalon m_FRDrive;
@@ -119,6 +123,8 @@ public:
                 m_topFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
 
+                std::thread runLidar(lidarThread, this, &m_lidar);
+                runLidar.detach();
 
                 while (IsEnabled() && IsTest())
                 {
@@ -234,8 +240,18 @@ public:
 
                 }
 
+                runLidar.join();
     }
 
 };
+
+void lidarThread(Robot * robot, Lidar * lidar) {
+   while(true) {
+      lidar->run();
+      stringstream ss;
+      ss << lidar->getDistance();
+      SmartDashboard::PutString("DB/String 3", ss.str());
+   }
+}
 
 START_ROBOT_CLASS(Robot)
