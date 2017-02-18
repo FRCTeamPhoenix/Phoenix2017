@@ -25,6 +25,10 @@
 
 using namespace std;
 using json=nlohmann::json;
+using valijson::Schema;
+using valijson::SchemaParser;
+using valijson::Validator;
+using valijson::adapters::NlohmannJsonAdapter;
 
 class ShooterCalibrator
 {
