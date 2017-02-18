@@ -44,9 +44,25 @@ void FlyWheels::run()
             setRightSpeed(SmartDashboard::GetNumber("DB/Slider 2", 0.0));
             break;
         case LIDARRATE: //Speed based on lidar Distance
-            setRightSpeed(m_shooterCalibrator.getFlywheelPower(m_lidar.getFastAverage()));
-            setLeftSpeed(m_shooterCalibrator.getFlywheelPower(m_lidar.getFastAverage()));
+
+            if (m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getFastAverage()) > ShooterConstants::maxFlywheelVelocity) {
+                m_rightFlyWheelMotor.goAtVelocity(ShooterConstants::maxFlywheelVelocity);
+            } else if (m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getFastAverage()) < ShooterConstants::minFlywheelVelocity) {
+                m_rightFlyWheelMotor.goAtVelocity(ShooterConstants::minFlywheelVelocity);
+            } else {
+                m_rightFlyWheelMotor.goAtVelocity(m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getFastAverage()));
+            }
+
+            if (m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getFastAverage()) > ShooterConstants::maxFlywheelVelocity) {
+                m_leftFlyWheelMotor.goAtVelocity(ShooterConstants::maxFlywheelVelocity);
+            } else if (m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getFastAverage()) < ShooterConstants::minFlywheelVelocity) {
+                m_leftFlyWheelMotor.goAtVelocity(ShooterConstants::minFlywheelVelocity);
+            } else {
+                m_leftFlyWheelMotor.goAtVelocity(m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getFastAverage()));
+            }
+
             break;
+
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.
             setRightSpeed(m_gamepad.GetThrottle());
             setLeftSpeed(m_gamepad.GetThrottle());
