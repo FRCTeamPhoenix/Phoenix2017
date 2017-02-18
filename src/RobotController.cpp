@@ -68,7 +68,7 @@ void RobotController::run()
 		}
         if(m_controlBox.GetRawButton(DriveStationConstants::buttonFlywheel))
         {
-            m_flywheels.setState(FlyWheels::FLATRATE); //TODO set to lidarRate when lidar tuning is done
+            m_flywheels.setState(FlyWheels::LIDARRATE); //TODO set to lidarRate when lidar tuning is done
         }
         else
         {

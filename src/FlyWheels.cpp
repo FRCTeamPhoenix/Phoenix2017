@@ -45,20 +45,20 @@ void FlyWheels::run()
             break;
         case LIDARRATE: //Speed based on lidar Distance
 
-            if (m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getFastAverage()) > ShooterConstants::maxFlywheelVelocity) {
+            if (m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getDistance()) > ShooterConstants::maxFlywheelVelocity) {
                 m_rightFlyWheelMotor.goAtVelocity(ShooterConstants::maxFlywheelVelocity);
-            } else if (m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getFastAverage()) < ShooterConstants::minFlywheelVelocity) {
+            } else if (m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getDistance()) < ShooterConstants::minFlywheelVelocity) {
                 m_rightFlyWheelMotor.goAtVelocity(ShooterConstants::minFlywheelVelocity);
             } else {
-                m_rightFlyWheelMotor.goAtVelocity(m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getFastAverage()));
+                m_rightFlyWheelMotor.goAtVelocity(m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getDistance()));
             }
 
-            if (m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getFastAverage()) > ShooterConstants::maxFlywheelVelocity) {
+            if (m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getDistance()) > ShooterConstants::maxFlywheelVelocity) {
                 m_leftFlyWheelMotor.goAtVelocity(ShooterConstants::maxFlywheelVelocity);
-            } else if (m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getFastAverage()) < ShooterConstants::minFlywheelVelocity) {
+            } else if (m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getDistance()) < ShooterConstants::minFlywheelVelocity) {
                 m_leftFlyWheelMotor.goAtVelocity(ShooterConstants::minFlywheelVelocity);
             } else {
-                m_leftFlyWheelMotor.goAtVelocity(m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getFastAverage()));
+                m_leftFlyWheelMotor.goAtVelocity(m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getDistance()));
             }
 
             break;
