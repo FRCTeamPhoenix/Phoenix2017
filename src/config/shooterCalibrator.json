@@ -2,41 +2,26 @@
   {
     "distance": 0,
     "velocityTop": 40000,
-    "velocityLow": 4000
+    "velocityLow": 3000
   },
   {
-   	"distance": 72,
-    "velocityTop": 41000,
-    "velocityLow": 12000
-  },
-  {
-    "distance": 96,
-    "velocityTop": 41000,
-    "velocityLow": 12000
-  },
-  {
-    "distance": 120,
-    "velocityTop": 41000,
-    "velocityLow": 12000
+   	"distance": 104,
+    "velocityTop": 55000,
+    "velocityLow": 3000
   },
   {
     "distance": 144,
-    "velocityTop": 41000,
-    "velocityLow": 12000
+    "velocityTop": 59000,
+    "velocityLow": 3300
   },
   {
-    "distance": 168,
-    "velocityTop": 41000,
-    "velocityLow": 12000
+    "distance": 159,
+    "velocityTop": 61000,
+    "velocityLow": 3400
   },
   {
-    "distance": 192,
-    "velocityTop": 41000,
-    "velocityLow": 12000
-  },
-  {
-    "distance": 480,
-    "velocityTop": 41000,
-    "velocityLow": 12000
+    "distance": 165,
+    "velocityTop": 64000,
+    "velocityLow": 3400
   }
 ]
