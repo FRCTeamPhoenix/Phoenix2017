@@ -165,7 +165,7 @@ public:
                     // Gamepad Y: Run indexer
                     if (m_gamepad.GetRawButton(DriveStationConstants::buttonA)){
                         //m_indexerMotor.goDistance(250,0.5);
-                        m_indexerMotor.goAt(0.75);
+                        m_indexerMotor.Set(0.2);
 
                    }
                     else{
