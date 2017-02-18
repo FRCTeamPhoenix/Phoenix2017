@@ -128,7 +128,7 @@ public:
 
                 while (IsEnabled() && IsTest())
                 {
-                /*    //A = indexer quarter rotation
+                    //A = indexer quarter rotation
                     //B = feeder run of dashboard from slider 0 input
                     //joystick throttle = run feeder
                     //joystick Y = run flywheels
@@ -145,7 +145,7 @@ public:
                    }
                    else
                    {
-                       m_feederMotor.Set((m_joystick.GetThrottle()-1) / 2);
+                       //m_feederMotor.Set((m_joystick.GetThrottle()-1) / 2);
                    }
 
                     std::ostringstream throttleValue;
@@ -218,7 +218,7 @@ public:
 
                    std::ostringstream lidarString;
                    lidarString << "Distance: ";
-                   lidarString << m_lidar.getFastAverage();
+                   lidarString << m_lidar.getDistance();
                    SmartDashboard::PutString("DB/String 9", lidarString.str());
 
                    std::ostringstream shooterTopVel;
@@ -237,7 +237,7 @@ public:
                    m_configEditor.update();
 
 
-                  */
+
                 }
 
                 runLidar.join();
