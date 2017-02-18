@@ -5,7 +5,7 @@
  *      Author: cbadu
  */
 
-#include <Feeder.h>
+#include "Feeder.h"
 
 Feeder::Feeder(SmartTalon& feederMotor, Joystick& gamepad):
     m_feederMotor(feederMotor),

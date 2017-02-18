@@ -5,7 +5,7 @@
  *      Author: lukec
  */
 
-#include <RobotController.h>
+#include "RobotController.h"
 
 RobotController::RobotController(
         FlyWheels& flywheel,
@@ -20,7 +20,7 @@ RobotController::RobotController(
         m_turret(turret),
         m_feeder(feeder),
         m_indexer(indexer),
-        m_gamepad(gamepad),
+        m_controlBox(gamepad),
         m_climber(climber),
         m_gatherer(gatherer)
 
@@ -37,10 +37,10 @@ void RobotController::run()
 {
     //Run functions of FlyWheels and Turret
     m_flywheels.run();
-    m_turret.run();
+//    m_turret.run();
     m_feeder.run();
     m_indexer.run();
-    m_gatherer.run();
+//    m_gatherer.run();
     m_climber.run();
 
     switch(m_state){
@@ -60,25 +60,27 @@ void RobotController::run()
 
 
         //Flywheels and Feeder
-        if(m_gamepad.GetRawButton(DriveStationConstants::buttonA)){
+        if(m_controlBox.GetRawButton(DriveStationConstants::buttonFeeder)){
             m_feeder.setState(Feeder::ON);
-            m_flywheels.setState(FlyWheels::JOYSTICKRATE); //TODO set to lidarRate when lidar tuning is done
         }
-        else{
+		else{
             m_feeder.setState(Feeder::OFF);
+		}
+        if(m_controlBox.GetRawButton(DriveStationConstants::buttonFlywheel))
+        {
+            m_flywheels.setState(FlyWheels::FLATRATE); //TODO set to lidarRate when lidar tuning is done
+        }
+        else
+        {
             m_flywheels.setState(FlyWheels::OFF); //TODO set to lidarRate when lidar tuning is done
         }
 
         //Turret
-        if(m_gamepad.GetRawButton(DriveStationConstants::buttonB)){
-            m_turret.setState(Turret::AUTO); //Auto state untested
-        }
-        else if (m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
-            m_turret.setState(Turret::TELEOP);
-        }
+        m_turret.setState(Turret::TELEOP);
+
 
         //Indexer
-        if(m_gamepad.GetRawButton(DriveStationConstants::buttonY)){
+        if(m_controlBox.GetRawButton(DriveStationConstants::buttonIndexer)){
             m_indexer.setState(Indexer::ON);
         }
         else{
@@ -86,15 +88,18 @@ void RobotController::run()
         }
 
         //Climber
-        if(m_gamepad.GetRawButton(DriveStationConstants::buttonLB)){
+        if(m_controlBox.GetRawButton(DriveStationConstants::buttonClimberUP)){
             m_climber.setState(Climber::ON);
+        }
+        else if(m_controlBox.GetRawButton(DriveStationConstants::buttonClimberDOWN)){
+            m_climber.setState(Climber::REVERSE);
         }
         else{
             m_climber.setState(Climber::OFF);
         }
 
         //Gatherer
-        if(m_gamepad.GetRawButton(DriveStationConstants::buttonRB)){
+        if(m_controlBox.GetRawButton(DriveStationConstants::buttonRB)){
             m_gatherer.setState(Gatherer::ON);
         }
         else{

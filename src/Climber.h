@@ -25,7 +25,8 @@ public:
 	enum STATE
 	{
 		OFF,
-		ON
+		ON,
+		REVERSE
 	};
 	void updateButton(); // Checks to see if the button is pressed on the Smart Train Dashboard console
 	void move(double speed);

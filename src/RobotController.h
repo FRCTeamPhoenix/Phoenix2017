@@ -62,7 +62,7 @@ private:
     Turret& m_turret;
     Feeder& m_feeder;
     Indexer& m_indexer;
-    Joystick& m_gamepad;
+    Joystick& m_controlBox;
     Climber& m_climber;
     Gatherer& m_gatherer;
 //    Joystick& m_controlBox;

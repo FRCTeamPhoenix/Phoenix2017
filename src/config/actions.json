@@ -12,21 +12,56 @@
       "startingCondition": -1,
       "containedActions":[
       	{
-	      	"type": "GoDistance",
-	      	"name": "First gear move",
-	      	"startingCondition": 0,
-	      	
-	      	"distance": 20000,
-	      	"angle": 0,
-	      	"speed": 0.5,
-	      	"tolerance": 0.05,
-	      	
-	      	"dependencies": []
-      	}
+          "type": "GoDistance",
+          "name": "First gear move",
+          "startingCondition": 0,
+
+          "distance": 20000,
+          "angle": 0,
+          "speed": 0.5,
+          "tolerance": 0.05,
+
+          "dependencies": []
+      	},
+
+        {
+          "type": "GoDistance",
+          "name": "Second gear move",
+          "startingCondition": 0,
+
+          "distance": 20000,
+          "angle": 180,
+          "speed": 0.5,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 1, "requiredCondition": 2}]
+        }
       ],
         "dependencies": [],
   		"doneDependencies": []
     },
+
+    {
+      "type": "ActionGroup",
+      "name": "Rotate Auto",
+      "startingCondition": -1,
+      "containedActions":[
+        {
+          "type": "Rotate",
+          "name": "Rotation",
+          "startingCondition": 0,
+
+          "angle": 180,
+          "speed": 0.5,
+          "tolerance": 0.05,
+
+          "dependencies": []
+        }
+      ],
+      "dependencies": [],
+      "doneDependencies": []
+    },
+
     
     {
       "type": "ActionGroup",
@@ -35,11 +70,11 @@
       "containedActions":[
       	{
 	      	"type": "DriveJoystick",
-	      	"name": "joystick":,
+	      	"name": "joystick",
 	      	"startingCondition": 0,	      	
 	      	"dependencies": []
       	}
-      ]
+      ],
         "dependencies": [],
   		"doneDependencies": []
     }

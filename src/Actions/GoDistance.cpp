@@ -37,6 +37,7 @@ void GoDistance::run ()
     else if(m_robot->doneDriveMove (m_tolerance))
     {
         finish();
+        cout << m_name << " is done" << endl;
         m_timer.Stop ();
     }
 

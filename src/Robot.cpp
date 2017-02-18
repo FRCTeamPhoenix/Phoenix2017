@@ -18,30 +18,43 @@ Robot::Robot() :
 				m_rightLimitSwitch( PortAssign::rightLimitSwitch),
 				m_joystick(PortAssign::joystick),
 				m_gamepad(PortAssign::gamepad),
-				//        m_controlBox(PortAssign::controlBox),
+                m_controlBox(PortAssign::controlBox),
 				m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0),
 				m_expansionBoard(),
 				m_visionComs(),
 				m_shooterCalibrator(),
-				m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_gamepad),
-				m_turret(m_turretRotateMotor,m_visionComs, m_gamepad),
+				m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_controlBox),
+				m_turret(m_turretRotateMotor,m_visionComs, m_controlBox),
 				m_loggerController(),
 				m_configEditor(),
 				m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
-				m_climber(m_climberMotor, m_gamepad),
+				m_climber(m_climberMotor, m_controlBox),
 				m_gathererMotor(PortAssign::loader),
 				m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
 				m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder),
-				m_indexer(m_indexerMotor, m_gamepad),
-				m_feeder(m_feederMotor, m_gamepad),
-				m_gatherer(m_gathererMotor, m_gamepad),
-				m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_gamepad,m_climber,m_gatherer)
+				m_indexer(m_indexerMotor, m_controlBox),
+				m_feeder(m_feederMotor, m_controlBox),
+				m_gatherer(m_gathererMotor, m_controlBox),
+				m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_controlBox,m_climber,m_gatherer)
 {
 
 }
 
+// Print the Message on the Drive Station For Test Mode
+void printMSG(string place, string msg) {
+    std::ostringstream stream;
+    stream << msg;
+    SmartDashboard::PutString("DB/String " + place, stream.str());
+    stream.clear();
+}
+
 void Robot::RobotInit()
 {
+
+    CameraServer::GetInstance()->StartAutomaticCapture("Drive Cam", 0);
+    CameraServer::GetInstance()->StartAutomaticCapture("Gear Cam", 1);
+    CameraServer::GetInstance()->StartAutomaticCapture("Turret Cam", 2);
+
 	cout << "In Robot INIT" << endl;
 	initMainActionGroup();
 	SmartDashboard::PutStringArray("Test List", testModes);
@@ -54,7 +67,6 @@ void Robot::Autonomous()
 
 	while (IsEnabled() && IsAutonomous())
 	{
-
 		m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
 	}
 
@@ -89,14 +101,6 @@ void Robot::OperatorControl()
 	}
 }
 
-// Print the Message on the Drive Station For Test Mode
-void printMSG(string place, string msg) {
-	std::ostringstream stream;
-	stream << msg;
-	SmartDashboard::PutString("DB/String " + place, stream.str());
-	stream.clear();
-}
-
 void Robot::Test()
 {
     m_pidState = PID;
@@ -123,7 +127,7 @@ void Robot::Test()
             }
             break;
         case VOLTAGE:
-            if (m_gamepad.GetRawButton(DriveStationConstants::buttonA))
+            if (m_joystick.GetRawButton(11))
             {
                 m_pidState = PID;
                 break;
@@ -387,8 +391,8 @@ void Robot::Test()
                 m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
                 m_topFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
                 m_indexerMotor.goAt(power / 5);
-                m_lowerFlyWheelMotor.goAt(m_gamepad.GetY());
-                m_topFlyWheelMotor.goAt(m_gamepad.GetY());
+//                m_lowerFlyWheelMotor.goAt(m_gamepad.GetY());
+//                m_topFlyWheelMotor.goAt(m_gamepad.GetY());
             }
             else if (m_pidState == VOLTAGE)
             {
@@ -397,8 +401,8 @@ void Robot::Test()
                 m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 m_topFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 m_indexerMotor.Set(power / 5);
-                m_lowerFlyWheelMotor.Set(m_gamepad.GetY());
-                m_topFlyWheelMotor.Set(m_gamepad.GetY());
+//                m_lowerFlyWheelMotor.Set(m_gamepad.GetY());
+//                m_topFlyWheelMotor.Set(m_gamepad.GetY());
             }
             // Fly wheel Test
             if ((m_pidState == VOLTAGE) && (m_gamepad.GetRawButton(DriveStationConstants::buttonRB)))
@@ -537,6 +541,10 @@ void Robot::initAutoMode ()
 		        SmartDashboard::PutString("DB/String 7","auto init");
 			actionIterator->get ()->reset ();
 		}
+		else
+		{
+			actionIterator->get ()->disable ();
+		}
 	}
 
 }
@@ -586,11 +594,12 @@ void Robot::driveJoystick()
 	double FB = -m_joystick.GetY();
 
 	double LF = m_joystick.GetX();
-	double rot = m_joystick.GetZ() / 4;
+	double rot = m_joystick.GetZ() / 2;
 
-	FB = (fabs(FB) < 0.1) ? 0 : FB;
-	LF = (fabs(LF) < 0.1) ? 0 : LF;
-	rot = (fabs(rot) < 0.1) ? 0 : rot;
+	FB = (fabs(FB) < 0.1) ? 0 : ((FB < 0) ? (FB + 0.1) / (0.9 / 0.5) : (FB - 0.1) / 0.9);
+	LF = (fabs(LF) < 0.1) ? 0 : ((LF < 0) ? (LF + 0.1) / (0.9 / 1): (LF - 0.1) / 0.9);
+	rot = (fabs(rot) < 0.1) ? 0 : ((rot < 0) ? (rot + 0.1) / (0.9 / 1) : (rot - 0.1) / 0.9);
+
 
 	m_drivetrain.moveRelative(FB, LF, rot);
 }

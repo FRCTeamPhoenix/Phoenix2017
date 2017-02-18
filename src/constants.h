@@ -91,6 +91,16 @@ namespace DriveStationConstants
         joystickLeftButton = 11,
         joystickRightButton = 12
     };
+    enum controlBox
+	{
+    	buttonFlywheel = 1,
+		buttonIndexer = 2,
+		buttonFeeder = 3,
+		buttonClimberUP = 4,
+		buttonClimberDOWN = 5,
+		buttonAutoStart = 6,
+		buttonAutoStop = 7
+	};
     const static std::string dashButtonNames[6] =
     {
         "New Name",

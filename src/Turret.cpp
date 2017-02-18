@@ -67,7 +67,7 @@ void Turret::run()
 //            }
 //            else
 //            {
-                m_turretRotatorMotor.goDistance(25 * gamepadJoystickWithDeadZone(),0.5);
+                m_turretRotatorMotor.goDistance(25 * m_gamepad.GetZ(),0.5);
 //            }
             break;
         case HOMING:

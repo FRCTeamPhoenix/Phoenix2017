@@ -60,7 +60,7 @@ class Robot: public SampleRobot
 	DigitalInput m_rightLimitSwitch;
 	Joystick m_joystick;
 	Joystick m_gamepad;
-	//    Joystick m_controlBox;
+    Joystick m_controlBox;
 	Lidar m_lidar;
 	ADIS16448_IMU m_expansionBoard;
 	Communications m_visionComs;

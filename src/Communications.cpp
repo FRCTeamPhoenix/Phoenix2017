@@ -46,6 +46,7 @@ JetsonState Communications::getState(){
 	//std::cout << state_str << std::endl;
 
 
+
 	int state_num = std::stoi(state_str);
 
 	return JetsonState(state_num);

@@ -43,6 +43,10 @@ void Climber::run()
         case ON:
             m_motor.Set(1.0);
             break;
+
+        case REVERSE:
+            m_motor.Set(-0.5);
+            break;
     }
 
 }

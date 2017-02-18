@@ -5,7 +5,7 @@
  *      Author: lukec
  */
 
-#include <FlyWheels.h>
+#include "FlyWheels.h"
 
 FlyWheels::FlyWheels(
         SmartTalon& rightFlyWheelMotor,
@@ -40,16 +40,16 @@ void FlyWheels::run()
             m_leftFlyWheelMotor.goAt(0.0); //stop left FlyWheel
             break;
         case FLATRATE: //Speed based on given number.
-            setLeftSpeed(0.5);
-            setRightSpeed(0.5);
+            setLeftSpeed(SmartDashboard::GetNumber("DB/Slider 1", 0.0));
+            setRightSpeed(SmartDashboard::GetNumber("DB/Slider 2", 0.0));
             break;
         case LIDARRATE: //Speed based on lidar Distance
             setRightSpeed(m_shooterCalibrator.getFlywheelPower(m_lidar.getFastAverage()));
             setLeftSpeed(m_shooterCalibrator.getFlywheelPower(m_lidar.getFastAverage()));
             break;
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.
-            setRightSpeed(m_gamepad.GetY());
-            setRightSpeed(m_gamepad.GetY());
+            setRightSpeed(m_gamepad.GetThrottle());
+            setLeftSpeed(m_gamepad.GetThrottle());
             break;
     }
 }
