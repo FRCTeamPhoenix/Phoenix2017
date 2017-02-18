@@ -4,8 +4,8 @@
 
 #include "CountUp.h"
 
-CountUp::CountUp (int start, int end, vector<shared_ptr<dependency>> dependencies):
-    Action(dependencies),
+CountUp::CountUp (int start, int end, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
+    Action(dependencies, robot),
     m_current(start),
     m_start(start),
     m_end(end)

@@ -5,10 +5,10 @@
  *      Author: larry
  */
 
-#include <Actions/DriveJoystick.h>
+#include "Actions/DriveJoystick.h"
 
-DriveJoystick::DriveJoystick(vector<shared_ptr<dependency>> dependencies):
-Action(dependencies)
+DriveJoystick::DriveJoystick(vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
+Action(dependencies, robot)
 {
 	// TODO Auto-generated constructor stub
 }

@@ -37,7 +37,7 @@ void RobotController::run()
 {
     //Run functions of FlyWheels and Turret
     m_flywheels.run();
-//    m_turret.run();
+    m_turret.run();
     m_feeder.run();
     m_indexer.run();
 //    m_gatherer.run();
@@ -86,6 +86,12 @@ void RobotController::run()
         //Indexer
         if(m_controlBox.GetRawButton(DriveStationConstants::buttonIndexer)){
             m_indexer.setState(Indexer::ON);
+            m_indexer.setSpeed(0.75);
+        }
+        else if(m_controlBox.GetRawButton(8))
+        {
+            m_indexer.setState(Indexer::ON);
+            m_indexer.setSpeed(-0.3);
         }
         else{
             m_indexer.setState(Indexer::OFF);

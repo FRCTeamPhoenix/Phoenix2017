@@ -28,7 +28,7 @@ using json=nlohmann::json;
 class ActionGroup : public Action
 {
 public:
-    ActionGroup(vector<shared_ptr<Action>> containedActions, vector<shared_ptr<dependency>> dependencies, vector<shared_ptr<dependency>> doneDependencies);
+    ActionGroup(vector<shared_ptr<Action>> containedActions, vector<shared_ptr<dependency>> dependencies, vector<shared_ptr<dependency>> doneDependencies, shared_ptr<Robot> robot);
     ActionGroup(json& actionGroup, shared_ptr<Robot> robot);
     ActionGroup();
 

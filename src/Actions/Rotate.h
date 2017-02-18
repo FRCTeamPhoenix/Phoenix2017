@@ -18,7 +18,7 @@ using json=nlohmann::json;
 class Rotate : public Action
 {
 public:
-    Rotate(double angle, double speed, double tolerance, vector<shared_ptr<dependency>> dependencies);
+    Rotate(double angle, double speed, double tolerance, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
 
     Rotate(json& action, shared_ptr<Robot> robot);
 

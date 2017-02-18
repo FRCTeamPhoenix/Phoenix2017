@@ -20,7 +20,7 @@ using json=nlohmann::json;
 class resetAction : public Action
 {
 public:
-    resetAction(vector<int> placesToReset, vector<shared_ptr<dependency>> dependencies);
+    resetAction(vector<int> placesToReset, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
 
     /*
      * Expected Json Values

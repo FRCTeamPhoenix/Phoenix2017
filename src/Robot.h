@@ -1,6 +1,6 @@
 #ifndef ACTIONGRAPHS_ROBOT_H
 #define ACTIONGRAPHS_ROBOT_H
-#include <RobotController.h>
+#include "RobotController.h"
 #include "WPILib.h"
 #include "constants.h"
 #include "SmartTalon.h"
@@ -106,6 +106,8 @@ public:
 	bool doneDriveMove(double tolerance);
 
 	void driveJoystick();
+
+    void setIndexerSpeed(double speed);
 
 	//End of Functions for Actions
 

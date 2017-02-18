@@ -180,9 +180,9 @@ bool relativeMecanumDrivetrain::doneMove (double tolerancePercentage)
 double relativeMecanumDrivetrain::PIDGet ()
 {
     double distance = getDistance();
-    std::stringstream dist;
-    dist << "Distance: " << distance;
-    SmartDashboard::PutString("DB/String 4", dist.str());
+//    std::stringstream dist;
+//    dist << "Distance: " << distance;
+//    SmartDashboard::PutString("DB/String 4", dist.str());
 
 //    LOGI << dist.str();
 
@@ -241,19 +241,19 @@ void relativeMecanumDrivetrain::PIDWrite (double output)
 //        std::stringstream gY;
 //        gY << "speed Y: " << speedY;
 //        SmartDashboard::PutString("DB/String 1", gY.str());
-
-        std::stringstream speeds;
-        speeds << "Output Dist: " << output;
-        SmartDashboard::PutString("DB/String 3", speeds.str());
-
-        std::stringstream rot;
-        rot << "Rotation Spd: " << (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity);
-        SmartDashboard::PutString("DB/String 2", rot.str());
-//        LOGI << speeds.str();
-
-        std::stringstream rotation;
-        rotation << "Rotation: " << m_headingControl.getOutput ();
-        SmartDashboard::PutString("DB/String 9", rotation.str());
+//
+//        std::stringstream speeds;
+//        speeds << "Output Dist: " << output;
+//        SmartDashboard::PutString("DB/String 3", speeds.str());
+//
+//        std::stringstream rot;
+//        rot << "Rotation Spd: " << (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity);
+//        SmartDashboard::PutString("DB/String 2", rot.str());
+////        LOGI << speeds.str();
+//
+//        std::stringstream rotation;
+//        rotation << "Rotation: " << m_headingControl.getOutput ();
+//        SmartDashboard::PutString("DB/String 9", rotation.str());
 //        LOGI << speeds.str();
     }
 }

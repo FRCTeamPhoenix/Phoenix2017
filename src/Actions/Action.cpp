@@ -8,10 +8,10 @@
 
 
 
-Action::Action (vector<shared_ptr<dependency>> dependencies):
+Action::Action (vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
     m_dependencies(dependencies),
     m_currentCondition(dependency::NotStarted),
-    m_robot(NULL)
+    m_robot(robot)
 
 {
 

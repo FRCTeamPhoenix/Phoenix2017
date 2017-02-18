@@ -64,7 +64,7 @@ class Action
 public:
 
 
-    Action(vector<shared_ptr<dependency>> dependencies);
+    Action(vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
     Action();
 
 
