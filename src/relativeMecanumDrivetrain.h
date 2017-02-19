@@ -78,6 +78,8 @@ private:
     double m_distance;
     double m_goalDistance;
 
+    bool m_isDistanceMove;
+
 
     int m_FRenc;
     int m_FLenc;

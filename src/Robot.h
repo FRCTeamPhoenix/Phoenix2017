@@ -107,6 +107,8 @@ public:
 
 	void driveJoystick();
 
+    void setIndexerSpeed(double speed);
+
 	//End of Functions for Actions
 
 	// Beginning of Test Mode

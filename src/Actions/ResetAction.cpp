@@ -5,8 +5,8 @@
 #include "ResetAction.h"
 
 
-resetAction::resetAction (vector<int> placeToReset, vector<shared_ptr<dependency>> dependencies):
-    Action(dependencies),
+resetAction::resetAction (vector<int> placeToReset, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
+    Action(dependencies, robot),
     m_placesToReset(placeToReset)
 { }
 

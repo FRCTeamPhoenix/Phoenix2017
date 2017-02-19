@@ -34,6 +34,10 @@ double Lidar::getDistance() {
     return m_fastAverage;
 }
 
+double Lidar::getDistance() {
+   return m_distance;
+}
+
 double Lidar::getSlowAverage() {
     return m_slowAverage;
 }

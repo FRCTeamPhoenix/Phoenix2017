@@ -76,8 +76,8 @@ namespace ConfigVariables
 
 namespace ShooterConstants
 {
-    const static double maxFlywheelVelocity = 60000;
-    const static double minFlywheelVelocity = 15000;
+    const static double maxFlywheelVelocity = 75000;
+    const static double minFlywheelVelocity = 2000;
 
 };
 
@@ -100,13 +100,13 @@ namespace DriveStationConstants
     };
     enum controlBox
 	{
-    	buttonFlywheel = 1,
-		buttonIndexer = 2,
-		buttonFeeder = 3,
-		buttonClimberUP = 4,
-		buttonClimberDOWN = 5,
-		buttonAutoStart = 6,
-		buttonAutoStop = 7
+		buttonIndexer = 4,
+		buttonFeeder = 2,
+		buttonClimberUP = 3,
+		buttonFlywheelManual = 5,
+		buttonFlywheelAuto = 6,
+		buttonAutoStart = 7,
+		buttonAutoStop = 8
 	};
     const static std::string dashButtonNames[6] =
     {

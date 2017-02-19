@@ -19,7 +19,7 @@ using namespace std;
 
 class DriveJoystick: public Action {
 public:
-	DriveJoystick(vector<shared_ptr<dependency>> dependencies);
+	DriveJoystick(vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
 	DriveJoystick(json& action, shared_ptr<Robot> robot);
     virtual ~DriveJoystick();
 

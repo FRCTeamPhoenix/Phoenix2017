@@ -4,8 +4,8 @@
 
 #include "ActionGroup.h"
 
-ActionGroup::ActionGroup (vector<shared_ptr<Action>> containedActions, vector<shared_ptr<dependency>> dependencies, vector<shared_ptr<dependency>> doneDependencies):
-    Action(dependencies),
+ActionGroup::ActionGroup (vector<shared_ptr<Action>> containedActions, vector<shared_ptr<dependency>> dependencies, vector<shared_ptr<dependency>> doneDependencies, shared_ptr<Robot> robot):
+    Action(dependencies, robot),
     m_containedActions(containedActions),
     m_doneDependencies(doneDependencies)
 {

@@ -609,12 +609,37 @@ void Robot::driveJoystick()
 	double LF = m_joystick.GetX();
 	double rot = m_joystick.GetZ() / 2;
 
-	FB = (fabs(FB) < 0.1) ? 0 : ((FB < 0) ? (FB + 0.1) / (0.9 / 0.5) : (FB - 0.1) / 0.9);
+	FB = (fabs(FB) < 0.1) ? 0 : ((FB < 0) ? (FB + 0.1) / (0.9 / 0.75) : (FB - 0.1) / 0.9);
 	LF = (fabs(LF) < 0.1) ? 0 : ((LF < 0) ? (LF + 0.1) / (0.9 / 1): (LF - 0.1) / 0.9);
 	rot = (fabs(rot) < 0.1) ? 0 : ((rot < 0) ? (rot + 0.1) / (0.9 / 1) : (rot - 0.1) / 0.9);
 
+    double throttle = (((-m_joystick.GetThrottle() + 1) / 2));
+    if(throttle < 0.2)
+    {
+        throttle = 0.2;
+    }
+    if(throttle > 0.8)
+    {
+        throttle = 0.8;
+    }
 
-	m_drivetrain.moveRelative(FB, LF, rot);
+    FB *= throttle;
+    LF *= throttle;
+    rot *= throttle;
+
+    if(m_joystick.GetRawButton(12))
+    {
+        m_drivetrain.moveRelative(LF, -FB / 2, rot / 2);
+    }
+    else
+    {
+        m_drivetrain.moveRelative(FB, LF, rot);
+    }
+}
+
+void Robot::setIndexerSpeed(double speed)
+{
+    m_indexer.setSpeed(speed);
 }
 
 START_ROBOT_CLASS(Robot)
