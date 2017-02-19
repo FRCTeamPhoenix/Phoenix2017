@@ -40,15 +40,15 @@ class Lidar
 
     DigitalOutput m_triggerPin;
 
-    public:
-        // Make sure to pass in 0 to mode
-        Lidar(uint32_t triggerPin, uint32_t monitorPin, int mode);
-        void run();
-        double getDistance();
-        double getFastAverage();
-        double getSlowAverage();
-        virtual ~Lidar();
-        int getStatus();
+public:
+    // Make sure to pass in 0 to mode
+    Lidar(uint32_t triggerPin, uint32_t monitorPin, int mode);
+    void run();
+    double getDistance();
+    double getDistance();
+    double getSlowAverage();
+    virtual ~Lidar();
+    int getStatus();
 };
 
 #endif /* SRC_LIDAR_H_ */

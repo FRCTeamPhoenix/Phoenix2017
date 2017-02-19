@@ -8,7 +8,7 @@
  *      Author: Brin Harper
  */
 
-#include <ShooterCalibrator.h>
+#include "ShooterCalibrator.h"
 
 ShooterCalibrator::ShooterCalibrator()
 {
@@ -20,7 +20,7 @@ ShooterCalibrator::ShooterCalibrator()
     try
     {
 
-        if (!valijson::utils::loadDocument("/home/lvuser/config/shooterCalibrator.json", scSchemaDoc))
+        if (!valijson::utils::loadDocument("/home/lvuser/schemas/shooterCalibrator.schema", scSchemaDoc))
         {
 
             cout << "Shooter Calibration Schema Failed Loading" << endl;
@@ -53,16 +53,9 @@ ShooterCalibrator::ShooterCalibrator()
         {
             cout << "Shooter Calibration Validated" << endl;
 
-            // Create json object containing distance/power pairs
-            ifstream points_json;
-            points_json.open("/home/lvuser/config/shooterCalibrator.json");
-            json points;
-            points_json >> points;
-            points_json.close();
-
             // Iterate over points from json file; read and store reference values
             json::iterator jsonItr;
-            for (jsonItr = points.begin(); jsonItr != points.end(); jsonItr++)
+            for (jsonItr = scJsonDoc.begin(); jsonItr != scJsonDoc.end(); jsonItr++)
             {
                 dvPairsLow.push_back(DistanceVelocityPair(*jsonItr, false));
                 dvPairsTop.push_back(DistanceVelocityPair(*jsonItr, true));

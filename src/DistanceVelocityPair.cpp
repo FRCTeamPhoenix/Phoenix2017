@@ -7,7 +7,7 @@
  *      Author: Brin Harper
  */
 
-#include <DistanceVelocityPair.h>
+#include "DistanceVelocityPair.h"
 
 // Directly pass in distance and power values
 DistanceVelocityPair::DistanceVelocityPair(double distance, double velocity)

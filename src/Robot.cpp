@@ -4,6 +4,15 @@
 using namespace std;
 using json=nlohmann::json;
 
+void lidarThread(shared_ptr<Robot> robot, Lidar& lidar) {
+    while(true) {
+        if(robot->IsEnabled())
+        {
+            lidar.run();
+        }
+    }
+}
+
 Robot::Robot() :
         		m_FRDrive(PortAssign::frontRightWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
 				m_FLDrive(PortAssign::frontLeftWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
@@ -58,6 +67,9 @@ void Robot::RobotInit()
 	cout << "In Robot INIT" << endl;
 	initMainActionGroup();
 	SmartDashboard::PutStringArray("Test List", testModes);
+
+    std::thread runLidar(lidarThread, shared_ptr<Robot>(this), m_lidar);
+    runLidar.detach();
 }
 
 void Robot::Autonomous()
@@ -200,7 +212,7 @@ void Robot::Test()
             printMSG("1", "Control Mode: " + std::to_string(m_pidState));
             printMSG("2", "RFW ENC: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
             printMSG("3", "LFW ENC: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
-            printMSG("4", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("4", "Lidar: " + std::to_string(m_lidar.getDistance()));
             printMSG("5", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
             if (m_pidState == PID)
             {
@@ -225,7 +237,7 @@ void Robot::Test()
             printMSG("0", "Feeder Testing Mode");
             printMSG("1", "Control Mode: " + std::to_string(m_pidState));
             printMSG("2", "Feeder ENC: " + std::to_string(m_feederMotor.GetEncPosition()));
-            printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("3", "Lidar: " + std::to_string(m_lidar.getDistance()));
             printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
             if (m_pidState == PID)
             {
@@ -260,7 +272,7 @@ void Robot::Test()
             printMSG("0", "Indexer Testing Mode");
             printMSG("1", "Control Mode: " + std::to_string(m_pidState));
             printMSG("2", "Indexer ENC: " + std::to_string(m_indexerMotor.GetEncPosition()));
-            printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("3", "Lidar: " + std::to_string(m_lidar.getDistance()));
             printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
 
             if (m_pidState == PID)
@@ -295,7 +307,7 @@ void Robot::Test()
         {
             printMSG("0", "Gather Testing Mode");
             printMSG("1", "Gatherer Speed: " + std::to_string(m_gathererMotor.GetSpeed()));
-            printMSG("2", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("2", "Lidar: " + std::to_string(m_lidar.getDistance()));
             printMSG("3", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
             m_gathererMotor.Set(power);
             break;
@@ -306,7 +318,7 @@ void Robot::Test()
             printMSG("0", "Turret Testing Mode");
             printMSG("1", "Control Mode: " + std::to_string(m_pidState));
             printMSG("2", "Turret ENC: " + std::to_string(m_turretRotateMotor.GetEncPosition()));
-            printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("3", "Lidar: " + std::to_string(m_lidar.getDistance()));
             printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
             if (m_pidState == PID)
             {
@@ -334,7 +346,7 @@ void Robot::Test()
             printMSG("0", "Climber Testing Mode");
             printMSG("1", "Control Mode: " + std::to_string(m_pidState));
             printMSG("2", "Climber ENC: " + std::to_string(m_climberMotor.GetEncPosition()));
-            printMSG("3", "Lidar: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("3", "Lidar: " + std::to_string(m_lidar.getDistance()));
             printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
             if (m_pidState == PID)
             {
@@ -358,7 +370,7 @@ void Robot::Test()
             printMSG("6", "EncoderF: " + std::to_string(m_feederMotor.GetEncPosition()));
             printMSG("7", "Throttle: " + std::to_string(((throttle - 1) / 2)));
             printMSG("8", "EncoderI: " + std::to_string(m_feederMotor.GetEncPosition()));
-            printMSG("9", "Distance: " + std::to_string(m_lidar.getFastAverage()));
+            printMSG("9", "Distance: " + std::to_string(m_lidar.getDistance()));
             if ((m_pidState == VOLTAGE) && m_gamepad.GetRawButton(DriveStationConstants::buttonX))
             {
                 m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
@@ -392,7 +404,7 @@ void Robot::Test()
                 m_topFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
                 m_indexerMotor.goAt(power / 5);
 //                m_lowerFlyWheelMotor.goAt(m_gamepad.GetY());
-//                m_topFlyWheelMotor.goAt(m_gamepad.GetY());
+//                m_lowerFlyWheelMotor.goAt(m_gamepad.GetY());
             }
             else if (m_pidState == VOLTAGE)
             {
@@ -402,7 +414,7 @@ void Robot::Test()
                 m_topFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 m_indexerMotor.Set(power / 5);
 //                m_lowerFlyWheelMotor.Set(m_gamepad.GetY());
-//                m_topFlyWheelMotor.Set(m_gamepad.GetY());
+//                m_lowerFlyWheelMotor.Set(m_gamepad.GetY());
             }
             // Fly wheel Test
             if ((m_pidState == VOLTAGE) && (m_gamepad.GetRawButton(DriveStationConstants::buttonRB)))
