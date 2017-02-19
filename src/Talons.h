@@ -36,6 +36,7 @@ class Talons {
    public:
       Talons(string jsonPath, string schemaPath);
       json getTalonConfig(int talonId);
+      void initTalons();
       virtual ~Talons();
       bool m_status;
 };

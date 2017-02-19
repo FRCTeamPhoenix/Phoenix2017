@@ -32,45 +32,50 @@ Talons::Talons(string jsonPath, string schemaPath) {
       "\"inverted\": false}"_json;
    m_status = true;
 
+   initTalons();
+
+}
+
+void Talons::initTalons() {
    try
-   {
-      if(!valijson::utils::loadDocument("/home/lvuser/" + schemaPath,
-                                        m_schemaJson))
       {
-         cout << "Failed to load talons.schema." << endl;
-         throw std::runtime_error("Failed to load schema document");
+         if(!valijson::utils::loadDocument("/home/lvuser/schemas/talons.schema",
+                                           m_schemaJson))
+         {
+            cout << "Failed to load talons.schema." << endl;
+            throw std::runtime_error("Failed to load schema document");
+         }
+
+         Schema schema;
+         SchemaParser parser;
+         NlohmannJsonAdapter schemaAdapter(m_schemaJson);
+         parser.populateSchema(schemaAdapter, schema);
+
+         if(!valijson::utils::loadDocument("/home/lvuser/config/talons.json",
+                                           m_talonJson))
+         {
+            cout << "Failed to load talons.json." << endl;
+            throw std::runtime_error("Failed to load json document");
+         }
+
+         Validator validator;
+         NlohmannJsonAdapter jsonAdapter(m_talonJson);
+
+         if(!validator.validate(schema, jsonAdapter, NULL))
+         {
+            cout << "Failed to validate talons.json." << endl;
+
+            throw std::runtime_error("Failed to validate json document.");
+         }
       }
-
-      Schema schema;
-      SchemaParser parser;
-      NlohmannJsonAdapter schemaAdapter(m_schemaJson);
-      parser.populateSchema(schemaAdapter, schema);
-
-      if(!valijson::utils::loadDocument("/home/lvuser" + jsonPath,
-                                        m_talonJson))
+      catch(runtime_error& runtime)
       {
-         cout << "Failed to load talons.json." << endl;
-         throw std::runtime_error("Failed to load json document");
+         cout << runtime.what() << endl;
+
+         m_status = false;
+
+         return;
       }
-
-      Validator validator;
-      NlohmannJsonAdapter jsonAdapter(m_talonJson);
-
-      if(!validator.validate(schema, jsonAdapter, NULL))
-      {
-         cout << "Failed to validate talons.json." << endl;
-
-         throw std::runtime_error("Failed to validate json document.");
-      }
-   }
-   catch(runtime_error& runtime)
-   {
-      cout << runtime.what() << endl;
-
-      m_status = false;
-   }
-
-
 }
 
 json Talons::getTalonConfig(int talonId) {
