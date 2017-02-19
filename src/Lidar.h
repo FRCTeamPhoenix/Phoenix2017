@@ -45,7 +45,7 @@ public:
     Lidar(uint32_t triggerPin, uint32_t monitorPin, int mode);
     void run();
     double getDistance();
-    double getDistance();
+    double getFastAverage();
     double getSlowAverage();
     virtual ~Lidar();
     int getStatus();

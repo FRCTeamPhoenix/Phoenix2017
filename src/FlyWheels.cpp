@@ -44,9 +44,9 @@ void FlyWheels::run()
             setRightSpeed(SmartDashboard::GetNumber("DB/Slider 2", 0.0));
             break;
         case LIDARRATE: //Speed based on lidar Distance
-
+        {
             int topSpeed = m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getDistance());
-            int lowerSpeed = m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getDistance();
+            int lowerSpeed = m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getDistance());
 
             if (topSpeed > ShooterConstants::maxFlywheelVelocity) {
                 m_lowerFlyWheelMotor.goAtVelocity(ShooterConstants::maxFlywheelVelocity);
@@ -63,7 +63,7 @@ void FlyWheels::run()
             } else {
                 m_topFlyWheelMotor.goAtVelocity(lowerSpeed);
             }
-
+        }
             break;
 
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.

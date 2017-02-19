@@ -4,11 +4,11 @@
 using namespace std;
 using json=nlohmann::json;
 
-void lidarThread(shared_ptr<Robot> robot, Lidar& lidar) {
+void lidarThread(Robot * robot, Lidar * lidar) {
     while(true) {
         if(robot->IsEnabled())
         {
-            lidar.run();
+            lidar->run();
         }
     }
 }
@@ -68,7 +68,7 @@ void Robot::RobotInit()
 	initMainActionGroup();
 	SmartDashboard::PutStringArray("Test List", testModes);
 
-    std::thread runLidar(lidarThread, shared_ptr<Robot>(this), m_lidar);
+    std::thread runLidar(lidarThread, this, &m_lidar);
     runLidar.detach();
 }
 
