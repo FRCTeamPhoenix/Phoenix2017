@@ -42,7 +42,7 @@ struct PortAssign
 struct RobotConstants
 {
     constexpr static float turretDamp = 0.6f;
-    constexpr static float degreesToTicks = 0.5f; // THIS IS WRONG. NEEDS TO BE CHANGED
+    constexpr static float degreesToTicks = 27.27f; // THIS IS WRONG. NEEDS TO BE CHANGED
 };
 
 namespace ConfigVariables
@@ -105,8 +105,9 @@ namespace DriveStationConstants
 		buttonClimberUP = 3,
 		buttonFlywheelManual = 5,
 		buttonFlywheelAuto = 6,
-		buttonAutoStart = 7,
-		buttonAutoStop = 8
+        buttonIndexerReverse = 7,
+		buttonAutoStart = 8,
+		buttonAutoStop = 9
 	};
     const static std::string dashButtonNames[6] =
     {
