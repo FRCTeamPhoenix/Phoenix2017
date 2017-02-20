@@ -220,18 +220,21 @@ public:
                    lidarString << "Distance: ";
                    lidarString << m_lidar.getDistance();
                    SmartDashboard::PutString("DB/String 9", lidarString.str());
+                   SmartDashboard::PutNumber("LidarDistance", m_lidar.getDistance());
 
                    std::ostringstream shooterTopVel;
                    shooterTopVel << "VelTop: ";
                    shooterTopVel << m_topFlyWheelMotor.GetEncVel();
                    //shooterTopVel << SmartDashboard::GetNumber("DB/Slider 1", 0.0);
                    SmartDashboard::PutString("DB/String 2", shooterTopVel.str());
+                   SmartDashboard::PutNumber("ShooterTopVel", m_topFlyWheelMotor.GetEncVel());
 
                    std::ostringstream shooterLowVel;
                    shooterLowVel << "VelLow: ";
                    shooterLowVel << m_lowerFlyWheelMotor.GetEncVel();
                    //shooterLowVel << SmartDashboard::GetNumber("DB/Slider 2", 0.0);
                    SmartDashboard::PutString("DB/String 3", shooterLowVel.str());
+                   SmartDashboard::PutNumber("ShooterLowVel", m_lowerFlyWheelMotor.GetEncVel());
 
 
                    m_configEditor.update();
