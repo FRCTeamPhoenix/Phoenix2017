@@ -14,37 +14,38 @@ void lidarThread(Robot * robot, Lidar * lidar) {
 }
 
 Robot::Robot() :
-        		m_FRDrive(PortAssign::frontRightWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-				m_FLDrive(PortAssign::frontLeftWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-				m_BRDrive(PortAssign::backRightWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-				m_BLDrive(PortAssign::backLeftWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-				m_mainAutoGroup(new ActionGroup()),
-				m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_expansionBoard, HeadingControl::GyroAxes::x),
-				m_topFlyWheelMotor(PortAssign::topFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-				m_lowerFlyWheelMotor(PortAssign::lowerFlyWheelMotor, CANTalon::FeedbackDevice::QuadEncoder),
-				m_turretRotateMotor(PortAssign::turret, CANTalon::FeedbackDevice::QuadEncoder),
-				m_leftLimitSwitch(PortAssign::leftLimitSwitch),
-				m_rightLimitSwitch( PortAssign::rightLimitSwitch),
-				m_joystick(PortAssign::joystick),
-				m_gamepad(PortAssign::gamepad),
-                m_controlBox(PortAssign::controlBox),
-				m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0),
-				m_expansionBoard(),
-				m_visionComs(),
-				m_shooterCalibrator(),
-				m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_controlBox),
-				m_turret(m_turretRotateMotor,m_visionComs, m_controlBox),
-				m_loggerController(),
-				m_configEditor(),
-				m_climberMotor(PortAssign::climber, CANTalon::FeedbackDevice::QuadEncoder),
-				m_climber(m_climberMotor, m_controlBox),
-				m_gathererMotor(PortAssign::loader),
-				m_feederMotor(PortAssign::feeder, CANTalon::FeedbackDevice::QuadEncoder),
-				m_indexerMotor(PortAssign::indexer, CANTalon::FeedbackDevice::QuadEncoder),
-				m_indexer(m_indexerMotor, m_controlBox),
-				m_feeder(m_feederMotor, m_controlBox),
-				m_gatherer(m_gathererMotor, m_controlBox),
-				m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_controlBox,m_climber,m_gatherer)
+        m_talons("config/talons_validated.json", "schemas/talons.schema"),
+        m_FRDrive(7, m_talons.getTalonConfig(7), CANTalon::FeedbackDevice::QuadEncoder),
+        m_FLDrive(8, m_talons.getTalonConfig(8), CANTalon::FeedbackDevice::QuadEncoder),
+        m_BRDrive(1, m_talons.getTalonConfig(1), CANTalon::FeedbackDevice::QuadEncoder),
+        m_BLDrive(2, m_talons.getTalonConfig(2), CANTalon::FeedbackDevice::QuadEncoder),
+        m_mainAutoGroup(new ActionGroup()),
+        m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_expansionBoard, HeadingControl::GyroAxes::x),
+        m_topFlyWheelMotor(PortAssign::topFlyWheelMotor, m_talons.getTalonConfig(PortAssign::topFlyWheelMotor), CANTalon::FeedbackDevice::QuadEncoder),
+        m_lowerFlyWheelMotor(PortAssign::lowerFlyWheelMotor, m_talons.getTalonConfig(PortAssign::lowerFlyWheelMotor), CANTalon::FeedbackDevice::QuadEncoder),
+        m_turretRotateMotor(PortAssign::turret, m_talons.getTalonConfig(PortAssign::turret), CANTalon::FeedbackDevice::QuadEncoder),
+        m_leftLimitSwitch(PortAssign::leftLimitSwitch),
+        m_rightLimitSwitch( PortAssign::rightLimitSwitch),
+        m_joystick(PortAssign::joystick),
+        m_gamepad(PortAssign::gamepad),
+        m_controlBox(PortAssign::controlBox),
+        m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0),
+        m_expansionBoard(),
+        m_visionComs(),
+        m_shooterCalibrator(),
+        m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_gamepad),
+        m_turret(m_turretRotateMotor,m_visionComs, m_gamepad),
+        m_loggerController(),
+        m_configEditor(),
+        m_climberMotor(PortAssign::climber, m_talons.getTalonConfig(PortAssign::climber), CANTalon::FeedbackDevice::QuadEncoder),
+        m_climber(m_climberMotor, m_joystick),
+        m_gathererMotor(PortAssign::loader),
+        m_feederMotor(PortAssign::feeder, m_talons.getTalonConfig(PortAssign::feeder), CANTalon::FeedbackDevice::QuadEncoder),
+        m_indexerMotor(PortAssign::indexer, m_talons.getTalonConfig(PortAssign::indexer), CANTalon::FeedbackDevice::QuadEncoder),
+        m_indexer(m_indexerMotor, m_gamepad),
+        m_feeder(m_feederMotor, m_gamepad),
+        m_gatherer(m_gathererMotor, m_gamepad),
+        m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_controlBox,m_climber,m_gatherer)
 {
 
 }
@@ -121,6 +122,20 @@ void Robot::OperatorControl()
 
 void Robot::Test()
 {
+    m_FRDrive.SetControlMode(CANSpeedController::kPercentVbus);
+    m_FLDrive.SetControlMode(CANSpeedController::kPercentVbus);
+    m_BRDrive.SetControlMode(CANSpeedController::kPercentVbus);
+    m_BLDrive.SetControlMode(CANSpeedController::kPercentVbus);
+
+    stringstream ss;
+    ss << m_talons.m_status;
+    SmartDashboard::PutString("DB/String 7", ss.str());
+
+    ss.str("");
+    ss << m_talons.getTalonConfig(2)["speed"]["p"];
+    SmartDashboard::PutString("DB/String 8", ss.str());
+
+    LOGI << "Start Test Mode";
     m_pidState = PID;
     testModeSelector = t_Talons;
     while (IsEnabled() && IsTest())

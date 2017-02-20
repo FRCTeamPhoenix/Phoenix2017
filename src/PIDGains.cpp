@@ -4,23 +4,24 @@
 
 #include "PIDGains.h"
 
-PIDGains::PIDGains(double P, double I, double D, int IZone, double FeedForward)
+PIDGains::PIDGains(double P, double I, double D, int IZone, double FeedForward, double rampRate)
 {
     setP(P);
     setI(I);
     setD(D);
     setIZone(IZone);
     setFeedForward(FeedForward);
-
+    setRampRate(rampRate);
 }
 
-void PIDGains::set(double newP, double newI, double newD, int newIZone, double newFeedForward)
+void PIDGains::set(double newP, double newI, double newD, int newIZone, double newFeedForward, double newRampRate)
 {
     setP(newP);
     setI(newI);
     setD(newD);
     setIZone(newIZone);
     setFeedForward(newFeedForward);
+    setRampRate(newRampRate);
 }
 
 double PIDGains::getP ()
@@ -41,6 +42,11 @@ double PIDGains::getD()
 int PIDGains::getIZone()
 {
     return m_IZone;
+}
+
+double PIDGains::getRampRate()
+{
+   return m_rampRate;
 }
 
 double PIDGains::getFeedForward()
@@ -106,4 +112,16 @@ void PIDGains::setFeedForward(double newFeedForward)
     {
         m_FeedForward = newFeedForward;
     }
+}
+
+void PIDGains::setRampRate(double newRampRate)
+{
+   if(newRampRate < 0)
+   {
+      m_rampRate = 0;
+   }
+   else
+   {
+      m_rampRate = newRampRate;
+   }
 }
