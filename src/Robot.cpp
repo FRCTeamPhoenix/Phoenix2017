@@ -33,8 +33,8 @@ Robot::Robot() :
         m_expansionBoard(),
         m_visionComs(),
         m_shooterCalibrator(),
-        m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_gamepad),
-        m_turret(m_turretRotateMotor,m_visionComs, m_gamepad),
+        m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_controlBox),
+        m_turret(m_turretRotateMotor,m_visionComs, m_controlBox),
         m_loggerController(),
         m_configEditor(),
         m_climberMotor(PortAssign::climber, m_talons.getTalonConfig(PortAssign::climber), CANTalon::FeedbackDevice::QuadEncoder),
@@ -42,9 +42,9 @@ Robot::Robot() :
         m_gathererMotor(PortAssign::loader),
         m_feederMotor(PortAssign::feeder, m_talons.getTalonConfig(PortAssign::feeder), CANTalon::FeedbackDevice::QuadEncoder),
         m_indexerMotor(PortAssign::indexer, m_talons.getTalonConfig(PortAssign::indexer), CANTalon::FeedbackDevice::QuadEncoder),
-        m_indexer(m_indexerMotor, m_gamepad),
-        m_feeder(m_feederMotor, m_gamepad),
-        m_gatherer(m_gathererMotor, m_gamepad),
+        m_indexer(m_indexerMotor, m_controlBox),
+        m_feeder(m_feederMotor, m_controlBox),
+        m_gatherer(m_gathererMotor, m_controlBox),
         m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_controlBox,m_climber,m_gatherer)
 {
 
