@@ -14,7 +14,7 @@ void lidarThread(Robot * robot, Lidar * lidar) {
 }
 
 Robot::Robot() :
-        m_talons("config/talons.json", "schemas/talons.schema"),
+        m_talons("config/talons_validated.json", "schemas/talons.schema"),
         m_FRDrive(7, m_talons.getTalonConfig(7), CANTalon::FeedbackDevice::QuadEncoder),
         m_FLDrive(8, m_talons.getTalonConfig(8), CANTalon::FeedbackDevice::QuadEncoder),
         m_BRDrive(1, m_talons.getTalonConfig(1), CANTalon::FeedbackDevice::QuadEncoder),

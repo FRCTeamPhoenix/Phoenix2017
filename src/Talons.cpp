@@ -51,7 +51,7 @@ void Talons::initTalons() {
          NlohmannJsonAdapter schemaAdapter(m_schemaJson);
          parser.populateSchema(schemaAdapter, schema);
 
-         if(!valijson::utils::loadDocument("/home/lvuser/config/talons.json",
+         if(!valijson::utils::loadDocument("/home/lvuser/config/talons_validated.json",
                                            m_talonJson))
          {
             cout << "Failed to load talons.json." << endl;
