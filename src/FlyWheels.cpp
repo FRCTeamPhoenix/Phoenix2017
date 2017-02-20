@@ -13,8 +13,8 @@ FlyWheels::FlyWheels(
         ShooterCalibrator& shooterCalibrator,
         Lidar& lidar,
         Joystick& gamepad):
-        m_lowerFlyWheelMotor(rightFlyWheelMotor),
-        m_topFlyWheelMotor(leftFlyWheelMotor),
+        m_lowerFlyWheelMotor(leftFlyWheelMotor),
+        m_topFlyWheelMotor(rightFlyWheelMotor),
         m_shooterCalibrator(shooterCalibrator),
         m_lidar(lidar),
         m_gamepad(gamepad)
