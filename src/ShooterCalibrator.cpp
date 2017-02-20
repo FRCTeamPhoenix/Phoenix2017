@@ -8,54 +8,89 @@
  *      Author: Brin Harper
  */
 
-#include <ShooterCalibrator.h>
+#include "ShooterCalibrator.h"
 
 ShooterCalibrator::ShooterCalibrator()
 {
 
-//    bool validJson = true;
-//    json scJsonDoc;
-//    json scSchemaDoc;
-//
-//    try
-//    {
-//
-//        if (!valijson::utils::loadDocument("/home/lvuser/config/shooterCalibrator.json", scSchemaDoc))
-//        {
-//
-//            cout << "Schema Failed Loading" << endl;
-//
-//            throw std::runtime_error("Failed to load schema document");
-//
-//        }
-//
-//    }
-//
-//    catch (runtime_error runtime) {
-//        cout << runtime.what() << endl;
-//
-//        // LOAD IN DEFAULT VALUES
-//
-//    }
+    json scJsonDoc;
+    json scSchemaDoc;
 
-    // Create json object containing distance/power pairs
-    ifstream points_json;
-    points_json.open("/home/lvuser/config/shooterCalibrator.json");
-    json points;
-    points_json >> points;
-    points_json.close();
-
-    // Iterate over points from json file; read and store reference values
-    json::iterator jsonItr;
-    for (jsonItr = points.begin(); jsonItr != points.end(); jsonItr++)
+    try
     {
-        dvPairsLow.push_back(DistanceVelocityPair(*jsonItr, false));
-        dvPairsTop.push_back(DistanceVelocityPair(*jsonItr, true));
+
+        if (!valijson::utils::loadDocument("/home/lvuser/schemas/shooterCalibrator.schema", scSchemaDoc))
+        {
+
+            cout << "Shooter Calibration Schema Failed Loading" << endl;
+
+            throw std::runtime_error("Failed to load shooter calibrator schema document");
+
+        }
+
+        Schema scSchema;
+        SchemaParser parser;
+        NlohmannJsonAdapter scSchemaAdapter(scSchemaDoc);
+        parser.populateSchema(scSchemaAdapter, scSchema);
+
+        if (!valijson::utils::loadDocument("/home/lvuser/config/shooterCalibrator.json", scJsonDoc))
+        {
+            cout << "Shooter Calibration Json Failed Loading" << endl;
+
+            throw std::runtime_error("Failed to load shooter calibrator Json document");
+        }
+
+        Validator validator;
+        NlohmannJsonAdapter scTargetAdapter(scJsonDoc);
+        if (!validator.validate(scSchema, scTargetAdapter, NULL))
+        {
+            cout << "Shooter Calibration Validation Failed" << endl;
+            throw std::runtime_error("Shooter Calibration Validation failed");
+        }
+
+        else
+        {
+            cout << "Shooter Calibration Validated" << endl;
+
+            // Iterate over points from json file; read and store reference values
+            json::iterator jsonItr;
+            for (jsonItr = scJsonDoc.begin(); jsonItr != scJsonDoc.end(); jsonItr++)
+            {
+                dvPairsLow.push_back(DistanceVelocityPair(*jsonItr, false));
+                dvPairsTop.push_back(DistanceVelocityPair(*jsonItr, true));
+            }
+
+            // Sort reference values
+            sortRefVals(dvPairsLow);
+            sortRefVals(dvPairsTop);
+
+        }
+
     }
 
-    // Sort reference values
-    sortRefVals(dvPairsLow);
-    sortRefVals(dvPairsTop);
+    catch (runtime_error runtime) {
+
+        cout << runtime.what() << endl;
+        cout << "Default Shooter Calibration Values Loaded";
+
+        dvPairsTop.push_back(DistanceVelocityPair(0, 40000));
+        dvPairsLow.push_back(DistanceVelocityPair(0, 3000));
+
+        dvPairsTop.push_back(DistanceVelocityPair(104, 55000));
+        dvPairsLow.push_back(DistanceVelocityPair(104, 3000));
+
+        dvPairsTop.push_back(DistanceVelocityPair(144, 59000));
+        dvPairsLow.push_back(DistanceVelocityPair(144, 3300));
+
+        dvPairsTop.push_back(DistanceVelocityPair(159, 61000));
+        dvPairsLow.push_back(DistanceVelocityPair(159, 3400));
+
+        dvPairsTop.push_back(DistanceVelocityPair(165, 64000));
+        dvPairsLow.push_back(DistanceVelocityPair(144, 3400));
+
+        return;
+
+    }
 
 }
 

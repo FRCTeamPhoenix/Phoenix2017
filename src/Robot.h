@@ -20,7 +20,7 @@
 #include "Gatherer.h"
 #include "Feeder.h"
 #include "Indexer.h"
-
+#include "Talons.h"
 
 //Suppresses uint_64 overflow warning from valijson
 #pragma GCC diagnostic ignored "-Woverflow"
@@ -46,38 +46,38 @@ class ActionGroup;
 class Robot: public SampleRobot
 
 {
-
-	SmartTalon m_FRDrive;
-	SmartTalon m_FLDrive;
-	SmartTalon m_BRDrive;
-	SmartTalon m_BLDrive;
-	ActionGroup* m_mainAutoGroup;
-	relativeMecanumDrivetrain m_drivetrain;
-	SmartTalon m_topFlyWheelMotor;
-	SmartTalon m_lowerFlyWheelMotor;
-	SmartTalon m_turretRotateMotor;
-	DigitalInput m_leftLimitSwitch;
-	DigitalInput m_rightLimitSwitch;
-	Joystick m_joystick;
-	Joystick m_gamepad;
+    Talons m_talons;
+    SmartTalon m_FRDrive;
+    SmartTalon m_FLDrive;
+    SmartTalon m_BRDrive;
+    SmartTalon m_BLDrive;
+    ActionGroup* m_mainAutoGroup;
+    relativeMecanumDrivetrain m_drivetrain;
+    SmartTalon m_topFlyWheelMotor;
+    SmartTalon m_lowerFlyWheelMotor;
+    SmartTalon m_turretRotateMotor;
+    DigitalInput m_leftLimitSwitch;
+    DigitalInput m_rightLimitSwitch;
+    Joystick m_joystick;
+    Joystick m_gamepad;
     Joystick m_controlBox;
-	Lidar m_lidar;
-	ADIS16448_IMU m_expansionBoard;
-	Communications m_visionComs;
-	ShooterCalibrator m_shooterCalibrator;
-	FlyWheels m_flywheel;
-	Turret m_turret;
-	LoggerController m_loggerController;
-	ConfigEditor m_configEditor;
-	SmartTalon m_climberMotor;
-	Climber m_climber;
-	Talon m_gathererMotor;
-	SmartTalon m_feederMotor;
-	SmartTalon m_indexerMotor;
-	Indexer m_indexer;
-	Feeder m_feeder;
-	Gatherer m_gatherer;
-	RobotController m_robotController;
+    Lidar m_lidar;
+    ADIS16448_IMU m_expansionBoard;
+    Communications m_visionComs;
+    ShooterCalibrator m_shooterCalibrator;
+    FlyWheels m_flywheel;
+    Turret m_turret;
+    LoggerController m_loggerController;
+    ConfigEditor m_configEditor;
+    SmartTalon m_climberMotor;
+    Climber m_climber;
+    Talon m_gathererMotor;
+    SmartTalon m_feederMotor;
+    SmartTalon m_indexerMotor;
+    Indexer m_indexer;
+    Feeder m_feeder;
+    Gatherer m_gatherer;
+    RobotController m_robotController;
 
 public:
 	Robot();

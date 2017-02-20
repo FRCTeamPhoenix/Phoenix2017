@@ -32,7 +32,7 @@ public:
 
 
     FlyWheels(
-            SmartTalon& rightFlyWheelMotor, //Smart Talon of the right flywheel
+            SmartTalon& lowerFlyWheelMotor, //Smart Talon of the right flywheel
             SmartTalon& leftFlyWheelMotor, // Smart Talon of the left flywheel
             ShooterCalibrator& shooterCalibrator, //Lidar based flywheel speed
             Lidar& lidar,
@@ -43,8 +43,8 @@ public:
 
 private:
     STATE m_state; //State variable for the FlyWheels
-    SmartTalon& m_rightFlyWheelMotor; //Right FlyWheel Motor
-    SmartTalon& m_leftFlyWheelMotor; // Left FlyWheel Motor
+    SmartTalon& m_lowerFlyWheelMotor; //Right FlyWheel Motor
+    SmartTalon&m_topFlyWheelMotor; // Left FlyWheel Motor
     ShooterCalibrator& m_shooterCalibrator;
     Lidar& m_lidar;
     Joystick& m_gamepad; //Gamepad
