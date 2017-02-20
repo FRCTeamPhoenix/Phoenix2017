@@ -42,7 +42,9 @@ struct PortAssign
 struct RobotConstants
 {
     constexpr static double turretDamp = 0.6f;
+    constexpr static double turretSpeed = 0.1f;
     constexpr static double degreesToTicks = 27.2727273f;
+
 };
 
 namespace ConfigVariables
@@ -100,6 +102,7 @@ namespace DriveStationConstants
     };
     enum controlBox
 	{
+        buttonTurretAuto = 1,
 		buttonIndexer = 4,
 		buttonFeeder = 2,
 		buttonClimberUP = 3,
