@@ -4,8 +4,8 @@
 
 #include "Rotate.h"
 
-Rotate::Rotate (double angle, double speed, double tolerance, vector<shared_ptr<dependency>> dependencies):
-    Action(dependencies),
+Rotate::Rotate (double angle, double speed, double tolerance, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
+    Action(dependencies, robot),
     m_angle(angle),
     m_speed(speed),
     m_tolerance(tolerance)

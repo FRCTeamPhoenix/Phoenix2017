@@ -17,7 +17,7 @@ using namespace std;
 class DriveAt : public Action
 {
 public:
-    DriveAt(double speed, double angle, vector<shared_ptr<dependency>> dependencies);
+    DriveAt(double speed, double angle, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
 
     DriveAt(json& action, shared_ptr<Robot> robot);
 

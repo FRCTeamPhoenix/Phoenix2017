@@ -6,50 +6,43 @@
  */
 #include "Climber.h"
 
-Climber::Climber(
-        SmartTalon & motor,
-        Joystick & gamepad):
-		m_motor(motor),
+Climber::Climber(SmartTalon& motor,
+		Joystick & gamepad):
+        m_motor(motor),
 		m_gamepad(gamepad)
 {
+    m_state = OFF;
+    m_motor.SetControlMode(CANSpeedController::kPercentVbus);
+
 }
 
 Climber::~Climber()
 {
 }
 
-void Climber::move(double speed) {
-	m_motor.goAt(speed);
+//Gets the current state of the FlyWheels state machine
+Climber::STATE Climber::getState(){
+    return m_state;
 }
 
-void Climber::stop() {
-	m_motor.goAt(0.0);
+//Sets the state when there is a change in the FlyWheels state machine
+void Climber::setState(Climber::STATE state)
+{
+    m_state = state;
+
 }
 
 void Climber::run()
 {
-    //bool m_climb = m_gamepad->GetRawButton(buttonNames::buttonA); //Reason why is because we need to setup buttons
     switch (m_state)
     {
-    	stop();
         case OFF:
-            if (!m_gamepad.GetRawButton(DriveStationConstants::buttonA))
-            {
-                break;
-            }
-            m_state = ON;
+            m_motor.Set(0.0);
             break;
 
         case ON:
-        	move(2000);
-            if (m_gamepad.GetRawButton(DriveStationConstants::buttonA))
-            {
-            	break;
-            }
-            m_state = OFF;
+            m_motor.Set(1.0);
             break;
-
-            // TODO we need to add the limits and find them witht the encoders.
     }
 
 }

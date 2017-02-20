@@ -11,6 +11,8 @@
 #include "constants.h"
 #include "SmartTalon.h"
 
+//#include "Actions/AllActions.h"
+
 class Indexer
 {
 public:
@@ -28,10 +30,13 @@ public:
     void setState(State state);
     void run();
 
+    void setSpeed(double speed);
+
 private:
     State m_state;
     SmartTalon& m_indexerMotor;
     Joystick& m_gamepad;
+    double m_speed;
 };
 
 #endif /* SRC_INDEXER_H_ */

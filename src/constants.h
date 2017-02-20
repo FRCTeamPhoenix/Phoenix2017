@@ -28,6 +28,7 @@ struct PortAssign
     // Controllers
     const static uint32_t joystick = 0;
     const static uint32_t gamepad = 1;
+    const static uint32_t controlBox = 2;
 
     // Limit Switches
     const static uint32_t rightLimitSwitch = 1;
@@ -73,6 +74,13 @@ namespace ConfigVariables
     };
 };
 
+namespace ShooterConstants
+{
+    const static double maxFlywheelVelocity = 75000;
+    const static double minFlywheelVelocity = 2000;
+
+};
+
 namespace DriveStationConstants
 {
     enum buttonNames
@@ -90,6 +98,17 @@ namespace DriveStationConstants
         joystickLeftButton = 11,
         joystickRightButton = 12
     };
+    enum controlBox
+	{
+		buttonIndexer = 4,
+		buttonFeeder = 2,
+		buttonClimberUP = 3,
+		buttonFlywheelManual = 5,
+		buttonFlywheelAuto = 6,
+        buttonIndexerReverse = 7,
+		buttonAutoStart = 8,
+		buttonAutoStop = 9
+	};
     const static std::string dashButtonNames[6] =
     {
         "New Name",

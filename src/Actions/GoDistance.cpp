@@ -4,8 +4,8 @@
 
 #include "GoDistance.h"
 
-GoDistance::GoDistance (double distance, double angle, double speed, double tolerance, vector<shared_ptr<dependency>> dependencies):
-    Action(dependencies),
+GoDistance::GoDistance (double distance, double angle, double speed, double tolerance, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
+    Action(dependencies, robot),
     m_distance(distance),
     m_angle(angle),
     m_speed(speed),
@@ -37,6 +37,7 @@ void GoDistance::run ()
     else if(m_robot->doneDriveMove (m_tolerance))
     {
         finish();
+        cout << m_name << " is done" << endl;
         m_timer.Stop ();
     }
 

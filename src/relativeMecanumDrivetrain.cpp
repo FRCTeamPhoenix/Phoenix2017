@@ -34,6 +34,8 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
     m_BRenc = 0;
     m_BLenc = 0;
 
+    m_isDistanceMove = false;
+
     m_mode = CANSpeedController::ControlMode::kSpeed;
 
     m_distanceController.Enable();
@@ -87,6 +89,12 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
 {
     m_mode = CANSpeedController::ControlMode::kPosition;
 
+    if(fabs(distance) <= 0.05){
+        m_isDistanceMove = false;
+    }
+    else{
+        m_isDistanceMove = true;
+    }
     double distanceX = getXComponent(distance, angle);
     double distanceY = getYComponent(distance, angle);
 
@@ -114,7 +122,7 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
 
     m_distanceController.SetSetpoint (distance);
 
-    m_distanceController.SetSetpoint (sqrt((distanceX * distanceX) + (distanceY * distanceY)));
+//    m_distanceController.SetSetpoint (sqrt((distanceX * distanceX) + (distanceY * distanceY)));
 
 //    std::stringstream sP;
 //    sP << "SetPoint: " << m_distanceController.GetSetpoint ();
@@ -160,17 +168,21 @@ void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotat
 
 bool relativeMecanumDrivetrain::doneMove (double tolerancePercentage)
 {
-    double difference = m_distance - m_goalDistance;
 
-    return (fabs(difference) < fabs((tolerancePercentage * m_goalDistance))) && m_headingControl.isDone ();
+    if(m_isDistanceMove)
+    {
+        double difference = m_distance - m_goalDistance;
+        return (fabs(difference) < fabs((tolerancePercentage * m_goalDistance))) && m_headingControl.isDone();
+    }
+    return m_headingControl.isDone();
 }
 
 double relativeMecanumDrivetrain::PIDGet ()
 {
     double distance = getDistance();
-    std::stringstream dist;
-    dist << "Distance: " << distance;
-    SmartDashboard::PutString("DB/String 4", dist.str());
+//    std::stringstream dist;
+//    dist << "Distance: " << distance;
+//    SmartDashboard::PutString("DB/String 4", dist.str());
 
 //    LOGI << dist.str();
 
@@ -229,19 +241,19 @@ void relativeMecanumDrivetrain::PIDWrite (double output)
 //        std::stringstream gY;
 //        gY << "speed Y: " << speedY;
 //        SmartDashboard::PutString("DB/String 1", gY.str());
-
-        std::stringstream speeds;
-        speeds << "Output Dist: " << output;
-        SmartDashboard::PutString("DB/String 3", speeds.str());
-
-        std::stringstream rot;
-        rot << "Rotation Spd: " << (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity);
-        SmartDashboard::PutString("DB/String 2", rot.str());
-//        LOGI << speeds.str();
-
-        std::stringstream rotation;
-        rotation << "Rotation: " << m_headingControl.getOutput ();
-        SmartDashboard::PutString("DB/String 9", rotation.str());
+//
+//        std::stringstream speeds;
+//        speeds << "Output Dist: " << output;
+//        SmartDashboard::PutString("DB/String 3", speeds.str());
+//
+//        std::stringstream rot;
+//        rot << "Rotation Spd: " << (m_maxSpeed * m_headingControl.getOutput () * m_gyroSensitivity);
+//        SmartDashboard::PutString("DB/String 2", rot.str());
+////        LOGI << speeds.str();
+//
+//        std::stringstream rotation;
+//        rotation << "Rotation: " << m_headingControl.getOutput ();
+//        SmartDashboard::PutString("DB/String 9", rotation.str());
 //        LOGI << speeds.str();
     }
 }

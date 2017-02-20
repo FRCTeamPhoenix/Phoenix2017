@@ -18,7 +18,7 @@ using json=nlohmann::json;
 class GoDistance : public Action
 {
 public:
-    GoDistance(double distance, double angle, double speed, double tolerance, vector<shared_ptr<dependency>> dependencies);
+    GoDistance(double distance, double angle, double speed, double tolerance, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
 
     GoDistance(json& action, shared_ptr<Robot> robot);
 

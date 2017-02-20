@@ -20,11 +20,17 @@ using json=nlohmann::json;
 class resetAction : public Action
 {
 public:
-    resetAction(vector<int> placesToReset, vector<shared_ptr<dependency>> dependencies);
+    resetAction(vector<int> placesToReset, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
 
+    /*
+     * Expected Json Values
+     *
+     * "placesToReset": array of int [recommended to include its dependencies]
+     * All Base Action Json
+     */
     resetAction(json& action, shared_ptr<Robot> robot);
 
-    virtual void execute(vector<shared_ptr<Action>>& allActions);
+    void execute(vector<shared_ptr<Action>>& allActions);
 private:
 
     vector<int> m_placesToReset;

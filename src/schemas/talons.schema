@@ -1,0 +1,54 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	
+	"allOf": [
+		{"type": "array"},
+		{"items": {"$ref": "#/definitions/Talon"}},
+		{"minItems": 10},
+		{"maxItems": 10}
+	],
+	
+	"definitions": {
+		"Gains": {
+			"type": "object",
+			
+			"properties": {
+				"p": {"type": "number"},
+				"i": {"type": "number"},
+				"d": {"type": "number"},
+				"izone": {"type": "number"},
+				"ff": {"type": "number"},
+				"rr": {"type": "number"}
+			},
+			
+			"required": [
+				"p",
+				"i",
+				"d",
+				"izone",
+				"ff",
+				"rr"
+			]
+		},
+		
+		"Talon": {
+			"type": "object",
+			
+			"properties": {
+				"speed": {"$ref": "#/definitions/Gains"},
+				"distance": {"$ref": "#/definitions/Gains"},
+				"maxfvel": {"type": "number"},
+				"maxrvel": {"type": "number"},
+				"inverted": {"type": "boolean"}
+			},
+			
+			"required": [
+				"speed",
+				"distance",
+				"maxfvel",
+				"maxrvel",
+				"inverted"
+			]
+		}
+	}
+}

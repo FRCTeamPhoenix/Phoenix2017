@@ -4,8 +4,8 @@
 
 #include "DriveAt.h"
 
-DriveAt::DriveAt (double speed, double angle, vector<shared_ptr<dependency>> dependencies):
-    Action(dependencies),
+DriveAt::DriveAt (double speed, double angle, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
+    Action(dependencies, robot),
     m_speed(speed),
     m_angle(angle)
 { }

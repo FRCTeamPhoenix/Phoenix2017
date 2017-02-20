@@ -17,7 +17,7 @@ using namespace std;
 class CountUp : public Action
 {
 public:
-    CountUp(int start, int end, vector<shared_ptr<dependency>> dependencies);
+    CountUp(int start, int end, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
 
     CountUp(json& action, shared_ptr<Robot> robot);
 
@@ -25,9 +25,9 @@ public:
 private:
     void run();
     void reset();
+    int m_current;
     int m_start;
     int m_end;
-    int m_current;
 };
 
 

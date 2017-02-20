@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+
+  "type": "array",
+  "minItems": 2,
+  "items": {"$ref": "#/definitions/DistanceVelocityTriplet"},
+
+
+  "definitions": {
+    "DistanceVelocityTriplet":{
+      "type": "object",
+      "properties": {
+        "distance": {
+          "type": "number"
+        },
+        "velocityTop": {
+          "type": "number"
+        },
+        "velocityLow": {
+          "type": "number"
+        }
+      },
+      "required": ["distance", "velocityTop", "velocityLow"]
+    }
+  }
+}

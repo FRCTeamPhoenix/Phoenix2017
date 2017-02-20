@@ -4,7 +4,7 @@
 
 #include "SmartTalon.h"
 
-SmartTalon::SmartTalon (int deviceNumber, FeedbackDevice device) :
+SmartTalon::SmartTalon (int deviceNumber, json config, FeedbackDevice device) :
     CANTalon(deviceNumber),
     m_goal(0),
     m_tuneTimer(),
@@ -14,32 +14,25 @@ SmartTalon::SmartTalon (int deviceNumber, FeedbackDevice device) :
 
 {
     SetFeedbackDevice(device);
-    stringstream ss;
-    ss << deviceNumber;
-    string deviceNumberStr = ss.str();
+	m_distanceGains.set (config["distance"]["p"],
+	                     config["distance"]["i"],
+                        config["distance"]["d"],
+                        config["distance"]["izone"],
+                        config["distance"]["ff"],
+                        config["distance"]["rr"]);
 
-	ifstream json_file;
-	json_file.open("/home/lvuser/config/talons.json");
-	json talons;
-	json_file >> talons;
-	json_file.close();
-	m_distanceGains.set (talons[deviceNumberStr]["distance"]["p"],
-                         talons[deviceNumberStr]["distance"]["i"],
-                         talons[deviceNumberStr]["distance"]["d"],
-                         talons[deviceNumberStr]["distance"]["izone"],
-                         talons[deviceNumberStr]["distance"]["ff"]);
+	m_speedGains.set (config["speed"]["p"],
+                     config["speed"]["i"],
+                     config["speed"]["d"],
+                     config["speed"]["izone"],
+                     config["speed"]["ff"],
+                     config["speed"]["rr"]);
 
-	m_speedGains.set (talons[deviceNumberStr]["speed"]["p"],
-                      talons[deviceNumberStr]["speed"]["i"],
-                      talons[deviceNumberStr]["speed"]["d"],
-                      talons[deviceNumberStr]["speed"]["izone"],
-                      talons[deviceNumberStr]["speed"]["ff"]);
-
-	m_maxForwardSpeed = talons[deviceNumberStr]["maxfvel"];
-	m_maxReverseSpeed = talons[deviceNumberStr]["maxrvel"];
+	m_maxForwardSpeed = config["maxfvel"];
+	m_maxReverseSpeed = config["maxrvel"];
 
 //    m_inverted = true;
-    m_inverted = talons[deviceNumberStr]["inverted"];
+    m_inverted = config["inverted"];
 
 	SetSafetyEnabled(false);
 }
@@ -56,6 +49,7 @@ void SmartTalon::switchToGain (PIDGains gains)
 	SetD (gains.getD ());
 	SetIzone (gains.getIZone ());
 	SetF (gains.getFeedForward ());
+	SetVoltageRampRate(gains.getRampRate ());
 }
 
 void SmartTalon::goTo (double position, double speed)
@@ -87,6 +81,21 @@ void SmartTalon::goAt (double speed)
         SetSetpoint(speed);
 
 
+}
+
+void SmartTalon::goAtVelocity (int velocity)
+{
+    double percentPower = 0;
+
+    if(0 < velocity && 0 < m_maxForwardSpeed) {
+        percentPower = velocity / m_maxForwardSpeed;
+    }
+    else if(0 > velocity && 0 < m_maxReverseSpeed) {
+        percentPower = velocity / m_maxReverseSpeed;
+
+    }
+
+    goAt(percentPower);
 }
 
 void SmartTalon::goDistance (double distance, double speed)
@@ -195,7 +204,7 @@ void SmartTalon::tunePosition (double pInit, double tuneDistance, double F)
 	}
 	SmartDashboard::PutString ("DB/String 5", "Tuned");
 
-	m_distanceGains.set (GetP(), GetI (), GetD (), 0, GetF ());
+	m_distanceGains.set (GetP(), GetI (), GetD (), 0, GetF (), 0);
 
 	return;
 }
@@ -417,7 +426,7 @@ void SmartTalon::tuneRate (double pInit, double goalRate, int IZone, double F)
 		}
 	}
 
-	m_speedGains.set (GetP(), GetI (), GetD (), GetIzone (), GetF ());
+	m_speedGains.set (GetP(), GetI (), GetD (), GetIzone (), GetF (), 0);
 
 	SmartDashboard::PutString ("DB/String 3", "Tuned");
 	return;
@@ -425,7 +434,22 @@ void SmartTalon::tuneRate (double pInit, double goalRate, int IZone, double F)
 
 }
 
-
+bool SmartTalon::test()
+{
+    SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+    Set(0.1);
+    Wait(0.5);
+    if(GetSpeed() > 0)
+    {
+        Set(0.0);
+        return true;
+    }
+    else
+    {
+        Set(0.0);
+        return false;
+    }
+}
 
 
 

@@ -38,10 +38,15 @@ public:
 
     dependency(int p, condition rc = Finished);
 
+    /*
+     * Expected Json Values
+     *
+     * "place": int
+     * "requiredCondition": int
+     */
     dependency(json dependency);
 
     int getPlace();
-
     condition getCondition();
 
 
