@@ -75,22 +75,19 @@ ShooterCalibrator::ShooterCalibrator()
         cout << "Default Shooter Calibration Values Loaded";
 
         dvPairsTop.push_back(DistanceVelocityPair(0, 40000));
-        dvPairsLow.push_back(DistanceVelocityPair(0, 4000));
+        dvPairsLow.push_back(DistanceVelocityPair(0, 3000));
 
-        dvPairsTop.push_back(DistanceVelocityPair(72, 41000));
-        dvPairsLow.push_back(DistanceVelocityPair(96, 12000));
+        dvPairsTop.push_back(DistanceVelocityPair(104, 55000));
+        dvPairsLow.push_back(DistanceVelocityPair(104, 3000));
 
-        dvPairsTop.push_back(DistanceVelocityPair(96, 41000));
-        dvPairsLow.push_back(DistanceVelocityPair(96, 12000));
+        dvPairsTop.push_back(DistanceVelocityPair(144, 59000));
+        dvPairsLow.push_back(DistanceVelocityPair(144, 3300));
 
-        dvPairsTop.push_back(DistanceVelocityPair(120, 41000));
-        dvPairsLow.push_back(DistanceVelocityPair(120, 12000));
+        dvPairsTop.push_back(DistanceVelocityPair(159, 61000));
+        dvPairsLow.push_back(DistanceVelocityPair(159, 3400));
 
-        dvPairsTop.push_back(DistanceVelocityPair(144, 41000));
-        dvPairsLow.push_back(DistanceVelocityPair(144, 12000));
-
-        dvPairsTop.push_back(DistanceVelocityPair(168, 41000));
-        dvPairsLow.push_back(DistanceVelocityPair(168, 12000));
+        dvPairsTop.push_back(DistanceVelocityPair(165, 64000));
+        dvPairsLow.push_back(DistanceVelocityPair(144, 3400));
 
         return;
 

@@ -45,24 +45,14 @@ void FlyWheels::run()
             break;
         case LIDARRATE: //Speed based on lidar Distance
         {
+
+            // Max/min speeds must be set in Talon json
             int topSpeed = m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getDistance());
             int lowerSpeed = m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getDistance());
 
-            if (topSpeed > ShooterConstants::maxFlywheelVelocity) {
-                m_lowerFlyWheelMotor.goAtVelocity(ShooterConstants::maxFlywheelVelocity);
-            } else if (topSpeed < ShooterConstants::minFlywheelVelocity) {
-                m_lowerFlyWheelMotor.goAtVelocity(ShooterConstants::minFlywheelVelocity);
-            } else {
-                m_lowerFlyWheelMotor.goAtVelocity(topSpeed);
-            }
+            m_topFlyWheelMotor.goAtVelocity(topSpeed);
+            m_lowerFlyWheelMotor.goAtVelocity(lowerSpeed);
 
-            if (lowerSpeed > ShooterConstants::maxFlywheelVelocity) {
-                m_topFlyWheelMotor.goAtVelocity(ShooterConstants::maxFlywheelVelocity);
-            } else if (lowerSpeed < ShooterConstants::minFlywheelVelocity) {
-                m_topFlyWheelMotor.goAtVelocity(ShooterConstants::minFlywheelVelocity);
-            } else {
-                m_topFlyWheelMotor.goAtVelocity(lowerSpeed);
-            }
         }
             break;
 
