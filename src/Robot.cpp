@@ -62,7 +62,6 @@ void Robot::OperatorControl()
 {
     m_expansionBoard.Reset();
     LOGI << "Start Teleop";
-    //int count = 0;
 
     while (IsEnabled() && IsOperatorControl())
     {

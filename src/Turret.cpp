@@ -37,6 +37,10 @@ Turret::~Turret()
 void Turret::run()
 {
     m_state = AUTO;//TEMPORARY FOR TESTING
+
+    m_visionComms.setNumber(JetsonComms::turretAngle, m_turretRotatorMotor.GetEncPosition() / RobotConstants::degreesToTicks);
+    //m_vision.setNumber("turret_velocity", turretRotatorMotor.GetEncVel() / RobotConstants::degreesToTicks);
+
     //Homing State of Turret
     //Returns Turret to right limit.
     if(m_state == HOMING){
@@ -104,7 +108,7 @@ void Turret::run()
             case HOMING:
                 break;
             case AUTO:
-                long long int tempTime = m_visionComms.getTimestampFor(JetsonComms::goalId);
+                /*long long int tempTime = m_visionComms.getTimestampFor(JetsonComms::goalId);
 
                 if (tempTime != m_visionTimeStamp){
                     m_visionTimeStamp = tempTime;
@@ -125,7 +129,14 @@ void Turret::run()
                 if(!m_gamepad.GetRawButton(DriveStationConstants::buttonX))
                 {
                     //setState(IDLE);
-                }
+                }*/
+
+                //if (m_visionComms.getState == JetsonState::TARGET_FOUND){}
+
+                double degreesGoal = m_visionComms.getNumber(JetsonComms::goalAngle);
+                m_turretRotatorMotor.goTo(degreesGoal * RobotConstants::degreesToTicks, 0.1);
+
+                LOGI << "Goal: " << degreesGoal << "\n";
 
                 break;
         }
@@ -149,7 +160,7 @@ void Turret::autoTarget()
         std::ostringstream visionDebug;
         visionDebug << m_prevAngles[0];
         SmartDashboard::PutString("DB/String 0", visionDebug.str());
-        m_turretRotatorMotor.goDistance(degreeToTicks(m_prevAngles[0]), 0.15);
+        m_turretRotatorMotor.goDistance(degreeToTicks(m_prevAngles[0]), 0.1);
     }
     m_visionComms.setNumber("debug", -1.0);
 }

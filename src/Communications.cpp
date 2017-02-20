@@ -32,14 +32,14 @@ bool Communications::setMode(VisionMode mode){
     return m_table->PutNumber(JetsonComms::modeId, mode);
 };
 
-float Communications::getNumber(std::string key){
+double Communications::getNumber(std::string key){
     return  m_table->ContainsKey(key) ?
             m_table->GetNumber(key, 0) :
             0;
 };
 
-bool Communications::setNumber(std::string key, float num){
-    return m_table->GetNumber(key, num);
+bool Communications::setNumber(std::string key, double num){
+    return m_table->PutNumber(key, num);
 };
 
 long long Communications::getTimestampFor(std::string key){

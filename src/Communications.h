@@ -36,10 +36,11 @@ public:
 	JetsonState getState();
 	long long int getStateTimestamp();
 
+	VisionMode getMode();
     bool setMode(VisionMode);
 
-    bool setNumber(std::string, float);
-    float getNumber(std::string);
+    bool setNumber(std::string, double);
+    double getNumber(std::string);
     long long getTimestampFor(std::string);
 
     std::vector<int> getNumberArray(std::string);

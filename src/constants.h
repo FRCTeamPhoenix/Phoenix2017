@@ -40,8 +40,8 @@ struct PortAssign
 
 struct RobotConstants
 {
-    constexpr static float turretDamp = 0.6f;
-    constexpr static float degreesToTicks = 27.2727273f;
+    constexpr static double turretDamp = 0.6f;
+    constexpr static double degreesToTicks = 27.2727273f;
 };
 
 namespace ConfigVariables
@@ -124,7 +124,8 @@ namespace JetsonComms {
     const static std::string stateId = "jetson_state";
     const static std::string modeId = "jetson_mode";
 
-    const static std::string goalId = "high_goal";
+    const static std::string goalAngle = "high_goal";
+    const static std::string turretAngle = "turret_angle";
 
     const static std::string gearRVecs = "gear_rvecs";
     const static std::string gearTVecs = "gear_tvecs";
