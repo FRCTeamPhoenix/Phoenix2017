@@ -145,7 +145,7 @@ public:
                    }
                    else
                    {
-                       //m_feederMotor.Set((m_joystick.GetThrottle()-1) / 2);
+                       m_feederMotor.Set((m_joystick.GetThrottle()-1) / 2);
                    }
 
                     std::ostringstream throttleValue;
