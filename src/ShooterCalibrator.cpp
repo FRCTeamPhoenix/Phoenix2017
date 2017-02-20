@@ -36,7 +36,7 @@ ShooterCalibrator::ShooterCalibrator()
 
         if (!valijson::utils::loadDocument("/home/lvuser/config/shooterCalibrator.json", scJsonDoc))
         {
-            cout << "Schooter Calibration Json Failed Loading" << endl;
+            cout << "Shooter Calibration Json Failed Loading" << endl;
 
             throw std::runtime_error("Failed to load shooter calibrator Json document");
         }
