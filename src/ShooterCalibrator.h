@@ -14,6 +14,10 @@
 #include <iostream>
 #include "json.hpp"
 #include <fstream>
+
+//Suppresses uint_64 overflow warning from valijson
+#pragma GCC diagnostic ignored "-Woverflow"
+
 #include "valijson/adapters/nlohmann_json_adapter.hpp"
 #include "valijson/utils/nlohmann_json_utils.hpp"
 #include "valijson/schema.hpp"

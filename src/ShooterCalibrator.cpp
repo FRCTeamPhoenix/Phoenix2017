@@ -13,7 +13,6 @@
 ShooterCalibrator::ShooterCalibrator()
 {
 
-    bool validJson = true;
     json scJsonDoc;
     json scSchemaDoc;
 
