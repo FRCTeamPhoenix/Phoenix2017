@@ -84,6 +84,10 @@ void Robot::Test()
     ss << m_talons.m_status;
     SmartDashboard::PutString("DB/String 7", ss.str());
 
+    ss.str("");
+    ss << m_talons.getTalonConfig(2)["speed"]["p"];
+    SmartDashboard::PutString("DB/String 8", ss.str());
+
     LOGI << "Start Test Mode";
     while (IsEnabled() && IsTest())
     {
