@@ -71,7 +71,7 @@ void Turret::run()
 //            }
 
             m_turretRotatorMotor.SetControlMode(CANSpeedController::kPercentVbus);
-            m_turretRotatorMotor.Set(m_gamepad.GetZ() * 0.1);
+            m_turretRotatorMotor.Set(m_gamepad.GetRawAxis(1) * 0.1);
 
             break;
         case HOMING:
@@ -94,8 +94,8 @@ void Turret::run()
                 autoTarget(m_visionComs.getAngle());
             }
             break;
-
     }
+
 }
 
 void Turret::autoTarget(float degrees){

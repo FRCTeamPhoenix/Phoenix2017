@@ -67,7 +67,7 @@ void Robot::Autonomous()
 
 	while (IsEnabled() && IsAutonomous())
 	{
-		m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
+        m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
 	}
 
 }
@@ -77,26 +77,30 @@ void Robot::OperatorControl()
 	m_expansionBoard.Reset();
 	LOGI << "Start Teleop";
 
+    bool lastPressed3 = false;
+    bool lastPressed4 = false;
 	switchToTeleoperated();
 	while (IsEnabled() && IsOperatorControl())
 	{
 
+        m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
+        m_robotController.run();
 
-		/*
-		 * Robot Teleop Controls:
-		 * Button A held: Feeder and Flywheels on, flywheels at joystick rate or lidar rate
-		 * Button B pressed: turret auto on
-		 * Button X pressed: turret auto off
-		 * Button Y held: indexer on
-		 * Button LB held: climber on
-		 * Button RB held: Gatherer on
-		 * Gamepad left joystick: turret Control
-		 * Joystick: Control drivetrain
-		 *
-		 */
-//	    driveJoystick();
-            m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
-		m_robotController.run();
+        std::ostringstream lidarDistance;
+        lidarDistance << "Distance: ";
+        lidarDistance << m_lidar.getDistance();
+        SmartDashboard::PutString("DB/String 6", lidarDistance.str());
+
+        std::ostringstream topVel;
+        topVel << "TopVel: ";
+        topVel << m_topFlyWheelMotor.GetEncVel();
+        SmartDashboard::PutString("DB/String 7", topVel.str());
+
+        std::ostringstream lowVel;
+        lowVel << "LowVel: ";
+        lowVel << m_lowerFlyWheelMotor.GetEncVel();
+        SmartDashboard::PutString("DB/String 8", lowVel.str());
+
 
 	}
 }
