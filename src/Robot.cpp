@@ -115,6 +115,12 @@ void Robot::OperatorControl()
         SmartDashboard::PutString("DB/String 8", lowVel.str());
 
 
+		SmartDashboard::PutNumber("LidarDistance", m_lidar.getDistance());
+        SmartDashboard::PutNumber("ShooterTopVel", m_topFlyWheelMotor.GetEncVel());
+        SmartDashboard::PutNumber("ShooterLowVel", m_lowerFlyWheelMotor.GetEncVel());
+
+
+
 	}
 }
 
