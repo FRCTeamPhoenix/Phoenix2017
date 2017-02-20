@@ -41,8 +41,8 @@ struct PortAssign
 
 struct RobotConstants
 {
-    constexpr static float turretDamp = 0.6f;
-    constexpr static float degreesToTicks = 27.27f; // THIS IS WRONG. NEEDS TO BE CHANGED
+    constexpr static double turretDamp = 0.6f;
+    constexpr static double degreesToTicks = 27.2727273f;
 };
 
 namespace ConfigVariables
@@ -135,6 +135,19 @@ namespace DriveStationConstants
         "New Value"
     };
     const static uint32_t gamepadButtons = 12;
+};
+
+namespace JetsonComms {
+    const static std::string tableName = "datatable";
+
+    const static std::string stateId = "jetson_state";
+    const static std::string modeId = "jetson_mode";
+
+    const static std::string goalAngle = "high_goal";
+    const static std::string turretAngle = "turret_angle";
+
+    const static std::string gearRVecs = "gear_rvecs";
+    const static std::string gearTVecs = "gear_tvecs";
 };
 
 #endif /* SRC_CONSTANTS_H_ */
