@@ -4,59 +4,123 @@
 
 #include "SmartTalon.h"
 
-
-SmartTalon::SmartTalon (int deviceNumber, double maxForwardSpeed, double maxReverseSpeed) :
-        CANTalon(deviceNumber),
-        m_goal(0),
-        m_maxForwardSpeed(maxForwardSpeed),
-        m_maxReverseSpeed(maxReverseSpeed),
-        m_tuneTimer(),
-        m_distanceGains(0, 0, 0, 0, 0),
-        m_speedGains(0, 0, 0, 0, 0)
+SmartTalon::SmartTalon (int deviceNumber, FeedbackDevice device) :
+CANTalon(deviceNumber),
+m_goal(0),
+m_tuneTimer(),
+m_distanceGains(),
+m_speedGains()
 
 
 {
+    SetFeedbackDevice(device);
+    stringstream ss;
+    ss << deviceNumber;
+    string deviceNumberStr = ss.str();
+
+    ifstream json_file;
+    json_file.open("/home/lvuser/config/talons.json");
+    json talons;
+    json_file >> talons;
+    json_file.close();
+    m_distanceGains.set (talons[deviceNumberStr]["distance"]["p"],
+            talons[deviceNumberStr]["distance"]["i"],
+            talons[deviceNumberStr]["distance"]["d"],
+            talons[deviceNumberStr]["distance"]["izone"],
+            talons[deviceNumberStr]["distance"]["ff"]);
+
+    m_speedGains.set (talons[deviceNumberStr]["speed"]["p"],
+            talons[deviceNumberStr]["speed"]["i"],
+            talons[deviceNumberStr]["speed"]["d"],
+            talons[deviceNumberStr]["speed"]["izone"],
+            talons[deviceNumberStr]["speed"]["ff"]);
+
+    m_maxForwardSpeed = talons[deviceNumberStr]["maxfvel"];
+    m_maxReverseSpeed = talons[deviceNumberStr]["maxrvel"];
+
+    //    m_inverted = true;
+    m_inverted = talons[deviceNumberStr]["inverted"];
+
+    SetSafetyEnabled(false);
 }
+
 double SmartTalon::getGoal ()
 {
     return m_goal;
 }
 
-void SmartTalon::goTo (double position)
+void SmartTalon::switchToGain (PIDGains gains)
 {
+    SetP (gains.getP ());
+    SetI (gains.getI ());
+    SetD (gains.getD ());
+    SetIzone (gains.getIZone ());
+    SetF (gains.getFeedForward ());
+}
+
+void SmartTalon::goTo (double position, double speed)
+{
+    switchToGain (m_distanceGains);
     SetControlMode (CANSpeedController::kPosition);
-
-//    m_distanceGains.switchToGains (*this);
-
-    Set (position);
+    ConfigMaxOutputVoltage(speed * 12);
+    if(m_inverted)
+        Set (-position);
+    else
+        Set (position);
 
 }
 
 void SmartTalon::goAt (double speed)
 {
-    SetControlMode (CANSpeedController::kSpeed);
-
-//    m_speedGains.switchToGains (*this);
-
     speed = (speed > 1) ? 1 : speed;
     speed = (speed < -1) ? -1 : speed;
 
     speed = (speed > 0) ? speed * m_maxForwardSpeed : speed * m_maxReverseSpeed;
 
-    Set(speed);
+    switchToGain (m_speedGains);
+    SetControlMode (CANSpeedController::kSpeed);
+    ConfigMaxOutputVoltage(12);
+    //	SetEncPosition(0);
+    if(m_inverted)
+        SetSetpoint(-speed);
+    else
+        SetSetpoint(speed);
+
+
 }
 
-void SmartTalon::goDistance (double distance)
+void SmartTalon::goAtVelocity (int velocity)
 {
-    SetControlMode (CANSpeedController::kPosition);
+    double percentPower = 0;
 
-//    m_distanceGains.switchToGains (*this);
+    if(0 < velocity && 0 < m_maxForwardSpeed) {
+        percentPower = velocity / m_maxForwardSpeed;
+    }
+    else if(0 > velocity && 0 < m_maxReverseSpeed) {
+        percentPower = velocity / m_maxReverseSpeed;
+
+    }
+
+    goAt(percentPower);
+}
+
+
+void SmartTalon::goDistance (double distance, double speed)
+{
 
     double cPos = GetPosition ();
 
     double fPos = cPos + distance;
 
-    Set (fPos);
+    switchToGain (m_distanceGains);
+    SetControlMode (CANSpeedController::kPosition);
+    ConfigMaxOutputVoltage(12 * speed);
+//    SetEncPosition(0);
+//    Set(0);
+    if(m_inverted)
+        SetSetpoint(-fPos);
+    else
+        SetSetpoint(fPos);
 
 }
 
@@ -91,7 +155,7 @@ void SmartTalon::tunePosition (double pInit, double tuneDistance, double F)
         bool forward = true;
         int changeCount = 0;
 
-//        Wait(2);
+        //        Wait(2);
         std::ostringstream outputP;
         outputP << "P: ";
         outputP << (GetP ());
@@ -119,9 +183,9 @@ void SmartTalon::tunePosition (double pInit, double tuneDistance, double F)
 
             Wait(0.1);
             std::ostringstream outputL;
-             outputL << "Time: ";
-             outputL << (5 - m_tuneTimer.Get ());
-             SmartDashboard::PutString("DB/String 0", outputL.str());
+            outputL << "Time: ";
+            outputL << (5 - m_tuneTimer.Get ());
+            SmartDashboard::PutString("DB/String 0", outputL.str());
 
             std::ostringstream outputO;
             outputO << "Occilation: ";
@@ -138,7 +202,7 @@ void SmartTalon::tunePosition (double pInit, double tuneDistance, double F)
         else if (changeCount > 1)
         {
             ocillation = true;
-            SetD (GetD () + 10 * GetP ());
+            SetD (GetD () + GetP ());
         }
         else
         {
@@ -168,8 +232,6 @@ void SmartTalon::tuneRate (double pInit, double goalRate, int IZone, double F)
     SetD (0);
     SetF (F);
     SetIzone (IZone);
-
-
 
     int phase = 1;
     bool notTuned = true;
@@ -377,50 +439,22 @@ void SmartTalon::tuneRate (double pInit, double goalRate, int IZone, double F)
     return;
 
 
+
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+bool SmartTalon::test()
+{
+    SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+    Set(0.1);
+    Wait(0.5);
+    if(GetSpeed() > 0)
+    {
+        Set(0.0);
+        return true;
+    }
+    else
+    {
+        Set(0.0);
+        return false;
+    }
+}

@@ -14,6 +14,7 @@
 #include "plog/Init.h"
 #include "plog/Log.h"
 #include "plog/Logger.h"
+#include "plog/Formatters/UndecoratedFormatter.h"
 #include <string>
 #include <iostream>
 using namespace std;
@@ -23,7 +24,6 @@ class LoggerController
 public:
     LoggerController();
     virtual ~LoggerController();
-
 
     //updates severity from the driver station
     void updateSeverity();
@@ -36,6 +36,15 @@ public:
     string getSeverityString();
 
     void initLogger();
+
+    void openSpeedTuningLog();
+
+    void openStandardLog();
+
+    enum logEnum
+    {
+        SpeedTuningLog = 1
+    };
 
 };
 

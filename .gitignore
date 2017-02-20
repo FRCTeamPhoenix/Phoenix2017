@@ -35,3 +35,12 @@ CMakeLists.txt
 
 # For emacs auto-save files
 *~
+*.xml
+.idea
+src/.idea
+.settings
+
+
+*.iml
+.idea/
+.settings/

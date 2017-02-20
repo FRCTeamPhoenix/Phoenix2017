@@ -19,14 +19,11 @@ public:
     int getIZone();
     double getFeedForward();
 
-
     void setP(double newP);
     void setI(double newI);
     void setD(double newD);
     void setIZone(int newIZone);
     void setFeedForward(double newFeedForward);
-
-//    void switchToGains();
 
 private:
     double m_P = 0;
