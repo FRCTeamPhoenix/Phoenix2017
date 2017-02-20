@@ -7,15 +7,77 @@
   "startingCondition": 0,
   "containedActions": [
     {
-      "type": "GoDistance",
-      "name": "Drive Forward Auto",
+      "type": "ActionGroup",
+      "name": "Drive Auto",
       "startingCondition": -1,
-      "dependencies": [],
+      "containedActions":[
+      	{
+          "type": "GoDistance",
+          "name": "Drive move",
+          "startingCondition": 0,
 
-      "distance": 10000,
-      "angle": 0,
-      "speed": 0.5,
-      "tolerance": 0.05
+          "distance": 80000,
+          "angle": 0,
+          "speed": 0.5,
+          "tolerance": 0.05,
+
+          "dependencies": []
+      	}
+      ],
+        "dependencies": [],
+  		"doneDependencies": []
+    },
+
+    {
+      "type": "ActionGroup",
+      "name": "Gear Auto",
+      "startingCondition": -1,
+      "containedActions":[
+        {
+          "type": "GoDistance",
+          "name": "Drive move",
+          "startingCondition": 0,
+
+          "distance": 30000,
+          "angle": 0,
+          "speed": 0.5,
+          "tolerance": 0.05,
+
+          "dependencies": []
+        },
+        {
+          "type": "GoDistance",
+          "name": "approach move",
+          "startingCondition": -1,
+
+          "distance": 10000,
+          "angle": 0,
+          "speed": 0.1,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 0, "requiredCondition": 2}]
+        }
+
+      ],
+      "dependencies": [],
+      "doneDependencies": []
+    },
+
+    
+    {
+      "type": "ActionGroup",
+      "name": "Teleoperated",
+      "startingCondition": -1,
+      "containedActions":[
+      	{
+	      	"type": "DriveJoystick",
+	      	"name": "joystick",
+	      	"startingCondition": 0,	      	
+	      	"dependencies": []
+      	}
+      ],
+        "dependencies": [],
+  		"doneDependencies": []
     }
   ],
   "dependencies": [],

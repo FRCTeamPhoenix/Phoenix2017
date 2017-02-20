@@ -17,7 +17,7 @@ Turret::Turret(
         m_gamepad(gamepad)
 
 {
-    m_state = HOMING;
+    m_state = TELEOP;
     m_gamepadJoystick = 0;
     m_visionTimeStamp = 0;
 }
@@ -30,85 +30,71 @@ void Turret::run()
 {
     //Homing State of Turret
     //Returns Turret to right limit.
-    if(m_state == HOMING){
-        m_turretRotatorMotor.goAt(0.5);//will need to be changed. temp number.
-        if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
-        {
-            setState(IDLE);
-        }
-    }
-    else{
-        switch (m_state)
-        {
+    switch (m_state)
+    {
 
-            //Idle state of Turret
-            //Changes to Moving when there is joystick movement that is not in the deadzone
-            case IDLE:
-                m_turretRotatorMotor.goAt(0.0);
+        //Idle state of Turret
+        //Changes to Moving when there is joystick movement that is not in the deadzone
+        case IDLE:
+            m_turretRotatorMotor.goAt(0.0);
+            break;
+            //Moving state of Turret
+            //Changes to Idle when there is no joystick movement
+        case TELEOP:
+//            gamepadJoystickWithDeadZone();
 
-                if(gamepadJoystickWithDeadZone() != 0)
-                {
-                    setState(TELEOP);
-                }
-                if(m_gamepad.GetRawButton(DriveStationConstants::buttonX))
-                {
-                    setState(AUTO);
-                }
-                break;
-                //Moving state of Turret
-                //Changes to Idle when there is no joystick movement
-            case TELEOP:
-                gamepadJoystickWithDeadZone();
+//            if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
+//            {
+//                if (gamepadJoystickWithDeadZone() > 0)
+//                {
+//                    m_turretRotatorMotor.goDistance(0, 0.5);
+//                }
+//                else
+//                {
+//                    m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());
+//                }
+//            }
+//            else if (m_turretRotatorMotor.IsRevLimitSwitchClosed())
+//            {
+//                if (gamepadJoystickWithDeadZone() < 0)
+//                {
+//                    m_turretRotatorMotor.goDistance(0,0.5);
+//                }
+//                else
+//                {
+//                    m_turretRotatorMotor.goAt(25 * gamepadJoystickWithDeadZone());                }
+//
+//            }
+//            else
+//            {
+//                m_turretRotatorMotor.goDistance(100 * m_gamepad.GetZ(), 0.5);
+//            }
 
-                if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
-                {
-                    if (gamepadJoystickWithDeadZone() > 0)
-                    {
-                        m_turretRotatorMotor.goAt(0.0);
-                    }
-                    else
-                    {
-                        m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
-                    }
-                }
-                else if (m_turretRotatorMotor.IsRevLimitSwitchClosed())
-                {
-                    if (gamepadJoystickWithDeadZone() < 0)
-                    {
-                        m_turretRotatorMotor.goAt(0.0);
-                    }
-                    else
-                    {
-                        m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
-                    }
+            m_turretRotatorMotor.SetControlMode(CANSpeedController::kPercentVbus);
+            m_turretRotatorMotor.Set(m_gamepad.GetZ() * 0.1);
 
-                }
-                else
-                {
-                    m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
-                }
-                if(gamepadJoystickWithDeadZone() == 0)
-                {
-                    setState(IDLE);
-                }
-                break;
-            case HOMING:
-                break;
-            case AUTO:
-                long long int tempTime = m_visionComs.getAngleTimestamp();
+            break;
+        case HOMING:
+            m_turretRotatorMotor.SetControlMode(CANSpeedController::kPercentVbus);
 
-                if (tempTime != m_visionTimeStamp){
-                    m_visionTimeStamp = tempTime;
+            m_turretRotatorMotor.Set(.2);//will need to be changed. temp number.
 
-                    autoTarget(m_visionComs.getAngle());
-                }
-                if(!m_gamepad.GetRawButton(DriveStationConstants::buttonX))
-                {
-                    setState(IDLE);
-                }
+            if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
+            {
+                m_turretRotatorMotor.SetEncPosition(0);
+                setState(IDLE);
+            }
+            break;
+        case AUTO:
+            long long int tempTime = m_visionComs.getAngleTimestamp();
 
-                break;
-        }
+            if (tempTime != m_visionTimeStamp){
+                m_visionTimeStamp = tempTime;
+
+                autoTarget(m_visionComs.getAngle());
+            }
+            break;
+
     }
 }
 

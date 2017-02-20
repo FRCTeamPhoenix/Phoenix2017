@@ -19,24 +19,24 @@ HeadingControl::HeadingControl (ADIS16448_IMU& gyro, GyroAxes axis, bool invertD
 double HeadingControl::PIDGet ()
 {
 	double angle;
-    std::stringstream rotation;
+//    std::stringstream rotation;
 
     switch(m_axisOfInterest){
         case x:
         	angle = m_gyro.GetAngleX();
 
-            rotation << "Rotation: " << angle;
-            SmartDashboard::PutString("DB/String 5", rotation.str());
+//            rotation << "Rotation: " << angle;
+//            SmartDashboard::PutString("DB/String 5", rotation.str());
             return angle;
         case y:
         	angle = m_gyro.GetAngleY();
-            rotation << "Rotation: " << angle;
-            SmartDashboard::PutString("DB/String 5", rotation.str());
+//            rotation << "Rotation: " << angle;
+//            SmartDashboard::PutString("DB/String 5", rotation.str());
             return angle;
         case z:
         	angle = m_gyro.GetAngleZ();
-            rotation << "Rotation: " << angle;
-            SmartDashboard::PutString("DB/String 5", rotation.str());
+//            rotation << "Rotation: " << angle;
+//            SmartDashboard::PutString("DB/String 5", rotation.str());
             return angle;
     }
     return 0;

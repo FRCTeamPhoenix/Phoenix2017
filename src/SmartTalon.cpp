@@ -83,6 +83,21 @@ void SmartTalon::goAt (double speed)
 
 }
 
+void SmartTalon::goAtVelocity (int velocity)
+{
+    double percentPower = 0;
+
+    if(0 < velocity && 0 < m_maxForwardSpeed) {
+        percentPower = velocity / m_maxForwardSpeed;
+    }
+    else if(0 > velocity && 0 < m_maxReverseSpeed) {
+        percentPower = velocity / m_maxReverseSpeed;
+
+    }
+
+    goAt(percentPower);
+}
+
 void SmartTalon::goDistance (double distance, double speed)
 {
 
@@ -419,7 +434,22 @@ void SmartTalon::tuneRate (double pInit, double goalRate, int IZone, double F)
 
 }
 
-
+bool SmartTalon::test()
+{
+    SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+    Set(0.1);
+    Wait(0.5);
+    if(GetSpeed() > 0)
+    {
+        Set(0.0);
+        return true;
+    }
+    else
+    {
+        Set(0.0);
+        return false;
+    }
+}
 
 
 

@@ -1,5 +1,6 @@
 #ifndef ACTIONGRAPHS_ROBOT_H
 #define ACTIONGRAPHS_ROBOT_H
+#include "RobotController.h"
 #include "WPILib.h"
 #include "constants.h"
 #include "SmartTalon.h"
@@ -11,7 +12,6 @@
 #include "LoggerController.h"
 #include "FlyWheels.h"
 #include "Turret.h"
-#include "ShooterController.h"
 #include "ConfigEditor.h"
 #include <fstream>
 #include "json.hpp"
@@ -21,11 +21,16 @@
 #include "Feeder.h"
 #include "Indexer.h"
 #include "Talons.h"
+
+//Suppresses uint_64 overflow warning from valijson
+#pragma GCC diagnostic ignored "-Woverflow"
+
 #include "valijson/adapters/nlohmann_json_adapter.hpp"
 #include "valijson/utils/nlohmann_json_utils.hpp"
 #include "valijson/schema.hpp"
 #include "valijson/schema_parser.hpp"
 #include "valijson/validator.hpp"
+
 
 using valijson::Schema;
 using valijson::SchemaParser;
@@ -55,6 +60,7 @@ class Robot: public SampleRobot
     DigitalInput m_rightLimitSwitch;
     Joystick m_joystick;
     Joystick m_gamepad;
+    Joystick m_controlBox;
     Lidar m_lidar;
     ADIS16448_IMU m_expansionBoard;
     Communications m_visionComs;
@@ -62,7 +68,6 @@ class Robot: public SampleRobot
     FlyWheels m_flywheel;
     Turret m_turret;
     LoggerController m_loggerController;
-    ShooterController m_shooterController;
     ConfigEditor m_configEditor;
     SmartTalon m_climberMotor;
     Climber m_climber;
@@ -72,34 +77,71 @@ class Robot: public SampleRobot
     Indexer m_indexer;
     Feeder m_feeder;
     Gatherer m_gatherer;
+    RobotController m_robotController;
 
 public:
-    Robot();
+	Robot();
 
-    void RobotInit() override;
+	void RobotInit() override;
 
-    void Autonomous();
+	void Autonomous();
 
-    void OperatorControl();
+	void OperatorControl();
 
-    void Test();
-    
-    void initMainActionGroup();
+	void Test();
 
-    void initAutoMode();
+	void initMainActionGroup();
 
-    //Functions For Robot Actions
-    void driveAt(double speed, double angle);
+	void initAutoMode();
 
-    void driveDistance(double distance, double angle, double speed);
+	void switchToTeleoperated();
 
-    void rotateAngle(double angle, double speed);
+	//Functions For Robot Actions
+	void driveAt(double speed, double angle);
 
-    bool doneDriveMove(double tolerance);
+	void driveDistance(double distance, double angle, double speed);
 
+	void rotateAngle(double angle, double speed);
 
+	bool doneDriveMove(double tolerance);
 
-    //End of Functions for Actions
+	void driveJoystick();
+
+    void setIndexerSpeed(double speed);
+
+	//End of Functions for Actions
+
+	// Beginning of Test Mode
+	enum TestMode{
+		t_Talons,
+		t_ShooterHead,
+		t_Feeder,
+		t_Indexer,
+		t_Climber,
+		t_Turret,
+		t_Gatherer,
+		t_Shooter,
+		t_DriveTrain
+	};
+
+	vector<string> testModes = {
+			"Talons",
+			"ShooterHead",
+			"Feeder",
+			"Indexer",
+			"Climber",
+			"Turret",
+			"Gatherer",
+			"Shooter",
+			"DriveTrain"};
+
+	enum pidState {
+		PID,
+		VOLTAGE
+	};
+	pidState m_pidState;
+	TestMode testModeSelector;
+	// End of Test Mode
 
 };
 #endif

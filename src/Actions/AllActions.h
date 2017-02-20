@@ -12,6 +12,7 @@
 #include "DriveAt.h"
 #include "GoDistance.h"
 #include "Rotate.h"
+#include "DriveJoystick.h"
 
 
 #endif //ACTIONGRAPHS_ALLACTIONS_H

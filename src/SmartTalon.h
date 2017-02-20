@@ -20,6 +20,7 @@ public:
 
     void goTo(double position, double speed);
     void goAt(double speed);
+    void goAtVelocity(int velocity);
     void goDistance(double distance, double speed);
 
     double getGoal();
@@ -31,6 +32,7 @@ public:
     void tunePosition(double pInit, double tuneDistance, double F);
 
     void tuneRate(double pInit, double goalRate, int IZone, double F);
+    bool test();
 
 private:
 
@@ -52,3 +54,4 @@ private:
 
 
 #endif //INC_2017_PRESEASON_MECHANISMS_SMARTTALON_H
+
