@@ -140,13 +140,25 @@ double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<Dist
 
 double ShooterCalibrator::getTopFlywheelVelocity(double distance) {
 
-    return interpolateVelocityLinear(distance, dvPairsTop);
+    if (distance <= 0) {
+        return 0;
+    } else if (distance > 200) {
+        return 10000;
+    } else {
+        return interpolateVelocityLinear(distance, dvPairsTop);
+    }
 
 }
 
 double ShooterCalibrator::getLowFlywheelVelocity(double distance) {
 
-    return interpolateVelocityLinear(distance, dvPairsLow);
+    if (distance <= 0) {
+        return 0;
+    } else if (distance > 200) {
+        return 60000;
+    } else {
+        return interpolateVelocityLinear(distance, dvPairsLow);
+    }
 
 }
 
