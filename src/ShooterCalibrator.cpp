@@ -12,7 +12,6 @@
 
 ShooterCalibrator::ShooterCalibrator()
 {
-
     json scJsonDoc;
     json scSchemaDoc;
 
