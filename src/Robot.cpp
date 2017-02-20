@@ -110,6 +110,12 @@ void Robot::OperatorControl()
             m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
 		m_robotController.run();
 
+		SmartDashboard::PutNumber("LidarDistance", m_lidar.getDistance());
+        SmartDashboard::PutNumber("ShooterTopVel", m_topFlyWheelMotor.GetEncVel());
+        SmartDashboard::PutNumber("ShooterLowVel", m_lowerFlyWheelMotor.GetEncVel());
+
+
+
 	}
 }
 
