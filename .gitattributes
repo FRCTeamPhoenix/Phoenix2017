@@ -5,6 +5,8 @@
 *.c text eol=lf
 *.h text eol=lf
 *.hpp text eol=lf
+*.json text eol=lf
+*.schema text eol=lf
 *.md text eol=lf
 *.gitignore text eol=lf
 *.gitattributes text eol=lf
