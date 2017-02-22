@@ -28,6 +28,10 @@ long long Communications::getStateTimestamp(){
     return getTimestampFor(JetsonComms::stateId);
 };
 
+VisionMode Communications::getMode(){
+    return (VisionMode) (int) m_table->GetNumber(JetsonComms::modeId, VisionMode::NOT_YET_SET);
+};
+
 bool Communications::setMode(VisionMode mode){
     return m_table->PutNumber(JetsonComms::modeId, mode);
 };

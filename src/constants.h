@@ -149,8 +149,10 @@ namespace JetsonComms {
     const static std::string goalAngle = "high_goal";
     const static std::string turretAngle = "turret_angle";
 
-    const static std::string gearRVecs = "gear_rvecs";
-    const static std::string gearTVecs = "gear_tvecs";
+    //const static std::string gearRVecs = "gear_rvecs";
+    //const static std::string gearTVecs = "gear_tvecs";
+    const static std::string gearAngleId = "gear_angle";
+    const static std::string gearDistanceId = "gear_distance";
 };
 
 #endif /* SRC_CONSTANTS_H_ */
