@@ -12,12 +12,12 @@ FlyWheels::FlyWheels(
         SmartTalon& leftFlyWheelMotor,
         ShooterCalibrator& shooterCalibrator,
         Lidar& lidar,
-        Joystick& gamepad):
-        m_lowerFlyWheelMotor(rightFlyWheelMotor),
-        m_topFlyWheelMotor(leftFlyWheelMotor),
+        Joystick& customBox):
+        m_lowerFlyWheelMotor(leftFlyWheelMotor),
+        m_topFlyWheelMotor(rightFlyWheelMotor),
         m_shooterCalibrator(shooterCalibrator),
         m_lidar(lidar),
-        m_gamepad(gamepad)
+        m_customBox(customBox)
 {
     m_state = STATE::OFF;
 }
@@ -57,7 +57,7 @@ void FlyWheels::run()
             break;
 
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.
-        	double speed = ((m_gamepad.GetRawAxis(0) + 1) / 2) * 0.55;
+        	double speed = ((m_customBox.GetRawAxis(0) + 1) / 2) * 0.55;
 
             setRightSpeed(speed);
             setLeftSpeed(speed);

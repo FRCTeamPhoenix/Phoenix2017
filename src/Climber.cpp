@@ -7,9 +7,9 @@
 #include "Climber.h"
 
 Climber::Climber(SmartTalon& motor,
-		Joystick & gamepad):
+		Joystick & customBox):
         m_motor(motor),
-		m_gamepad(gamepad)
+        m_customBox(customBox)
 {
     m_state = OFF;
     m_motor.SetControlMode(CANSpeedController::kPercentVbus);

@@ -12,7 +12,6 @@
 
 ShooterCalibrator::ShooterCalibrator()
 {
-
     json scJsonDoc;
     json scSchemaDoc;
 
@@ -23,6 +22,10 @@ ShooterCalibrator::ShooterCalibrator()
         {
 
             cout << "Shooter Calibration Schema Failed Loading" << endl;
+            std::ostringstream status;
+            status << "SCJson: ";
+            status << "Schema Failed Loading";
+            SmartDashboard::PutString("DB/String 1", status.str());
 
             throw std::runtime_error("Failed to load shooter calibrator schema document");
 
@@ -36,6 +39,10 @@ ShooterCalibrator::ShooterCalibrator()
         if (!valijson::utils::loadDocument("/home/lvuser/config/shooterCalibrator.json", scJsonDoc))
         {
             cout << "Shooter Calibration Json Failed Loading" << endl;
+            std::ostringstream status;
+            status << "SCJson: ";
+            status << "Json Failed Loading";
+            SmartDashboard::PutString("DB/String 1", status.str());
 
             throw std::runtime_error("Failed to load shooter calibrator Json document");
         }
@@ -45,12 +52,21 @@ ShooterCalibrator::ShooterCalibrator()
         if (!validator.validate(scSchema, scTargetAdapter, NULL))
         {
             cout << "Shooter Calibration Validation Failed" << endl;
+            std::ostringstream status;
+            status << "SCJson: ";
+            status << "Validation Failed";
+            SmartDashboard::PutString("DB/String 1", status.str());
+
             throw std::runtime_error("Shooter Calibration Validation failed");
         }
 
         else
         {
             cout << "Shooter Calibration Validated" << endl;
+            std::ostringstream status;
+            status << "SCJson: ";
+            status << "Validated";
+            SmartDashboard::PutString("DB/String 1", status.str());
 
             // Iterate over points from json file; read and store reference values
             json::iterator jsonItr;

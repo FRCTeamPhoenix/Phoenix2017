@@ -27,8 +27,8 @@ struct PortAssign
 
     // Controllers
     const static uint32_t joystick = 0;
-    const static uint32_t gamepad = 1;
-    const static uint32_t controlBox = 2;
+    const static uint32_t gamepad = 2;
+    const static uint32_t customBox = 1;
 
     // Limit Switches
     const static uint32_t rightLimitSwitch = 1;
@@ -41,10 +41,11 @@ struct PortAssign
 
 struct RobotConstants
 {
-    constexpr static double turretDamp = 0.6f;
+    constexpr static float turretDamp = 0.6f;
     constexpr static double turretSpeed = 0.1f;
+    constexpr static double lidarValueTolerance = 12;
+    constexpr static double lidarMaxReading = 700;
     constexpr static double degreesToTicks = 27.2727273f;
-
 };
 
 namespace ConfigVariables

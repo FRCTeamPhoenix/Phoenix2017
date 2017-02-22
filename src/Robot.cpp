@@ -28,13 +28,13 @@ Robot::Robot() :
         m_rightLimitSwitch( PortAssign::rightLimitSwitch),
         m_joystick(PortAssign::joystick),
         m_gamepad(PortAssign::gamepad),
-        m_controlBox(PortAssign::controlBox),
+        m_customBox(PortAssign::customBox),
         m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0),
         m_expansionBoard(),
         m_visionComs(),
         m_shooterCalibrator(),
-        m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_gamepad),
-        m_turret(m_turretRotateMotor,m_visionComs, m_gamepad),
+        m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_customBox),
+        m_turret(m_turretRotateMotor,m_visionComs, m_customBox),
         m_loggerController(),
         m_configEditor(),
         m_climberMotor(PortAssign::climber, m_talons.getTalonConfig(PortAssign::climber), CANTalon::FeedbackDevice::QuadEncoder),
@@ -42,10 +42,10 @@ Robot::Robot() :
         m_gathererMotor(PortAssign::loader),
         m_feederMotor(PortAssign::feeder, m_talons.getTalonConfig(PortAssign::feeder), CANTalon::FeedbackDevice::QuadEncoder),
         m_indexerMotor(PortAssign::indexer, m_talons.getTalonConfig(PortAssign::indexer), CANTalon::FeedbackDevice::QuadEncoder),
-        m_indexer(m_indexerMotor, m_gamepad),
-        m_feeder(m_feederMotor, m_gamepad),
-        m_gatherer(m_gathererMotor, m_gamepad),
-        m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_controlBox,m_climber,m_gatherer)
+        m_indexer(m_indexerMotor, m_customBox),
+        m_feeder(m_feederMotor, m_customBox),
+        m_gatherer(m_gathererMotor, m_customBox),
+        m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_customBox,m_climber,m_gatherer)
 {
 
 }
@@ -388,14 +388,21 @@ void Robot::Test()
 
         case t_Shooter: //Test all Shooter Components
         {
+
+            /* for shooter calibration, flywheels is left bumper, feeder is x, indexer is y*/
             printMSG("0", "All Shooter Test Mode");
             printMSG("1", "Control Mode: " + std::to_string(m_pidState));
             printMSG("4", "EncoderShR: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
             printMSG("5", "EncoderShL: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
-            printMSG("6", "EncoderF: " + std::to_string(m_feederMotor.GetEncPosition()));
-            printMSG("7", "Throttle: " + std::to_string(((throttle - 1) / 2)));
-            printMSG("8", "EncoderI: " + std::to_string(m_feederMotor.GetEncPosition()));
+//            printMSG("6", "EncoderF: " + std::to_string(m_feederMotor.GetEncPosition()));
+//            printMSG("7", "Throttle: " + std::to_string(((throttle - 1) / 2)));
+//            printMSG("8", "EncoderI: " + std::to_string(m_feederMotor.GetEncPosition()));
             printMSG("9", "Distance: " + std::to_string(m_lidar.getDistance()));
+
+            printMSG("6", "VelLow: " + std::to_string(m_lowerFlyWheelMotor.GetEncVel()));
+            printMSG("7", "VelTop: " + std::to_string(m_topFlyWheelMotor.GetEncVel()));
+            printMSG("8", "LidarDistance: " + std::to_string(m_lidar.getDistance()));
+
             if ((m_pidState == VOLTAGE) && m_gamepad.GetRawButton(DriveStationConstants::buttonX))
             {
                 m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
@@ -407,39 +414,21 @@ void Robot::Test()
             }
             else if ((m_pidState == PID) && m_gamepad.GetRawButton(DriveStationConstants::buttonX))
             {
-                m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
-                m_feederMotor.goAt(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
+                m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
+                m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
             }
-            else if ((m_pidState == PID))
-            {
-                m_feederMotor.goAt((throttle - 1) / 2);
+            else {
+             m_feederMotor.Set(0.0);
             }
 
             //indexer test
             if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonY)))
             {
-                m_indexerMotor.goDistance(250, 0.5);
+                m_indexerMotor.goAt(.75);
             }
-            // Shooter Test
-            else if ((m_pidState == PID))
-            {
-                m_feederMotor.SetControlMode(CANSpeedController::kSpeed);
-                m_indexerMotor.SetControlMode(CANSpeedController::kSpeed);
-                m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
-                m_topFlyWheelMotor.SetControlMode(CANSpeedController::kSpeed);
-                m_indexerMotor.goAt(power / 5);
-//                m_lowerFlyWheelMotor.goAt(m_gamepad.GetY());
-//                m_lowerFlyWheelMotor.goAt(m_gamepad.GetY());
-            }
-            else if (m_pidState == VOLTAGE)
-            {
-                m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
-                m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
-                m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
-                m_topFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
-                m_indexerMotor.Set(power / 5);
-//                m_lowerFlyWheelMotor.Set(m_gamepad.GetY());
-//                m_lowerFlyWheelMotor.Set(m_gamepad.GetY());
+            else {
+                m_indexerMotor.goAt(0.0);
+
             }
             // Fly wheel Test
             if ((m_pidState == VOLTAGE) && (m_gamepad.GetRawButton(DriveStationConstants::buttonRB)))
@@ -447,10 +436,15 @@ void Robot::Test()
                 m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 1", 0.0));
                 m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2", 0.0));
             }
-            else if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonRB)))
+            else if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonLB)))
             {
                 m_lowerFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1", 0.0));
                 m_topFlyWheelMotor.goAt(SmartDashboard::GetNumber("DB/Slider 2", 0.0));
+            }
+            else {
+                m_lowerFlyWheelMotor.goAt(0.0);
+                m_topFlyWheelMotor.goAt(0.0);
+
             }
             m_configEditor.update();
             break;
