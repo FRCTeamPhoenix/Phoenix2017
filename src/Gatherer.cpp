@@ -7,9 +7,9 @@
 
 #include "Gatherer.h"
 
-Gatherer::Gatherer(Talon& gathererMotor, Joystick& gamepad):
+Gatherer::Gatherer(Talon& gathererMotor, Joystick& customBox):
     m_gathererMotor(gathererMotor),
-    m_gamepad(gamepad)
+    m_customBox(customBox)
 {
     m_state = OFF;
 }

@@ -14,7 +14,7 @@
 class Gatherer
 {
 public:
-    Gatherer(Talon& gathererMotor, Joystick& gamepad);
+    Gatherer(Talon& gathererMotor, Joystick& customBox);
     virtual ~Gatherer();
 
     enum State
@@ -30,7 +30,7 @@ public:
 private:
     State m_state;
     Talon& m_gathererMotor;
-    Joystick& m_gamepad;
+    Joystick& m_customBox;
 };
 
 #endif /* SRC_Gatherer_H_ */
