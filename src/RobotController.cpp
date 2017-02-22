@@ -12,7 +12,7 @@ RobotController::RobotController(
         Turret& turret,
         Feeder& feeder,
         Indexer& indexer,
-        Joystick& gamepad,
+        Joystick& customBox,
         Climber& climber,
         Gatherer& gatherer):
 
@@ -20,7 +20,7 @@ RobotController::RobotController(
         m_turret(turret),
         m_feeder(feeder),
         m_indexer(indexer),
-        m_controlBox(gamepad),
+        m_controlBox(customBox),
         m_climber(climber),
         m_gatherer(gatherer)
 

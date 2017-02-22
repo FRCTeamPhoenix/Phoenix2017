@@ -16,7 +16,7 @@
 class Indexer
 {
 public:
-    Indexer(SmartTalon& indexerMotor, Joystick& gamepad);
+    Indexer(SmartTalon& indexerMotor, Joystick& customBox);
     virtual ~Indexer();
 
     enum State {
@@ -35,7 +35,7 @@ public:
 private:
     State m_state;
     SmartTalon& m_indexerMotor;
-    Joystick& m_gamepad;
+    Joystick& m_customBox;
     double m_speed;
 };
 

@@ -7,9 +7,9 @@
 
 #include "Indexer.h"
 
-Indexer::Indexer(SmartTalon& indexerMotor, Joystick& gamepad):
+Indexer::Indexer(SmartTalon& indexerMotor, Joystick& customBox):
     m_indexerMotor(indexerMotor),
-    m_gamepad(gamepad)
+    m_customBox(customBox)
 {
 
     m_state = OFF;
@@ -48,7 +48,7 @@ void Indexer::run()
 {
     switch(m_state) {
         case TELEOP:
-            if (m_gamepad.GetRawButton(DriveStationConstants::buttonX)) {
+            if (m_customBox.GetRawButton(DriveStationConstants::buttonX)) {
                 m_indexerMotor.goAt(m_speed);
 
                 if(m_indexerMotor.GetIaccum() > 700000)

@@ -10,11 +10,11 @@
 Turret::Turret(
         SmartTalon& turretRotatorMotor,
         Communications& visionComms,
-        Joystick& gamepad):
+        Joystick& customBox):
 
         m_turretRotatorMotor(turretRotatorMotor),
         m_visionComms(visionComms),
-        m_gamepad(gamepad)
+        m_customBox(customBox)
         //m_prevAngles(),
         //m_timer()
 
@@ -108,7 +108,7 @@ void Turret::run()
 //Has a damping effect because we do not want the turret moving at full speed
 float Turret::gamepadJoystickWithDeadZone()
 {
-    float power = -m_gamepad.GetY();
+    float power = -m_customBox.GetY();
 
     if (fabs(power) < 0.05f){
         power = 0;

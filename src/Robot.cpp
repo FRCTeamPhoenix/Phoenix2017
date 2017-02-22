@@ -28,13 +28,13 @@ Robot::Robot() :
         m_rightLimitSwitch( PortAssign::rightLimitSwitch),
         m_joystick(PortAssign::joystick),
         m_gamepad(PortAssign::gamepad),
-        m_controlBox(PortAssign::controlBox),
+        m_customBox(PortAssign::customBox),
         m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0),
         m_expansionBoard(),
         m_visionComs(),
         m_shooterCalibrator(),
-        m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_controlBox),
-        m_turret(m_turretRotateMotor,m_visionComs, m_controlBox),
+        m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_customBox),
+        m_turret(m_turretRotateMotor,m_visionComs, m_customBox),
         m_loggerController(),
         m_configEditor(),
         m_climberMotor(PortAssign::climber, m_talons.getTalonConfig(PortAssign::climber), CANTalon::FeedbackDevice::QuadEncoder),
@@ -42,10 +42,10 @@ Robot::Robot() :
         m_gathererMotor(PortAssign::loader),
         m_feederMotor(PortAssign::feeder, m_talons.getTalonConfig(PortAssign::feeder), CANTalon::FeedbackDevice::QuadEncoder),
         m_indexerMotor(PortAssign::indexer, m_talons.getTalonConfig(PortAssign::indexer), CANTalon::FeedbackDevice::QuadEncoder),
-        m_indexer(m_indexerMotor, m_controlBox),
-        m_feeder(m_feederMotor, m_controlBox),
-        m_gatherer(m_gathererMotor, m_controlBox),
-        m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_controlBox,m_climber,m_gatherer)
+        m_indexer(m_indexerMotor, m_customBox),
+        m_feeder(m_feederMotor, m_customBox),
+        m_gatherer(m_gathererMotor, m_customBox),
+        m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_customBox,m_climber,m_gatherer)
 {
 
 }

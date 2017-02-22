@@ -20,11 +20,11 @@
 #include "Gatherer.h"
 #include "Feeder.h"
 #include "Indexer.h"
-#include "Talons.h"
+
 
 //Suppresses uint_64 overflow warning from valijson
 #pragma GCC diagnostic ignored "-Woverflow"
-
+#include "Talons.h"
 #include "valijson/adapters/nlohmann_json_adapter.hpp"
 #include "valijson/utils/nlohmann_json_utils.hpp"
 #include "valijson/schema.hpp"
@@ -60,7 +60,7 @@ class Robot: public SampleRobot
     DigitalInput m_rightLimitSwitch;
     Joystick m_joystick;
     Joystick m_gamepad;
-    Joystick m_controlBox;
+    Joystick m_customBox;
     Lidar m_lidar;
     ADIS16448_IMU m_expansionBoard;
     Communications m_visionComs;
