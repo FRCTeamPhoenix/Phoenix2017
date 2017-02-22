@@ -31,6 +31,7 @@ void GearTargeting::run(){
                     break;
                 case BOTH:
                     m_comms.setMode(VisionMode::HIGH_GOAL);
+                    break;
                 default:
                     break;
             }
