@@ -59,6 +59,14 @@ void FlyWheels::run()
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.
         	double speed = ((m_customBox.GetRawAxis(0) + 1) / 2) * 0.55;
 
+            SmartDashboard::PutNumber("Speed", speed * 80000);
+
+            SmartDashboard::PutNumber("Top Speed", m_topFlyWheelMotor.GetEncVel());
+            SmartDashboard::PutNumber("Bottom Speed", m_lowerFlyWheelMotor.GetEncVel());
+
+            SmartDashboard::PutNumber("Top Voltage", m_topFlyWheelMotor.GetOutputVoltage());
+            SmartDashboard::PutNumber("Bottom Voltage", m_lowerFlyWheelMotor.GetOutputVoltage());
+
             setRightSpeed(speed);
             setLeftSpeed(speed);
             break;

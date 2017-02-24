@@ -108,7 +108,7 @@ void Turret::run()
 //Has a damping effect because we do not want the turret moving at full speed
 float Turret::gamepadJoystickWithDeadZone()
 {
-    float power = -m_customBox.GetY();
+    float power = -m_customBox.GetRawAxis(2);
 
     if (fabs(power) < 0.05f){
         power = 0;

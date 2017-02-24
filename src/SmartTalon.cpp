@@ -35,6 +35,10 @@ SmartTalon::SmartTalon (int deviceNumber, json config, FeedbackDevice device) :
     m_inverted = config["inverted"];
 
 	SetSafetyEnabled(false);
+
+    m_mode = CANSpeedController::kSpeed;
+    SetControlMode(CANSpeedController::kSpeed);
+    switchToGain(m_speedGains);
 }
 
 double SmartTalon::getGoal ()
@@ -54,8 +58,12 @@ void SmartTalon::switchToGain (PIDGains gains)
 
 void SmartTalon::goTo (double position, double speed)
 {
-    switchToGain (m_distanceGains);
-    SetControlMode (CANSpeedController::kPosition);
+    if(CANSpeedController::kPosition != m_mode)
+    {
+        SetControlMode(CANSpeedController::kPosition);
+        switchToGain (m_distanceGains);
+        m_mode = CANSpeedController::kPosition;
+    }
 	ConfigMaxOutputVoltage(speed * 12);
     if(m_inverted)
 	    Set (-position);
@@ -71,8 +79,13 @@ void SmartTalon::goAt (double speed)
 
     speed = (speed > 0) ? speed * m_maxForwardSpeed : speed * m_maxReverseSpeed;
 
-    switchToGain (m_speedGains);
-	SetControlMode (CANSpeedController::kSpeed);
+    if(CANSpeedController::kSpeed != m_mode)
+    {
+        switchToGain (m_speedGains);
+        SetControlMode (CANSpeedController::kSpeed);
+        m_mode = CANSpeedController::kSpeed;
+    }
+
 	ConfigMaxOutputVoltage(12);
 //	SetEncPosition(0);
     if(m_inverted)
@@ -105,8 +118,12 @@ void SmartTalon::goDistance (double distance, double speed)
 
     double fPos = cPos + distance;
 
-    switchToGain (m_distanceGains);
-    SetControlMode (CANSpeedController::kPosition);
+    if(CANSpeedController::kPosition != m_mode)
+    {
+        SetControlMode(CANSpeedController::kPosition);
+        switchToGain (m_distanceGains);
+        m_mode = CANSpeedController::kPosition;
+    }
     ConfigMaxOutputVoltage(12 * speed);
     //SetEncPosition(0);
 	//Set(0);

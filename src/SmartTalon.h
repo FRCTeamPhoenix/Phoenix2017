@@ -46,6 +46,8 @@ private:
 
     bool m_inverted;
 
+    CANSpeedController::ControlMode m_mode;
+
     PIDGains m_distanceGains;
     PIDGains m_speedGains;
 
