@@ -24,7 +24,8 @@ enum JetsonState {
 enum VisionMode {
     HIGH_GOAL,
     GEARS,
-    BOTH
+    BOTH,
+    NOT_YET_SET
 };
 
 
