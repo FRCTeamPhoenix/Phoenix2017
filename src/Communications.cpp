@@ -17,11 +17,11 @@ Communications::~Communications(){
 };
 
 
-JetsonState Communications::getState(){
-    if (!m_table->ContainsKey(JetsonComms::stateId))
+JetsonState Communications::getState(std::string stateId){
+    if (!m_table->ContainsKey(stateId))
         return JetsonState::POWERED_OFF;
 
-    return (JetsonState) (int) m_table->GetNumber(JetsonComms::stateId, 4);
+    return (JetsonState) (int) m_table->GetNumber(stateId, JetsonState::POWERED_OFF);
 };
 
 long long Communications::getStateTimestamp(){

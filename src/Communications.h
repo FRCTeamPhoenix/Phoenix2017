@@ -34,8 +34,8 @@ public:
 	Communications();
 	~Communications();
 
-	JetsonState getState();
-	long long int getStateTimestamp();
+	JetsonState getState(std::string stateId);
+	long long int getStateTimestamp(std::string stateId);
 
 	VisionMode getMode();
     bool setMode(VisionMode);

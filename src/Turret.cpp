@@ -96,9 +96,12 @@ void Turret::run()
                 //We will not do homing, probably...
                 break;
             case AUTO:
-                double degreesGoal = m_visionComms.getNumber(JetsonComms::goalAngle);
-                m_turretRotatorMotor.goTo(degreesGoal * RobotConstants::degreesToTicks, RobotConstants::turretSpeed);
-                //LOGI << "Goal: " << degreesGoal << "\n";
+                JetsonState jstate = m_visionComms.getState(JetsonComms::highGoalState);
+                if (jstate == JetsonState::TARGET_FOUND){
+                    double degreesGoal = m_visionComms.getNumber(JetsonComms::goalAngle);
+                    m_turretRotatorMotor.goTo(degreesGoal * RobotConstants::degreesToTicks, RobotConstants::turretSpeed);
+                    //LOGI << "Goal: " << degreesGoal << "\n";
+                }
                 break;
         }
     }

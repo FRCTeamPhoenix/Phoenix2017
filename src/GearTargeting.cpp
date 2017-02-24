@@ -85,6 +85,6 @@ double GearTargeting::getDistance(){
 };
 
 bool GearTargeting::getTargetFound(){
-    return m_comms.getState() == JetsonState::TARGET_FOUND;
+    return m_comms.getState(JetsonComms::gearState) == JetsonState::TARGET_FOUND;
 };
 

@@ -144,7 +144,9 @@ namespace DriveStationConstants
 namespace JetsonComms {
     const static std::string tableName = "datatable";
 
-    const static std::string stateId = "jetson_state";
+    //const static std::string stateId = "jetson_state";
+    const static std::string gearState = "gear_state";
+    const static std::string highGoalState = "high_goal_state";
     const static std::string modeId = "jetson_mode";
 
     const static std::string goalAngle = "high_goal";
