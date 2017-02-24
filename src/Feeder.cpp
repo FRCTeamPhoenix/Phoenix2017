@@ -7,9 +7,9 @@
 
 #include "Feeder.h"
 
-Feeder::Feeder(SmartTalon& feederMotor, Joystick& gamepad):
+Feeder::Feeder(SmartTalon& feederMotor, Joystick& customBox):
     m_feederMotor(feederMotor),
-    m_gamepad(gamepad)
+    m_customBox(customBox)
 {
     m_state = OFF;
     m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);

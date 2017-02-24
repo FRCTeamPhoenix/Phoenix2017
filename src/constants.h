@@ -27,8 +27,8 @@ struct PortAssign
 
     // Controllers
     const static uint32_t joystick = 0;
-    const static uint32_t gamepad = 1;
-    const static uint32_t controlBox = 2;
+    const static uint32_t gamepad = 2;
+    const static uint32_t customBox = 1;
 
     // Limit Switches
     const static uint32_t rightLimitSwitch = 1;
@@ -42,7 +42,10 @@ struct PortAssign
 struct RobotConstants
 {
     constexpr static float turretDamp = 0.6f;
-    constexpr static float degreesToTicks = 0.5f; // THIS IS WRONG. NEEDS TO BE CHANGED
+    constexpr static double turretSpeed = 0.1f;
+    constexpr static double lidarValueTolerance = 12;
+    constexpr static double lidarMaxReading = 700;
+    constexpr static double degreesToTicks = 27.2727273f;
 };
 
 namespace ConfigVariables
@@ -100,13 +103,15 @@ namespace DriveStationConstants
     };
     enum controlBox
 	{
+        buttonTurretAuto = 1,
 		buttonIndexer = 4,
 		buttonFeeder = 2,
 		buttonClimberUP = 3,
 		buttonFlywheelManual = 5,
 		buttonFlywheelAuto = 6,
-		buttonAutoStart = 7,
-		buttonAutoStop = 8
+        buttonIndexerReverse = 7,
+		buttonAutoStart = 8,
+		buttonAutoStop = 9
 	};
     const static std::string dashButtonNames[6] =
     {
@@ -134,6 +139,21 @@ namespace DriveStationConstants
         "New Value"
     };
     const static uint32_t gamepadButtons = 12;
+};
+
+namespace JetsonComms {
+    const static std::string tableName = "datatable";
+
+    const static std::string stateId = "jetson_state";
+    const static std::string modeId = "jetson_mode";
+
+    const static std::string goalAngle = "high_goal";
+    const static std::string turretAngle = "turret_angle";
+
+    //const static std::string gearRVecs = "gear_rvecs";
+    //const static std::string gearTVecs = "gear_tvecs";
+    const static std::string gearAngleId = "gear_angle";
+    const static std::string gearDistanceId = "gear_distance";
 };
 
 #endif /* SRC_CONSTANTS_H_ */

@@ -16,7 +16,7 @@ using json=nlohmann::json;
 class SmartTalon : public CANTalon
 {
 public:
-    SmartTalon(int deviceNumber, FeedbackDevice device);
+    SmartTalon(int deviceNumber, json config, FeedbackDevice device);
 
     void goTo(double position, double speed);
     void goAt(double speed);
@@ -46,6 +46,8 @@ private:
 
     bool m_inverted;
 
+    CANSpeedController::ControlMode m_mode;
+
     PIDGains m_distanceGains;
     PIDGains m_speedGains;
 
@@ -54,3 +56,4 @@ private:
 
 
 #endif //INC_2017_PRESEASON_MECHANISMS_SMARTTALON_H
+

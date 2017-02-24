@@ -21,7 +21,11 @@ typedef unsigned char byte;
 
 #include <cstdint>
 #include "WPILib.h"
+#include "constants.h"
+#include <cmath>
 #include <sstream>
+
+using namespace std;
 
 class Lidar
 {
@@ -32,6 +36,8 @@ class Lidar
     double m_fastAverage;
     double m_slowAverage;
 
+    double m_distances[10] = {0};
+
     byte m_status;
 
     I2C *m_I2C;
@@ -40,11 +46,14 @@ class Lidar
 
     DigitalOutput m_triggerPin;
 
+    int m_counter;
+
 public:
     // Make sure to pass in 0 to mode
     Lidar(uint32_t triggerPin, uint32_t monitorPin, int mode);
     void run();
     double getDistance();
+    double getAverage();
     double getFastAverage();
     double getSlowAverage();
     virtual ~Lidar();
