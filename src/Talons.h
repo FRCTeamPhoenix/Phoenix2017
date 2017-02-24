@@ -9,6 +9,7 @@
 #define SRC_TALONS_H_
 
 #include "json.hpp"
+#include "WPILib.h"
 #include <iostream>
 #include "valijson/adapters/nlohmann_json_adapter.hpp"
 #include "valijson/utils/nlohmann_json_utils.hpp"
