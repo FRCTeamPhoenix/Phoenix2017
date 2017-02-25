@@ -58,8 +58,6 @@ void Turret::run()
                 //Moving state of Turret
                 //Changes to Idle when there is no joystick movement
             case TELEOP:
-                gamepadJoystickWithDeadZone();
-
                 if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
                 {
                     if (gamepadJoystickWithDeadZone() > 0)
@@ -93,7 +91,16 @@ void Turret::run()
                 }
                 break;
             case HOMING:
-                //We will not do homing, probably...
+                if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
+                {
+                    m_turretRotatorMotor.SetControlMode(CANSpeedController::kPercentVbus);
+                    m_turretRotatorMotor.Set(0.1);
+                }
+                else
+                {
+                    setState(IDLE);
+                    m_turretRotatorMotor.Set(0.0);
+                }
                 break;
             case AUTO:
                 double degreesGoal = m_visionComms.getNumber(JetsonComms::goalAngle);
