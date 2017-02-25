@@ -15,6 +15,7 @@
 #include "valijson/schema.hpp"
 #include "valijson/schema_parser.hpp"
 #include "valijson/validator.hpp"
+#include "WPILib.h"
 
 #include "plog/Log.h"
 

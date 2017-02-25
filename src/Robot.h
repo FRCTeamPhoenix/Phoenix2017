@@ -20,6 +20,7 @@
 #include "Gatherer.h"
 #include "Feeder.h"
 #include "Indexer.h"
+#include "RLogger.h"
 
 
 //Suppresses uint_64 overflow warning from valijson
@@ -78,6 +79,7 @@ class Robot: public SampleRobot
     Feeder m_feeder;
     Gatherer m_gatherer;
     RobotController m_robotController;
+    RLogger m_rlogger;
 
 public:
 	Robot();

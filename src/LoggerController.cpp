@@ -26,7 +26,6 @@ void LoggerController::initLogger()
 
     plog::init<SpeedTuningLog>(plog::debug, &fileAppender);
     LOGI << "Log initialized at Debug";
-
 }
 
 void LoggerController::setSeverity(plog::Severity severity)
