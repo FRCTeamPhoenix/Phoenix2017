@@ -57,7 +57,7 @@ void FlyWheels::run()
             break;
 
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.
-        	double speed = ((m_customBox.GetRawAxis(0) + 1) / 2) * 0.55;
+        	double speed = ((m_customBox.GetRawAxis(DriveStationConstants::potFlywheelSpeed) + 1) / 2) * 0.55;
 
             SmartDashboard::PutNumber("Speed", speed * 80000);
 
