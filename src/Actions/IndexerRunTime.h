@@ -10,12 +10,15 @@
 #include <vector>
 #include <iostream>
 #include "../plog/Log.h"
-#include "../Robot.h"
+#include "WPILib.h"
 
 using namespace std;
 
+class Robot;
+
 class IndexerRunTime : public Action
 {
+public:
     IndexerRunTime(double speed, double duration, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
 
     IndexerRunTime(json& action, shared_ptr<Robot> robot);
@@ -27,7 +30,7 @@ private:
     double m_speed;
     double m_duration;
 
-    Timer m_timer;
+    frc::Timer m_timer;
 };
 
 

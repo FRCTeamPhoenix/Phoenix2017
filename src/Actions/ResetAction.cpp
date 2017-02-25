@@ -3,7 +3,7 @@
 //
 
 #include "ResetAction.h"
-
+#include "../Robot.h"
 
 resetAction::resetAction (vector<int> placeToReset, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
     Action(dependencies, robot),

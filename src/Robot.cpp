@@ -1,5 +1,6 @@
 #include "Robot.h"
 #include "Actions/ActionFactory.h"
+#include "indexer.h"
 
 using namespace std;
 using json=nlohmann::json;
@@ -68,6 +69,8 @@ void Robot::RobotInit()
 	cout << "In Robot INIT" << endl;
 	initMainActionGroup();
 	SmartDashboard::PutStringArray("Test List", testModes);
+
+	m_indexer.initSpeedGroup(shared_ptr<Robot>(this));
 
     std::thread runLidar(lidarThread, this, &m_lidar);
     runLidar.detach();

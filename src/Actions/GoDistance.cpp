@@ -3,6 +3,7 @@
 //
 
 #include "GoDistance.h"
+#include "../Robot.h"
 
 GoDistance::GoDistance (double distance, double angle, double speed, double tolerance, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
     Action(dependencies, robot),

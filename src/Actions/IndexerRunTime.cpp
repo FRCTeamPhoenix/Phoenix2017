@@ -3,6 +3,7 @@
 //
 
 #include "IndexerRunTime.h"
+#include "../Robot.h"
 
 
 IndexerRunTime::IndexerRunTime (double speed, double duration, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):

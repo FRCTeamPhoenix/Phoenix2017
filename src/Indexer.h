@@ -11,7 +11,10 @@
 #include "constants.h"
 #include "SmartTalon.h"
 
-//#include "Actions/AllActions.h"
+using namespace nlohmann;
+
+class ActionGroup;
+class Robot;
 
 class Indexer
 {
@@ -32,10 +35,13 @@ public:
 
     void setSpeed(double speed);
 
+    void initSpeedGroup(std::shared_ptr<Robot> robot);
+
 private:
     State m_state;
     SmartTalon& m_indexerMotor;
     Joystick& m_customBox;
+    ActionGroup* m_speedGroup;
     double m_speed;
 };
 
