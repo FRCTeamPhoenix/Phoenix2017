@@ -16,6 +16,7 @@ using namespace std;
 
 class IndexerRunTime : public Action
 {
+public:
     IndexerRunTime(double speed, double duration, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
 
     IndexerRunTime(json& action, shared_ptr<Robot> robot);

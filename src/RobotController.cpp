@@ -83,7 +83,8 @@ void RobotController::run()
         if (m_controlBox.GetRawButton(DriveStationConstants::buttonAutoStart)){
             m_turret.setState(Turret::AUTO);
         }
-        else if (m_controlBox.GetRawButton(DriveStationConstants::buttonAutoStop){
+        else if (m_controlBox.GetRawButton(DriveStationConstants::buttonAutoStop))
+        {
             m_turret.setState(Turret::IDLE);
         }
 
