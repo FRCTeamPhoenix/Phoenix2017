@@ -24,8 +24,8 @@ JetsonState Communications::getState(std::string stateId){
     return (JetsonState) (int) m_table->GetNumber(stateId, JetsonState::POWERED_OFF);
 };
 
-long long Communications::getStateTimestamp(){
-    return getTimestampFor(JetsonComms::stateId);
+long long Communications::getStateTimestamp(std::string stateId){
+    return getTimestampFor(stateId);
 };
 
 VisionMode Communications::getMode(){
