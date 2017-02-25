@@ -4,12 +4,12 @@
 
 #ifndef ACTIONGRAPHS_ACTIONGROUP_H
 #define ACTIONGRAPHS_ACTIONGROUP_H
-
 #include "Action.h"
 #include "../json.hpp"
 #include <fstream>
 #include "../plog/Log.h"
 #include "../Robot.h"
+
 
 
 using namespace std;

@@ -1,7 +1,7 @@
-#ifndef ACTIONGRAPHS_ROBOT_H
-#define ACTIONGRAPHS_ROBOT_H
-#include "RobotController.h"
+#ifndef _ROBOT_H
+#define _ROBOT_H
 #include "WPILib.h"
+#include "RobotController.h"
 #include "constants.h"
 #include "SmartTalon.h"
 #include "relativeMecanumDrivetrain.h"
