@@ -390,6 +390,8 @@ void Robot::Test()
 			}
 
 			// Feeder Motor
+			// Slider 1
+
 			if ((m_pidState == VOLTAGE) && m_gamepad.GetRawButton(DriveStationConstants::buttonX)){
 				m_feederMotor.Set(SmartDashboard::GetNumber("DB/Slider 0",0.0));
 			}
@@ -405,6 +407,8 @@ void Robot::Test()
 			}
 
 			//indexer test
+			// Slider 2
+
 			if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonY))){
 				m_indexerMotor.goAt(SmartDashboard::GetNumber("DB/Slider 1",0.0));
 			}
@@ -419,6 +423,8 @@ void Robot::Test()
 			}
 
 			// Fly wheel Test
+			// Slider 3 for lowerflywheel
+			// Slider 4 for topflywheel
 			if ((m_pidState == VOLTAGE) && (m_gamepad.GetRawButton(DriveStationConstants::buttonA))){
 				m_lowerFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 2",0.0));
 				m_topFlyWheelMotor.Set(SmartDashboard::GetNumber("DB/Slider 3",0.0));
