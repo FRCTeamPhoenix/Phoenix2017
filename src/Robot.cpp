@@ -62,19 +62,20 @@ void Robot::VisionThread()
 {
     cs::UsbCamera cam0 = cs::UsbCamera("Gear Cam", 0);
     cam0.SetResolution(320,240);
-    cam0.SetFPS(20);
+    cam0.SetFPS(15);
     cs::UsbCamera cam1 = cs::UsbCamera("Drive Cam", 1);
     cam1.SetResolution(320,240);
-    cam1.SetFPS(20);
+    cam1.SetFPS(15);
     cs::UsbCamera cam2 = cs::UsbCamera("Turret Cam", 2);
     cam2.SetResolution(320,240);
-    cam2.SetFPS(20);
+    cam2.SetFPS(15);
     cv::Mat source(320, 240, CV_32FC3);
     cs::CvSink cvSink0 = CameraServer::GetInstance()->GetVideo(cam0);
     cs::CvSink cvSink1 = CameraServer::GetInstance()->GetVideo(cam1);
     cs::CvSink cvSink2 = CameraServer::GetInstance()->GetVideo(cam2);
     cs::CvSource cvSource = CameraServer::GetInstance()->PutVideo("Current View", 320,240);
     while(true){
+        int frameRate = SmartDashboard::GetNumber("Frame Rate", 15);
         int camNum = SmartDashboard::GetNumber("Camera Select",1);
         if(camNum == 0){
             cvSink1.SetEnabled(false);
@@ -96,18 +97,14 @@ void Robot::VisionThread()
             cvSink2.SetEnabled(true);
             cvSink2.GrabFrame(source);
         }
+        cvSource.SetFPS(frameRate);
         cvSource.PutFrame(source);
-        Wait(0.05);
+        Wait(1/frameRate);
     }
 }
 
 void Robot::RobotInit()
 {
-
-    CameraServer::GetInstance()->StartAutomaticCapture("Drive Cam", 0);
-    CameraServer::GetInstance()->StartAutomaticCapture("Gear Cam", 1);
-    CameraServer::GetInstance()->StartAutomaticCapture("Turret Cam", 2);
-
 	cout << "In Robot INIT" << endl;
 	initMainActionGroup();
 	SmartDashboard::PutStringArray("Test List", testModes);
