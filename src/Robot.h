@@ -20,7 +20,13 @@
 #include "Gatherer.h"
 #include "Feeder.h"
 #include "Indexer.h"
-
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <iostream>
+#include <ntcore.h>
+#include <cscore.h>
+#include <networktables/NetworkTable.h>
 
 //Suppresses uint_64 overflow warning from valijson
 #pragma GCC diagnostic ignored "-Woverflow"
@@ -94,6 +100,7 @@ public:
 
 	void initAutoMode();
 
+	static void VisionThread();
 	void switchToTeleoperated();
 
 	//Functions For Robot Actions
