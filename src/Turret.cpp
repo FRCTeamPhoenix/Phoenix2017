@@ -19,7 +19,7 @@ Turret::Turret(
         //m_timer()
 
 {
-    m_state = HOMING;
+    m_state = IDLE;
     m_gamepadJoystick = 0;
 }
 

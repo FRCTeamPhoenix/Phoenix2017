@@ -6,10 +6,10 @@ using json=nlohmann::json;
 
 void lidarThread(Robot * robot, Lidar * lidar) {
     while(true) {
-        if(robot->IsEnabled())
-        {
+//        if(robot->IsEnabled())
+//        {
             lidar->run();
-        }
+//        }
     }
 }
 

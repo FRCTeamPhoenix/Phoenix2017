@@ -78,6 +78,8 @@ void Lidar::run() {
     m_fastAverage = (fast * m_fastAverage + m_distance) / (fast + 1.0);
     double slow = 25.0;
     m_slowAverage = (slow * m_slowAverage + m_distance) / (slow + 1.0);
+
+    SmartDashboard::PutNumber("Lidar Distance", m_distance);
 }
 
 Lidar::~Lidar()
