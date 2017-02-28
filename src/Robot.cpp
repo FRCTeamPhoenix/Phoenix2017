@@ -169,11 +169,6 @@ void Robot::OperatorControl()
 
 void Robot::Test()
 {
-    m_FRDrive.SetControlMode(CANSpeedController::kPercentVbus);
-    m_FLDrive.SetControlMode(CANSpeedController::kPercentVbus);
-    m_BRDrive.SetControlMode(CANSpeedController::kPercentVbus);
-    m_BLDrive.SetControlMode(CANSpeedController::kPercentVbus);
-
     stringstream ss;
     ss << m_talons.m_status;
     SmartDashboard::PutString("DB/String 7", ss.str());
@@ -183,7 +178,7 @@ void Robot::Test()
     SmartDashboard::PutString("DB/String 8", ss.str());
 
     LOGI << "Start Test Mode";
-    m_pidState = PID;
+    m_pidState = VOLTAGE;
     testModeSelector = t_Talons;
     while (IsEnabled() && IsTest())
     {
@@ -361,11 +356,11 @@ void Robot::Test()
                 m_indexerMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
                 if (m_gamepad.GetRawButton(DriveStationConstants::buttonY))
                 {
-                    m_feederMotor.Set(throttle);
+                    m_indexerMotor.Set(throttle);
                 }
                 else
                 {
-                    m_feederMotor.Set(power);
+                    m_indexerMotor.Set(power);
                 }
             }
             break;

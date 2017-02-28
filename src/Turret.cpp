@@ -58,37 +58,11 @@ void Turret::run()
                 //Moving state of Turret
                 //Changes to Idle when there is no joystick movement
             case TELEOP:
-                if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
-                {
-                    if (gamepadJoystickWithDeadZone() > 0)
-                    {
-                        m_turretRotatorMotor.goAt(0.0);
-                    }
-                    else
-                    {
-                        m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
-                    }
-                }
-                else if (m_turretRotatorMotor.IsRevLimitSwitchClosed())
-                {
-                    if (gamepadJoystickWithDeadZone() < 0)
-                    {
-                        m_turretRotatorMotor.goAt(0.0);
-                    }
-                    else
-                    {
-                        m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
-                    }
+                m_turretRotatorMotor.SetControlMode(CANSpeedController::kPercentVbus);
+                m_turretRotatorMotor.Set(gamepadJoystickWithDeadZone());
 
-                }
-                else
-                {
-                    m_turretRotatorMotor.goAt(gamepadJoystickWithDeadZone());
-                }
-                if(gamepadJoystickWithDeadZone() == 0)
-                {
-                    setState(IDLE);
-                }
+                SmartDashboard::PutNumber("Turret Joystick", gamepadJoystickWithDeadZone());
+
                 break;
             case HOMING:
                 if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
@@ -117,7 +91,7 @@ float Turret::gamepadJoystickWithDeadZone()
 {
     float power = -m_customBox.GetRawAxis(2);
 
-    if (fabs(power) < 0.05f){
+    if (fabs(power) < 0.075f){
         power = 0;
     }
     return power * RobotConstants::turretDamp;

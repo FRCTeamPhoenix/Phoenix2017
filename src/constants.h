@@ -41,7 +41,7 @@ struct PortAssign
 
 struct RobotConstants
 {
-    constexpr static float turretDamp = 0.6f;
+    constexpr static float turretDamp = 0.3f;
     constexpr static double turretSpeed = 0.1f;
     constexpr static double lidarValueTolerance = 12;
     constexpr static double lidarMaxReading = 700;
@@ -113,9 +113,9 @@ namespace DriveStationConstants
 		buttonAutoStop = 9,
 
         potTurret = 2,
-        potFlywheelSpeed = 0,
+        potFlywheelSpeed = 3,
         potXChange = 1,
-        potYChange = 3
+        potYChange = 0
 
 	};
     const static std::string dashButtonNames[6] =
