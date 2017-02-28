@@ -7,19 +7,19 @@ using json=nlohmann::json;
 
 void lidarThread(Robot * robot, Lidar * lidar) {
     while(true) {
-        if(robot->IsEnabled())
-        {
+//        if(robot->IsEnabled())
+//        {
             lidar->run();
-        }
+//        }
     }
 }
 
 Robot::Robot() :
         m_talons("config/talons_validated.json", "schemas/talons.schema"),
-        m_FRDrive(7, m_talons.getTalonConfig(7), CANTalon::FeedbackDevice::QuadEncoder),
-        m_FLDrive(8, m_talons.getTalonConfig(8), CANTalon::FeedbackDevice::QuadEncoder),
-        m_BRDrive(1, m_talons.getTalonConfig(1), CANTalon::FeedbackDevice::QuadEncoder),
-        m_BLDrive(2, m_talons.getTalonConfig(2), CANTalon::FeedbackDevice::QuadEncoder),
+        m_FRDrive(PortAssign::frontRightWheelMotor, m_talons.getTalonConfig(PortAssign::frontRightWheelMotor), CANTalon::FeedbackDevice::QuadEncoder),
+        m_FLDrive(PortAssign::frontLeftWheelMotor, m_talons.getTalonConfig(PortAssign::frontLeftWheelMotor), CANTalon::FeedbackDevice::QuadEncoder),
+        m_BRDrive(PortAssign::backRightWheelMotor, m_talons.getTalonConfig(PortAssign::backRightWheelMotor), CANTalon::FeedbackDevice::QuadEncoder),
+        m_BLDrive(PortAssign::backLeftWheelMotor, m_talons.getTalonConfig(PortAssign::backLeftWheelMotor), CANTalon::FeedbackDevice::QuadEncoder),
         m_mainAutoGroup(new ActionGroup()),
         m_drivetrain(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_expansionBoard, HeadingControl::GyroAxes::x),
         m_topFlyWheelMotor(PortAssign::topFlyWheelMotor, m_talons.getTalonConfig(PortAssign::topFlyWheelMotor), CANTalon::FeedbackDevice::QuadEncoder),
@@ -59,13 +59,53 @@ void printMSG(string place, string msg) {
     stream.clear();
 }
 
+void Robot::VisionThread()
+{
+    cs::UsbCamera cam0 = cs::UsbCamera("Gear Cam", 0);
+    cam0.SetResolution(320,240);
+    cam0.SetFPS(15);
+    cs::UsbCamera cam1 = cs::UsbCamera("Drive Cam", 1);
+    cam1.SetResolution(320,240);
+    cam1.SetFPS(15);
+    cs::UsbCamera cam2 = cs::UsbCamera("Turret Cam", 2);
+    cam2.SetResolution(320,240);
+    cam2.SetFPS(15);
+    cv::Mat source(320, 240, CV_32FC3);
+    cs::CvSink cvSink0 = CameraServer::GetInstance()->GetVideo(cam0);
+    cs::CvSink cvSink1 = CameraServer::GetInstance()->GetVideo(cam1);
+    cs::CvSink cvSink2 = CameraServer::GetInstance()->GetVideo(cam2);
+    cs::CvSource cvSource = CameraServer::GetInstance()->PutVideo("Current View", 320,240);
+    while(true){
+        int frameRate = SmartDashboard::GetNumber("Frame Rate", 15);
+        int camNum = SmartDashboard::GetNumber("Camera Select",1);
+        if(camNum == 0){
+            cvSink1.SetEnabled(false);
+            cvSink2.SetEnabled(false);
+            cvSink0.SetEnabled(true);
+            cvSink0.GrabFrame(source);
+        }
+        else if(camNum == 1)
+        {
+            cvSink0.SetEnabled(false);
+            cvSink2.SetEnabled(false);
+            cvSink1.SetEnabled(true);
+            cvSink1.GrabFrame(source);
+        }
+        else
+        {
+            cvSink0.SetEnabled(false);
+            cvSink1.SetEnabled(false);
+            cvSink2.SetEnabled(true);
+            cvSink2.GrabFrame(source);
+        }
+        cvSource.SetFPS(frameRate);
+        cvSource.PutFrame(source);
+        Wait(1/frameRate);
+    }
+}
+
 void Robot::RobotInit()
 {
-
-    CameraServer::GetInstance()->StartAutomaticCapture("Drive Cam", 0);
-    CameraServer::GetInstance()->StartAutomaticCapture("Gear Cam", 1);
-    CameraServer::GetInstance()->StartAutomaticCapture("Turret Cam", 2);
-
 	cout << "In Robot INIT" << endl;
 	initMainActionGroup();
 	SmartDashboard::PutStringArray("Test List", testModes);
@@ -74,6 +114,9 @@ void Robot::RobotInit()
 
     std::thread runLidar(lidarThread, this, &m_lidar);
     runLidar.detach();
+
+    std::thread runVision(VisionThread);
+    runVision.detach();
 }
 
 void Robot::Autonomous()

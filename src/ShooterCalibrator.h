@@ -7,6 +7,8 @@
  *  Created on: Jan 12, 2017
  *      Author: Brin Harper
  */
+#ifndef SRC_SHOOTERCALIBRATOR_H_
+#define SRC_SHOOTERCALIBRATOR_H_
 
 #include "DistanceVelocityPair.h"
 #include "WPILib.h"
@@ -23,9 +25,6 @@
 #include "valijson/schema.hpp"
 #include "valijson/schema_parser.hpp"
 #include "valijson/validator.hpp"
-
-#ifndef SRC_SHOOTERCALIBRATOR_H_
-#define SRC_SHOOTERCALIBRATOR_H_
 
 using namespace std;
 using json=nlohmann::json;

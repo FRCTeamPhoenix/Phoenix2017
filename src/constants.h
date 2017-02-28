@@ -103,7 +103,6 @@ namespace DriveStationConstants
     };
     enum controlBox
 	{
-        buttonTurretAuto = 1,
 		buttonIndexer = 4,
 		buttonFeeder = 2,
 		buttonClimberUP = 3,
@@ -111,7 +110,13 @@ namespace DriveStationConstants
 		buttonFlywheelAuto = 6,
         buttonIndexerReverse = 7,
 		buttonAutoStart = 8,
-		buttonAutoStop = 9
+		buttonAutoStop = 9,
+
+        potTurret = 2,
+        potFlywheelSpeed = 0,
+        potXChange = 1,
+        potYChange = 3
+
 	};
     const static std::string dashButtonNames[6] =
     {

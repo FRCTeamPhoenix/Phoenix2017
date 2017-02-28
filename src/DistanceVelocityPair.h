@@ -7,13 +7,14 @@
  *      Author: Brin Harper
  */
 
+#ifndef SRC_DISTANCEVELOCITYPAIR_H_
+#define SRC_DISTANCEVELOCITYPAIR_H_
+
+
 #include "WPILib.h"
 #include <iostream>
 #include "json.hpp"
 #include <fstream>
-
-#ifndef SRC_DISTANCEVELOCITYPAIR_H_
-#define SRC_DISTANCEVELOCITYPAIR_H_
 
 using namespace std;
 using json=nlohmann::json;
