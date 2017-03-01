@@ -75,6 +75,8 @@ void Talons::initTalons() {
 
          return;
       }
+
+      SmartDashboard::PutString("DB/String 2", "VALIDATED talons.json");
 }
 
 json Talons::getTalonConfig(int talonId) {
