@@ -61,8 +61,8 @@ void Indexer::run()
                 m_indexerMotor.goAt(0.0);
             break;
         case ON:
-            //m_indexerMotor.goAt(m_speed);
             m_speedGroup->execute(m_speedGroup->getContainedActions());
+            m_indexerMotor.goAt(m_speed);
 
             if(m_indexerMotor.GetIaccum() > 700000)
                 m_indexerMotor.ClearIaccum();
@@ -104,7 +104,7 @@ void Indexer::initSpeedGroup(std::shared_ptr<Robot> robot)
                 "},"
 
                 "{"
-                    "\"type\": \"ResetAction\","
+                    "\"type\": \"resetAction\","
                     "\"startingCondition\": 0,"
 
                     "\"placesToReset\": [0, 1, 2],"
