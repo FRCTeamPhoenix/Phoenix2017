@@ -34,6 +34,9 @@ public:
     void tuneRate(double pInit, double goalRate, int IZone, double F);
     bool test();
 
+    double getMaxForwardSpeed();
+    double getMaxReverseSpeed();
+
 private:
 
     void switchToGain(PIDGains gains);

@@ -134,6 +134,16 @@ void SmartTalon::goDistance (double distance, double speed)
 
 }
 
+double SmartTalon::getMaxForwardSpeed()
+{
+    return m_maxForwardSpeed;
+}
+
+double SmartTalon::getMaxReverseSpeed()
+{
+    return m_maxReverseSpeed;
+}
+
 /*
  * DO NOT CALL IN ANY CASE WHERE YOU NEED ROBOT CONTROL
  * TAKES CONTROL OF SYSTEM AND DOES NOT RETURN IT TILL DONE

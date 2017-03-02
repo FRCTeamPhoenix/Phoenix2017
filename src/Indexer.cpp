@@ -62,8 +62,11 @@ void Indexer::run()
                 m_indexerMotor.goAt(0.0);
             break;
         case ON:
-            m_speedGroup->execute(m_speedGroup->getContainedActions());
+//            m_speedGroup->execute(m_speedGroup->getContainedActions());
             m_indexerMotor.goAt(m_speed);
+
+            SmartDashboard::PutNumber("Talons/Indexer/Speed", m_indexerMotor.GetEncVel());
+            SmartDashboard::PutNumber("Talons/Indexer/Goal Speed", m_speed * m_indexerMotor.getMaxForwardSpeed());
 
             if(m_indexerMotor.GetIaccum() > 700000)
                 m_indexerMotor.ClearIaccum();
