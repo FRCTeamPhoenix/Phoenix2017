@@ -5,7 +5,7 @@
  *      Author: larry
  */
 
-#include "Actions/DriveJoystick.h"
+#include "DriveJoystick.h"
 #include "../robot.h"
 
 DriveJoystick::DriveJoystick(vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):

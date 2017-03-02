@@ -109,6 +109,7 @@ public:
     string getName();
 
 protected:
+    string m_name;
 
     /*
      * Default:
@@ -132,7 +133,7 @@ protected:
      */
     virtual void run()
     {
-        cout << "IN DEFAULT RUN" << endl;
+        cout << m_name << " IN DEFAULT RUN" << endl;
     }
 
     void start(){
@@ -155,7 +156,6 @@ protected:
     vector<shared_ptr<dependency>> m_dependencies;
     dependency::condition m_currentCondition;
     shared_ptr<Robot> m_robot;
-    string m_name;
 
 
 };

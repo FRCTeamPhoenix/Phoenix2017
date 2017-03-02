@@ -10,7 +10,9 @@
 #include "WPILib.h"
 #include "constants.h"
 #include "SmartTalon.h"
+#include <iostream>
 
+using namespace std;
 using namespace nlohmann;
 
 class ActionGroup;

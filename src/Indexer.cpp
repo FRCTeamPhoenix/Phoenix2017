@@ -9,6 +9,7 @@
 #include "Robot.h"
 #include "Actions/AllActions.h"
 
+
 Indexer::Indexer(SmartTalon& indexerMotor, Joystick& customBox):
     m_indexerMotor(indexerMotor),
     m_customBox(customBox),
@@ -75,6 +76,7 @@ void Indexer::run()
 
 void Indexer::initSpeedGroup(std::shared_ptr<Robot> robot)
 {
+    cout << "in indexer init speed group" << endl;
     json jsonDoc = "{"
             "\"type\": \"ActionGroup\","
             "\"name\": \"Indexer Speed Group\","
@@ -83,9 +85,11 @@ void Indexer::initSpeedGroup(std::shared_ptr<Robot> robot)
             "\"containedActions\": ["
                 "{"
                     "\"type\": \"IndexerRunTime\","
+                    "\"name\": \"Indexer Speed Group Fast\","
+
                     "\"startingCondition\": 0,"
 
-                    "\"speed\": 0.75,"
+                    "\"speed\": 0.4,"
                     "\"duration\": 0.5,"
 
                     "\"dependencies\": []"
@@ -93,9 +97,11 @@ void Indexer::initSpeedGroup(std::shared_ptr<Robot> robot)
 
                 "{"
                     "\"type\": \"IndexerRunTime\","
+                    "\"name\": \"Indexer Speed Group Slow\","
+
                     "\"startingCondition\": 0,"
 
-                    "\"speed\": 0.3,"
+                    "\"speed\": 0.4,"
                     "\"duration\": 0.1,"
 
                     "\"dependencies\": ["
@@ -105,6 +111,8 @@ void Indexer::initSpeedGroup(std::shared_ptr<Robot> robot)
 
                 "{"
                     "\"type\": \"ResetAction\","
+                    "\"name\": \"Indexer Speed Group Reset\","
+
                     "\"startingCondition\": 0,"
 
                     "\"placesToReset\": [0, 1, 2],"
@@ -117,6 +125,7 @@ void Indexer::initSpeedGroup(std::shared_ptr<Robot> robot)
             "\"dependencies\": [],"
             "\"doneDependencies\": []"
         "}"_json;
-
+    cout << "after json delaration" << endl;
     m_speedGroup->initActionGroup(jsonDoc, robot);
+    cout << "after group init" << endl;
 }

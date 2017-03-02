@@ -61,13 +61,13 @@ void printMSG(string place, string msg) {
 
 void Robot::VisionThread()
 {
-    cs::UsbCamera cam0 = cs::UsbCamera("Gear Cam", 0);
+    static cs::UsbCamera cam0 = cs::UsbCamera("Gear Cam", 0);
     cam0.SetResolution(320,240);
     cam0.SetFPS(15);
-    cs::UsbCamera cam1 = cs::UsbCamera("Drive Cam", 1);
+    static cs::UsbCamera cam1 = cs::UsbCamera("Drive Cam", 1);
     cam1.SetResolution(320,240);
     cam1.SetFPS(15);
-    cs::UsbCamera cam2 = cs::UsbCamera("Turret Cam", 2);
+    static cs::UsbCamera cam2 = cs::UsbCamera("Turret Cam", 2);
     cam2.SetResolution(320,240);
     cam2.SetFPS(15);
     cv::Mat source(320, 240, CV_32FC3);
@@ -115,8 +115,8 @@ void Robot::RobotInit()
     std::thread runLidar(lidarThread, this, &m_lidar);
     runLidar.detach();
 
-    std::thread runVision(VisionThread);
-    runVision.detach();
+//    std::thread runVision(VisionThread);
+//    runVision.detach();
 }
 
 void Robot::Autonomous()

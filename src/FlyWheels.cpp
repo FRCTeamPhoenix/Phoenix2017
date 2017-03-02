@@ -13,8 +13,8 @@ FlyWheels::FlyWheels(
         ShooterCalibrator& shooterCalibrator,
         Lidar& lidar,
         Joystick& customBox):
-        m_lowerFlyWheelMotor(leftFlyWheelMotor),
-        m_topFlyWheelMotor(rightFlyWheelMotor),
+        m_lowerFlyWheelMotor(rightFlyWheelMotor),
+        m_topFlyWheelMotor(leftFlyWheelMotor),
         m_shooterCalibrator(shooterCalibrator),
         m_lidar(lidar),
         m_customBox(customBox)
@@ -59,7 +59,9 @@ void FlyWheels::run()
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.
         	double speed = ((m_customBox.GetRawAxis(DriveStationConstants::potFlywheelSpeed) + 1) / 2) * 0.55;
 
-            SmartDashboard::PutNumber("Speed", speed * 80000);
+            SmartDashboard::PutNumber("Top Goal Speed", speed * 80000 / 4);
+            SmartDashboard::PutNumber("Bottom Goal Speed", speed * 80000);
+
 
             SmartDashboard::PutNumber("Top Speed", m_topFlyWheelMotor.GetEncVel());
             SmartDashboard::PutNumber("Bottom Speed", m_lowerFlyWheelMotor.GetEncVel());
@@ -68,7 +70,7 @@ void FlyWheels::run()
             SmartDashboard::PutNumber("Bottom Voltage", m_lowerFlyWheelMotor.GetOutputVoltage());
 
             setRightSpeed(speed);
-            setLeftSpeed(speed);
+            setLeftSpeed(speed / 4);
             break;
     }
 }
