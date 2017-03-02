@@ -110,7 +110,7 @@ void Indexer::initSpeedGroup(std::shared_ptr<Robot> robot)
                 "},"
 
                 "{"
-                    "\"type\": \"ResetAction\","
+                    "\"type\": \"resetAction\","
                     "\"name\": \"Indexer Speed Group Reset\","
 
                     "\"startingCondition\": 0,"
