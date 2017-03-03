@@ -101,3 +101,8 @@ void FlyWheels::setBothSpeed(double speed)
     m_topFlyWheelMotor.goAt(speed);
     m_lowerFlyWheelMotor.goAt(speed);
 }
+
+bool FlyWheels::inRange()
+{
+    return m_shooterCalibrator.inRange(m_lidar.getDistance());
+}

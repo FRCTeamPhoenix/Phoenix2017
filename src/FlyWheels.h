@@ -30,6 +30,7 @@ public:
     STATE getState(); //Gets the current state of the Flywheels
     void setState(STATE state); //Sets the state of the Flywheels
 
+    bool inRange();
 
     FlyWheels(
             SmartTalon& lowerFlyWheelMotor, //Smart Talon of the right flywheel
