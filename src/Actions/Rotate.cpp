@@ -3,6 +3,7 @@
 //
 
 #include "Rotate.h"
+#include "../Robot.h"
 
 Rotate::Rotate (double angle, double speed, double tolerance, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
     Action(dependencies, robot),

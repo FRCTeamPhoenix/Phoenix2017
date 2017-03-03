@@ -45,7 +45,6 @@ using valijson::adapters::NlohmannJsonAdapter;
 
 using namespace std;
 using json=nlohmann::json;
-class ActionGroup;
 
 class ActionGroup;
 

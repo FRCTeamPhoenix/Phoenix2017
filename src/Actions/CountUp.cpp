@@ -3,6 +3,12 @@
 //
 
 #include "CountUp.h"
+#include "../Robot.h"
+#include "Action.h"
+#include "dependency.h"
+#include <vector>
+#include <iostream>
+#include "../plog/Log.h"
 
 CountUp::CountUp (int start, int end, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
     Action(dependencies, robot),

@@ -10,9 +10,8 @@
 #include "dependency.h"
 #include "../json.hpp"
 #include <iostream>
-#include "../plog/Log.h"
-#include "../Robot.h"
 
+class Robot;
 
 using namespace std;
 using json=nlohmann::json;

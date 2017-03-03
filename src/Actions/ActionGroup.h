@@ -8,12 +8,12 @@
 #include "../json.hpp"
 #include <fstream>
 #include "../plog/Log.h"
-#include "../Robot.h"
-
 
 
 using namespace std;
 using json=nlohmann::json;
+
+class Robot;
 
 /* Action Groups:
  *      An organizational tool that contains Actions while being an Action itself. This allows

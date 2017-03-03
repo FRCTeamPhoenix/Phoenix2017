@@ -13,9 +13,10 @@
 #include <vector>
 #include <iostream>
 #include "../plog/Log.h"
-#include "../Robot.h"
 
 using namespace std;
+
+class Robot;
 
 class DriveJoystick: public Action {
 public:

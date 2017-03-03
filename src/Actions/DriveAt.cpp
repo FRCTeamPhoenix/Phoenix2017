@@ -3,6 +3,7 @@
 //
 
 #include "DriveAt.h"
+#include "../Robot.h"
 
 DriveAt::DriveAt (double speed, double angle, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
     Action(dependencies, robot),

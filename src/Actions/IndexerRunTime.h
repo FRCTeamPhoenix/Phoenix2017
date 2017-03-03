@@ -10,9 +10,11 @@
 #include <vector>
 #include <iostream>
 #include "../plog/Log.h"
-#include "../Robot.h"
+#include "WPILib.h"
 
 using namespace std;
+
+class Robot;
 
 class IndexerRunTime : public Action
 {
@@ -28,7 +30,7 @@ private:
     double m_speed;
     double m_duration;
 
-    Timer m_timer;
+    frc::Timer m_timer;
 };
 
 
