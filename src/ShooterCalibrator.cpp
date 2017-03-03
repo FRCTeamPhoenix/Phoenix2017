@@ -162,26 +162,12 @@ double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<Dist
 
 double ShooterCalibrator::getTopFlywheelVelocity(double distance) {
 
-    if (distance <= 0) {
-        return 0;
-    } else if (distance > 200) {
-        return 10000;
-    } else {
-        return interpolateVelocityLinear(distance, dvPairsTop);
-    }
-
+    return interpolateVelocityLinear(distance, dvPairsTop);
 }
 
 double ShooterCalibrator::getLowFlywheelVelocity(double distance) {
 
-    if (distance <= 0) {
-        return 0;
-    } else if (distance > 200) {
-        return 60000;
-    } else {
-        return interpolateVelocityLinear(distance, dvPairsLow);
-    }
-
+     return interpolateVelocityLinear(distance, dvPairsLow);
 }
 
 void ShooterCalibrator::sortRefVals(vector<DistanceVelocityPair>& dvPairs) {
