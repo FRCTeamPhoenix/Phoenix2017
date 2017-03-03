@@ -89,18 +89,30 @@ void RobotController::run()
         }
 
         //Indexer
-        if(m_controlBox.GetRawButton(DriveStationConstants::buttonIndexer)){
-            m_indexer.setState(Indexer::ON);
-            m_indexer.setSpeed(0.75);
-        }
-        else if(m_controlBox.GetRawButton(8))
+        if((m_flywheels.getState() == FlyWheels::LIDARRATE) && (!m_flywheels.inRange()))
         {
-            m_indexer.setState(Indexer::ON);
-            m_indexer.setSpeed(-0.3);
-        }
-        else{
             m_indexer.setState(Indexer::OFF);
+
         }
+        else
+        {
+            if(m_controlBox.GetRawButton(DriveStationConstants::buttonIndexer)){
+                m_indexer.setState(Indexer::ON);
+                m_indexer.setSpeed(0.75);
+            }
+            else if(m_controlBox.GetRawButton(8))
+            {
+                m_indexer.setState(Indexer::ON);
+                m_indexer.setSpeed(-0.3);
+            }
+            else{
+                m_indexer.setState(Indexer::OFF);
+            }
+        }
+
+
+
+
 
         //Climber
         if(m_controlBox.GetRawButton(DriveStationConstants::buttonClimberUP)){
