@@ -1,28 +1,13 @@
 [
   {
-    "distance": 159,
-    "velocityTop": 61000,
-    "velocityLow": 3400
+    "distance": 126,
+    "velocityTop": 8593,
+    "velocityLow": 40000
   },
   {
-    "distance": 165,
-    "velocityTop": 64000,
-    "velocityLow": 3400
-  },
-  {
-    "distance": 0,
-    "velocityTop": 40000,
-    "velocityLow": 3000
-  },
-  {
-   	"distance": 104,
-    "velocityTop": 55000,
-    "velocityLow": 3000
-  },
-  {
-    "distance": 144,
-    "velocityTop": 59000,
-    "velocityLow": 3300
+    "distance": 160,
+    "velocityTop": 10480,
+    "velocityLow": 44000
   }
 
 ]

@@ -62,6 +62,8 @@ void Indexer::run()
                 m_indexerMotor.goAt(0.0);
             break;
         case ON:
+//            m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+//            m_indexerMotor.Set(SmartDashboard::GetNumber("DB/Slider 1", 0.0));
 //            m_speedGroup->execute(m_speedGroup->getContainedActions());
             m_indexerMotor.goAt(m_speed);
 
@@ -72,6 +74,8 @@ void Indexer::run()
                 m_indexerMotor.ClearIaccum();
             break;
         case OFF:
+//            m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+//            m_indexerMotor.Set(0.0);
             m_indexerMotor.goAt(0.0);
             break;
     }

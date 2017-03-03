@@ -465,10 +465,12 @@ void Robot::Test()
             //indexer test
             if ((m_pidState == PID) && (m_gamepad.GetRawButton(DriveStationConstants::buttonY)))
             {
-                m_indexerMotor.goAt(.75);
+                m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+                m_indexerMotor.Set(SmartDashboard::GetNumber("DB/Slider 3", 0.0));
             }
             else {
-                m_indexerMotor.goAt(0.0);
+                m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+                m_indexerMotor.Set(0);
 
             }
             // Fly wheel Test
