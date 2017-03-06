@@ -461,22 +461,46 @@ void SmartTalon::tuneRate (double pInit, double goalRate, int IZone, double F)
 
 }
 
-bool SmartTalon::test()
+int SmartTalon::test(double power, double timeout)
 {
     SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-    Set(0.1);
-    Wait(0.5);
-    if(GetSpeed() > 0)
+    Set(power);
+    Wait(timeout);
+    int speed = GetSpeed();
+    if(speed > 10)
     {
         Set(0.0);
-        return true;
+        return 1;
+    }
+    else if(speed < -10)
+    {
+        Set(0.0);
+        return -1;
     }
     else
     {
-        Set(0.0);
-        return false;
+        return 0;
     }
 }
+
+
+string SmartTalon::testStr(double power, double timeout)
+{
+    int condition = test(power, timeout);
+    if(condition == 1)
+    {
+        return "Correct";
+    }
+    else if(condition == -1)
+    {
+        return "Reversed";
+    }
+    else
+    {
+        return "Not Reading!!!";
+    }
+}
+
 
 
 

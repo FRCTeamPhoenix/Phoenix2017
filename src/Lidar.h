@@ -12,7 +12,8 @@
 #define MODE_PWM 1
 #define    LIDARLite_ADDRESS   0x62          // Default I2C Address of LIDAR-Lite.
 #define    RegisterMeasure     0x00          // Register to write to initiate ranging.
-#define    MeasureValue        0x03          // Value to initiate ranging.
+#define    MeasureValue        0x04          // Value to initiate ranging.
+#define    RegisterHighLowB    0x8f
 #define    HighByte            0x18          // Distance measurement high byte
 #define    LowByte             0x19          // Distance measurement low byte
 

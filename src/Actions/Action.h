@@ -141,6 +141,7 @@ protected:
     }
 
     void finish(){
+        cout << m_name << " is done" << endl;
         m_currentCondition = dependency::Finished;
     }
 

@@ -253,22 +253,20 @@ void Robot::Test()
         {
         case t_Talons: //Test all Talons on robot
         {
-            printMSG("0", "All Talons");
-            printMSG("1", "Control Mode: " + std::to_string(m_pidState));
-            printMSG("2", "FRD ENC: " + std::to_string(m_FRDrive.GetEncPosition()));
-            printMSG("3", "FLD ENC: " + std::to_string(m_FLDrive.GetEncPosition()));
-            printMSG("4", "BRD ENC: " + std::to_string(m_BRDrive.GetEncPosition()));
-            printMSG("5", "BLD ENC: " + std::to_string(m_BLDrive.GetEncPosition()));
-            printMSG("6", "RFW ENC: " + std::to_string(m_lowerFlyWheelMotor.GetEncPosition()));
-            printMSG("7", "LFW ENC: " + std::to_string(m_topFlyWheelMotor.GetEncPosition()));
-            printMSG("8", "TRM ENC: " + std::to_string(m_turretRotateMotor.GetEncPosition()));
-            m_FRDrive.goAt(power);
-            m_FLDrive.goAt(power);
-            m_BRDrive.goAt(power);
-            m_BLDrive.goAt(power);
-            m_lowerFlyWheelMotor.goAt(power);
-            m_topFlyWheelMotor.goAt(power);
-            m_turretRotateMotor.goAt(power);
+            if(m_gamepad.GetRawButton(DriveStationConstants::buttonY))
+            {
+                printMSG("0", "FRD ENC: " + (m_FRDrive.testStr(0.25)));
+                printMSG("1", "FLD ENC: " + (m_FLDrive.testStr(0.25)));
+                printMSG("2", "BRD ENC: " + (m_BRDrive.testStr(0.25)));
+                printMSG("3", "BLD ENC: " + (m_BLDrive.testStr(0.25)));
+                printMSG("4", "RFW ENC: " + (m_lowerFlyWheelMotor.testStr(0.25)));
+                printMSG("5", "LFW ENC: " + (m_topFlyWheelMotor.testStr(0.25)));
+                printMSG("6", "TRM ENC: " + (m_turretRotateMotor.testStr(0.1, 0.25)));
+                printMSG("7", "FED ENC: " + (m_feederMotor.testStr(0.25)));
+                printMSG("8", "IDX ENC: " + (m_indexerMotor.testStr(0.25)));
+            }
+
+//            m_turretRotateMotor.goAt(power);
             break;
         }
 

@@ -59,8 +59,8 @@ void FlyWheels::run()
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.
         	double speed = ((m_customBox.GetRawAxis(DriveStationConstants::potFlywheelSpeed) + 1) / 2) * 0.55;
 
-            SmartDashboard::PutNumber("Talons/Flywheels/Top Goal Speed", speed * 80000 / 2);
-            SmartDashboard::PutNumber("Talons/Flywheels/Bottom Goal Speed", SmartDashboard::GetNumber("DB/Slider 1", 0.0) * 80000);
+            SmartDashboard::PutNumber("Talons/Flywheels/Top Goal Speed", SmartDashboard::GetNumber("DB/Slider 0", 0.0) * m_topFlyWheelMotor.getMaxForwardSpeed());
+            SmartDashboard::PutNumber("Talons/Flywheels/Bottom Goal Speed", SmartDashboard::GetNumber("DB/Slider 1", 0.0) * m_lowerFlyWheelMotor.getMaxForwardSpeed());
 
 
             SmartDashboard::PutNumber("Talons/Flywheels/Top Speed", m_topFlyWheelMotor.GetEncVel());
@@ -70,7 +70,7 @@ void FlyWheels::run()
             SmartDashboard::PutNumber("Talons/Flywheels/Bottom Voltage", m_lowerFlyWheelMotor.GetOutputVoltage());
 
             setRightSpeed(SmartDashboard::GetNumber("DB/Slider 1", 0.0));
-            setLeftSpeed(speed / 2);
+            setLeftSpeed(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
             break;
     }
 }

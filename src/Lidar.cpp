@@ -47,7 +47,7 @@ double Lidar::getSlowAverage() {
 }
 
 void Lidar::run() {
-    //I2C code
+//    //I2C code
     double distance;
     byte distanceArray[2];
     m_I2C->Write(0x00, 0x04);
