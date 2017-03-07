@@ -109,7 +109,48 @@
       "dependencies": [],
       "doneDependencies": []
     },
-
+    {
+        "type": "ActionGroup",
+        "name": "Red Gear Non Boiler Auto",
+        "startingCondition": -1,
+        "containedActions":[
+        {
+        	"type": "GoDistance",
+        	"name": "RGNB Drive move",
+        	"startingCondition":0,
+        
+        	"distance": 28908,
+        	"angle": 0,
+        	"speed": 0.15,
+        	"tolerance": 0.05,
+        	"dependencies": []
+       	 },
+         {
+        	"type": "Rotate",
+       		"name": "RGNB Rotate",
+       		"startingCondition": 0,
+        
+        	"angle": 60,
+        	"speed": 0.3
+        	"tolerance": 0.05,
+        	"dependencies": [{"place": 0, "requiredCondition": 2}]
+        },
+        {
+            "type": "GoDistance",
+        	"name": "RGNB approaching move",
+        	"startingCondition": -1,
+        
+        	"distance": 8569,
+        	"angle": 0,
+        	"speed": 0.15,
+        	"tolerance": 0.05,
+        	"dependencies": [{"place": 1, "requiredCondition": 2}]
+        }
+        ],
+        
+      "dependencies": [],
+      "doneDependencies": []
+    },
     {
       "type": "ActionGroup",
       "name": "Red Boiler Gear Hopper Auto",
@@ -192,7 +233,8 @@
       "dependencies": [],
       "doneDependencies": []
     },
-
+    
+    
     
     {
       "type": "ActionGroup",
