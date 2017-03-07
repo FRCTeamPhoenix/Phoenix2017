@@ -98,7 +98,7 @@ void RobotController::run()
         {
             if(m_controlBox.GetRawButton(DriveStationConstants::buttonIndexer)){
                 m_indexer.setState(Indexer::ON);
-                m_indexer.setSpeed(SmartDashboard::GetNumber("DB/Slider 2", 0.0));
+                m_indexer.setSpeed(0.3);
             }
             else if(m_controlBox.GetRawButton(8))
             {

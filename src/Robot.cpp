@@ -663,37 +663,70 @@ bool Robot::doneDriveMove (double tolerance)
 
 void Robot::driveJoystick()
 {
-	double FB = -m_joystick.GetY();
-
-	double LF = m_joystick.GetX();
-	double rot = m_joystick.GetZ() / 2;
-
-	FB = (fabs(FB) < 0.1) ? 0 : ((FB < 0) ? (FB + 0.1) / (0.9 / 0.75) : (FB - 0.1) / 0.9);
-	LF = (fabs(LF) < 0.1) ? 0 : ((LF < 0) ? (LF + 0.1) / (0.9 / 1): (LF - 0.1) / 0.9);
-	rot = (fabs(rot) < 0.1) ? 0 : ((rot < 0) ? (rot + 0.1) / (0.9 / 1) : (rot - 0.1) / 0.9);
-
-    double throttle = (((-m_joystick.GetThrottle() + 1) / 2));
-    if(throttle < 0.2)
-    {
-        throttle = 0.2;
-    }
-    if(throttle > 0.8)
-    {
-        throttle = 0.8;
-    }
-
-    FB *= throttle;
-    LF *= throttle;
-    rot *= throttle;
+    double throttle = (((m_joystick.GetThrottle() + 1) / 2));
+    double FB = 0;
+    double LR = 0;
+    double rot = 0;
 
     if(m_joystick.GetRawButton(12))
     {
-        m_drivetrain.moveRelative(LF, -FB / 2, rot / 2);
+        LR = fabs(m_joystick.GetY());
+        FB = fabs(m_joystick.GetX());
+        rot = fabs(m_joystick.GetZ() / 2);
+
+        throttle = throttle * 3.67;
+        throttle += 1;
+
+        if(LR > 0.05)
+            LR = pow(LR, throttle) * (fabs(m_joystick.GetY()) / m_joystick.GetY());
+        else
+            LR = 0;
+
+        if(FB > 0.05)
+            FB = pow(FB, throttle) * (fabs(m_joystick.GetX()) / m_joystick.GetX());
+        else
+            FB = 0;
+
+        if(FB > 0.05)
+            rot = pow(rot, throttle) * (fabs(m_joystick.GetZ()) / m_joystick.GetZ());
+        else
+            rot = 0;
+
+        FB *= 0.8;
+        LR *= 0.6;
     }
     else
     {
-        m_drivetrain.moveRelative(FB, LF, rot);
+        LR = fabs(m_joystick.GetX());
+        FB = fabs(m_joystick.GetY());
+        rot = fabs(m_joystick.GetZ() / 2);
+
+        throttle *= 4;
+        throttle += 1;
+
+        if(LR > 0.05)
+            LR = pow(LR, throttle) * (fabs(m_joystick.GetX()) / m_joystick.GetX());
+        else
+            LR = 0;
+
+        if(FB > 0.05)
+            FB = -pow(FB, throttle) * (fabs(m_joystick.GetY()) / m_joystick.GetY());
+        else
+            FB = 0;
+
+        if(rot > 0.05)
+            rot = pow(rot, throttle) * (fabs(m_joystick.GetZ()) / m_joystick.GetZ());
+        else
+            rot = 0;
     }
+
+    printMSG("0", "FB: " + std::to_string(FB));
+    printMSG("1", "LR: " + std::to_string(LR));
+    printMSG("2", "rot: " + std::to_string(rot));
+    printMSG("3", "throttle: " + std::to_string(throttle));
+
+    m_drivetrain.moveRelative(FB, LR, rot);
+
 }
 
 void Robot::setIndexerSpeed(double speed)
