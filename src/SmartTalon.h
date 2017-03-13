@@ -22,6 +22,7 @@ public:
     void goAt(double speed);
     void goAtVelocity(int velocity);
     void goDistance(double distance, double speed);
+    void goVoltage(double speed);
 
     double getGoal();
 

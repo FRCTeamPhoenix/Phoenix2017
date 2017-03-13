@@ -47,8 +47,8 @@ void FlyWheels::run()
         {
 
             // Max/min speeds must be set in Talon json
-            int topSpeed = m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getDistance());
-            int lowerSpeed = m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getDistance());
+            int topSpeed = m_shooterCalibrator.getTopFlywheelVelocity(SmartDashboard::GetNumber("../datatable/high_goal_distance", 0.0));
+            int lowerSpeed = m_shooterCalibrator.getLowFlywheelVelocity(SmartDashboard::GetNumber("../datatable/high_goal_distance", 0.0));
 
             m_topFlyWheelMotor.goAtVelocity(topSpeed);
             m_lowerFlyWheelMotor.goAtVelocity(lowerSpeed);
@@ -69,8 +69,8 @@ void FlyWheels::run()
             SmartDashboard::PutNumber("Talons/Flywheels/Top Voltage", m_topFlyWheelMotor.GetOutputVoltage());
             SmartDashboard::PutNumber("Talons/Flywheels/Bottom Voltage", m_lowerFlyWheelMotor.GetOutputVoltage());
 
-            setRightSpeed(SmartDashboard::GetNumber("DB/Slider 1", 0.0));
-            setLeftSpeed(SmartDashboard::GetNumber("DB/Slider 0", 0.0));
+            setRightSpeed(0.55);
+            setLeftSpeed(0.15);
             break;
     }
 }

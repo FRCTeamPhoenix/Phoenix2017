@@ -115,8 +115,8 @@ void Robot::RobotInit()
     std::thread runLidar(lidarThread, this, &m_lidar);
     runLidar.detach();
 
-//    std::thread runVision(VisionThread);
-//    runVision.detach();
+    std::thread runVision(VisionThread);
+    runVision.detach();
 }
 
 void Robot::Autonomous()
@@ -672,12 +672,14 @@ void Robot::driveJoystick()
     {
         LR = fabs(m_joystick.GetY());
         FB = fabs(m_joystick.GetX());
-        rot = fabs(m_joystick.GetZ() / 2);
+        rot = m_joystick.GetZ();
 
         throttle = throttle * 3.67;
         throttle += 1;
 
-        if(LR > 0.05)
+        throttle = 1;
+
+        if(LR > 0.1)
             LR = pow(LR, throttle) * (fabs(m_joystick.GetY()) / m_joystick.GetY());
         else
             LR = 0;
@@ -687,8 +689,8 @@ void Robot::driveJoystick()
         else
             FB = 0;
 
-        if(FB > 0.05)
-            rot = pow(rot, throttle) * (fabs(m_joystick.GetZ()) / m_joystick.GetZ());
+        if(fabs(rot) > (0.05 * 10))
+            rot /= 8;
         else
             rot = 0;
 
@@ -699,34 +701,46 @@ void Robot::driveJoystick()
     {
         LR = fabs(m_joystick.GetX());
         FB = fabs(m_joystick.GetY());
-        rot = fabs(m_joystick.GetZ() / 2);
+        rot = m_joystick.GetZ();
 
         throttle *= 4;
         throttle += 1;
+
+        throttle = 1;
 
         if(LR > 0.05)
             LR = pow(LR, throttle) * (fabs(m_joystick.GetX()) / m_joystick.GetX());
         else
             LR = 0;
 
-        if(FB > 0.05)
+        if(FB > 0.1)
             FB = -pow(FB, throttle) * (fabs(m_joystick.GetY()) / m_joystick.GetY());
         else
             FB = 0;
 
-        if(rot > 0.05)
-            rot = pow(rot, throttle) * (fabs(m_joystick.GetZ()) / m_joystick.GetZ());
+        if(fabs(rot) > (0.05 * 5))
+            rot /= 4;
         else
             rot = 0;
+    }
+
+    FB *= (((m_joystick.GetThrottle() - 1) / -2));
+    LR *= (((m_joystick.GetThrottle() - 1) / -2));
+    rot *= 0.97;
+
+    if(m_joystick.GetRawButton(9))
+    {
+        m_drivetrain.moveRelativeVoltage(FB, LR, rot * 1.6);
+    }
+    else
+    {
+        m_drivetrain.moveRelative(FB, LR, rot);
     }
 
     printMSG("0", "FB: " + std::to_string(FB));
     printMSG("1", "LR: " + std::to_string(LR));
     printMSG("2", "rot: " + std::to_string(rot));
     printMSG("3", "throttle: " + std::to_string(throttle));
-
-    m_drivetrain.moveRelative(FB, LR, rot);
-
 }
 
 void Robot::setIndexerSpeed(double speed)
