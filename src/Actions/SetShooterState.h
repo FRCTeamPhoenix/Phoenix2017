@@ -5,8 +5,8 @@
  *      Author: Brin Harper
  */
 
-#ifndef SRC_SETSHOOTERSTATE_H_
-#define SRC_SETSHOOTERSTATE_H_
+#ifndef SRC_ACTIONS_SETSHOOTERSTATE_H_
+#define SRC_ACTIONS_SETSHOOTERSTATE_H_
 
 #include "Action.h"
 #include "dependency.h"
@@ -34,4 +34,4 @@ class SetShooterState : public Action
 
 
 
-#endif /* SRC_SETSHOOTERSTATE_H_ */
+#endif /* SRC_ACTIONS_SETSHOOTERSTATE_H_ */

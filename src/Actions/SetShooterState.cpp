@@ -5,7 +5,7 @@
  *      Author: Brin Harper
  */
 
-#include "SetShooterState.h"
+#include <Actions/SetShooterState.h>
 #include "../Robot.h"
 
 SetShooterState::SetShooterState(int state, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot) :
@@ -32,6 +32,8 @@ SetShooterState::SetShooterState(json& action, shared_ptr<Robot> robot) :
         m_flywheelState = FlyWheels::STATE::FLATRATE;
         m_feederState = Feeder::State::ON;
     }
+
+    initAction(action, robot);
 }
 
 void SetShooterState::run() {
