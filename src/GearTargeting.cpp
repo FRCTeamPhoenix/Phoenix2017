@@ -11,7 +11,10 @@ GearTargeting::GearTargeting(Communications& comms, relativeMecanumDrivetrain& t
     m_state(IDLE),
     m_comms(comms),
     m_train(train),
-    m_timer()
+    m_timer(),
+    m_rotation(0),
+    m_horizontal(0),
+    m_forward(0)
 {
 };
 
@@ -20,7 +23,7 @@ GearTargeting::~GearTargeting(){
 };
 
 void GearTargeting::run(){
-    double rotation, horizontal, forward;
+    //double rotation, horizontal, forward;
     double speed = 0.1;
 
     switch (m_state){
@@ -83,7 +86,7 @@ void GearTargeting::run(){
                 m_state = SEARCHING;
             }
             else{
-                m_state = ROTATING
+                m_state = ROTATING;
                 m_rotation = getRotation();
                 m_horizontal = getHorizontal();
                 m_forward = getForward();
@@ -97,8 +100,8 @@ void GearTargeting::run(){
                     m_horizontal = getHorizontal();
                     m_forward = getForward();
                 }
-                int angle = ((horizontal > 0) - (horizontal < 0)) * 90;
-                m_train.moveDistance(horizontal, angle, speed);
+                int angle = ((m_horizontal > 0) - (m_horizontal < 0)) * 90;
+                m_train.moveDistance(m_horizontal, angle, speed);
             }
             break;
         case SHIFTING:
@@ -127,16 +130,20 @@ void GearTargeting::run(){
     }
 }
 
+void GearTargeting::setState(STATE state){
+    m_state = state;
+};
+
 double GearTargeting::getRotation(){
-    return m_comms.getNumber(JetsonComms::gearRotation);
+    return m_comms.getNumber(JetsonComms::gearsRotation);
 };
 
 double GearTargeting::getHorizontal(){
-    return m_comms.getNumber(JetsonComms::gearHorizontal);
+    return m_comms.getNumber(JetsonComms::gearsHorizontal);
 };
 
 double GearTargeting::getForward(){
-    return m_comms.getNumber(JetsonComms::gearForward);
+    return m_comms.getNumber(JetsonComms::gearsForward);
 };
 
 bool GearTargeting::getTargetFound(){

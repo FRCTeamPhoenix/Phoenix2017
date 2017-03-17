@@ -20,6 +20,7 @@
 #include "Gatherer.h"
 #include "Feeder.h"
 #include "Indexer.h"
+#include "GearTargeting.h"
 
 
 //Suppresses uint_64 overflow warning from valijson
@@ -67,6 +68,7 @@ class Robot: public SampleRobot
     ShooterCalibrator m_shooterCalibrator;
     FlyWheels m_flywheel;
     Turret m_turret;
+    GearTargeting m_gearTargeting;
     LoggerController m_loggerController;
     ConfigEditor m_configEditor;
     SmartTalon m_climberMotor;

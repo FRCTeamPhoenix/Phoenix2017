@@ -15,6 +15,7 @@
 #include "Indexer.h"
 #include "Gatherer.h"
 #include "Climber.h"
+#include "GearTargeting.h"
 
 
 class RobotController
@@ -50,8 +51,10 @@ public:
             Feeder& feeder,
             Indexer& indexer,
             Joystick& gamepad,
+            Joystick& joystick,
             Climber& climber,
-            Gatherer& gatherer
+            Gatherer& gatherer,
+            GearTargeting& gearTargeting
 
     );
     virtual ~RobotController();
@@ -63,8 +66,10 @@ private:
     Feeder& m_feeder;
     Indexer& m_indexer;
     Joystick& m_controlBox;
+    Joystick& m_joystick;
     Climber& m_climber;
     Gatherer& m_gatherer;
+    GearTargeting& m_gearTargeting;
 //    Joystick& m_controlBox;
 };
 

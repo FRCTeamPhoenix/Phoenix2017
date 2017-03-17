@@ -34,6 +34,8 @@ public:
 
     void run();
 
+    void setState(STATE state);
+
 private:
     STATE m_state;
     Communications& m_comms;

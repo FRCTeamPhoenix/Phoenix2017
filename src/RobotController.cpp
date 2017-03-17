@@ -13,16 +13,20 @@ RobotController::RobotController(
         Feeder& feeder,
         Indexer& indexer,
         Joystick& customBox,
+        Joystick& joystick,
         Climber& climber,
-        Gatherer& gatherer):
+        Gatherer& gatherer,
+        GearTargeting& gearTargeting):
 
         m_flywheels(flywheel),
         m_turret(turret),
         m_feeder(feeder),
         m_indexer(indexer),
         m_controlBox(customBox),
+        m_joystick(joystick),
         m_climber(climber),
-        m_gatherer(gatherer)
+        m_gatherer(gatherer),
+        m_gearTargeting(gearTargeting)
 
 {
     m_state = TELEOP;
@@ -79,11 +83,18 @@ void RobotController::run()
             m_flywheels.setState(FlyWheels::OFF); //TODO set to lidarRate when lidar tuning is done
         }
 
-        //Turret
+        //Turret Auto
         if (m_controlBox.GetRawButton(DriveStationConstants::buttonTurretAuto)){
             m_turret.setState(Turret::AUTO);
         } else if (m_turret.getState() == Turret::AUTO){
             m_turret.setState(Turret::IDLE);
+        }
+
+        //Gears Auto
+        if (m_joystick.GetRawButton(DriveStationConstants::buttonGearsAutoOff)){
+            m_gearTargeting.setState(GearTargeting::IDLE);
+        } else if (m_joystick.GetRawButton(DriveStationConstants::buttonGearsAutoOff)){
+            m_gearTargeting.setState(GearTargeting::SEARCHING);
         }
 
         //Indexer

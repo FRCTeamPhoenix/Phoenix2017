@@ -111,7 +111,10 @@ namespace DriveStationConstants
 		buttonFlywheelAuto = 6,
         buttonIndexerReverse = 7,
 		buttonAutoStart = 8,
-		buttonAutoStop = 9
+		buttonAutoStop = 9,
+
+		buttonGearsAutoOn = 9,
+		buttonGearsAutoOff = 10,
 	};
     const static std::string dashButtonNames[6] =
     {
