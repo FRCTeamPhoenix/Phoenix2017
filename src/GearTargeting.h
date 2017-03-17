@@ -23,6 +23,9 @@ public:
         SEARCHING,
         DISCONNECTED,
         ALIGNING,
+        ROTATING,
+        SHIFTING,
+        APPROACHING,
         DEPOSITING
     };
 
@@ -30,9 +33,6 @@ public:
     ~GearTargeting();
 
     void run();
-    double getAngle();
-    double getDistance();
-    bool getTargetFound();
 
 private:
     STATE m_state;
@@ -40,6 +40,13 @@ private:
     relativeMecanumDrivetrain& m_train;
 
     Timer m_timer;
+
+    double m_rotation, m_horizontal, m_forward;
+
+    double getRotation();
+    double getHorizontal();
+    double getForward();
+    bool getTargetFound();
 };
 
 
