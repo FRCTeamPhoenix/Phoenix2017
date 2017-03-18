@@ -27,7 +27,8 @@ Robot::Robot() :
         m_turretRotateMotor(PortAssign::turret, m_talons.getTalonConfig(PortAssign::turret), CANTalon::FeedbackDevice::QuadEncoder),
         m_leftLimitSwitch(PortAssign::leftLimitSwitch),
         m_rightLimitSwitch( PortAssign::rightLimitSwitch),
-        m_joystick(PortAssign::joystick),
+        m_joystickLeft(PortAssign::joystickLeft),
+        m_joystickRight(PortAssign::joystickRight),
         m_gamepad(PortAssign::gamepad),
         m_customBox(PortAssign::customBox),
         m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0),
@@ -39,7 +40,7 @@ Robot::Robot() :
         m_loggerController(),
         m_configEditor(),
         m_climberMotor(PortAssign::climber, m_talons.getTalonConfig(PortAssign::climber), CANTalon::FeedbackDevice::QuadEncoder),
-        m_climber(m_climberMotor, m_joystick),
+        m_climber(m_climberMotor, m_customBox),
         m_gathererMotor(PortAssign::loader),
         m_feederMotor(PortAssign::feeder, m_talons.getTalonConfig(PortAssign::feeder), CANTalon::FeedbackDevice::QuadEncoder),
         m_indexerMotor(PortAssign::indexer, m_talons.getTalonConfig(PortAssign::indexer), CANTalon::FeedbackDevice::QuadEncoder),
@@ -145,25 +146,25 @@ void Robot::OperatorControl()
         m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
         m_robotController.run();
 
-        std::ostringstream lidarDistance;
-        lidarDistance << "Distance: ";
-        lidarDistance << m_lidar.getDistance();
-        SmartDashboard::PutString("DB/String 6", lidarDistance.str());
-
-        std::ostringstream topVel;
-        topVel << "TopVel: ";
-        topVel << m_topFlyWheelMotor.GetEncVel();
-        SmartDashboard::PutString("DB/String 7", topVel.str());
-
-        std::ostringstream lowVel;
-        lowVel << "LowVel: ";
-        lowVel << m_lowerFlyWheelMotor.GetEncVel();
-        SmartDashboard::PutString("DB/String 8", lowVel.str());
-
-
-		SmartDashboard::PutNumber("LidarDistance", m_lidar.getDistance());
-        SmartDashboard::PutNumber("ShooterTopVel", m_topFlyWheelMotor.GetEncVel());
-        SmartDashboard::PutNumber("ShooterLowVel", m_lowerFlyWheelMotor.GetEncVel());
+//        std::ostringstream lidarDistance;
+//        lidarDistance << "Distance: ";
+//        lidarDistance << m_lidar.getDistance();
+//        SmartDashboard::PutString("DB/String 6", lidarDistance.str());
+//
+//        std::ostringstream topVel;
+//        topVel << "TopVel: ";
+//        topVel << m_topFlyWheelMotor.GetEncVel();
+//        SmartDashboard::PutString("DB/String 7", topVel.str());
+//
+//        std::ostringstream lowVel;
+//        lowVel << "LowVel: ";
+//        lowVel << m_lowerFlyWheelMotor.GetEncVel();
+//        SmartDashboard::PutString("DB/String 8", lowVel.str());
+//
+//
+//		SmartDashboard::PutNumber("LidarDistance", m_lidar.getDistance());
+//        SmartDashboard::PutNumber("ShooterTopVel", m_topFlyWheelMotor.GetEncVel());
+//        SmartDashboard::PutNumber("ShooterLowVel", m_lowerFlyWheelMotor.GetEncVel());
 
 
 
@@ -198,14 +199,14 @@ void Robot::Test()
         switch (m_pidState)
         {
         case PID:
-            if (m_joystick.GetRawButton(12))
+            if (m_joystickLeft.GetRawButton(12))
             {
                 m_pidState = VOLTAGE;
                 break;
             }
             break;
         case VOLTAGE:
-            if (m_joystick.GetRawButton(11))
+            if (m_joystickLeft.GetRawButton(11))
             {
                 m_pidState = PID;
                 break;
@@ -213,7 +214,7 @@ void Robot::Test()
             break;
         }
         // IMPORTANT You have Full Joystick Controll So Be Careful
-        float power = m_joystick.GetY();
+        float power = m_joystickLeft.GetY();
         if (fabs(power) < 0.05f)
         {
             power = 0.0f;
@@ -226,10 +227,10 @@ void Robot::Test()
              * Just remember that when you change a variable all other functions that use that variable can cause some issues.
              * Otherwise be safe and have fun!
              */
-            power = m_joystick.GetY();
+            power = m_joystickLeft.GetY();
         }
         // Also you have full throttle controll SO BE CAREFUL!
-        float throttle = m_joystick.GetThrottle();
+        float throttle = m_joystickLeft.GetThrottle();
 
         // updates the state of the TALONS as PID or VOLTAGE
         string mode = SmartDashboard::GetString("Test Selector", "none");
@@ -287,8 +288,8 @@ void Robot::Test()
             }
             else
             {
-                m_lowerFlyWheelMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-                m_topFlyWheelMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_lowerFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
+                m_topFlyWheelMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 m_lowerFlyWheelMotor.Set(power);
                 m_topFlyWheelMotor.Set(power);
             }
@@ -318,7 +319,7 @@ void Robot::Test()
             }
             else if (m_pidState == VOLTAGE)
             {
-                m_feederMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 if (m_gamepad.GetRawButton(DriveStationConstants::buttonY))
                 {
                     m_feederMotor.Set(throttle);
@@ -354,7 +355,7 @@ void Robot::Test()
             }
             else if (m_pidState == VOLTAGE)
             {
-                m_indexerMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 if (m_gamepad.GetRawButton(DriveStationConstants::buttonY))
                 {
                     m_indexerMotor.Set(throttle);
@@ -392,7 +393,7 @@ void Robot::Test()
             }
             else
             {
-                m_turretRotateMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_turretRotateMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 if (m_gamepad.GetRawButton(DriveStationConstants::buttonY))
                 {
                     m_turretRotateMotor.Set(throttle);
@@ -419,7 +420,7 @@ void Robot::Test()
             }
             else if (m_pidState == VOLTAGE)
             {
-                m_climberMotor.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_climberMotor.SetControlMode(CANSpeedController::kPercentVbus);
                 m_climberMotor.Set(power);
             }
             break;
@@ -512,10 +513,10 @@ void Robot::Test()
             }
             if (m_pidState == VOLTAGE)
             {
-                m_FRDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-                m_FLDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-                m_BRDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-                m_BLDrive.SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+                m_FRDrive.SetControlMode(CANSpeedController::kPercentVbus);
+                m_FLDrive.SetControlMode(CANSpeedController::kPercentVbus);
+                m_BRDrive.SetControlMode(CANSpeedController::kPercentVbus);
+                m_BLDrive.SetControlMode(CANSpeedController::kPercentVbus);
                 m_FRDrive.Set(power);
                 m_FLDrive.Set(power);
                 m_BRDrive.Set(power);
@@ -663,84 +664,74 @@ bool Robot::doneDriveMove (double tolerance)
 
 void Robot::driveJoystick()
 {
-    double throttle = (((m_joystick.GetThrottle() + 1) / 2));
-    double FB = 0;
-    double LR = 0;
-    double rot = 0;
-
-    if(m_joystick.GetRawButton(12))
+    if(m_customBox.GetRawButton(10))
     {
-        LR = fabs(m_joystick.GetY());
-        FB = fabs(m_joystick.GetX());
-        rot = m_joystick.GetZ();
-
-        throttle = throttle * 3.67;
-        throttle += 1;
-
-        throttle = 1;
-
-        if(LR > 0.1)
-            LR = pow(LR, throttle) * (fabs(m_joystick.GetY()) / m_joystick.GetY());
-        else
-            LR = 0;
-
-        if(FB > 0.05)
-            FB = pow(FB, throttle) * (fabs(m_joystick.GetX()) / m_joystick.GetX());
-        else
-            FB = 0;
-
-        if(fabs(rot) > (0.05 * 10))
-            rot /= 8;
-        else
-            rot = 0;
-
-        FB *= 0.8;
-        LR *= 0.6;
+        m_expansionBoard.Reset();
     }
-    else
+
+    if(m_customBox.GetRawButton(1))
     {
-        LR = fabs(m_joystick.GetX());
-        FB = fabs(m_joystick.GetY());
-        rot = m_joystick.GetZ();
+        double LR = m_joystickRight.GetX();
+        double FB = -m_joystickRight.GetY();
+        double rot = m_joystickRight.GetZ();
+        double throttle = (((m_joystickLeft.GetZ() + 1) / 2));
 
-        throttle *= 4;
-        throttle += 1;
-
-        throttle = 1;
-
-        if(LR > 0.05)
-            LR = pow(LR, throttle) * (fabs(m_joystick.GetX()) / m_joystick.GetX());
-        else
+        if(fabs(LR) < 0.1)
             LR = 0;
-
-        if(FB > 0.1)
-            FB = -pow(FB, throttle) * (fabs(m_joystick.GetY()) / m_joystick.GetY());
         else
+            LR *= throttle;
+
+        if(fabs(FB) < 0.1)
             FB = 0;
+        else
+            FB *= throttle;
 
         if(fabs(rot) > (0.05 * 5))
             rot /= 4;
         else
             rot = 0;
-    }
 
-    FB *= (((m_joystick.GetThrottle() - 1) / -2));
-    LR *= (((m_joystick.GetThrottle() - 1) / -2));
-    rot *= 0.97;
+        m_drivetrain.moveRelative(FB, LR, rot, m_expansionBoard.GetAngleX());
+        printMSG("0", "Rot x: " + std::to_string(m_expansionBoard.GetAngleX()));
 
-    if(m_joystick.GetRawButton(9))
-    {
-        m_drivetrain.moveRelativeVoltage(FB, LR, rot * 1.6);
     }
-    else
-    {
-        m_drivetrain.moveRelative(FB, LR, rot);
-    }
+    else {
+        double throttleSpeed = (((m_joystickRight.GetZ() + 1) / 2));
+        printMSG("8", "Raw t_Speed: " + std::to_string(throttleSpeed));
 
-    printMSG("0", "FB: " + std::to_string(FB));
-    printMSG("1", "LR: " + std::to_string(LR));
-    printMSG("2", "rot: " + std::to_string(rot));
-    printMSG("3", "throttle: " + std::to_string(throttle));
+        double throttleStrafe = (((m_joystickLeft.GetZ() + 1) / 2));
+        printMSG("9", "Raw t_Strafe: " + std::to_string(throttleStrafe));
+
+        throttleSpeed = (throttleSpeed < 0.2) ? 0.2 : throttleSpeed;
+        throttleStrafe = (throttleStrafe < 0.2) ? 0.2 : throttleStrafe;
+
+
+        double leftPower = -m_joystickLeft.GetY() * throttleSpeed;
+        double rightPower = -m_joystickRight.GetY() * throttleSpeed;
+
+        double strafePower = 0;
+
+        strafePower += (m_joystickRight.GetX() < -0.1) ? m_joystickRight.GetX() * throttleStrafe : 0;
+        strafePower += (m_joystickLeft.GetX() > 0.1) ? m_joystickLeft.GetX() * throttleStrafe : 0;
+
+        printMSG("5", "Raw Left: " + std::to_string(leftPower));
+        printMSG("6", "Raw Right: " + std::to_string(rightPower));
+        printMSG("7", "Raw Strafe: " + std::to_string(strafePower));
+
+        leftPower = (fabs(leftPower) < 0.1) ? 0 : leftPower;
+        rightPower = (fabs(rightPower) < 0.1) ? 0 : rightPower;
+
+
+        strafePower = (fabs(strafePower) < 0.2) ? 0 : strafePower;
+
+        m_drivetrain.moveTankStyle(leftPower, rightPower, strafePower);
+
+        printMSG("0", "Left: " + std::to_string(leftPower));
+        printMSG("1", "Right: " + std::to_string(rightPower));
+        printMSG("2", "Strafe: " + std::to_string(strafePower));
+        printMSG("3", "t_Speed: " + std::to_string(throttleSpeed));
+        printMSG("4", "t_Strafe: " + std::to_string(throttleStrafe));
+    }
 }
 
 void Robot::setIndexerSpeed(double speed)

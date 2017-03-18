@@ -26,9 +26,10 @@ struct PortAssign
     const static uint32_t loader = 0;
 
     // Controllers
-    const static uint32_t joystick = 0;
-    const static uint32_t gamepad = 2;
-    const static uint32_t customBox = 1;
+    const static uint32_t joystickLeft = 0;
+    const static uint32_t joystickRight = 1;
+    const static uint32_t gamepad = 3;
+    const static uint32_t customBox = 2;
 
     // Limit Switches
     const static uint32_t rightLimitSwitch = 1;

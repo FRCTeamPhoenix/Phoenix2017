@@ -63,7 +63,8 @@ class Robot: public SampleRobot
     SmartTalon m_turretRotateMotor;
     DigitalInput m_leftLimitSwitch;
     DigitalInput m_rightLimitSwitch;
-    Joystick m_joystick;
+    Joystick m_joystickLeft;
+    Joystick m_joystickRight;
     Joystick m_gamepad;
     Joystick m_customBox;
     Lidar m_lidar;

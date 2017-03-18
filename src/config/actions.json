@@ -48,7 +48,7 @@
         {
           "type": "GoDistance",
           "name": "approach move",
-          "startingCondition": -1,
+          "startingCondition": 0,
 
           "distance": 10000,
           "angle": 0,
@@ -403,8 +403,6 @@
       "dependencies": [],
       "doneDependencies": []
     },
-    
-    
     
     {
       "type": "ActionGroup",

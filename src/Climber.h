@@ -19,9 +19,7 @@
 class Climber
 {
 public:
-	Climber(SmartTalon & motor,
-			Joystick & customBox
-	);
+	Climber(SmartTalon & motor, Joystick& customBox);
 	virtual ~Climber();
 	enum STATE
 	{
@@ -37,8 +35,8 @@ public:
 
 private:
 	SmartTalon & m_motor;
-	Joystick & m_customBox;
 	STATE m_state;
+    Joystick& m_customBox;
 
 };
 
