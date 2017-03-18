@@ -93,7 +93,7 @@ void RobotController::run()
         //Gears Auto
         if (m_joystick.GetRawButton(DriveStationConstants::buttonGearsAutoOff)){
             m_gearTargeting.setState(GearTargeting::IDLE);
-        } else if (m_joystick.GetRawButton(DriveStationConstants::buttonGearsAutoOff)){
+        } else if (m_joystick.GetRawButton(DriveStationConstants::buttonGearsAutoOn)){
             m_gearTargeting.setState(GearTargeting::SEARCHING);
         }
 
