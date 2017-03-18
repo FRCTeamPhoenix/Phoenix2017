@@ -42,7 +42,7 @@ void Talons::initTalons() {
          if(!valijson::utils::loadDocument("/home/lvuser/schemas/talons.schema",
                                            m_schemaJson))
          {
-            cout << "Failed to load talons.schema." << endl;
+            SmartDashboard::PutString("DB/String 2", "LOAD FAILED talons.schema");
             throw std::runtime_error("Failed to load schema document");
          }
 
@@ -54,7 +54,7 @@ void Talons::initTalons() {
          if(!valijson::utils::loadDocument("/home/lvuser/config/talons_validated.json",
                                            m_talonJson))
          {
-            cout << "Failed to load talons.json." << endl;
+            SmartDashboard::PutString("DB/String 2", "LOAD FAILED talons.json");
             throw std::runtime_error("Failed to load json document");
          }
 
@@ -63,8 +63,7 @@ void Talons::initTalons() {
 
          if(!validator.validate(schema, jsonAdapter, NULL))
          {
-            cout << "Failed to validate talons.json." << endl;
-
+            SmartDashboard::PutString("DB/String 2", "VALIDATE FAILED talons.json");
             throw std::runtime_error("Failed to validate json document.");
          }
       }
@@ -76,6 +75,8 @@ void Talons::initTalons() {
 
          return;
       }
+
+      SmartDashboard::PutString("DB/String 2", "VALIDATED talons.json");
 }
 
 json Talons::getTalonConfig(int talonId) {

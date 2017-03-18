@@ -12,7 +12,6 @@ Feeder::Feeder(SmartTalon& feederMotor, Joystick& customBox):
     m_customBox(customBox)
 {
     m_state = OFF;
-    m_feederMotor.SetControlMode(CANSpeedController::kPercentVbus);
 }
 
 Feeder::~Feeder()
@@ -31,13 +30,16 @@ void Feeder::setState(Feeder::State state)
 
 void Feeder::run()
 {
+    SmartDashboard::PutNumber("Talons/Feeder/Speed", m_feederMotor.GetEncVel());
+    SmartDashboard::PutNumber("Talons/Feeder/Goal Speed", 0.70 * m_feederMotor.getMaxForwardSpeed());
     switch (m_state)
     {
     case ON:
-        m_feederMotor.Set(.65);
+        m_feederMotor.goAt(0.70);
+
         break;
     case OFF:
-        m_feederMotor.Set(0.0);
+        m_feederMotor.goAt(0.0);
         break;
     }
 }

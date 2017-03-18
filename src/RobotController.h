@@ -12,10 +12,9 @@
 #include "Turret.h"
 #include "constants.h"
 #include "Feeder.h"
-#include "Indexer.h"
 #include "Gatherer.h"
 #include "Climber.h"
-
+#include "indexer.h"
 
 class RobotController
 {

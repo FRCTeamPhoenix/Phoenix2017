@@ -16,9 +16,9 @@
           "name": "Drive move",
           "startingCondition": 0,
 
-          "distance": 80000,
+          "distance": 8000,
           "angle": 0,
-          "speed": 0.5,
+          "speed": 0.3,
           "tolerance": 0.05,
 
           "dependencies": []
@@ -30,7 +30,7 @@
 
     {
       "type": "ActionGroup",
-      "name": "Gear Auto",
+      "name": "Center Gear Auto",
       "startingCondition": -1,
       "containedActions":[
         {
@@ -40,7 +40,7 @@
 
           "distance": 30000,
           "angle": 0,
-          "speed": 0.5,
+          "speed": 0.3,
           "tolerance": 0.05,
 
           "dependencies": []
@@ -48,7 +48,7 @@
         {
           "type": "GoDistance",
           "name": "approach move",
-          "startingCondition": -1,
+          "startingCondition": 0,
 
           "distance": 10000,
           "angle": 0,
@@ -63,6 +63,346 @@
       "doneDependencies": []
     },
 
+    {
+      "type": "ActionGroup",
+      "name": "Blue Boiler Gear Only Auto",
+      "startingCondition": -1,
+      "containedActions":[
+        {
+          "type": "GoDistance",
+          "name": "BBG Drive move",
+          "startingCondition": 0,
+
+          "distance": 34941,
+          "angle": 0,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": []
+        },
+        {
+          "type": "Rotate",
+          "name": "BBG Aim Rotate",
+          "startingCondition": 0,
+
+          "angle": -60,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 0, "requiredCondition": 2}]
+
+        },
+        {
+          "type": "GoDistance",
+          "name": "BBG approach move",
+          "startingCondition": -1,
+
+          "distance": 12375,
+          "angle": 0,
+          "speed": 0.15,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 1, "requiredCondition": 2}]
+        }
+
+      ],
+      "dependencies": [],
+      "doneDependencies": []
+    },
+    {
+        "type": "ActionGroup",
+        "name": "Blue Gear Non Boiler Auto",
+        "startingCondition": -1,
+        "containedActions":[
+        {
+        	"type": "GoDistance",
+        	"name": "BGNB Drive move",
+        	"startingCondition": 0,
+        
+        	"distance": 33908,
+        	"angle": 0,
+        	"speed": 0.15,
+        	"tolerance": 0.05,
+        	"dependencies": []
+       	 },
+         {
+        	"type": "Rotate",
+       		"name": "BGNB Rotate",
+       		"startingCondition": 0,
+        
+        	"angle": 60,
+        	"speed": 0.3,
+        	"tolerance": 0.05,
+        	"dependencies": [{"place": 0, "requiredCondition": 2}]
+        },
+        {
+            "type": "GoDistance",
+        	"name": "BGNB approaching move",
+        	"startingCondition": -1,
+        
+        	"distance": 8569,
+        	"angle": 0,
+        	"speed": 0.15,
+        	"tolerance": 0.05,
+        	"dependencies": [{"place": 1, "requiredCondition": 2}]
+        }
+        ],
+        
+      "dependencies": [],
+      "doneDependencies": []
+    },
+    {
+      "type": "ActionGroup",
+      "name": "Blue Boiler Gear Hopper Auto",
+      "startingCondition": -1,
+      "containedActions":[
+        {
+          "type": "GoDistance",
+          "name": "BBGH Drive move",
+          "startingCondition": 0,
+
+          "distance": 34941,
+          "angle": 0,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": []
+        },
+        {
+          "type": "Rotate",
+          "name": "BBGH Aim Rotate",
+          "startingCondition": 0,
+
+          "angle": -60,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 0, "requiredCondition": 2}]
+
+        },
+        {
+          "type": "GoDistance",
+          "name": "BBGH approach move",
+          "startingCondition": -1,
+
+          "distance": 10875,
+          "angle": 0,
+          "speed": 0.15,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 1, "requiredCondition": 2}]
+        },
+        {
+          "type": "GoDistance",
+          "name": "BBGH reproach move",
+          "startingCondition": -1,
+
+          "distance": 19087,
+          "angle": -180,
+          "speed": 0.15,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 2, "requiredCondition": 2}]
+        },
+        {
+          "type": "Rotate",
+          "name": "BBGH Aim Rotate",
+          "startingCondition": 0,
+
+          "angle": -30,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 3, "requiredCondition": 2}]
+
+        },
+        {
+          "type": "GoDistance",
+          "name": "BBGH Drive move",
+          "startingCondition": 0,
+
+          "distance": 13653,
+          "angle": -180,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 4, "requiredCondition": 2}]
+        }
+
+      ],
+      "dependencies": [],
+      "doneDependencies": []
+    },
+    {
+      "type": "ActionGroup",
+      "name": "Red Boiler Gear Only Auto",
+      "startingCondition": -1,
+      "containedActions":[
+        {
+          "type": "GoDistance",
+          "name": "RBG Drive move",
+          "startingCondition": 0,
+
+          "distance": 34941,
+          "angle": 0,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": []
+        },
+        {
+          "type": "Rotate",
+          "name": "RBG Aim Rotate",
+          "startingCondition": 0,
+
+          "angle": 60,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 0, "requiredCondition": 2}]
+
+        },
+        {
+          "type": "GoDistance",
+          "name": "RBG approach move",
+          "startingCondition": -1,
+
+          "distance": 12375,
+          "angle": 0,
+          "speed": 0.15,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 1, "requiredCondition": 2}]
+        }
+
+      ],
+      "dependencies": [],
+      "doneDependencies": []
+    },
+    {
+      "type": "ActionGroup",
+      "name": "Red Gear Non Boiler Auto",
+      "startingCondition": -1,
+      "containedActions":[
+        {
+          "type": "GoDistance",
+          "name": "RGNB Drive move",
+          "startingCondition": 0,
+
+          "distance": 33908,
+          "angle": 0,
+          "speed": 0.15,
+          "tolerance": 0.05,
+          "dependencies": []
+        },
+        {
+          "type": "Rotate",
+          "name": "RGNB Rotate",
+          "startingCondition": 0,
+
+          "angle": -60,
+          "speed": 0.3,
+          "tolerance": 0.05,
+          "dependencies": [{"place": 0, "requiredCondition": 2}]
+        },
+        {
+          "type": "GoDistance",
+          "name": "RGNB approaching move",
+          "startingCondition": -1,
+
+          "distance": 8569,
+          "angle": 0,
+          "speed": 0.15,
+          "tolerance": 0.05,
+          "dependencies": [{"place": 1, "requiredCondition": 2}]
+        }
+      ],
+
+      "dependencies": [],
+      "doneDependencies": []
+    },
+    {
+      "type": "ActionGroup",
+      "name": "Red Boiler Gear Hopper Auto",
+      "startingCondition": -1,
+      "containedActions":[
+        {
+          "type": "GoDistance",
+          "name": "RBGH Drive move",
+          "startingCondition": 0,
+
+          "distance": 34941,
+          "angle": 0,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": []
+        },
+        {
+          "type": "Rotate",
+          "name": "RBGH Aim Rotate",
+          "startingCondition": 0,
+
+          "angle": 60,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 0, "requiredCondition": 2}]
+
+        },
+        {
+          "type": "GoDistance",
+          "name": "RBGH approach move",
+          "startingCondition": -1,
+
+          "distance": 10875,
+          "angle": 0,
+          "speed": 0.15,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 1, "requiredCondition": 2}]
+        },
+        {
+          "type": "GoDistance",
+          "name": "RBGH reproach move",
+          "startingCondition": -1,
+
+          "distance": 19087,
+          "angle": -180,
+          "speed": 0.15,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 2, "requiredCondition": 2}]
+        },
+        {
+          "type": "Rotate",
+          "name": "RBGH Aim Rotate",
+          "startingCondition": 0,
+
+          "angle": 30,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 3, "requiredCondition": 2}]
+
+        },
+        {
+          "type": "GoDistance",
+          "name": "RBGH Drive move",
+          "startingCondition": 0,
+
+          "distance": 13653,
+          "angle": -180,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 4, "requiredCondition": 2}]
+        }
+
+      ],
+      "dependencies": [],
+      "doneDependencies": []
+    },
     
     {
       "type": "ActionGroup",

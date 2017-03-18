@@ -26,9 +26,10 @@ struct PortAssign
     const static uint32_t loader = 0;
 
     // Controllers
-    const static uint32_t joystick = 0;
-    const static uint32_t gamepad = 2;
-    const static uint32_t customBox = 1;
+    const static uint32_t joystickLeft = 0;
+    const static uint32_t joystickRight = 1;
+    const static uint32_t gamepad = 3;
+    const static uint32_t customBox = 2;
 
     // Limit Switches
     const static uint32_t rightLimitSwitch = 1;
@@ -41,7 +42,7 @@ struct PortAssign
 
 struct RobotConstants
 {
-    constexpr static float turretDamp = 0.6f;
+    constexpr static float turretDamp = 0.3f;
     constexpr static double turretSpeed = 0.1f;
     constexpr static double lidarValueTolerance = 12;
     constexpr static double lidarMaxReading = 700;
@@ -103,7 +104,6 @@ namespace DriveStationConstants
     };
     enum controlBox
 	{
-        buttonTurretAuto = 1,
 		buttonIndexer = 4,
 		buttonFeeder = 2,
 		buttonClimberUP = 3,
@@ -111,7 +111,13 @@ namespace DriveStationConstants
 		buttonFlywheelAuto = 6,
         buttonIndexerReverse = 7,
 		buttonAutoStart = 8,
-		buttonAutoStop = 9
+		buttonAutoStop = 9,
+
+        potTurret = 2,
+        potFlywheelSpeed = 3,
+        potXChange = 1,
+        potYChange = 0
+
 	};
     const static std::string dashButtonNames[6] =
     {

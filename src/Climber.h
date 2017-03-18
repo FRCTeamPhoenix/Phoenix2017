@@ -4,11 +4,12 @@
  *  Created on: Jan 10, 2017
  *      Author: Joshua Calzadillas
  */
+#ifndef SRC_CLIMBER_H_
+#define SRC_CLIMBER_H_
+
 #include "WPILib.h"
 #include "SmartTalon.h"
 #include "constants.h"
-#ifndef SRC_CLIMBER_H_
-#define SRC_CLIMBER_H_
 
 /* constants:
  *
@@ -18,9 +19,7 @@
 class Climber
 {
 public:
-	Climber(SmartTalon & motor,
-			Joystick & customBox
-	);
+	Climber(SmartTalon & motor, Joystick& customBox);
 	virtual ~Climber();
 	enum STATE
 	{
@@ -36,8 +35,8 @@ public:
 
 private:
 	SmartTalon & m_motor;
-	Joystick & m_customBox;
 	STATE m_state;
+    Joystick& m_customBox;
 
 };
 

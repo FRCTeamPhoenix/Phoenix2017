@@ -35,6 +35,10 @@ SmartTalon::SmartTalon (int deviceNumber, json config, FeedbackDevice device) :
     m_inverted = config["inverted"];
 
 	SetSafetyEnabled(false);
+
+    m_mode = CANSpeedController::kSpeed;
+    SetControlMode(CANSpeedController::kSpeed);
+    switchToGain(m_speedGains);
 }
 
 double SmartTalon::getGoal ()
@@ -54,8 +58,12 @@ void SmartTalon::switchToGain (PIDGains gains)
 
 void SmartTalon::goTo (double position, double speed)
 {
-    switchToGain (m_distanceGains);
-    SetControlMode (CANSpeedController::kPosition);
+    if(CANSpeedController::kPosition != m_mode)
+    {
+        SetControlMode(CANSpeedController::kPosition);
+        switchToGain (m_distanceGains);
+        m_mode = CANSpeedController::kPosition;
+    }
 	ConfigMaxOutputVoltage(speed * 12);
     if(m_inverted)
 	    Set (-position);
@@ -71,8 +79,13 @@ void SmartTalon::goAt (double speed)
 
     speed = (speed > 0) ? speed * m_maxForwardSpeed : speed * m_maxReverseSpeed;
 
-    switchToGain (m_speedGains);
-	SetControlMode (CANSpeedController::kSpeed);
+    if(CANSpeedController::kSpeed != m_mode)
+    {
+        switchToGain (m_speedGains);
+        SetControlMode (CANSpeedController::kSpeed);
+        m_mode = CANSpeedController::kSpeed;
+    }
+
 	ConfigMaxOutputVoltage(12);
 //	SetEncPosition(0);
     if(m_inverted)
@@ -82,6 +95,22 @@ void SmartTalon::goAt (double speed)
 
 
 }
+
+void SmartTalon::goVoltage(double speed)
+{
+    if(CANSpeedController::kPercentVbus != m_mode)
+    {
+        SetControlMode (CANSpeedController::kPercentVbus);
+        m_mode = CANSpeedController::kPercentVbus;
+    }
+
+    if(m_inverted)
+        Set(-speed);
+    else
+        Set(speed);
+
+}
+
 
 void SmartTalon::goAtVelocity (int velocity)
 {
@@ -105,8 +134,12 @@ void SmartTalon::goDistance (double distance, double speed)
 
     double fPos = cPos + distance;
 
-    switchToGain (m_distanceGains);
-    SetControlMode (CANSpeedController::kPosition);
+    if(CANSpeedController::kPosition != m_mode)
+    {
+        SetControlMode(CANSpeedController::kPosition);
+        switchToGain (m_distanceGains);
+        m_mode = CANSpeedController::kPosition;
+    }
     ConfigMaxOutputVoltage(12 * speed);
     //SetEncPosition(0);
 	//Set(0);
@@ -115,6 +148,16 @@ void SmartTalon::goDistance (double distance, double speed)
     else
         SetSetpoint(fPos);
 
+}
+
+double SmartTalon::getMaxForwardSpeed()
+{
+    return m_maxForwardSpeed;
+}
+
+double SmartTalon::getMaxReverseSpeed()
+{
+    return m_maxReverseSpeed;
 }
 
 /*
@@ -434,22 +477,46 @@ void SmartTalon::tuneRate (double pInit, double goalRate, int IZone, double F)
 
 }
 
-bool SmartTalon::test()
+int SmartTalon::test(double power, double timeout)
 {
     SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
-    Set(0.1);
-    Wait(0.5);
-    if(GetSpeed() > 0)
+    Set(power);
+    Wait(timeout);
+    int speed = GetSpeed();
+    if(speed > 10)
     {
         Set(0.0);
-        return true;
+        return 1;
+    }
+    else if(speed < -10)
+    {
+        Set(0.0);
+        return -1;
     }
     else
     {
-        Set(0.0);
-        return false;
+        return 0;
     }
 }
+
+
+string SmartTalon::testStr(double power, double timeout)
+{
+    int condition = test(power, timeout);
+    if(condition == 1)
+    {
+        return "Correct";
+    }
+    else if(condition == -1)
+    {
+        return "Reversed";
+    }
+    else
+    {
+        return "Not Reading!!!";
+    }
+}
+
 
 
 

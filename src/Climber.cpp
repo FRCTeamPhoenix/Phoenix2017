@@ -6,8 +6,7 @@
  */
 #include "Climber.h"
 
-Climber::Climber(SmartTalon& motor,
-		Joystick & customBox):
+Climber::Climber(SmartTalon& motor, Joystick& customBox):
         m_motor(motor),
         m_customBox(customBox)
 {
@@ -41,7 +40,7 @@ void Climber::run()
             break;
 
         case ON:
-            m_motor.Set(1.0);
+            m_motor.Set((m_customBox.GetRawAxis(DriveStationConstants::potFlywheelSpeed) + 1) / 2);
             break;
     }
 

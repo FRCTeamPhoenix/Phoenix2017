@@ -22,6 +22,7 @@ public:
     void goAt(double speed);
     void goAtVelocity(int velocity);
     void goDistance(double distance, double speed);
+    void goVoltage(double speed);
 
     double getGoal();
 
@@ -32,7 +33,12 @@ public:
     void tunePosition(double pInit, double tuneDistance, double F);
 
     void tuneRate(double pInit, double goalRate, int IZone, double F);
-    bool test();
+    string testStr(double power = 0.1, double timeout = 0.5);
+    int test(double power = 0.1, double timeout = 0.5);
+
+
+    double getMaxForwardSpeed();
+    double getMaxReverseSpeed();
 
 private:
 
@@ -45,6 +51,8 @@ private:
     Timer m_tuneTimer;
 
     bool m_inverted;
+
+    CANSpeedController::ControlMode m_mode;
 
     PIDGains m_distanceGains;
     PIDGains m_speedGains;
