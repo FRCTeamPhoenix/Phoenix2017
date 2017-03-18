@@ -41,6 +41,9 @@ public:
     void moveAt(double speed, double angle);
     void rotate(double angle, double speed);
     void moveRelative(double FB, double LR, double rotation);
+    void moveRelativeVoltage(double FB, double LR, double rotation);
+    void moveTankStyle(double left, double right);
+
     void stop();
 
     void PIDWrite(double output);

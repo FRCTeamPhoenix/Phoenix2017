@@ -3,6 +3,7 @@
 //
 
 #include "ActionGroup.h"
+#include "../Robot.h"
 
 ActionGroup::ActionGroup (vector<shared_ptr<Action>> containedActions, vector<shared_ptr<dependency>> dependencies, vector<shared_ptr<dependency>> doneDependencies, shared_ptr<Robot> robot):
     Action(dependencies, robot),

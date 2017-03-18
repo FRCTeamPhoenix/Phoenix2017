@@ -4,11 +4,12 @@
  *  Created on: Jan 10, 2017
  *      Author: Joshua Calzadillas
  */
+#ifndef SRC_CLIMBER_H_
+#define SRC_CLIMBER_H_
+
 #include "WPILib.h"
 #include "SmartTalon.h"
 #include "constants.h"
-#ifndef SRC_CLIMBER_H_
-#define SRC_CLIMBER_H_
 
 /* constants:
  *

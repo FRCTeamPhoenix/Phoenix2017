@@ -6,12 +6,13 @@
 #define ACTIONGRAPHS_COUNTUP_H
 
 #include "Action.h"
-#include "dependency.h"
+//#include "dependency.h"
 #include <vector>
 #include <iostream>
 #include "../plog/Log.h"
-#include "../Robot.h"
 
+class Robot;
+class dependency;
 
 using namespace std;
 class CountUp : public Action

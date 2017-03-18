@@ -9,11 +9,12 @@
 #include "../json.hpp"
 #include <fstream>
 #include "../plog/Log.h"
-#include "../Robot.h"
-
+#include "WPILib.h"
 
 using namespace std;
 using json=nlohmann::json;
+
+class Robot;
 
 class GoDistance : public Action
 {
@@ -26,7 +27,7 @@ private:
     void run();
     void reset();
 
-    Timer m_timer;
+    frc::Timer m_timer;
     double m_distance;
     double m_angle;
     double m_speed;

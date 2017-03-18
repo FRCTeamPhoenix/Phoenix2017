@@ -108,6 +108,10 @@ ShooterCalibrator::ShooterCalibrator()
 
     }
 
+    m_minRange = dvPairsTop[0].getDistance();
+    m_maxRange = dvPairsTop[dvPairsTop.size() - 1].getDistance();
+
+
 }
 
 // Calculate required flywheel power, given shooting distance
@@ -121,15 +125,17 @@ double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<Dist
     double d1 = dvPairs[i1].getDistance();
     double d2 = dvPairs[i2].getDistance();
 
-    // Use last two reference values if distance exceeds greatest value
+    //Cap speeds at upper and lower values
     if (distance >= dvPairs[dvPairs.size() - 1].getDistance())
     {
-        i1 = dvPairs.size() - 2;
-        d1 = dvPairs[i1].getDistance();
-        i2 = i1 + 1;
-        d2 = dvPairs[i2].getDistance();
+        return dvPairs[dvPairs.size() - 1].getVelocity();
     }
-    // Otherwise, if distance isn't below/between the first pair of reference values, choose greater values
+    else if(distance <= dvPairs[0].getDistance())
+    {
+        return dvPairs[0].getVelocity();
+    }
+        // Otherwise, if distance isn't below/between the first pair of reference values, choose greater values
+        //Redundant IF statement
     else if (distance >= dvPairs[1].getDistance())
     {
         while (d2 <= distance) {
@@ -156,26 +162,12 @@ double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<Dist
 
 double ShooterCalibrator::getTopFlywheelVelocity(double distance) {
 
-    if (distance <= 0) {
-        return 0;
-    } else if (distance > 200) {
-        return 10000;
-    } else {
-        return interpolateVelocityLinear(distance, dvPairsTop);
-    }
-
+    return interpolateVelocityLinear(distance, dvPairsTop);
 }
 
 double ShooterCalibrator::getLowFlywheelVelocity(double distance) {
 
-    if (distance <= 0) {
-        return 0;
-    } else if (distance > 200) {
-        return 60000;
-    } else {
-        return interpolateVelocityLinear(distance, dvPairsLow);
-    }
-
+    return interpolateVelocityLinear(distance, dvPairsLow);
 }
 
 void ShooterCalibrator::sortRefVals(vector<DistanceVelocityPair>& dvPairs) {
@@ -202,6 +194,16 @@ void ShooterCalibrator::initialize() {
 
 
 }
+
+bool ShooterCalibrator::inRange(int distance)
+{
+    if((distance < m_minRange) || (distance > m_maxRange))
+    {
+        return false;
+    }
+    return true;
+}
+
 
 ShooterCalibrator::~ShooterCalibrator()
 {

@@ -10,9 +10,8 @@
 #include "dependency.h"
 #include "../json.hpp"
 #include <iostream>
-#include "../plog/Log.h"
-#include "../Robot.h"
 
+class Robot;
 
 using namespace std;
 using json=nlohmann::json;
@@ -110,6 +109,7 @@ public:
     string getName();
 
 protected:
+    string m_name;
 
     /*
      * Default:
@@ -133,7 +133,7 @@ protected:
      */
     virtual void run()
     {
-        cout << "IN DEFAULT RUN" << endl;
+        cout << m_name << " IN DEFAULT RUN" << endl;
     }
 
     void start(){
@@ -141,6 +141,7 @@ protected:
     }
 
     void finish(){
+        cout << m_name << " is done" << endl;
         m_currentCondition = dependency::Finished;
     }
 
@@ -156,7 +157,6 @@ protected:
     vector<shared_ptr<dependency>> m_dependencies;
     dependency::condition m_currentCondition;
     shared_ptr<Robot> m_robot;
-    string m_name;
 
 
 };

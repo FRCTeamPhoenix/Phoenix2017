@@ -10,12 +10,11 @@
 #include <vector>
 #include <iostream>
 #include "../plog/Log.h"
-#include "../Robot.h"
-
 
 using namespace std;
 using json=nlohmann::json;
 
+class Robot;
 
 class resetAction : public Action
 {

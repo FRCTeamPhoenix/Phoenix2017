@@ -13,8 +13,8 @@ FlyWheels::FlyWheels(
         ShooterCalibrator& shooterCalibrator,
         Lidar& lidar,
         Joystick& customBox):
-        m_lowerFlyWheelMotor(leftFlyWheelMotor),
-        m_topFlyWheelMotor(rightFlyWheelMotor),
+        m_lowerFlyWheelMotor(rightFlyWheelMotor),
+        m_topFlyWheelMotor(leftFlyWheelMotor),
         m_shooterCalibrator(shooterCalibrator),
         m_lidar(lidar),
         m_customBox(customBox)
@@ -47,8 +47,8 @@ void FlyWheels::run()
         {
 
             // Max/min speeds must be set in Talon json
-            int topSpeed = m_shooterCalibrator.getTopFlywheelVelocity(m_lidar.getDistance());
-            int lowerSpeed = m_shooterCalibrator.getLowFlywheelVelocity(m_lidar.getDistance());
+            int topSpeed = m_shooterCalibrator.getTopFlywheelVelocity(SmartDashboard::GetNumber("../datatable/high_goal_distance", 0.0));
+            int lowerSpeed = m_shooterCalibrator.getLowFlywheelVelocity(SmartDashboard::GetNumber("../datatable/high_goal_distance", 0.0));
 
             m_topFlyWheelMotor.goAtVelocity(topSpeed);
             m_lowerFlyWheelMotor.goAtVelocity(lowerSpeed);
@@ -57,10 +57,20 @@ void FlyWheels::run()
             break;
 
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.
-        	double speed = ((m_customBox.GetRawAxis(0) + 1) / 2) * 0.55;
+        	double speed = ((m_customBox.GetRawAxis(DriveStationConstants::potFlywheelSpeed) + 1) / 2) * 0.55;
 
-            setRightSpeed(speed);
-            setLeftSpeed(speed);
+            SmartDashboard::PutNumber("Talons/Flywheels/Top Goal Speed", SmartDashboard::GetNumber("DB/Slider 0", 0.0) * m_topFlyWheelMotor.getMaxForwardSpeed());
+            SmartDashboard::PutNumber("Talons/Flywheels/Bottom Goal Speed", SmartDashboard::GetNumber("DB/Slider 1", 0.0) * m_lowerFlyWheelMotor.getMaxForwardSpeed());
+
+
+            SmartDashboard::PutNumber("Talons/Flywheels/Top Speed", m_topFlyWheelMotor.GetEncVel());
+            SmartDashboard::PutNumber("Talons/Flywheels/Bottom Speed", m_lowerFlyWheelMotor.GetEncVel());
+
+            SmartDashboard::PutNumber("Talons/Flywheels/Top Voltage", m_topFlyWheelMotor.GetOutputVoltage());
+            SmartDashboard::PutNumber("Talons/Flywheels/Bottom Voltage", m_lowerFlyWheelMotor.GetOutputVoltage());
+
+            setRightSpeed(0.55);
+            setLeftSpeed(0.15);
             break;
     }
 }
@@ -92,4 +102,9 @@ void FlyWheels::setBothSpeed(double speed)
 {
     m_topFlyWheelMotor.goAt(speed);
     m_lowerFlyWheelMotor.goAt(speed);
+}
+
+bool FlyWheels::inRange()
+{
+    return m_shooterCalibrator.inRange(m_lidar.getDistance());
 }

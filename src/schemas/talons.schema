@@ -35,6 +35,7 @@
 			"type": "object",
 			
 			"properties": {
+			        "id": {"type": "number"},
 				"speed": {"$ref": "#/definitions/Gains"},
 				"distance": {"$ref": "#/definitions/Gains"},
 				"maxfvel": {"type": "number"},
@@ -43,6 +44,7 @@
 			},
 			
 			"required": [
+			        "id",
 				"speed",
 				"distance",
 				"maxfvel",

@@ -20,8 +20,12 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
     m_BRTalon(BRTalon),
     m_BLTalon(BLTalon),
 //    m_driveTrain(FLTalon, BLTalon, FRTalon, BLTalon),
-    m_distanceController(0.00004, 0, 0.00, this, this)
-
+    m_distanceController(0.0002, 0, 0.00075, this, this)
+//    m_distanceController(SmartDashboard::GetNumber("DB/Slider 0", 0.0),
+//                         SmartDashboard::GetNumber("DB/Slider 1", 0.0),
+//                         SmartDashboard::GetNumber("DB/Slider 2", 0.0),
+//                         SmartDashboard::GetNumber("DB/Slider 3", 0.0),
+//                         this, this)
 {
     m_gyroSensitivity = 1;
     m_goalX = 0;
@@ -95,6 +99,7 @@ void relativeMecanumDrivetrain::moveDistance (double distance, double angle, dou
     else{
         m_isDistanceMove = true;
     }
+
     double distanceX = getXComponent(distance, angle);
     double distanceY = getYComponent(distance, angle);
 
@@ -143,9 +148,9 @@ void relativeMecanumDrivetrain::moveAt (double speed, double angle)
     m_BLTalon.goAt (speedY);
 }
 
-void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotation)
+void relativeMecanumDrivetrain::moveRelativeVoltage (double FB, double LR, double rotation)
 {
-    m_mode = CANSpeedController::ControlMode::kSpeed;
+    m_mode = CANSpeedController::ControlMode::kVoltage;
 
     double x = cos(M_PI_4) * FB + cos(-M_PI_4) * LR;
     double y = sin(M_PI_4) * FB + sin(-M_PI_4) * LR;
@@ -156,6 +161,45 @@ void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotat
     y = y > 1   ?   1   : y;
     y = y < -1  ?  -1   : y;
 
+    stringstream ss;
+    ss << y;
+    SmartDashboard::PutString("DB/String 7", ss.str());
+
+    stringstream ss2;
+    ss2 << x;
+    SmartDashboard::PutString("DB/String 8", ss.str());
+    m_FLTalon.goVoltage (x + rotation);
+    m_BRTalon.goVoltage (x - rotation);
+
+    m_FRTalon.goVoltage (y - rotation);
+    m_BLTalon.goVoltage (y + rotation);
+}
+
+void relativeMecanumDrivetrain::moveTankStyle(double left, double right)
+{
+
+}
+
+void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotation)
+{
+    m_mode = CANSpeedController::ControlMode::kVoltage;
+
+    double x = cos(M_PI_4) * FB + cos(-M_PI_4) * LR;
+    double y = sin(M_PI_4) * FB + sin(-M_PI_4) * LR;
+
+    x = x > 1   ?   1   : x;
+    x = x < -1  ?  -1   : x;
+
+    y = y > 1   ?   1   : y;
+    y = y < -1  ?  -1   : y;
+
+    stringstream ss;
+    ss << y;
+    SmartDashboard::PutString("DB/String 7", ss.str());
+
+    stringstream ss2;
+    ss2 << x;
+    SmartDashboard::PutString("DB/String 8", ss.str());
     m_FLTalon.goAt (x + rotation);
     m_BRTalon.goAt (x - rotation);
 
@@ -266,8 +310,13 @@ void relativeMecanumDrivetrain::SetPIDSourceType (PIDSourceType pidSource)
 double relativeMecanumDrivetrain::getDistance ()
 {
 
-    double xPos = (-(m_FLTalon.GetEncPosition () - m_FLenc)  + (m_BRTalon.GetEncPosition () - m_BRenc)) / 2;
-    double yPos = ((m_FRTalon.GetEncPosition () - m_FRenc) + -(m_BLTalon.GetEncPosition () - m_BLenc)) / 2;
+//    Wrong Code
+//    double xPos = (-(m_FLTalon.GetEncPosition () - m_FLenc)  + (m_BRTalon.GetEncPosition () - m_BRenc)) / 2;
+//    double yPos = ((m_FRTalon.GetEncPosition () - m_FRenc) + -(m_BLTalon.GetEncPosition () - m_BLenc)) / 2;
+//
+//    return sqrt((xPos * xPos) + (yPos * yPos));
 
-    return sqrt((xPos * xPos) + (yPos * yPos));
+//    Only works when going forawrd and back
+
+    return fabs((-(m_FLTalon.GetEncPosition () - m_FLenc) + (m_BRTalon.GetEncPosition () - m_BRenc) + (m_FRTalon.GetEncPosition () - m_FRenc) + -(m_BLTalon.GetEncPosition () - m_BLenc)) / 4);
 }
