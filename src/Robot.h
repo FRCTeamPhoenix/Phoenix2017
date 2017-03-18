@@ -20,6 +20,7 @@
 #include "Gatherer.h"
 #include "Feeder.h"
 #include "Indexer.h"
+#include "GearTargeting.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -73,6 +74,7 @@ class Robot: public SampleRobot
     ShooterCalibrator m_shooterCalibrator;
     FlyWheels m_flywheel;
     Turret m_turret;
+    GearTargeting m_gearTargeting;
     LoggerController m_loggerController;
     ConfigEditor m_configEditor;
     SmartTalon m_climberMotor;

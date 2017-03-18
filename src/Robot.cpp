@@ -37,6 +37,7 @@ Robot::Robot() :
         m_shooterCalibrator(),
         m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_customBox),
         m_turret(m_turretRotateMotor,m_visionComs, m_customBox),
+        m_gearTargeting(m_visionComs, m_drivetrain),
         m_loggerController(),
         m_configEditor(),
         m_climberMotor(PortAssign::climber, m_talons.getTalonConfig(PortAssign::climber), CANTalon::FeedbackDevice::QuadEncoder),
@@ -47,7 +48,7 @@ Robot::Robot() :
         m_indexer(m_indexerMotor, m_customBox),
         m_feeder(m_feederMotor, m_customBox),
         m_gatherer(m_gathererMotor, m_customBox),
-        m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_customBox,m_climber,m_gatherer)
+        m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_customBox,m_joystick,m_climber,m_gatherer,m_gearTargeting)
 {
 
 }
