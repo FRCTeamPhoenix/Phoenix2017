@@ -17,9 +17,14 @@
 
 class RLogger {
 public:
-	RLogger(SmartTalon & topFlyWheel,
-			SmartTalon & lowerFlyWheel,
-			Lidar & lidar);
+	RLogger(SmartTalon & FRwheel,
+			SmartTalon & FLwheel,
+			SmartTalon & BRwheel,
+			SmartTalon & BLwheel,
+//			SmartTalon & topFlyWheel,
+//			SmartTalon & lowerFlyWheel,
+			Lidar & lidar
+	);
 	virtual ~RLogger();
 	void run();
 	void stop();
@@ -31,8 +36,12 @@ public:
 	void printLogMSG(std::list<std::string> &values); // Prints out the Message to the File
 
 private:
-	SmartTalon& m_topFlyWheel;
-	SmartTalon& m_lowerFlyWheel;
+	//	SmartTalon& m_topFlyWheel;
+	//	SmartTalon& m_lowerFlyWheel;
+	SmartTalon& m_FRwheel;
+	SmartTalon& m_FLwheel;
+	SmartTalon& m_BRwheel;
+	SmartTalon& m_BLwheel;
 	Lidar & m_lidar;
 	Timer m_timer;
 

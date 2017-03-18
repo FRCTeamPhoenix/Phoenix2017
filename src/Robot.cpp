@@ -47,7 +47,8 @@ Robot::Robot() :
         m_feeder(m_feederMotor, m_customBox),
         m_gatherer(m_gathererMotor, m_customBox),
         m_robotController(m_flywheel,m_turret,m_feeder,m_indexer,m_customBox,m_climber,m_gatherer),
-        m_rlogger(m_topFlyWheelMotor, m_lowerFlyWheelMotor, m_lidar)
+//        m_rlogger(m_topFlyWheelMotor, m_lowerFlyWheelMotor, m_lidar) For now We will put the shooter in later
+		m_rlogger(m_FRDrive, m_FLDrive, m_BRDrive, m_BLDrive, m_lidar)
 {
 
 }
