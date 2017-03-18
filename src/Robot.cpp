@@ -148,17 +148,17 @@ void Robot::OperatorControl()
         std::ostringstream lidarDistance;
         lidarDistance << "Distance: ";
         lidarDistance << m_lidar.getDistance();
-        SmartDashboard::PutString("DB/String 6", lidarDistance.str());
+        SmartDashboard::PutString("DB/String 3", lidarDistance.str());
 
         std::ostringstream topVel;
         topVel << "TopVel: ";
         topVel << m_topFlyWheelMotor.GetEncVel();
-        SmartDashboard::PutString("DB/String 7", topVel.str());
+        SmartDashboard::PutString("DB/String 4", topVel.str());
 
         std::ostringstream lowVel;
         lowVel << "LowVel: ";
         lowVel << m_lowerFlyWheelMotor.GetEncVel();
-        SmartDashboard::PutString("DB/String 8", lowVel.str());
+        SmartDashboard::PutString("DB/String 5", lowVel.str());
 
 
 		SmartDashboard::PutNumber("LidarDistance", m_lidar.getDistance());
@@ -603,14 +603,14 @@ void Robot::initAutoMode ()
 
 	vector<shared_ptr<Action>> allActions = m_mainAutoGroup->getContainedActions ();
 
-	SmartDashboard::PutString("DB/String 6", mode);
+	//SmartDashboard::PutString("DB/String 6", mode);
 
 	vector<shared_ptr<Action>>::iterator actionIterator;
 	for(actionIterator = allActions.begin(); actionIterator != allActions.end(); actionIterator++)
 	{
 		if(actionIterator->get ()->getName () == mode)
 		{
-		        SmartDashboard::PutString("DB/String 7","auto init");
+		      //  SmartDashboard::PutString("DB/String 7","auto init");
 			actionIterator->get ()->reset ();
 		}
 		else
