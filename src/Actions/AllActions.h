@@ -14,6 +14,8 @@
 #include "Rotate.h"
 #include "DriveJoystick.h"
 #include "IndexerRunTime.h"
+#include "SetIndexerState.h"
+#include "SetShooterState.h"
 
 
 #endif //ACTIONGRAPHS_ALLACTIONS_H

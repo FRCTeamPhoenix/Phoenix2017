@@ -69,6 +69,14 @@ shared_ptr<Action> Action::generateAction (json &action, shared_ptr<Robot> robot
     {
         return make_shared<IndexerRunTime>(action, robot);
     }
+    else if("SetIndexerState" == type)
+    {
+        return make_shared<SetIndexerState>(action, robot);
+    }
+    else if("SetShooterState" == type)
+    {
+        return make_shared<SetShooterState>(action, robot);
+    }
     else{
         cout << "Type Not Found" << endl;
         return make_shared<Action>();
