@@ -415,6 +415,7 @@
           "startingCondition": 0,
 
           "state": 1,
+          "duration": 0.5,
 
           "dependencies": []
         },
@@ -425,6 +426,7 @@
           "startingCondition": 0,
 
           "state": 2,
+          "duration": 0.5,
 
           "dependencies": [{"place": 0, "requiredCondition": 2}]
         },
@@ -435,6 +437,7 @@
           "startingCondition": -1,
 
           "state": 0,
+          "duration": 0.01,
 
           "dependencies": [{"place": 1, "requiredCondition": 2}]
         },
@@ -445,7 +448,8 @@
           "startingCondition": -1,
 
           "state": 2,
-
+          "duration": 0.01,
+          
           "dependencies": [{"place": 2, "requiredCondition": 2}]
         },
 
@@ -465,6 +469,7 @@
           "startingCondition": 0,
 
           "state": 1,
+          "duration": 0.5,
 
           "dependencies": []
         },
@@ -475,6 +480,7 @@
           "startingCondition": 0,
 
           "state": 1,
+          "duration": 0.5,
 
           "dependencies": [{"place": 0, "requiredCondition": 2}]
         },
@@ -485,6 +491,7 @@
           "startingCondition": -1,
 
           "state": 0,
+          "duration": 0.01,
 
           "dependencies": [{"place": 1, "requiredCondition": 2}]
         },
@@ -495,6 +502,7 @@
           "startingCondition": -1,
 
           "state": 2,
+          "duration": 0.01,
 
           "dependencies": [{"place": 2, "requiredCondition": 2}]
         },

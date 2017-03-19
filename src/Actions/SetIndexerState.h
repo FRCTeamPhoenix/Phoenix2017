@@ -24,12 +24,15 @@ class SetIndexerState : public Action
 
         // State: 0=TELEOP, 1=ON, 2=OFF
         // State numbers have been chosen to match class enums
-        SetIndexerState(int state, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
+        SetIndexerState(int state, double duration, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
         SetIndexerState(json& action, shared_ptr<Robot> robot);
 
     private:
+        frc::Timer m_timer;
         int m_state;
+        double m_duration;
         void run();
+        void reset();
 
 };
 

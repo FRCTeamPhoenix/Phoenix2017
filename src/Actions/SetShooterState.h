@@ -25,12 +25,15 @@ class SetShooterState : public Action
 
         // State: 0=OFF, 1=FLATRATE, 2=LIDARRATE, 3=JOYSTICKRATE
         // State numbers have been chosen to match class enums
-        SetShooterState(int state, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
+        SetShooterState(int state, double duration, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
         SetShooterState(json& action, shared_ptr<Robot> robot);
 
     private:
+        frc::Timer m_timer;
         int m_state;
+        double m_duration;
         void run();
+        void reset();
 
 };
 
