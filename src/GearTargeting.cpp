@@ -24,10 +24,13 @@ GearTargeting::~GearTargeting(){
 
 void GearTargeting::run(){
     //double rotation, horizontal, forward;
-    double speed = 0.1;
+    //double speed = 0.2;
+    std::stringstream dist;
 
     switch (m_state){
         case IDLE:
+            dist << "IDLE";
+            SmartDashboard::PutString("DB/String 5", dist.str());
             //Remove gears from jetson mode
             switch (m_comms.getMode()){
                 //We could have neither mode run here
@@ -42,6 +45,8 @@ void GearTargeting::run(){
 
             break;
         case SEARCHING:
+            dist << "SEARCHING";
+            SmartDashboard::PutString("DB/String 5", dist.str());
             //Keep gears in jetson mode
             //if target found, switch to aligning
             if (getTargetFound()){
@@ -49,9 +54,13 @@ void GearTargeting::run(){
             }
             break;
         case DISCONNECTED:
+            dist << "DISCONNECTED";
+            SmartDashboard::PutString("DB/String 5", dist.str());
             //Report error
             break;
         case ALIGNING:
+            dist << "ALIGNING";
+            SmartDashboard::PutString("DB/String 5", dist.str());
             /*//move according to getAngle and getDistance
             //Don't rotate all the way, or we will end up skewed relative to the target.
             angle = getAngle();
@@ -86,44 +95,74 @@ void GearTargeting::run(){
                 m_state = SEARCHING;
             }
             else{
-                m_state = ROTATING;
-                m_rotation = getRotation();
-                m_horizontal = getHorizontal();
-                m_forward = getForward();
-                m_train.moveDistance(0, 0, speed, m_rotation);
+                //m_state = ROTATING;
+                m_state = SHIFTING;
+
+                //m_rotation = getRotation();
+                //m_horizontal = getHorizontal();
+                //m_forward = getForward();
+                //m_train.moveDistance(0, 0, 0.3, m_rotation);
+                //m_horizontal = getHorizontal();
+                //m_forward = getForward();
+                //int angle = ((m_horizontal >= 0) - (m_horizontal < 0)) * (-90);
+                //m_train.moveDistance(fabs(m_horizontal) * 4000.0 / 12.0, angle, 0.1);
             }
             break;
         case ROTATING:
+            dist << "ROTATING";
+            SmartDashboard::PutString("DB/String 5", dist.str());
+
+            if (getTargetFound()){
+                m_rotation = getRotation();
+                m_horizontal = getHorizontal();
+                m_forward = getForward();
+                m_train.moveDistance(0, 0, 0.3, m_rotation);
+            }
+
             if (m_train.doneMove(0.05)){
-                m_state = SHIFTING;
+                //m_state = SHIFTING;
+                m_state = IDLE;
                 if (getTargetFound()){
                     m_horizontal = getHorizontal();
                     m_forward = getForward();
                 }
-                int angle = ((m_horizontal > 0) - (m_horizontal < 0)) * 90;
-                m_train.moveDistance(m_horizontal, angle, speed);
+                //int angle = ((m_horizontal > 0) - (m_horizontal < 0)) * 90;
+                //m_train.moveDistance(fabs(m_horizontal) * 4000.0 / 12.0, angle, speed);
             }
             break;
         case SHIFTING:
-            if (m_train.doneMove(0.05)){
-                m_state = APPROACHING;
-                if (getTargetFound()) {
-                    m_forward = getForward();
-                    m_state = APPROACHING;
-                    m_train.moveDistance(m_forward, 0, speed);
-                } else {
-                    m_state = SEARCHING;
-                }
+            dist << "SHIFTING";
+            SmartDashboard::PutString("DB/String 5", dist.str());
+
+            if (getTargetFound()){
+                m_horizontal = getHorizontal();
+                m_forward = getForward();
+                int angle = ((m_horizontal >= 0) - (m_horizontal < 0)) * (-90);
+                m_train.moveDistance(fabs(m_horizontal) * 4000.0 / 12.0, angle, 0.15);
+            }
+
+            if (m_train.doneMoveAbsolute(2.0)){
+                m_state = IDLE;
+//                m_state = APPROACHING;
+//                if (getTargetFound()) {
+//                    m_forward = getForward();
+//                }
+//                m_state = APPROACHING;
+//                m_train.moveDistance(m_forward * 4000 / 12.0, 0, 0.15);
             }
             break;
         case APPROACHING:
-            if (m_train.doneMove(0.05)){
+            dist << "APPROACHING";
+            SmartDashboard::PutString("DB/String 5", dist.str());
+            if (m_train.doneMoveAbsolute(2.0)){
                 m_state = DEPOSITING;
             }
             break;
         case DEPOSITING:
+            dist << "DEPOSITING";
+            SmartDashboard::PutString("DB/String 5", dist.str());
             //Do nothing, unless time is up (2 sec or so), then switch to idle and give control to next auto section
-            if (m_timer.Get() > 2000){
+            if (m_timer.Get() > 2.0){
                 m_state = IDLE;
             }
             break;

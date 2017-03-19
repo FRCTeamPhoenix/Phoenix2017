@@ -46,6 +46,7 @@ void RobotController::run()
     m_indexer.run();
 //    m_gatherer.run();
     m_climber.run();
+    m_gearTargeting.run();
 
     switch(m_state){
 

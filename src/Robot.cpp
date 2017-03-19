@@ -144,7 +144,7 @@ void Robot::OperatorControl()
 	while (IsEnabled() && IsOperatorControl())
 	{
 
-        m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
+        //m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
         m_robotController.run();
 
 //        std::ostringstream lidarDistance;

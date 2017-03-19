@@ -50,6 +50,7 @@ public:
     double PIDGet();
 
     bool doneMove(double tolerancePercentage);
+    bool doneMoveAbsolute(double distanceInches);
 
     void SetPIDSourceType(PIDSourceType pidSource);
 
