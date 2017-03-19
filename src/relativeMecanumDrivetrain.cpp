@@ -242,12 +242,23 @@ bool relativeMecanumDrivetrain::doneMove (double tolerancePercentage)
     return m_headingControl.isDone();
 }
 
+bool relativeMecanumDrivetrain::doneMoveAbsolute (double distanceInches)
+{
+
+    if(m_isDistanceMove)
+    {
+        double difference = m_distance - m_goalDistance;
+        return (fabs(difference) < fabs(distanceInches * 4000.0 / 12.0)) && m_headingControl.isDone();
+    }
+    return m_headingControl.isDone();
+}
+
 double relativeMecanumDrivetrain::PIDGet ()
 {
     double distance = getDistance();
-//    std::stringstream dist;
-//    dist << "Distance: " << distance;
-//    SmartDashboard::PutString("DB/String 4", dist.str());
+    std::stringstream dist;
+    dist << "Distance: " << distance;
+    SmartDashboard::PutString("DB/String 4", dist.str());
 
 //    LOGI << dist.str();
 
@@ -338,6 +349,5 @@ double relativeMecanumDrivetrain::getDistance ()
 //    return sqrt((xPos * xPos) + (yPos * yPos));
 
 //    Only works when going forawrd and back
-
-    return fabs((-(m_FLTalon.GetEncPosition () - m_FLenc) + (m_BRTalon.GetEncPosition () - m_BRenc) + (m_FRTalon.GetEncPosition () - m_FRenc) + -(m_BLTalon.GetEncPosition () - m_BLenc)) / 4);
+    return (fabs((-(m_FLTalon.GetEncPosition () - m_FLenc) + (m_BRTalon.GetEncPosition () - m_BRenc))/(2 * 0.7071)) + fabs(((m_FRTalon.GetEncPosition () - m_FRenc) + -(m_BLTalon.GetEncPosition () - m_BLenc))/(2 * 0.7071))) / 2;
 }

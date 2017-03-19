@@ -84,7 +84,7 @@ bool HeadingControl::isDone ()
 
     double goal = m_gyroController.GetSetpoint ();
 
-    if(fabs(goal - angle) < 5){
+    if(fabs(goal - angle) < 2){
         return true;
     }
     return false;
