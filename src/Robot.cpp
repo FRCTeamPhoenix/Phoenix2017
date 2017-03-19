@@ -115,8 +115,8 @@ void Robot::RobotInit()
     std::thread runLidar(lidarThread, this, &m_lidar);
     runLidar.detach();
 
-//    std::thread runVision(VisionThread);
-//    runVision.detach();
+    std::thread runVision(VisionThread);
+    runVision.detach();
 }
 
 void Robot::Autonomous()
@@ -148,17 +148,17 @@ void Robot::OperatorControl()
         std::ostringstream lidarDistance;
         lidarDistance << "Distance: ";
         lidarDistance << m_lidar.getDistance();
-        SmartDashboard::PutString("DB/String 6", lidarDistance.str());
+        SmartDashboard::PutString("DB/String 3", lidarDistance.str());
 
         std::ostringstream topVel;
         topVel << "TopVel: ";
         topVel << m_topFlyWheelMotor.GetEncVel();
-        SmartDashboard::PutString("DB/String 7", topVel.str());
+        SmartDashboard::PutString("DB/String 4", topVel.str());
 
         std::ostringstream lowVel;
         lowVel << "LowVel: ";
         lowVel << m_lowerFlyWheelMotor.GetEncVel();
-        SmartDashboard::PutString("DB/String 8", lowVel.str());
+        SmartDashboard::PutString("DB/String 5", lowVel.str());
 
 
 		SmartDashboard::PutNumber("LidarDistance", m_lidar.getDistance());
@@ -603,14 +603,14 @@ void Robot::initAutoMode ()
 
 	vector<shared_ptr<Action>> allActions = m_mainAutoGroup->getContainedActions ();
 
-	SmartDashboard::PutString("DB/String 6", mode);
+	//SmartDashboard::PutString("DB/String 6", mode);
 
 	vector<shared_ptr<Action>>::iterator actionIterator;
 	for(actionIterator = allActions.begin(); actionIterator != allActions.end(); actionIterator++)
 	{
 		if(actionIterator->get ()->getName () == mode)
 		{
-		        SmartDashboard::PutString("DB/String 7","auto init");
+		      //  SmartDashboard::PutString("DB/String 7","auto init");
 			actionIterator->get ()->reset ();
 		}
 		else
@@ -663,37 +663,84 @@ bool Robot::doneDriveMove (double tolerance)
 
 void Robot::driveJoystick()
 {
-	double FB = -m_joystick.GetY();
-
-	double LF = m_joystick.GetX();
-	double rot = m_joystick.GetZ() / 2;
-
-	FB = (fabs(FB) < 0.1) ? 0 : ((FB < 0) ? (FB + 0.1) / (0.9 / 0.75) : (FB - 0.1) / 0.9);
-	LF = (fabs(LF) < 0.1) ? 0 : ((LF < 0) ? (LF + 0.1) / (0.9 / 1): (LF - 0.1) / 0.9);
-	rot = (fabs(rot) < 0.1) ? 0 : ((rot < 0) ? (rot + 0.1) / (0.9 / 1) : (rot - 0.1) / 0.9);
-
-    double throttle = (((-m_joystick.GetThrottle() + 1) / 2));
-    if(throttle < 0.2)
-    {
-        throttle = 0.2;
-    }
-    if(throttle > 0.8)
-    {
-        throttle = 0.8;
-    }
-
-    FB *= throttle;
-    LF *= throttle;
-    rot *= throttle;
+    double throttle = (((m_joystick.GetThrottle() + 1) / 2));
+    double FB = 0;
+    double LR = 0;
+    double rot = 0;
 
     if(m_joystick.GetRawButton(12))
     {
-        m_drivetrain.moveRelative(LF, -FB / 2, rot / 2);
+        LR = fabs(m_joystick.GetY());
+        FB = fabs(m_joystick.GetX());
+        rot = m_joystick.GetZ();
+
+        throttle = throttle * 3.67;
+        throttle += 1;
+
+        throttle = 1;
+
+        if(LR > 0.1)
+            LR = pow(LR, throttle) * (fabs(m_joystick.GetY()) / m_joystick.GetY());
+        else
+            LR = 0;
+
+        if(FB > 0.05)
+            FB = pow(FB, throttle) * (fabs(m_joystick.GetX()) / m_joystick.GetX());
+        else
+            FB = 0;
+
+        if(fabs(rot) > (0.05 * 10))
+            rot /= 8;
+        else
+            rot = 0;
+
+        FB *= 0.8;
+        LR *= 0.6;
     }
     else
     {
-        m_drivetrain.moveRelative(FB, LF, rot);
+        LR = fabs(m_joystick.GetX());
+        FB = fabs(m_joystick.GetY());
+        rot = m_joystick.GetZ();
+
+        throttle *= 4;
+        throttle += 1;
+
+        throttle = 1;
+
+        if(LR > 0.05)
+            LR = pow(LR, throttle) * (fabs(m_joystick.GetX()) / m_joystick.GetX());
+        else
+            LR = 0;
+
+        if(FB > 0.1)
+            FB = -pow(FB, throttle) * (fabs(m_joystick.GetY()) / m_joystick.GetY());
+        else
+            FB = 0;
+
+        if(fabs(rot) > (0.05 * 5))
+            rot /= 4;
+        else
+            rot = 0;
     }
+
+    FB *= (((m_joystick.GetThrottle() - 1) / -2));
+    LR *= (((m_joystick.GetThrottle() - 1) / -2));
+    rot *= 0.97;
+
+    if(m_joystick.GetRawButton(9))
+    {
+        m_drivetrain.moveRelativeVoltage(FB, LR, rot * 1.6);
+    }
+    else
+    {
+        m_drivetrain.moveRelative(FB, LR, rot);
+    }
+
+    printMSG("0", "FB: " + std::to_string(FB));
+    printMSG("1", "LR: " + std::to_string(LR));
+    printMSG("2", "rot: " + std::to_string(rot));
+    printMSG("3", "throttle: " + std::to_string(throttle));
 }
 
 void Robot::setIndexerSpeed(double speed)

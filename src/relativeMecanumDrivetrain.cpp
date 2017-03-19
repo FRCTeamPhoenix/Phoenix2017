@@ -148,9 +148,9 @@ void relativeMecanumDrivetrain::moveAt (double speed, double angle)
     m_BLTalon.goAt (speedY);
 }
 
-void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotation)
+void relativeMecanumDrivetrain::moveRelativeVoltage (double FB, double LR, double rotation)
 {
-    m_mode = CANSpeedController::ControlMode::kSpeed;
+    m_mode = CANSpeedController::ControlMode::kVoltage;
 
     double x = cos(M_PI_4) * FB + cos(-M_PI_4) * LR;
     double y = sin(M_PI_4) * FB + sin(-M_PI_4) * LR;
@@ -161,6 +161,45 @@ void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotat
     y = y > 1   ?   1   : y;
     y = y < -1  ?  -1   : y;
 
+    stringstream ss;
+    ss << y;
+    SmartDashboard::PutString("DB/String 7", ss.str());
+
+    stringstream ss2;
+    ss2 << x;
+    SmartDashboard::PutString("DB/String 8", ss.str());
+    m_FLTalon.goVoltage (x + rotation);
+    m_BRTalon.goVoltage (x - rotation);
+
+    m_FRTalon.goVoltage (y - rotation);
+    m_BLTalon.goVoltage (y + rotation);
+}
+
+void relativeMecanumDrivetrain::moveTankStyle(double left, double right)
+{
+
+}
+
+void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotation)
+{
+    m_mode = CANSpeedController::ControlMode::kVoltage;
+
+    double x = cos(M_PI_4) * FB + cos(-M_PI_4) * LR;
+    double y = sin(M_PI_4) * FB + sin(-M_PI_4) * LR;
+
+    x = x > 1   ?   1   : x;
+    x = x < -1  ?  -1   : x;
+
+    y = y > 1   ?   1   : y;
+    y = y < -1  ?  -1   : y;
+
+    stringstream ss;
+    ss << y;
+    SmartDashboard::PutString("DB/String 7", ss.str());
+
+    stringstream ss2;
+    ss2 << x;
+    SmartDashboard::PutString("DB/String 8", ss.str());
     m_FLTalon.goAt (x + rotation);
     m_BRTalon.goAt (x - rotation);
 

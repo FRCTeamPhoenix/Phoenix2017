@@ -96,6 +96,22 @@ void SmartTalon::goAt (double speed)
 
 }
 
+void SmartTalon::goVoltage(double speed)
+{
+    if(CANSpeedController::kPercentVbus != m_mode)
+    {
+        SetControlMode (CANSpeedController::kPercentVbus);
+        m_mode = CANSpeedController::kPercentVbus;
+    }
+
+    if(m_inverted)
+        Set(-speed);
+    else
+        Set(speed);
+
+}
+
+
 void SmartTalon::goAtVelocity (int velocity)
 {
     double percentPower = 0;
