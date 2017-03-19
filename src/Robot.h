@@ -115,6 +115,12 @@ public:
 
     void setIndexerSpeed(double speed);
 
+    void setFeederState(int state);
+
+    void setFlywheelState(int state);
+
+    void setIndexerState(int state);
+
 	//End of Functions for Actions
 
 	// Beginning of Test Mode

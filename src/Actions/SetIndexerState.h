@@ -9,6 +9,7 @@
 #define SRC_ACTIONS_SETINDEXERSTATE_H_
 
 #include "Action.h"
+#include "Indexer.h"
 #include "dependency.h"
 #include <vector>
 #include <iostream>
@@ -20,11 +21,14 @@ class Robot;
 class SetIndexerState : public Action
 {
     public:
-        SetIndexerState(enum Indexer::State state, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
+
+        // State: 0=TELEOP, 1=ON, 2=OFF
+        // State numbers have been chosen to match class enums
+        SetIndexerState(int state, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
         SetIndexerState(json& action, shared_ptr<Robot> robot);
 
     private:
-        enum Indexer::State m_state;
+        int m_state;
         void run();
 
 };

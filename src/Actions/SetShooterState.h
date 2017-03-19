@@ -9,6 +9,8 @@
 #define SRC_ACTIONS_SETSHOOTERSTATE_H_
 
 #include "Action.h"
+#include "FlyWheels.h"
+#include "Feeder.h"
 #include "dependency.h"
 #include <vector>
 #include <iostream>
@@ -20,13 +22,14 @@ class Robot;
 class SetShooterState : public Action
 {
     public:
+
+        // State: 0=OFF, 1=FLATRATE, 2=LIDARRATE, 3=JOYSTICKRATE
+        // State numbers have been chosen to match class enums
         SetShooterState(int state, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot);
         SetShooterState(json& action, shared_ptr<Robot> robot);
 
     private:
         int m_state;
-        enum FlyWheels::STATE m_flywheelState;
-        enum Feeder::State m_feederState;
         void run();
 
 };

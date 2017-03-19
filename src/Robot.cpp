@@ -701,4 +701,52 @@ void Robot::setIndexerSpeed(double speed)
     m_indexer.setSpeed(speed);
 }
 
+void Robot::setFeederState(int state)
+{
+    if (state == 1 || state == 2 || state == 3)
+    {
+        this->m_feeder.setState(Feeder::State::ON);
+    } else
+    {
+        this->m_feeder.setState(Feeder::State::OFF);
+    }
+
+}
+
+void Robot::setFlywheelState(int state)
+{
+    if (state == 1)
+    {
+        this->m_flywheel.setState(FlyWheels::STATE::FLATRATE);
+    }
+    else if (state == 2)
+    {
+        this->m_flywheel.setState(FlyWheels::STATE::LIDARRATE);
+    }
+    else if (state == 3)
+    {
+        this->m_flywheel.setState(FlyWheels::STATE::JOYSTICKRATE);
+    }
+    else
+    {
+        this->m_flywheel.setState(FlyWheels::STATE::OFF);
+    }
+}
+
+void Robot::setIndexerState(int state)
+{
+    if (state == 0)
+    {
+        this->m_indexer.setState(Indexer::State::TELEOP);
+    }
+    else if (state == 1)
+    {
+        this->m_indexer.setState(Indexer::State::ON);
+    }
+    else
+    {
+        this->m_indexer.setState(Indexer::State::OFF);
+    }
+}
+
 START_ROBOT_CLASS(Robot)

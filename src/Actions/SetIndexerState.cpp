@@ -8,7 +8,7 @@
 #include "SetIndexerState.h"
 #include "../Robot.h"
 
-SetIndexerState::SetIndexerState(enum Indexer::State state, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot) :
+SetIndexerState::SetIndexerState(int state, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot) :
     Action(dependencies, robot),
     m_state(state)
 { }
@@ -23,6 +23,6 @@ SetIndexerState::SetIndexerState(json& action, shared_ptr<Robot> robot):
 
 void SetIndexerState::run() {
 
-    m_robot->m_indexer.setState(m_state);
+    m_robot->setIndexerState(m_state);
 
 }
