@@ -75,7 +75,20 @@
         {"$ref": "#/definitions/BaseAction"}
       ]
     },
-
+    "SetGearTargetingState": {
+      "allOf": [
+        {"$ref": "#/definitions/BaseAction"},
+        {
+          "properties":
+          {
+            "state": {"type": "number"}
+          },
+          "required": [
+            "state"
+          ]
+        }
+      ]
+    },
     "Rotate": {
       "allOf": [
         {"$ref": "#/definitions/BaseAction"},
@@ -128,7 +141,9 @@
                 { "$ref": "#/definitions/Rotate" },
                 { "$ref": "#/definitions/ActionGroup" },
                 { "$ref": "#/definitions/ResetAction" },
-                { "$ref": "#/definitions/DriveJoystick" }
+                { "$ref": "#/definitions/DriveJoystick" },
+                { "$ref": "#/definitions/SetGearTargetingState" }
+
 
               ]
             },

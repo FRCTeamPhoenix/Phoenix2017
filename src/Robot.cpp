@@ -132,7 +132,9 @@ void Robot::Autonomous()
 	while (IsEnabled() && IsAutonomous())
 	{
         m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
-	}
+        m_robotController.run();
+
+    }
 
 }
 
@@ -639,6 +641,8 @@ void Robot::initAutoMode ()
 			actionIterator->get ()->disable ();
 		}
 	}
+    m_robotController.setState(RobotController::AUTO);
+
 
 }
 
@@ -660,6 +664,7 @@ void Robot::switchToTeleoperated()
 			actionIterator->get ()->disable ();
 		}
 	}
+    m_robotController.setState(RobotController::TELEOP);
 }
 
 void Robot::driveAt(double speed, double angle)
@@ -757,6 +762,11 @@ void Robot::driveJoystick()
 void Robot::setIndexerSpeed(double speed)
 {
     m_indexer.setSpeed(speed);
+}
+
+void Robot::setGearTargetingState(int state)
+{
+    m_gearTargeting.setState((GearTargeting::STATE)state);
 }
 
 START_ROBOT_CLASS(Robot)

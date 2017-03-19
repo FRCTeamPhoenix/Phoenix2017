@@ -36,6 +36,8 @@ public:
 
     void setState(STATE state);
 
+    bool isAligned();
+
 private:
     STATE m_state;
     Communications& m_comms;

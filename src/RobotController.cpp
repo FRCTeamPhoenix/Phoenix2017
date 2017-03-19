@@ -29,7 +29,7 @@ RobotController::RobotController(
         m_gearTargeting(gearTargeting)
 
 {
-    m_state = TELEOP;
+    m_state = AUTO;
 }
 
 RobotController::~RobotController()

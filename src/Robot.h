@@ -118,6 +118,8 @@ public:
 
     void setIndexerSpeed(double speed);
 
+    void setGearTargetingState(int state);
+
 	//End of Functions for Actions
 
 	// Beginning of Test Mode

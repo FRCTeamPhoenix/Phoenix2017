@@ -14,6 +14,7 @@
 #include "Rotate.h"
 #include "DriveJoystick.h"
 #include "IndexerRunTime.h"
+#include "SetGearTargetingState.h"
 
 
 #endif //ACTIONGRAPHS_ALLACTIONS_H

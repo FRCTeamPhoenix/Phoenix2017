@@ -27,6 +27,12 @@ void GearTargeting::run(){
     //double speed = 0.2;
     std::stringstream dist;
 
+    if(isAligned())
+    {
+        m_state = IDLE;
+
+    }
+
     switch (m_state){
         case IDLE:
             dist << "IDLE";
@@ -95,9 +101,16 @@ void GearTargeting::run(){
                 m_state = SEARCHING;
             }
             else{
-                //m_state = ROTATING;
-                m_state = SHIFTING;
-
+                m_rotation = getRotation();
+                m_horizontal = getHorizontal();
+                m_forward = getForward();
+                m_train.moveDistance(0, 0, 0.4, m_rotation);
+                m_state = ROTATING;
+//                m_state = SHIFTING;
+//                m_horizontal = getHorizontal();
+//                m_forward = getForward();
+//                int angle = ((m_horizontal >= 0) - (m_horizontal < 0)) * (90);
+//                m_train.moveDistance(fabs(m_horizontal) * 4000.0 / 12.0, angle, 0.15);
                 //m_rotation = getRotation();
                 //m_horizontal = getHorizontal();
                 //m_forward = getForward();
@@ -113,19 +126,19 @@ void GearTargeting::run(){
             SmartDashboard::PutString("DB/String 5", dist.str());
 
             if (getTargetFound()){
-                m_rotation = getRotation();
-                m_horizontal = getHorizontal();
-                m_forward = getForward();
-                m_train.moveDistance(0, 0, 0.3, m_rotation);
+//                m_rotation = getRotation();
+//                m_horizontal = getHorizontal();
+//                m_forward = getForward();
+//                m_train.moveDistance(0, 0, 0.3, m_rotation);
             }
 
             if (m_train.doneMove(0.05)){
-                //m_state = SHIFTING;
-                m_state = IDLE;
-                if (getTargetFound()){
-                    m_horizontal = getHorizontal();
-                    m_forward = getForward();
-                }
+                m_state = SHIFTING;
+//                m_state = IDLE;
+//                if (getTargetFound()){
+//                    m_horizontal = getHorizontal();
+//                    m_forward = getForward();
+//                }
                 //int angle = ((m_horizontal > 0) - (m_horizontal < 0)) * 90;
                 //m_train.moveDistance(fabs(m_horizontal) * 4000.0 / 12.0, angle, speed);
             }
@@ -137,18 +150,19 @@ void GearTargeting::run(){
             if (getTargetFound()){
                 m_horizontal = getHorizontal();
                 m_forward = getForward();
-                int angle = ((m_horizontal >= 0) - (m_horizontal < 0)) * (-90);
+                int angle = ((m_horizontal >= 0) - (m_horizontal < 0)) * (90);
                 m_train.moveDistance(fabs(m_horizontal) * 4000.0 / 12.0, angle, 0.15);
             }
 
             if (m_train.doneMoveAbsolute(2.0)){
-                m_state = IDLE;
+                m_state = ALIGNING;
+
 //                m_state = APPROACHING;
 //                if (getTargetFound()) {
 //                    m_forward = getForward();
 //                }
 //                m_state = APPROACHING;
-//                m_train.moveDistance(m_forward * 4000 / 12.0, 0, 0.15);
+//                m_train.moveDistance(m_forward * 4000 / 12.0, 0, 0.2);
             }
             break;
         case APPROACHING:
@@ -169,6 +183,13 @@ void GearTargeting::run(){
     }
 }
 
+bool GearTargeting::isAligned()
+{
+    m_horizontal = getHorizontal();
+    m_rotation = getRotation();
+    return (fabs(m_horizontal) < 3 && fabs(m_rotation) < 3);
+
+}
 void GearTargeting::setState(STATE state){
     m_state = state;
 };

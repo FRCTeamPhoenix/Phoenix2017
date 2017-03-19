@@ -27,7 +27,7 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
 //                         SmartDashboard::GetNumber("DB/Slider 3", 0.0),
 //                         this, this)
 {
-    m_gyroSensitivity = 1;
+    m_gyroSensitivity = 2;
     m_goalX = 0;
     m_goalY = 0;
     m_goalGyro = 0;
