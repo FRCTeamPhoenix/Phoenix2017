@@ -20,7 +20,7 @@ relativeMecanumDrivetrain::relativeMecanumDrivetrain (SmartTalon &FRTalon,
     m_BRTalon(BRTalon),
     m_BLTalon(BLTalon),
 //    m_driveTrain(FLTalon, BLTalon, FRTalon, BLTalon),
-    m_distanceController(0.0002, 0, 0.00075, this, this)
+    m_distanceController(0.0002, 0, 0.0008, this, this)
 //    m_distanceController(SmartDashboard::GetNumber("DB/Slider 0", 0.0),
 //                         SmartDashboard::GetNumber("DB/Slider 1", 0.0),
 //                         SmartDashboard::GetNumber("DB/Slider 2", 0.0),
@@ -349,5 +349,8 @@ double relativeMecanumDrivetrain::getDistance ()
 //    return sqrt((xPos * xPos) + (yPos * yPos));
 
 //    Only works when going forawrd and back
-    return (fabs((-(m_FLTalon.GetEncPosition () - m_FLenc) + (m_BRTalon.GetEncPosition () - m_BRenc))/(2 * 0.7071)) + fabs(((m_FRTalon.GetEncPosition () - m_FRenc) + -(m_BLTalon.GetEncPosition () - m_BLenc))/(2 * 0.7071))) / 2;
+
+//    return fabs((-(m_FLTalon.GetEncPosition () - m_FLenc) + (m_BRTalon.GetEncPosition () - m_BRenc) + (m_FRTalon.GetEncPosition () - m_FRenc) + -(m_BLTalon.GetEncPosition () - m_BLenc)) / 4);
+
+    return (fabs((-(m_FLTalon.GetEncPosition () - m_FLenc) + (m_BRTalon.GetEncPosition () - m_BRenc)) / (2 * 0.7071)) + fabs(((m_FRTalon.GetEncPosition () - m_FRenc) + -(m_BLTalon.GetEncPosition () - m_BLenc)) / (2 * 0.7071))) / 2;
 }
