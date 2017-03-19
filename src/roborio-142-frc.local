@@ -65,41 +65,6 @@
 
     {
       "type": "ActionGroup",
-      "name": "Blue Boiler Gear Only TEST Auto",
-      "startingCondition": -1,
-      "containedActions":[
-        {
-          "type": "GoDistance",
-          "name": "BBG Drive move",
-          "startingCondition": 0,
-
-          "distance": 20000,
-          "angle": 0,
-          "speed": 0.2,
-          "tolerance": 0.05,
-
-          "dependencies": []
-        },
-        {
-          "type": "Rotate",
-          "name": "BBG Aim Rotate",
-          "startingCondition": 0,
-
-          "angle": -60,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-
-        }
-      ],
-      "dependencies": [],
-      "doneDependencies": []
-    },
-
-
-    {
-      "type": "ActionGroup",
       "name": "Blue Boiler Gear Only Auto",
       "startingCondition": -1,
       "containedActions":[

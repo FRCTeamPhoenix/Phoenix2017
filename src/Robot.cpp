@@ -118,6 +118,9 @@ void Robot::RobotInit()
 
     std::thread runVision(VisionThread);
     runVision.detach();
+
+    m_expansionBoard.Reset();
+    m_expansionBoard.Calibrate();
 }
 
 void Robot::Autonomous()
@@ -134,41 +137,57 @@ void Robot::Autonomous()
 
 void Robot::OperatorControl()
 {
-	m_expansionBoard.Reset();
 	LOGI << "Start Teleop";
 
     bool lastPressed3 = false;
     bool lastPressed4 = false;
+
+    Timer timer;
+    timer.Start();
+    double currentVelY = 0;
+    double currentPosY = 0;
+
+    double currentVelZ = 0;
+    double currentPosZ = 0;
+
+
 	switchToTeleoperated();
-	while (IsEnabled() && IsOperatorControl())
+    timer.Reset();
+    while (IsEnabled() && IsOperatorControl())
 	{
 
-        m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
-        m_robotController.run();
+//        m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
+//        m_robotController.run();
 
-//        std::ostringstream lidarDistance;
-//        lidarDistance << "Distance: ";
-//        lidarDistance << m_lidar.getDistance();
-//        SmartDashboard::PutString("DB/String 6", lidarDistance.str());
-//
-//        std::ostringstream topVel;
-//        topVel << "TopVel: ";
-//        topVel << m_topFlyWheelMotor.GetEncVel();
-//        SmartDashboard::PutString("DB/String 7", topVel.str());
-//
-//        std::ostringstream lowVel;
-//        lowVel << "LowVel: ";
-//        lowVel << m_lowerFlyWheelMotor.GetEncVel();
-//        SmartDashboard::PutString("DB/String 8", lowVel.str());
-//
-//
-//		SmartDashboard::PutNumber("LidarDistance", m_lidar.getDistance());
-//        SmartDashboard::PutNumber("ShooterTopVel", m_topFlyWheelMotor.GetEncVel());
-//        SmartDashboard::PutNumber("ShooterLowVel", m_lowerFlyWheelMotor.GetEncVel());
+        double deltaTime = timer.Get();
+        timer.Reset();
+
+        double accelY = (m_expansionBoard.GetAccelY());
+        double accelZ = (m_expansionBoard.GetAccelZ());
+
+        accelY = fabs(accelY < 0.01) ? 0 : accelY;
+        accelZ = fabs(accelZ < 0.01) ? 0 : accelZ;
+
+        currentVelY += ((accelY) * 9.8 * deltaTime);
+
+//        currentVelY = fabs(currentVelY < 0.01) ? 0 : currentVelY;
+        currentPosY += (currentVelY * deltaTime * 100 / 2.54);
 
 
 
-	}
+        currentVelZ += ((accelZ) * 9.8 * deltaTime);
+
+//        currentVelZ = fabs(currentVelZ < 0.01) ? 0 : currentVelZ;
+        currentPosZ += (currentVelZ * deltaTime * 100 / 2.54);
+
+        SmartDashboard::PutNumber("Accel/Delta Time", deltaTime);
+        SmartDashboard::PutNumber("Accel/Accel Y", (m_expansionBoard.GetAccelY()));
+        SmartDashboard::PutNumber("Accel/Accel Z", (m_expansionBoard.GetAccelZ()));
+        SmartDashboard::PutNumber("Accel/Vel Y", currentVelY);
+        SmartDashboard::PutNumber("Accel/Vel Z", currentVelZ);
+        SmartDashboard::PutNumber("Accel/Pos Y", currentPosY);
+        SmartDashboard::PutNumber("Accel/Pos Z", currentPosZ);
+    }
 }
 
 void Robot::Test()
