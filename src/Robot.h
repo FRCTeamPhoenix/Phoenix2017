@@ -67,6 +67,7 @@ class Robot: public SampleRobot
     Joystick m_joystickRight;
     Joystick m_gamepad;
     Joystick m_customBox;
+    Joystick m_driverCustomBox;
     Lidar m_lidar;
     ADIS16448_IMU m_expansionBoard;
     Communications m_visionComs;

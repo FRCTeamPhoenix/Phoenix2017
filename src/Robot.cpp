@@ -31,6 +31,7 @@ Robot::Robot() :
         m_joystickRight(PortAssign::joystickRight),
         m_gamepad(PortAssign::gamepad),
         m_customBox(PortAssign::customBox),
+        m_driverCustomBox(PortAssign::driverCustomBox),
         m_lidar(PortAssign::lidarTriggerPin, PortAssign::lidarMonitorPin, 0),
         m_expansionBoard(),
         m_visionComs(),
@@ -683,12 +684,12 @@ bool Robot::doneDriveMove (double tolerance)
 
 void Robot::driveJoystick()
 {
-    if(m_customBox.GetRawButton(10))
+    if(m_driverCustomBox.GetRawButton(DriveStationConstants::gyroReset))
     {
         m_expansionBoard.Reset();
     }
 
-    if(m_customBox.GetRawButton(1))
+    if(m_driverCustomBox.GetRawButton(DriveStationConstants::fieldOriented))
     {
         double LR = m_joystickRight.GetX();
         double FB = -m_joystickRight.GetY();

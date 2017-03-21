@@ -28,7 +28,8 @@ struct PortAssign
     // Controllers
     const static uint32_t joystickLeft = 0;
     const static uint32_t joystickRight = 1;
-    const static uint32_t gamepad = 3;
+    const static uint32_t gamepad = 4;
+    const static uint32_t driverCustomBox = 3;
     const static uint32_t customBox = 2;
 
     // Limit Switches
@@ -119,6 +120,14 @@ namespace DriveStationConstants
         potYChange = 0
 
 	};
+    enum driverControl
+    {
+        voltageMode = 2,
+        fieldOriented = 3,
+        gyroReset = 4,
+        spareButton = 5
+
+    };
     const static std::string dashButtonNames[6] =
     {
         "New Name",
