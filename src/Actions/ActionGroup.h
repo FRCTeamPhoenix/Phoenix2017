@@ -29,7 +29,7 @@ class ActionGroup : public Action
 {
 public:
     ActionGroup(vector<shared_ptr<Action>> containedActions, vector<shared_ptr<dependency>> dependencies, vector<shared_ptr<dependency>> doneDependencies, shared_ptr<Robot> robot);
-    ActionGroup(json& actionGroup, shared_ptr<Robot> robot);
+    ActionGroup(json& actionGroup, json& allActionsJson, shared_ptr<Robot> robot);
     ActionGroup();
 
     vector<shared_ptr<Action>>& getContainedActions()
@@ -49,7 +49,7 @@ public:
      * All Base Action Json
      *
      */
-    void initActionGroup(json& actionGroup, shared_ptr<Robot> robot);
+    void initActionGroup(json& actionGroup, json& allActionsJson, shared_ptr<Robot> robot);
 
     /*
      * Reset and Disable an action inside of the contained actions

@@ -28,7 +28,7 @@ class Robot;
  * All expected Json values for the desired action and for a base action
  */
 
-shared_ptr<Action> Action::generateAction (json &action, shared_ptr<Robot> robot)
+shared_ptr<Action> Action::generateAction (json &action, json& allActionsJson, shared_ptr<Robot> robot)
 {
     string type = "";
     try
@@ -43,7 +43,7 @@ shared_ptr<Action> Action::generateAction (json &action, shared_ptr<Robot> robot
 
     if ("ActionGroup" == type)
     {
-        return make_shared<ActionGroup>(action, robot);
+        return make_shared<ActionGroup>(action, allActionsJson, robot);
     }
     else if("CountUp" == type)
     {
@@ -76,6 +76,16 @@ shared_ptr<Action> Action::generateAction (json &action, shared_ptr<Robot> robot
     else if("SetShooterState" == type)
     {
         return make_shared<SetShooterState>(action, robot);
+    }
+    else if("ActionGroupPtr" == type)
+    {
+    	string baseCommonActionPath = "/Common_Actions/";
+    	string commonAction = action["commonAction"];
+
+    	string pathToCommonAction = baseCommonActionPath + commonAction;
+
+        return generateAction(allActionsJson.at(pathToCommonAction), allActionsJson, robot);
+
     }
     else{
         cout << "Type Not Found" << endl;

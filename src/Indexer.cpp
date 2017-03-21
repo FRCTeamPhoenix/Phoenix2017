@@ -133,6 +133,6 @@ void Indexer::initSpeedGroup(std::shared_ptr<Robot> robot)
             "\"doneDependencies\": []"
         "}"_json;
     cout << "after json delaration" << endl;
-    m_speedGroup->initActionGroup(jsonDoc, robot);
+    m_speedGroup->initActionGroup(jsonDoc, jsonDoc, robot);
     cout << "after group init" << endl;
 }

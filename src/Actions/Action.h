@@ -152,7 +152,7 @@ protected:
     /*
      * Forward delcarationg for the actionFactory, more indepth explanation can be found in Actions/actionFactory
      */
-    static shared_ptr<Action> generateAction(json& action, shared_ptr<Robot> robot);
+    static shared_ptr<Action> generateAction(json& action, json& allActionsJson, shared_ptr<Robot> robot);
 
     vector<shared_ptr<dependency>> m_dependencies;
     dependency::condition m_currentCondition;

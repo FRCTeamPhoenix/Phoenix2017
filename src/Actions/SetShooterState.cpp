@@ -5,7 +5,7 @@
  *      Author: Brin Harper
  */
 
-#include <Actions/SetShooterState.h>
+#include "SetShooterState.h"
 #include "../Robot.h"
 
 SetShooterState::SetShooterState(int state, double duration, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot) :

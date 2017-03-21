@@ -403,116 +403,41 @@
       "dependencies": [],
       "doneDependencies": []
     },
-    
     {
       "type": "ActionGroup",
-      "name": "LidarShoot",
+      "name": "NO MOVE SHOOT Auto",
       "startingCondition": -1,
       "containedActions":[
         {
-          "type": "SetIndexerState",
-          "name": "Turn on indexer",
+          "type": "ActionGroup",
+          "name": "LidarShoot",
           "startingCondition": 0,
-
-          "state": 1,
-          "duration": 0.5,
-
-          "dependencies": []
-        },
-        
-        {
-          "type": "SetShooterState",
-          "name": "Turn on shooter",
-          "startingCondition": 0,
-
-          "state": 2,
-          "duration": 0.5,
-
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-        },
-        
-        {
-          "type": "SetShooterState",
-          "name": "Turn off shooter",
-          "startingCondition": -1,
-
-          "state": 0,
-          "duration": 0.01,
-
-          "dependencies": [{"place": 1, "requiredCondition": 2}]
-        },
-        
-        {
-          "type": "SetIndexerState",
-          "name": "Turn off indexer",
-          "startingCondition": -1,
-
-          "state": 2,
-          "duration": 0.01,
-          
-          "dependencies": [{"place": 2, "requiredCondition": 2}]
-        },
-
+          "containedActions": [
+            {
+              "type": "SetShooterState",
+              "name": "Turn on shooter",
+              "startingCondition": 0,
+              "state": 1,
+              "duration": 0.5,
+              "dependencies": []
+            },
+            {
+              "type": "SetIndexerState",
+              "name": "Turn on indexer",
+              "startingCondition": 0,
+              "state": 1,
+              "duration": 0.5,
+              "dependencies": [{"place": 0, "requiredCondition": 2}]
+            }
+          ],
+          "dependencies": [],
+          "doneDependencies": []
+        }
       ],
       "dependencies": [],
       "doneDependencies": []
     },
-    
-    {
-      "type": "ActionGroup",
-      "name": "NumericShoot",
-      "startingCondition": -1,
-      "containedActions":[
-        {
-          "type": "SetIndexerState",
-          "name": "Turn on indexer",
-          "startingCondition": 0,
 
-          "state": 1,
-          "duration": 0.5,
-
-          "dependencies": []
-        },
-        
-        {
-          "type": "SetShooterState",
-          "name": "Turn on shooter",
-          "startingCondition": 0,
-
-          "state": 1,
-          "duration": 0.5,
-
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-        },
-        
-        {
-          "type": "SetShooterState",
-          "name": "Turn off shooter",
-          "startingCondition": -1,
-
-          "state": 0,
-          "duration": 0.01,
-
-          "dependencies": [{"place": 1, "requiredCondition": 2}]
-        },
-        
-        {
-          "type": "SetIndexerState",
-          "name": "Turn off indexer",
-          "startingCondition": -1,
-
-          "state": 2,
-          "duration": 0.01,
-
-          "dependencies": [{"place": 2, "requiredCondition": 2}]
-        },
-
-      ],
-      "dependencies": [],
-      "doneDependencies": []
-    },
-    
-    
     {
       "type": "ActionGroup",
       "name": "Teleoperated",
@@ -530,6 +455,100 @@
     }
   ],
   "dependencies": [],
-  "doneDependencies": []
+  "doneDependencies": [],
 
+  "Common_Actions": {
+    "LidarShoot": {
+      "type": "ActionGroup",
+      "name": "LidarShoot",
+      "startingCondition": -1,
+      "containedActions": [
+        {
+          "type": "SetShooterState",
+          "name": "Turn on shooter",
+          "startingCondition": 0,
+          "state": 2,
+          "duration": 0.5,
+          "dependencies": []
+        },
+        {
+          "type": "SetIndexerState",
+          "name": "Turn on indexer",
+          "startingCondition": 0,
+          "state": 1,
+          "duration": 0.5,
+          "dependencies": [
+            {
+              "place": 0,
+              "requiredCondition": 2
+            }
+          ]
+        }
+      ],
+      "dependencies": [],
+      "doneDependencies": []
+    },
+
+    "NumericShoot": {
+      "type": "ActionGroup",
+      "name": "NumericShoot",
+      "startingCondition": -1,
+      "containedActions": [
+        {
+          "type": "SetShooterState",
+          "name": "Turn on shooter",
+          "startingCondition": 0,
+          "state": 1,
+          "duration": 0.5,
+          "dependencies": []
+        },
+        {
+          "type": "SetIndexerState",
+          "name": "Turn on indexer",
+          "startingCondition": 0,
+          "state": 1,
+          "duration": 0.5,
+          "dependencies": [
+            {
+              "place": 0,
+              "requiredCondition": 2
+            }
+          ]
+        }
+      ],
+      "dependencies": [],
+      "doneDependencies": []
+    },
+
+    "Turn off Shooter": {
+      "type": "ActionGroup",
+      "name": "Turn off Shooter",
+      "startingCondition": -1,
+      "containedAction": [
+        {
+          "type": "SetShooterState",
+          "name": "Turn off shooter",
+          "startingCondition": -1,
+          "state": 0,
+          "duration": 0.1,
+          "dependencies": []
+        },
+        {
+          "type": "SetIndexerState",
+          "name": "Turn off indexer",
+          "startingCondition": -1,
+          "state": 2,
+          "duration": 0.01,
+          "dependencies": [
+            {
+              "place": 0,
+              "requiredCondition": 2
+            }
+          ]
+        }
+      ],
+      "dependencies": [],
+      "doneDependencies": []
+    }
+  }
 }

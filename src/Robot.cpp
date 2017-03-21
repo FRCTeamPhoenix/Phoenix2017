@@ -569,7 +569,7 @@ void Robot::initMainActionGroup ()
 			cout << "Validated" << endl;
 		}
 
-		m_mainAutoGroup->initActionGroup (myJsonDoc, shared_ptr<Robot>(this));
+		m_mainAutoGroup->initActionGroup (myJsonDoc, myJsonDoc, shared_ptr<Robot>(this));
 
 	}
 	catch(runtime_error runtime){
@@ -777,6 +777,7 @@ void Robot::setFlywheelState(int state)
     else
     {
         this->m_flywheel.setState(FlyWheels::STATE::OFF);
+        printMSG("4", "FLYWHEEL OFF");
     }
 }
 

@@ -9,8 +9,6 @@
 #define SRC_ACTIONS_SETSHOOTERSTATE_H_
 
 #include "Action.h"
-#include "FlyWheels.h"
-#include "Feeder.h"
 #include "dependency.h"
 #include <vector>
 #include <iostream>
