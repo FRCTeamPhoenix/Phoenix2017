@@ -25,7 +25,7 @@ RobotController::RobotController(
         m_gatherer(gatherer)
 
 {
-    m_state = TELEOP;
+    m_state = AUTO;
 }
 
 RobotController::~RobotController()
@@ -85,7 +85,7 @@ void RobotController::run()
         }
         else if (m_controlBox.GetRawButton(DriveStationConstants::buttonAutoStop))
         {
-            m_turret.setState(Turret::IDLE);
+            m_turret.setState(Turret::TELEOP);
         }
 
         //Indexer

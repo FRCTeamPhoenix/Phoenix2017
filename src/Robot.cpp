@@ -1,6 +1,6 @@
 #include "Robot.h"
 #include "Actions/ActionFactory.h"
-#include "indexer.h"
+#include "Indexer.h"
 
 using namespace std;
 using json=nlohmann::json;
@@ -124,10 +124,14 @@ void Robot::Autonomous()
 	LOGI << "Start Auto";
 	initAutoMode();
 
+	m_robotController.setState(RobotController::AUTO);
 	while (IsEnabled() && IsAutonomous())
 	{
-        m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
+            m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
+            m_robotController.run();
+
 	}
+	m_robotController.setState(RobotController::TELEOP);
 
 }
 
@@ -777,6 +781,7 @@ void Robot::setFlywheelState(int state)
     else
     {
         this->m_flywheel.setState(FlyWheels::STATE::OFF);
+        printMSG("4", "Flywheels OFF");
     }
 }
 
