@@ -160,14 +160,7 @@ void Robot::OperatorControl()
 //        m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
 //        m_robotController.run();
 
-        double deltaTime = timer.Get();
-        timer.Reset();
 
-        double accelY = (m_expansionBoard.GetAccelY());
-        double accelZ = (m_expansionBoard.GetAccelZ());
-
-        accelY = fabs(accelY < 0.01) ? 0 : accelY;
-        accelZ = fabs(accelZ < 0.01) ? 0 : accelZ;
 
         currentVelY += ((accelY) * 9.8 * deltaTime);
 
@@ -624,14 +617,14 @@ void Robot::initAutoMode ()
 
 	vector<shared_ptr<Action>> allActions = m_mainAutoGroup->getContainedActions ();
 
-	SmartDashboard::PutString("DB/String 6", mode);
+	//SmartDashboard::PutString("DB/String 6", mode);
 
 	vector<shared_ptr<Action>>::iterator actionIterator;
 	for(actionIterator = allActions.begin(); actionIterator != allActions.end(); actionIterator++)
 	{
 		if(actionIterator->get ()->getName () == mode)
 		{
-		        SmartDashboard::PutString("DB/String 7","auto init");
+		      //  SmartDashboard::PutString("DB/String 7","auto init");
 			actionIterator->get ()->reset ();
 		}
 		else
