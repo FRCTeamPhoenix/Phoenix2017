@@ -41,7 +41,8 @@ Robot::Robot() :
         m_loggerController(),
         m_configEditor(),
         m_climberMotor(PortAssign::climber, m_talons.getTalonConfig(PortAssign::climber), CANTalon::FeedbackDevice::QuadEncoder),
-        m_climber(m_climberMotor, m_customBox),
+        m_climberMotor2(11, m_talons.getTalonConfig(PortAssign::climber), CANTalon::FeedbackDevice::QuadEncoder),
+        m_climber(m_climberMotor, m_climberMotor2, m_customBox),
         m_gathererMotor(PortAssign::loader),
         m_feederMotor(PortAssign::feeder, m_talons.getTalonConfig(PortAssign::feeder), CANTalon::FeedbackDevice::QuadEncoder),
         m_indexerMotor(PortAssign::indexer, m_talons.getTalonConfig(PortAssign::indexer), CANTalon::FeedbackDevice::QuadEncoder),
@@ -157,30 +158,8 @@ void Robot::OperatorControl()
     while (IsEnabled() && IsOperatorControl())
 	{
 
-//        m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
-//        m_robotController.run();
-
-
-
-        currentVelY += ((accelY) * 9.8 * deltaTime);
-
-//        currentVelY = fabs(currentVelY < 0.01) ? 0 : currentVelY;
-        currentPosY += (currentVelY * deltaTime * 100 / 2.54);
-
-
-
-        currentVelZ += ((accelZ) * 9.8 * deltaTime);
-
-//        currentVelZ = fabs(currentVelZ < 0.01) ? 0 : currentVelZ;
-        currentPosZ += (currentVelZ * deltaTime * 100 / 2.54);
-
-        SmartDashboard::PutNumber("Accel/Delta Time", deltaTime);
-        SmartDashboard::PutNumber("Accel/Accel Y", (m_expansionBoard.GetAccelY()));
-        SmartDashboard::PutNumber("Accel/Accel Z", (m_expansionBoard.GetAccelZ()));
-        SmartDashboard::PutNumber("Accel/Vel Y", currentVelY);
-        SmartDashboard::PutNumber("Accel/Vel Z", currentVelZ);
-        SmartDashboard::PutNumber("Accel/Pos Y", currentPosY);
-        SmartDashboard::PutNumber("Accel/Pos Z", currentPosZ);
+        m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
+        m_robotController.run();
     }
 }
 
@@ -700,7 +679,7 @@ void Robot::driveJoystick()
             FB *= throttle;
 
         if(fabs(rot) > (0.05 * 5))
-            rot /= 4;
+            rot /= 2;
         else
             rot = 0;
 

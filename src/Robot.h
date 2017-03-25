@@ -77,6 +77,7 @@ class Robot: public SampleRobot
     LoggerController m_loggerController;
     ConfigEditor m_configEditor;
     SmartTalon m_climberMotor;
+    SmartTalon m_climberMotor2;
     Climber m_climber;
     Talon m_gathererMotor;
     SmartTalon m_feederMotor;

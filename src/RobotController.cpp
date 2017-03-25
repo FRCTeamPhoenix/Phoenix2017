@@ -100,7 +100,7 @@ void RobotController::run()
                 m_indexer.setState(Indexer::ON);
                 m_indexer.setSpeed(0.3);
             }
-            else if(m_controlBox.GetRawButton(8))
+            else if(m_controlBox.GetRawButton(7))
             {
                 m_indexer.setState(Indexer::ON);
                 m_indexer.setSpeed(-0.3);

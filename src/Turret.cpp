@@ -32,6 +32,7 @@ void Turret::run()
 {
     //Communicate our current turret position to the Jetson
     m_visionComms.setNumber(JetsonComms::turretAngle, m_turretRotatorMotor.GetEncPosition() / RobotConstants::degreesToTicks);
+
     //m_vision.setNumber("turret_velocity", turretRotatorMotor.GetEncVel() / RobotConstants::degreesToTicks);
     switch (m_state)
     {

@@ -44,7 +44,7 @@ struct PortAssign
 struct RobotConstants
 {
     constexpr static float turretDamp = 0.3f;
-    constexpr static double turretSpeed = 0.1f;
+    constexpr static double turretSpeed = 0.05f;
     constexpr static double lidarValueTolerance = 12;
     constexpr static double lidarMaxReading = 700;
     constexpr static double degreesToTicks = 27.2727273f;
@@ -162,7 +162,7 @@ namespace JetsonComms {
     const static std::string stateId = "jetson_state";
     const static std::string modeId = "jetson_mode";
 
-    const static std::string goalAngle = "high_goal";
+    const static std::string goalAngle = "high_goal_angle";
     const static std::string turretAngle = "turret_angle";
 
     //const static std::string gearRVecs = "gear_rvecs";
