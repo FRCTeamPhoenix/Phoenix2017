@@ -160,6 +160,23 @@ void Robot::OperatorControl()
 
         m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
         m_robotController.run();
+
+        stringstream fr;
+        fr << "FR: " << m_FRDrive.GetOutputCurrent();
+        SmartDashboard::PutString("DB/String 0", fr.str());
+
+        stringstream br;
+        br << "BR: " << m_BRDrive.GetOutputCurrent();
+        SmartDashboard::PutString("DB/String 1", br.str());
+
+        stringstream fl;
+        fl << "FL: " << m_FLDrive.GetOutputCurrent();
+        SmartDashboard::PutString("DB/String 2", fl.str());
+
+        stringstream bl;
+        bl << "BL: " << m_BLDrive.GetOutputCurrent();
+        SmartDashboard::PutString("DB/String 3", bl.str());
+
     }
 }
 
@@ -684,15 +701,15 @@ void Robot::driveJoystick()
             rot = 0;
 
         m_drivetrain.moveRelative(FB, LR, rot, m_expansionBoard.GetAngleX());
-        printMSG("0", "Rot x: " + std::to_string(m_expansionBoard.GetAngleX()));
+//        printMSG("0", "Rot x: " + std::to_string(m_expansionBoard.GetAngleX()));
 
     }
     else {
         double throttleSpeed = (((m_joystickRight.GetZ() + 1) / 2));
-        printMSG("8", "Raw t_Speed: " + std::to_string(throttleSpeed));
+//        printMSG("8", "Raw t_Speed: " + std::to_string(throttleSpeed));
 
         double throttleStrafe = (((m_joystickLeft.GetZ() + 1) / 2));
-        printMSG("9", "Raw t_Strafe: " + std::to_string(throttleStrafe));
+//        printMSG("9", "Raw t_Strafe: " + std::to_string(throttleStrafe));
 
         throttleSpeed = (throttleSpeed < 0.2) ? 0.2 : throttleSpeed;
         throttleStrafe = (throttleStrafe < 0.2) ? 0.2 : throttleStrafe;
@@ -705,10 +722,10 @@ void Robot::driveJoystick()
 
         strafePower += (m_joystickRight.GetX() < -0.1) ? m_joystickRight.GetX() * throttleStrafe : 0;
         strafePower += (m_joystickLeft.GetX() > 0.1) ? m_joystickLeft.GetX() * throttleStrafe : 0;
-
-        printMSG("5", "Raw Left: " + std::to_string(leftPower));
-        printMSG("6", "Raw Right: " + std::to_string(rightPower));
-        printMSG("7", "Raw Strafe: " + std::to_string(strafePower));
+//
+//        printMSG("5", "Raw Left: " + std::to_string(leftPower));
+//        printMSG("6", "Raw Right: " + std::to_string(rightPower));
+//        printMSG("7", "Raw Strafe: " + std::to_string(strafePower));
 
         leftPower = (fabs(leftPower) < 0.1) ? 0 : leftPower;
         rightPower = (fabs(rightPower) < 0.1) ? 0 : rightPower;
@@ -716,13 +733,20 @@ void Robot::driveJoystick()
 
         strafePower = (fabs(strafePower) < 0.2) ? 0 : strafePower;
 
-        m_drivetrain.moveTankStyle(leftPower, rightPower, strafePower);
-
-        printMSG("0", "Left: " + std::to_string(leftPower));
-        printMSG("1", "Right: " + std::to_string(rightPower));
-        printMSG("2", "Strafe: " + std::to_string(strafePower));
-        printMSG("3", "t_Speed: " + std::to_string(throttleSpeed));
-        printMSG("4", "t_Strafe: " + std::to_string(throttleStrafe));
+        if(!m_driverCustomBox.GetRawButton(DriveStationConstants::voltageMode))
+        {
+            m_drivetrain.moveTankStyle(leftPower, rightPower, strafePower);
+        }
+        else
+        {
+            m_drivetrain.moveTankStyleVoltage(leftPower, rightPower, strafePower);
+        }
+//
+//        printMSG("0", "Left: " + std::to_string(leftPower));
+//        printMSG("1", "Right: " + std::to_string(rightPower));
+//        printMSG("2", "Strafe: " + std::to_string(strafePower));
+//        printMSG("3", "t_Speed: " + std::to_string(throttleSpeed));
+//        printMSG("4", "t_Strafe: " + std::to_string(throttleStrafe));
     }
 }
 

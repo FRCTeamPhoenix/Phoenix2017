@@ -177,7 +177,7 @@ void relativeMecanumDrivetrain::moveRelativeVoltage (double FB, double LR, doubl
 
 void relativeMecanumDrivetrain::moveTankStyle(double left, double right, double strafe_power)
 {
-    m_mode = CANSpeedController::ControlMode::kVoltage;
+    m_mode = CANSpeedController::ControlMode::kSpeed;
 
     double FL_power = left + strafe_power;
     double BL_power = left - strafe_power;
@@ -185,11 +185,6 @@ void relativeMecanumDrivetrain::moveTankStyle(double left, double right, double 
     double FR_power = right - strafe_power;
     double BR_power = right + strafe_power;
 
-//    m_FLTalon.goVoltage (FL_power);
-//    m_BLTalon.goVoltage (BL_power);
-//
-//    m_FRTalon.goVoltage (FR_power);
-//    m_BRTalon.goVoltage (BR_power);
     m_FLTalon.goAt (FL_power);
     m_BLTalon.goAt (BL_power);
 
@@ -198,7 +193,24 @@ void relativeMecanumDrivetrain::moveTankStyle(double left, double right, double 
 
 
 }
+void relativeMecanumDrivetrain::moveTankStyleVoltage(double left, double right, double strafe_power)
+{
+    m_mode = CANSpeedController::ControlMode::kVoltage;
 
+    double FL_power = left + strafe_power;
+    double BL_power = left - strafe_power;
+
+    double FR_power = right - strafe_power;
+    double BR_power = right + strafe_power;
+
+    m_FLTalon.goVoltage (FL_power);
+    m_BLTalon.goVoltage (BL_power);
+
+    m_FRTalon.goVoltage (FR_power);
+    m_BRTalon.goVoltage (BR_power);
+
+
+}
 void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotation, double front)
 {
     m_mode = CANSpeedController::ControlMode::kSpeed;
@@ -207,6 +219,9 @@ void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotat
 
     double x = cos(M_PI_4 - front) * FB + sin(M_PI_4 - front) * LR;
     double y = cos(M_PI_4 + front) * FB + sin(-M_PI_4 - front) * LR;
+
+    x *= sqrt(2);
+    y *= sqrt(2);
 
     x = x > 1   ?   1   : x;
     x = x < -1  ?  -1   : x;
@@ -220,7 +235,7 @@ void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotat
 
     stringstream ss2;
     ss2 << x;
-    SmartDashboard::PutString("DB/String 8", ss.str());
+    SmartDashboard::PutString("DB/String 8", ss2.str());
     m_FLTalon.goVoltage (x + rotation);
     m_BRTalon.goVoltage (x - rotation);
 
@@ -245,9 +260,9 @@ bool relativeMecanumDrivetrain::doneMove (double tolerancePercentage)
 double relativeMecanumDrivetrain::PIDGet ()
 {
     double distance = getDistance();
-    std::stringstream dist;
-    dist << "Distance: " << distance;
-    SmartDashboard::PutString("DB/String 4", dist.str());
+//    std::stringstream dist;
+//    dist << "Distance: " << distance;
+//    SmartDashboard::PutString("DB/String 4", dist.str());
 
 //    LOGI << dist.str();
 

@@ -30,6 +30,68 @@
 
     {
       "type": "ActionGroup",
+      "name": "Drive Box Auto",
+      "startingCondition": -1,
+      "containedActions":[
+        {
+          "type": "GoDistance",
+          "name": "Drive move",
+          "startingCondition": 0,
+
+          "distance": 8000,
+          "angle": 0,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": []
+        },
+        {
+          "type": "GoDistance",
+          "name": "Drive move",
+          "startingCondition": 0,
+
+          "angle": 90,
+          "speed": 0.4,
+          "tolerance": 0.05,
+
+          "dependancies": [{"place": 0, "requiredCondition": 2}]
+
+        },
+        {
+          "type": "GoDistance",
+          "name": "Drive move",
+          "startingCondition": 0,
+
+          "distance": 8000,
+          "angle": 0,
+          "speed": 0.3,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 1, "requiredCondition": 2}]
+        },
+        {
+          "type": "TurnOnFlywheels",
+          "name": "Turn on fly",
+          "startingCondition": 0,
+
+          "dependencies": [{"place": 1, "requiredCondition": 2}]
+        },
+
+        {
+          "type": "shoot",
+          "name": "shoot",
+          "startingCondition": 0,
+
+          "dependencies": [{"place": 2, "requiredCondition": 2}, {"place": 3, "requiredCondition": 2}]
+        }
+
+      ],
+      "dependencies": [],
+      "doneDependencies": []
+    },
+
+    {
+      "type": "ActionGroup",
       "name": "Center Gear Auto",
       "startingCondition": -1,
       "containedActions":[
@@ -56,47 +118,24 @@
           "tolerance": 0.05,
 
           "dependencies": [{"place": 0, "requiredCondition": 2}]
-        }
-
-      ],
-      "dependencies": [],
-      "doneDependencies": []
-    },
-
-    {
-      "type": "ActionGroup",
-      "name": "Blue Boiler Gear Only TEST Auto",
-      "startingCondition": -1,
-      "containedActions":[
-        {
-          "type": "GoDistance",
-          "name": "BBG Drive move",
-          "startingCondition": 0,
-
-          "distance": 20000,
-          "angle": 0,
-          "speed": 0.2,
-          "tolerance": 0.05,
-
-          "dependencies": []
         },
         {
-          "type": "Rotate",
-          "name": "BBG Aim Rotate",
+          "type": "GoDistance",
+          "name": "approach move",
           "startingCondition": 0,
 
-          "angle": -60,
-          "speed": 0.3,
+          "distance": 600,
+          "angle": 180,
+          "speed": 0.1,
           "tolerance": 0.05,
 
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-
+          "dependencies": [{"place": 1, "requiredCondition": 2}]
         }
+
       ],
       "dependencies": [],
       "doneDependencies": []
     },
-
 
     {
       "type": "ActionGroup",
@@ -108,7 +147,7 @@
           "name": "BBG Drive move",
           "startingCondition": 0,
 
-          "distance": 34941,
+          "distance": 44941,
           "angle": 0,
           "speed": 0.3,
           "tolerance": 0.05,
@@ -132,13 +171,26 @@
           "name": "BBG approach move",
           "startingCondition": -1,
 
-          "distance": 12375,
+          "distance": 14375,
           "angle": 0,
           "speed": 0.15,
           "tolerance": 0.05,
 
           "dependencies": [{"place": 1, "requiredCondition": 2}]
+        },
+        {
+          "type": "GoDistance",
+          "name": "approach move",
+          "startingCondition": 0,
+
+          "distance": 600,
+          "angle": 180,
+          "speed": 0.1,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 2, "requiredCondition": 2}]
         }
+
 
       ],
       "dependencies": [],
@@ -154,7 +206,7 @@
         	"name": "BGNB Drive move",
         	"startingCondition": 0,
         
-        	"distance": 33908,
+        	"distance": 42908,
         	"angle": 0,
         	"speed": 0.15,
         	"tolerance": 0.05,
@@ -166,7 +218,7 @@
        		"startingCondition": 0,
         
         	"angle": 60,
-        	"speed": 0.3,
+        	"speed": 0.4,
         	"tolerance": 0.05,
         	"dependencies": [{"place": 0, "requiredCondition": 2}]
         },
@@ -175,12 +227,24 @@
         	"name": "BGNB approaching move",
         	"startingCondition": -1,
         
-        	"distance": 8569,
+        	"distance": 14569,
         	"angle": 0,
         	"speed": 0.15,
         	"tolerance": 0.05,
         	"dependencies": [{"place": 1, "requiredCondition": 2}]
-        }
+        },
+          {
+            "type": "GoDistance",
+            "name": "approach move",
+            "startingCondition": 0,
+
+            "distance": 600,
+            "angle": 180,
+            "speed": 0.1,
+            "tolerance": 0.05,
+
+            "dependencies": [{"place": 2, "requiredCondition": 2}]
+          }
         ],
         
       "dependencies": [],
@@ -196,7 +260,7 @@
           "name": "BBGH Drive move",
           "startingCondition": 0,
 
-          "distance": 34941,
+          "distance": 42941,
           "angle": 0,
           "speed": 0.3,
           "tolerance": 0.05,
@@ -278,7 +342,7 @@
           "name": "RBG Drive move",
           "startingCondition": 0,
 
-          "distance": 34941,
+          "distance": 44941,
           "angle": 0,
           "speed": 0.3,
           "tolerance": 0.05,
@@ -302,12 +366,24 @@
           "name": "RBG approach move",
           "startingCondition": -1,
 
-          "distance": 12375,
+          "distance": 14375,
           "angle": 0,
           "speed": 0.15,
           "tolerance": 0.05,
 
           "dependencies": [{"place": 1, "requiredCondition": 2}]
+        },
+        {
+          "type": "GoDistance",
+          "name": "approach move",
+          "startingCondition": 0,
+
+          "distance": 600,
+          "angle": 180,
+          "speed": 0.1,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 2, "requiredCondition": 2}]
         }
 
       ],
@@ -324,7 +400,7 @@
           "name": "RGNB Drive move",
           "startingCondition": 0,
 
-          "distance": 33908,
+          "distance": 42908,
           "angle": 0,
           "speed": 0.15,
           "tolerance": 0.05,
@@ -336,7 +412,7 @@
           "startingCondition": 0,
 
           "angle": -60,
-          "speed": 0.3,
+          "speed": 0.4,
           "tolerance": 0.05,
           "dependencies": [{"place": 0, "requiredCondition": 2}]
         },
@@ -345,11 +421,23 @@
           "name": "RGNB approaching move",
           "startingCondition": -1,
 
-          "distance": 8569,
+          "distance": 14569,
           "angle": 0,
           "speed": 0.15,
           "tolerance": 0.05,
           "dependencies": [{"place": 1, "requiredCondition": 2}]
+        },
+        {
+          "type": "GoDistance",
+          "name": "approach move",
+          "startingCondition": 0,
+
+          "distance": 600,
+          "angle": 180,
+          "speed": 0.1,
+          "tolerance": 0.05,
+
+          "dependencies": [{"place": 2, "requiredCondition": 2}]
         }
       ],
 
@@ -366,7 +454,7 @@
           "name": "RBGH Drive move",
           "startingCondition": 0,
 
-          "distance": 34941,
+          "distance": 44941,
           "angle": 0,
           "speed": 0.3,
           "tolerance": 0.05,

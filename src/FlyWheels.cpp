@@ -13,8 +13,8 @@ FlyWheels::FlyWheels(
         ShooterCalibrator& shooterCalibrator,
         Lidar& lidar,
         Joystick& customBox):
-        m_lowerFlyWheelMotor(leftFlyWheelMotor),
-        m_topFlyWheelMotor(rightFlyWheelMotor),
+        m_lowerFlyWheelMotor(rightFlyWheelMotor),
+        m_topFlyWheelMotor(leftFlyWheelMotor),
         m_shooterCalibrator(shooterCalibrator),
         m_lidar(lidar),
         m_customBox(customBox)
@@ -47,8 +47,13 @@ void FlyWheels::run()
         {
 
             // Max/min speeds must be set in Talon json
-            int topSpeed = m_shooterCalibrator.getTopFlywheelVelocity(SmartDashboard::GetNumber("../datatable/high_goal_distance", 0.0));
-            int lowerSpeed = m_shooterCalibrator.getLowFlywheelVelocity(SmartDashboard::GetNumber("../datatable/high_goal_distance", 0.0));
+            double topSpeed = m_shooterCalibrator.getTopFlywheelVelocity(SmartDashboard::GetNumber("../datatable/high_goal_distance", 0.0));
+            double lowerSpeed = m_shooterCalibrator.getLowFlywheelVelocity(SmartDashboard::GetNumber("../datatable/high_goal_distance", 0.0));
+
+            double shift = (m_customBox.GetRawAxis(DriveStationConstants::potYChange) * 0.2) + 1;
+
+            topSpeed *= shift;
+            lowerSpeed *= shift;
 
             m_topFlyWheelMotor.goAtVelocity(topSpeed);
             m_lowerFlyWheelMotor.goAtVelocity(lowerSpeed);

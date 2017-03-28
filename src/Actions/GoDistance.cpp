@@ -31,6 +31,7 @@ void GoDistance::run ()
         m_timer.Reset ();
         m_timer.Start ();
         start ();
+        cout << m_name << ": has started" << endl;
     }
     else if(m_timer.Get() < 0.1)
     {
@@ -38,6 +39,11 @@ void GoDistance::run ()
     else if(m_robot->doneDriveMove (m_tolerance))
     {
         finish();
+        m_timer.Stop ();
+    }
+    else if(m_timer.Get() > 5)
+    {
+        disable();
         m_timer.Stop ();
     }
 

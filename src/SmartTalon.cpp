@@ -480,6 +480,7 @@ void SmartTalon::tuneRate (double pInit, double goalRate, int IZone, double F)
 int SmartTalon::test(double power, double timeout)
 {
     SetControlMode(CANTalon::CANSpeedController::kPercentVbus);
+    m_mode = CANSpeedController::kPercentVbus;
     Set(power);
     Wait(timeout);
     int speed = GetSpeed();

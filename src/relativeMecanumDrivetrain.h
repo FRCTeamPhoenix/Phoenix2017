@@ -43,6 +43,8 @@ public:
     void moveRelative(double FB, double LR, double rotation, double front);
     void moveRelativeVoltage(double FB, double LR, double rotation);
     void moveTankStyle(double left, double right, double strafe_power);
+    void moveTankStyleVoltage(double left, double right, double strafe_power);
+
 
     void stop();
 
