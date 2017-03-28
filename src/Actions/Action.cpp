@@ -5,8 +5,7 @@
 #include "Action.h"
 #include <memory>
 #include <fstream>
-
-
+#include "../Robot.h"
 
 Action::Action (vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
     m_dependencies(dependencies),

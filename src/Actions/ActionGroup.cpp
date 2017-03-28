@@ -3,6 +3,7 @@
 //
 
 #include "ActionGroup.h"
+#include "../Robot.h"
 
 ActionGroup::ActionGroup (vector<shared_ptr<Action>> containedActions, vector<shared_ptr<dependency>> dependencies, vector<shared_ptr<dependency>> doneDependencies, shared_ptr<Robot> robot):
     Action(dependencies, robot),
@@ -15,9 +16,6 @@ ActionGroup::ActionGroup (json& actionGroup, shared_ptr<Robot> robot):
     Action(),
     m_containedActions(),
     m_doneDependencies()
-
-
-
 {
 
     initActionGroup(actionGroup, robot);

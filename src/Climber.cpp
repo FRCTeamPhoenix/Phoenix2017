@@ -6,13 +6,14 @@
  */
 #include "Climber.h"
 
-Climber::Climber(SmartTalon& motor,
-		Joystick & gamepad):
+Climber::Climber(SmartTalon& motor, SmartTalon& motor2, Joystick& customBox):
         m_motor(motor),
-		m_gamepad(gamepad)
+        m_motor2(motor2),
+        m_customBox(customBox)
 {
     m_state = OFF;
     m_motor.SetControlMode(CANSpeedController::kPercentVbus);
+    m_motor2.SetControlMode(CANSpeedController::kPercentVbus);
 
 }
 
@@ -38,10 +39,12 @@ void Climber::run()
     {
         case OFF:
             m_motor.Set(0.0);
+            m_motor2.Set(0.0);
             break;
 
         case ON:
-            m_motor.Set(1.0);
+            m_motor.Set((m_customBox.GetRawAxis(DriveStationConstants::potFlywheelSpeed) + 1) / 2);
+            m_motor2.Set((m_customBox.GetRawAxis(DriveStationConstants::potFlywheelSpeed) + 1) / 2);
             break;
     }
 

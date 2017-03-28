@@ -12,7 +12,7 @@ RobotController::RobotController(
         Turret& turret,
         Feeder& feeder,
         Indexer& indexer,
-        Joystick& gamepad,
+        Joystick& customBox,
         Climber& climber,
         Gatherer& gatherer):
 
@@ -20,7 +20,7 @@ RobotController::RobotController(
         m_turret(turret),
         m_feeder(feeder),
         m_indexer(indexer),
-        m_controlBox(gamepad),
+        m_controlBox(customBox),
         m_climber(climber),
         m_gatherer(gatherer)
 
@@ -80,15 +80,27 @@ void RobotController::run()
         }
 
         //Turret
-        m_turret.setState(Turret::TELEOP);
-
+        if (m_controlBox.GetRawButton(DriveStationConstants::buttonAutoStart)){
+            m_turret.setState(Turret::AUTO);
+        }
+        else if (m_controlBox.GetRawButton(DriveStationConstants::buttonAutoStop))
+        {
+            m_turret.setState(Turret::IDLE);
+        }
 
         //Indexer
+//        if((m_flywheels.getState() == FlyWheels::LIDARRATE) && (!m_flywheels.inRange()))
+//        {
+//            m_indexer.setState(Indexer::OFF);
+//
+//        }
+//        else
+//        {
         if(m_controlBox.GetRawButton(DriveStationConstants::buttonIndexer)){
             m_indexer.setState(Indexer::ON);
-            m_indexer.setSpeed(0.75);
+            m_indexer.setSpeed(0.3);
         }
-        else if(m_controlBox.GetRawButton(8))
+        else if(m_controlBox.GetRawButton(7))
         {
             m_indexer.setState(Indexer::ON);
             m_indexer.setSpeed(-0.3);
@@ -96,6 +108,11 @@ void RobotController::run()
         else{
             m_indexer.setState(Indexer::OFF);
         }
+//        }
+
+
+
+
 
         //Climber
         if(m_controlBox.GetRawButton(DriveStationConstants::buttonClimberUP)){

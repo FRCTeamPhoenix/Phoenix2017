@@ -10,13 +10,18 @@
 #include "WPILib.h"
 #include "constants.h"
 #include "SmartTalon.h"
+#include <iostream>
 
-//#include "Actions/AllActions.h"
+using namespace std;
+using namespace nlohmann;
+
+class ActionGroup;
+class Robot;
 
 class Indexer
 {
 public:
-    Indexer(SmartTalon& indexerMotor, Joystick& gamepad);
+    Indexer(SmartTalon& indexerMotor, Joystick& customBox);
     virtual ~Indexer();
 
     enum State {
@@ -32,10 +37,13 @@ public:
 
     void setSpeed(double speed);
 
+    void initSpeedGroup(std::shared_ptr<Robot> robot);
+
 private:
     State m_state;
     SmartTalon& m_indexerMotor;
-    Joystick& m_gamepad;
+    Joystick& m_customBox;
+    ActionGroup* m_speedGroup;
     double m_speed;
 };
 

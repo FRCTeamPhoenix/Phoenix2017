@@ -10,8 +10,6 @@
 #include <memory>
 #include "../json.hpp"
 #include "AllActions.h"
-#include "../Robot.h"
-
 
 using namespace std;
 using json=nlohmann::json;
@@ -61,14 +59,19 @@ shared_ptr<Action> Action::generateAction (json &action, shared_ptr<Robot> robot
     }
     else if("Rotate" == type)
     {
+        cout << "Rotate Created" << endl;
         return make_shared<Rotate>(action, robot);
     }
     else if("DriveJoystick" == type)
     {
         return make_shared<DriveJoystick>(action, robot);
     }
+    else if("IndexerRunTime" == type)
+    {
+        return make_shared<IndexerRunTime>(action, robot);
+    }
     else{
-        cout << "Type Not Found" << endl;
+        cout << "Type Not Found: " << type << endl;
         return make_shared<Action>();
     }
 

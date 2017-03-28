@@ -1,0 +1,17 @@
+[
+  {
+    "distance": 95,
+    "velocityTop": 10000,
+    "velocityLow": 44000
+  },
+  {
+    "distance": 108,
+    "velocityTop": 12000,
+    "velocityLow": 44000
+  },
+  {
+    "distance": 116,
+    "velocityTop": 14400,
+    "velocityLow": 44000
+  }
+]

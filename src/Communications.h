@@ -10,6 +10,7 @@
 
 #include <string>
 #include "WPILib.h"
+#include "constants.h"
 
 
 enum JetsonState {
@@ -18,6 +19,13 @@ enum JetsonState {
 	TARGET_FOUND,
 	TARGET_NOT_FOUND,
 	POWERED_OFF
+};
+
+enum VisionMode {
+    HIGH_GOAL,
+    GEARS,
+    BOTH,
+    NOT_YET_SET
 };
 
 
@@ -29,15 +37,17 @@ public:
 	JetsonState getState();
 	long long int getStateTimestamp();
 
-	float getAngle();
-	long long int getAngleTimestamp();
+	VisionMode getMode();
+    bool setMode(VisionMode);
+
+    bool setNumber(std::string, double);
+    double getNumber(std::string);
+    long long getTimestampFor(std::string);
+
+    std::vector<int> getNumberArray(std::string);
 
 private:
-
-	long long getTimestamp(std::string);
-
 	std::shared_ptr<NetworkTable> m_table;
-
 };
 
 

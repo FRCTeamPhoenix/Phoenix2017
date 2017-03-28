@@ -26,9 +26,11 @@ struct PortAssign
     const static uint32_t loader = 0;
 
     // Controllers
-    const static uint32_t joystick = 0;
-    const static uint32_t gamepad = 1;
-    const static uint32_t controlBox = 2;
+    const static uint32_t joystickLeft = 0;
+    const static uint32_t joystickRight = 1;
+    const static uint32_t gamepad = 4;
+    const static uint32_t driverCustomBox = 3;
+    const static uint32_t customBox = 2;
 
     // Limit Switches
     const static uint32_t rightLimitSwitch = 1;
@@ -41,8 +43,11 @@ struct PortAssign
 
 struct RobotConstants
 {
-    constexpr static float turretDamp = 0.6f;
-    constexpr static float degreesToTicks = 0.5f; // THIS IS WRONG. NEEDS TO BE CHANGED
+    constexpr static float turretDamp = 0.3f;
+    constexpr static double turretSpeed = 0.05f;
+    constexpr static double lidarValueTolerance = 12;
+    constexpr static double lidarMaxReading = 700;
+    constexpr static double degreesToTicks = 27.2727273f;
 };
 
 namespace ConfigVariables
@@ -105,9 +110,24 @@ namespace DriveStationConstants
 		buttonClimberUP = 3,
 		buttonFlywheelManual = 5,
 		buttonFlywheelAuto = 6,
-		buttonAutoStart = 7,
-		buttonAutoStop = 8
+        buttonIndexerReverse = 7,
+		buttonAutoStart = 8,
+		buttonAutoStop = 9,
+
+        potTurret = 2,
+        potFlywheelSpeed = 3,
+        potXChange = 1,
+        potYChange = 0
+
 	};
+    enum driverControl
+    {
+        voltageMode = 2,
+        fieldOriented = 3,
+        gyroReset = 4,
+        spareButton = 5
+
+    };
     const static std::string dashButtonNames[6] =
     {
         "New Name",
@@ -134,6 +154,21 @@ namespace DriveStationConstants
         "New Value"
     };
     const static uint32_t gamepadButtons = 12;
+};
+
+namespace JetsonComms {
+    const static std::string tableName = "datatable";
+
+    const static std::string stateId = "jetson_state";
+    const static std::string modeId = "jetson_mode";
+
+    const static std::string goalAngle = "high_goal_angle";
+    const static std::string turretAngle = "turret_angle";
+
+    //const static std::string gearRVecs = "gear_rvecs";
+    //const static std::string gearTVecs = "gear_tvecs";
+    const static std::string gearAngleId = "gear_angle";
+    const static std::string gearDistanceId = "gear_distance";
 };
 
 #endif /* SRC_CONSTANTS_H_ */

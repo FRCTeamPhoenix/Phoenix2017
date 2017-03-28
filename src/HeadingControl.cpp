@@ -10,7 +10,7 @@ HeadingControl::HeadingControl (ADIS16448_IMU& gyro, GyroAxes axis, bool invertD
     m_axisOfInterest(axis),
     m_invertDirection(invertDirection),
     m_currentOutput(0),
-    m_gyroController(0.01, 0, 0, this, this)
+    m_gyroController(0.02, 0, 0, this, this)
 {
     m_gyroController.Enable ();
 
@@ -20,23 +20,32 @@ double HeadingControl::PIDGet ()
 {
 	double angle;
 //    std::stringstream rotation;
+    SmartDashboard::PutNumber("Gyro X Rotation", m_gyro.GetAngleX());
+    SmartDashboard::PutNumber("Gyro Y Rotation", m_gyro.GetAngleY());
+    SmartDashboard::PutNumber("Gyro Z Rotation", m_gyro.GetAngleZ());
 
+    SmartDashboard::PutNumber("Gyro X Acceleration", m_gyro.GetAccelX());
+    SmartDashboard::PutNumber("Gyro Y Acceleration", m_gyro.GetAccelY());
+    SmartDashboard::PutNumber("Gyro Z Acceleration", m_gyro.GetAccelZ());
     switch(m_axisOfInterest){
         case x:
         	angle = m_gyro.GetAngleX();
 
 //            rotation << "Rotation: " << angle;
 //            SmartDashboard::PutString("DB/String 5", rotation.str());
+
             return angle;
         case y:
         	angle = m_gyro.GetAngleY();
 //            rotation << "Rotation: " << angle;
 //            SmartDashboard::PutString("DB/String 5", rotation.str());
+
             return angle;
         case z:
         	angle = m_gyro.GetAngleZ();
 //            rotation << "Rotation: " << angle;
 //            SmartDashboard::PutString("DB/String 5", rotation.str());
+
             return angle;
     }
     return 0;

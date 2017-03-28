@@ -44,3 +44,4 @@ src/.idea
 *.iml
 .idea/
 .settings/
+.gitattributes

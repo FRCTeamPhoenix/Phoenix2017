@@ -12,7 +12,6 @@
 
 ShooterCalibrator::ShooterCalibrator()
 {
-
     json scJsonDoc;
     json scSchemaDoc;
 
@@ -23,6 +22,10 @@ ShooterCalibrator::ShooterCalibrator()
         {
 
             cout << "Shooter Calibration Schema Failed Loading" << endl;
+            std::ostringstream status;
+            status << "SCJson: ";
+            status << "Schema Failed Loading";
+            SmartDashboard::PutString("DB/String 0", status.str());
 
             throw std::runtime_error("Failed to load shooter calibrator schema document");
 
@@ -36,6 +39,10 @@ ShooterCalibrator::ShooterCalibrator()
         if (!valijson::utils::loadDocument("/home/lvuser/config/shooterCalibrator.json", scJsonDoc))
         {
             cout << "Shooter Calibration Json Failed Loading" << endl;
+            std::ostringstream status;
+            status << "SCJson: ";
+            status << "Json Failed Loading";
+            SmartDashboard::PutString("DB/String 0", status.str());
 
             throw std::runtime_error("Failed to load shooter calibrator Json document");
         }
@@ -45,12 +52,21 @@ ShooterCalibrator::ShooterCalibrator()
         if (!validator.validate(scSchema, scTargetAdapter, NULL))
         {
             cout << "Shooter Calibration Validation Failed" << endl;
+            std::ostringstream status;
+            status << "SCJson: ";
+            status << "Validation Failed";
+            SmartDashboard::PutString("DB/String 0", status.str());
+
             throw std::runtime_error("Shooter Calibration Validation failed");
         }
 
         else
         {
             cout << "Shooter Calibration Validated" << endl;
+            std::ostringstream status;
+            status << "SCJson: ";
+            status << "Validated";
+            SmartDashboard::PutString("DB/String 0", status.str());
 
             // Iterate over points from json file; read and store reference values
             json::iterator jsonItr;
@@ -92,6 +108,10 @@ ShooterCalibrator::ShooterCalibrator()
 
     }
 
+    m_minRange = dvPairsTop[0].getDistance();
+    m_maxRange = dvPairsTop[dvPairsTop.size() - 1].getDistance();
+
+
 }
 
 // Calculate required flywheel power, given shooting distance
@@ -105,15 +125,17 @@ double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<Dist
     double d1 = dvPairs[i1].getDistance();
     double d2 = dvPairs[i2].getDistance();
 
-    // Use last two reference values if distance exceeds greatest value
+    //Cap speeds at upper and lower values
     if (distance >= dvPairs[dvPairs.size() - 1].getDistance())
     {
-        i1 = dvPairs.size() - 2;
-        d1 = dvPairs[i1].getDistance();
-        i2 = i1 + 1;
-        d2 = dvPairs[i2].getDistance();
+        return dvPairs[dvPairs.size() - 1].getVelocity();
     }
-    // Otherwise, if distance isn't below/between the first pair of reference values, choose greater values
+    else if(distance <= dvPairs[0].getDistance())
+    {
+        return dvPairs[0].getVelocity();
+    }
+        // Otherwise, if distance isn't below/between the first pair of reference values, choose greater values
+        //Redundant IF statement
     else if (distance >= dvPairs[1].getDistance())
     {
         while (d2 <= distance) {
@@ -141,13 +163,11 @@ double ShooterCalibrator::interpolateVelocityLinear(double distance, vector<Dist
 double ShooterCalibrator::getTopFlywheelVelocity(double distance) {
 
     return interpolateVelocityLinear(distance, dvPairsTop);
-
 }
 
 double ShooterCalibrator::getLowFlywheelVelocity(double distance) {
 
     return interpolateVelocityLinear(distance, dvPairsLow);
-
 }
 
 void ShooterCalibrator::sortRefVals(vector<DistanceVelocityPair>& dvPairs) {
@@ -174,6 +194,16 @@ void ShooterCalibrator::initialize() {
 
 
 }
+
+bool ShooterCalibrator::inRange(int distance)
+{
+    if((distance < m_minRange) || (distance > m_maxRange))
+    {
+        return false;
+    }
+    return true;
+}
+
 
 ShooterCalibrator::~ShooterCalibrator()
 {

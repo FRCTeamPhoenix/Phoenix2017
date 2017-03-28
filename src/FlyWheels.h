@@ -30,13 +30,14 @@ public:
     STATE getState(); //Gets the current state of the Flywheels
     void setState(STATE state); //Sets the state of the Flywheels
 
+    bool inRange();
 
     FlyWheels(
             SmartTalon& lowerFlyWheelMotor, //Smart Talon of the right flywheel
             SmartTalon& leftFlyWheelMotor, // Smart Talon of the left flywheel
             ShooterCalibrator& shooterCalibrator, //Lidar based flywheel speed
             Lidar& lidar,
-            Joystick& gamepad //Uses gamepad for the right trigger and the left trigger
+            Joystick& customBox //Uses gamepad for the right trigger and the left trigger
     );
     virtual ~FlyWheels();
 
@@ -47,7 +48,7 @@ private:
     SmartTalon&m_topFlyWheelMotor; // Left FlyWheel Motor
     ShooterCalibrator& m_shooterCalibrator;
     Lidar& m_lidar;
-    Joystick& m_gamepad; //Gamepad
+    Joystick& m_customBox;
 
     void setRightSpeed(double speed);
     void setLeftSpeed(double speed);

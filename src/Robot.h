@@ -1,7 +1,7 @@
-#ifndef ACTIONGRAPHS_ROBOT_H
-#define ACTIONGRAPHS_ROBOT_H
-#include "RobotController.h"
+#ifndef _ROBOT_H
+#define _ROBOT_H
 #include "WPILib.h"
+#include "RobotController.h"
 #include "constants.h"
 #include "SmartTalon.h"
 #include "relativeMecanumDrivetrain.h"
@@ -20,11 +20,17 @@
 #include "Gatherer.h"
 #include "Feeder.h"
 #include "Indexer.h"
-
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <iostream>
+#include <ntcore.h>
+#include <cscore.h>
+#include <networktables/NetworkTable.h>
 
 //Suppresses uint_64 overflow warning from valijson
 #pragma GCC diagnostic ignored "-Woverflow"
-
+#include "Talons.h"
 #include "valijson/adapters/nlohmann_json_adapter.hpp"
 #include "valijson/utils/nlohmann_json_utils.hpp"
 #include "valijson/schema.hpp"
@@ -39,45 +45,47 @@ using valijson::adapters::NlohmannJsonAdapter;
 
 using namespace std;
 using json=nlohmann::json;
-class ActionGroup;
 
 class ActionGroup;
 
 class Robot: public SampleRobot
 
 {
-
-	SmartTalon m_FRDrive;
-	SmartTalon m_FLDrive;
-	SmartTalon m_BRDrive;
-	SmartTalon m_BLDrive;
-	ActionGroup* m_mainAutoGroup;
-	relativeMecanumDrivetrain m_drivetrain;
-	SmartTalon m_topFlyWheelMotor;
-	SmartTalon m_lowerFlyWheelMotor;
-	SmartTalon m_turretRotateMotor;
-	DigitalInput m_leftLimitSwitch;
-	DigitalInput m_rightLimitSwitch;
-	Joystick m_joystick;
-	Joystick m_gamepad;
-    Joystick m_controlBox;
-	Lidar m_lidar;
-	ADIS16448_IMU m_expansionBoard;
-	Communications m_visionComs;
-	ShooterCalibrator m_shooterCalibrator;
-	FlyWheels m_flywheel;
-	Turret m_turret;
-	LoggerController m_loggerController;
-	ConfigEditor m_configEditor;
-	SmartTalon m_climberMotor;
-	Climber m_climber;
-	Talon m_gathererMotor;
-	SmartTalon m_feederMotor;
-	SmartTalon m_indexerMotor;
-	Indexer m_indexer;
-	Feeder m_feeder;
-	Gatherer m_gatherer;
-	RobotController m_robotController;
+    Talons m_talons;
+    SmartTalon m_FRDrive;
+    SmartTalon m_FLDrive;
+    SmartTalon m_BRDrive;
+    SmartTalon m_BLDrive;
+    ActionGroup* m_mainAutoGroup;
+    relativeMecanumDrivetrain m_drivetrain;
+    SmartTalon m_topFlyWheelMotor;
+    SmartTalon m_lowerFlyWheelMotor;
+    SmartTalon m_turretRotateMotor;
+    DigitalInput m_leftLimitSwitch;
+    DigitalInput m_rightLimitSwitch;
+    Joystick m_joystickLeft;
+    Joystick m_joystickRight;
+    Joystick m_gamepad;
+    Joystick m_customBox;
+    Joystick m_driverCustomBox;
+    Lidar m_lidar;
+    ADIS16448_IMU m_expansionBoard;
+    Communications m_visionComs;
+    ShooterCalibrator m_shooterCalibrator;
+    FlyWheels m_flywheel;
+    Turret m_turret;
+    LoggerController m_loggerController;
+    ConfigEditor m_configEditor;
+    SmartTalon m_climberMotor;
+    SmartTalon m_climberMotor2;
+    Climber m_climber;
+    Talon m_gathererMotor;
+    SmartTalon m_feederMotor;
+    SmartTalon m_indexerMotor;
+    Indexer m_indexer;
+    Feeder m_feeder;
+    Gatherer m_gatherer;
+    RobotController m_robotController;
 
 public:
 	Robot();
@@ -94,6 +102,7 @@ public:
 
 	void initAutoMode();
 
+	static void VisionThread();
 	void switchToTeleoperated();
 
 	//Functions For Robot Actions

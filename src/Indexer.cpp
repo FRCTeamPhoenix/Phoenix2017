@@ -6,10 +6,14 @@
  */
 
 #include "Indexer.h"
+#include "Robot.h"
+#include "Actions/AllActions.h"
 
-Indexer::Indexer(SmartTalon& indexerMotor, Joystick& gamepad):
+
+Indexer::Indexer(SmartTalon& indexerMotor, Joystick& customBox):
     m_indexerMotor(indexerMotor),
-    m_gamepad(gamepad)
+    m_customBox(customBox),
+    m_speedGroup(new ActionGroup())
 {
 
     m_state = OFF;
@@ -48,7 +52,7 @@ void Indexer::run()
 {
     switch(m_state) {
         case TELEOP:
-            if (m_gamepad.GetRawButton(DriveStationConstants::buttonX)) {
+            if (m_customBox.GetRawButton(DriveStationConstants::buttonX)) {
                 m_indexerMotor.goAt(m_speed);
 
                 if(m_indexerMotor.GetIaccum() > 700000)
@@ -58,13 +62,77 @@ void Indexer::run()
                 m_indexerMotor.goAt(0.0);
             break;
         case ON:
+//            m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+//            m_indexerMotor.Set(SmartDashboard::GetNumber("DB/Slider 1", 0.0));
+//            m_speedGroup->execute(m_speedGroup->getContainedActions());
             m_indexerMotor.goAt(m_speed);
+
+            SmartDashboard::PutNumber("Talons/Indexer/Speed", m_indexerMotor.GetEncVel());
+            SmartDashboard::PutNumber("Talons/Indexer/Goal Speed", m_speed * m_indexerMotor.getMaxForwardSpeed());
 
             if(m_indexerMotor.GetIaccum() > 700000)
                 m_indexerMotor.ClearIaccum();
             break;
         case OFF:
+//            m_indexerMotor.SetControlMode(CANSpeedController::kPercentVbus);
+//            m_indexerMotor.Set(0.0);
             m_indexerMotor.goAt(0.0);
             break;
     }
+}
+
+void Indexer::initSpeedGroup(std::shared_ptr<Robot> robot)
+{
+    cout << "in indexer init speed group" << endl;
+    json jsonDoc = "{"
+            "\"type\": \"ActionGroup\","
+            "\"name\": \"Indexer Speed Group\","
+
+            "\"startingCondition\": 0,"
+            "\"containedActions\": ["
+                "{"
+                    "\"type\": \"IndexerRunTime\","
+                    "\"name\": \"Indexer Speed Group Fast\","
+
+                    "\"startingCondition\": 0,"
+
+                    "\"speed\": 0.4,"
+                    "\"duration\": 0.5,"
+
+                    "\"dependencies\": []"
+                "},"
+
+                "{"
+                    "\"type\": \"IndexerRunTime\","
+                    "\"name\": \"Indexer Speed Group Slow\","
+
+                    "\"startingCondition\": 0,"
+
+                    "\"speed\": 0.4,"
+                    "\"duration\": 0.1,"
+
+                    "\"dependencies\": ["
+                        "{\"place\": 0, \"requiredCondition\": 2}"
+                    "]"
+                "},"
+
+                "{"
+                    "\"type\": \"resetAction\","
+                    "\"name\": \"Indexer Speed Group Reset\","
+
+                    "\"startingCondition\": 0,"
+
+                    "\"placesToReset\": [0, 1, 2],"
+
+                    "\"dependencies\": ["
+                        "{\"place\": 1, \"requiredCondition\": 2}"
+                    "]"
+                "}"
+            "],"
+            "\"dependencies\": [],"
+            "\"doneDependencies\": []"
+        "}"_json;
+    cout << "after json delaration" << endl;
+    m_speedGroup->initActionGroup(jsonDoc, robot);
+    cout << "after group init" << endl;
 }

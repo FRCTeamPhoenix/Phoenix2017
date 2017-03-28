@@ -3,6 +3,7 @@
 //
 
 #include "Rotate.h"
+#include "../Robot.h"
 
 Rotate::Rotate (double angle, double speed, double tolerance, vector<shared_ptr<dependency>> dependencies, shared_ptr<Robot> robot):
     Action(dependencies, robot),
@@ -30,6 +31,7 @@ void Rotate::run ()
         m_timer.Reset ();
         m_timer.Start ();
         start ();
+        cout << m_name << ": has started" << endl;
     }
     else if(m_timer.Get() < 0.1)
     {
