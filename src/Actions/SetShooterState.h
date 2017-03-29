@@ -13,6 +13,7 @@
 #include <vector>
 #include <iostream>
 #include "../plog/Log.h"
+#include "WPILib.h"
 
 using namespace std;
 class Robot;
@@ -27,7 +28,7 @@ class SetShooterState : public Action
         SetShooterState(json& action, shared_ptr<Robot> robot);
 
     private:
-        frc::Timer m_timer;
+        Timer m_timer;
         int m_state;
         double m_duration;
         void run();

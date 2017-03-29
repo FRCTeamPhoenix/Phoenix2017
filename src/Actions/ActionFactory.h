@@ -79,12 +79,13 @@ shared_ptr<Action> Action::generateAction (json &action, json& allActionsJson, s
     }
     else if("ActionGroupPtr" == type)
     {
-    	string baseCommonActionPath = "/Common_Actions/";
-    	string commonAction = action["commonAction"];
+    	json& commonActions = allActionsJson["Common_Actions"];
+        string commonAction = action["commonAction"];
 
-    	string pathToCommonAction = baseCommonActionPath + commonAction;
+        json commonActionJson = commonActions[commonAction];
 
-        return generateAction(allActionsJson.at(pathToCommonAction), allActionsJson, robot);
+        commonActionJson["dependencies"] = action["dependencies"];
+        return generateAction(commonActionJson, allActionsJson, robot);
 
     }
     else{
