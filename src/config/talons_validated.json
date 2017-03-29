@@ -219,5 +219,27 @@
         "maxfvel": 6500,
         "maxrvel": 6500,
         "inverted": true
+    },
+    {
+      "id": 11,
+      "speed": {
+        "p": 0,
+        "i": 0,
+        "d": 0,
+        "izone": 14000,
+        "ff": 0,
+        "rr": 0
+      },
+      "distance": {
+        "p": 0,
+        "i": 0,
+        "d": 0,
+        "izone": 4000,
+        "ff": 0,
+        "rr": 0
+      },
+      "maxfvel": 6500,
+      "maxrvel": 6500,
+      "inverted": true
     }
 ]

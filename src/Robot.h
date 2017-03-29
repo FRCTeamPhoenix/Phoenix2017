@@ -63,9 +63,11 @@ class Robot: public SampleRobot
     SmartTalon m_turretRotateMotor;
     DigitalInput m_leftLimitSwitch;
     DigitalInput m_rightLimitSwitch;
-    Joystick m_joystick;
+    Joystick m_joystickLeft;
+    Joystick m_joystickRight;
     Joystick m_gamepad;
     Joystick m_customBox;
+    Joystick m_driverCustomBox;
     Lidar m_lidar;
     ADIS16448_IMU m_expansionBoard;
     Communications m_visionComs;
@@ -75,6 +77,7 @@ class Robot: public SampleRobot
     LoggerController m_loggerController;
     ConfigEditor m_configEditor;
     SmartTalon m_climberMotor;
+    SmartTalon m_climberMotor2;
     Climber m_climber;
     Talon m_gathererMotor;
     SmartTalon m_feederMotor;

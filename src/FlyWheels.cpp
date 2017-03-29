@@ -47,8 +47,13 @@ void FlyWheels::run()
         {
 
             // Max/min speeds must be set in Talon json
-            int topSpeed = m_shooterCalibrator.getTopFlywheelVelocity(SmartDashboard::GetNumber("../datatable/high_goal_distance", 0.0));
-            int lowerSpeed = m_shooterCalibrator.getLowFlywheelVelocity(SmartDashboard::GetNumber("../datatable/high_goal_distance", 0.0));
+            double topSpeed = m_shooterCalibrator.getTopFlywheelVelocity(SmartDashboard::GetNumber("../datatable/high_goal_distance", 0.0));
+            double lowerSpeed = m_shooterCalibrator.getLowFlywheelVelocity(SmartDashboard::GetNumber("../datatable/high_goal_distance", 0.0));
+
+            double shift = (m_customBox.GetRawAxis(DriveStationConstants::potYChange) * 0.2) + 1;
+
+            topSpeed *= shift;
+            lowerSpeed *= shift;
 
             m_topFlyWheelMotor.goAtVelocity(topSpeed);
             m_lowerFlyWheelMotor.goAtVelocity(lowerSpeed);
@@ -59,8 +64,8 @@ void FlyWheels::run()
         case JOYSTICKRATE: //The position that the joystick is in determines the speed.
         	double speed = ((m_customBox.GetRawAxis(DriveStationConstants::potFlywheelSpeed) + 1) / 2) * 0.55;
 
-            SmartDashboard::PutNumber("Talons/Flywheels/Top Goal Speed", SmartDashboard::GetNumber("DB/Slider 0", 0.0) * m_topFlyWheelMotor.getMaxForwardSpeed());
-            SmartDashboard::PutNumber("Talons/Flywheels/Bottom Goal Speed", SmartDashboard::GetNumber("DB/Slider 1", 0.0) * m_lowerFlyWheelMotor.getMaxForwardSpeed());
+            SmartDashboard::PutNumber("Talons/Flywheels/Top Goal Speed", speed * m_topFlyWheelMotor.getMaxForwardSpeed());
+            SmartDashboard::PutNumber("Talons/Flywheels/Bottom Goal Speed", speed * m_lowerFlyWheelMotor.getMaxForwardSpeed());
 
 
             SmartDashboard::PutNumber("Talons/Flywheels/Top Speed", m_topFlyWheelMotor.GetEncVel());
@@ -69,8 +74,8 @@ void FlyWheels::run()
             SmartDashboard::PutNumber("Talons/Flywheels/Top Voltage", m_topFlyWheelMotor.GetOutputVoltage());
             SmartDashboard::PutNumber("Talons/Flywheels/Bottom Voltage", m_lowerFlyWheelMotor.GetOutputVoltage());
 
-            setRightSpeed(0.55);
-            setLeftSpeed(0.15);
+            setRightSpeed(speed);
+            setLeftSpeed(speed);
             break;
     }
 }

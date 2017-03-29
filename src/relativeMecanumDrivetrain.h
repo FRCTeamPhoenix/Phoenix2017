@@ -40,9 +40,11 @@ public:
     void moveDistance(double distance, double angle, double speed, double rotation = 0);
     void moveAt(double speed, double angle);
     void rotate(double angle, double speed);
-    void moveRelative(double FB, double LR, double rotation);
+    void moveRelative(double FB, double LR, double rotation, double front);
     void moveRelativeVoltage(double FB, double LR, double rotation);
-    void moveTankStyle(double left, double right);
+    void moveTankStyle(double left, double right, double strafe_power);
+    void moveTankStyleVoltage(double left, double right, double strafe_power);
+
 
     void stop();
 

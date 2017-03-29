@@ -16,9 +16,6 @@ ActionGroup::ActionGroup (json& actionGroup, json& allActionsJson, shared_ptr<Ro
     Action(),
     m_containedActions(),
     m_doneDependencies()
-
-
-
 {
 
     initActionGroup(actionGroup, allActionsJson, robot);

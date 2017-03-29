@@ -10,7 +10,7 @@ HeadingControl::HeadingControl (ADIS16448_IMU& gyro, GyroAxes axis, bool invertD
     m_axisOfInterest(axis),
     m_invertDirection(invertDirection),
     m_currentOutput(0),
-    m_gyroController(0.01, 0, 0, this, this)
+    m_gyroController(0.02, 0, 0, this, this)
 {
     m_gyroController.Enable ();
 

@@ -59,6 +59,7 @@ shared_ptr<Action> Action::generateAction (json &action, json& allActionsJson, s
     }
     else if("Rotate" == type)
     {
+        cout << "Rotate Created" << endl;
         return make_shared<Rotate>(action, robot);
     }
     else if("DriveJoystick" == type)
@@ -89,7 +90,7 @@ shared_ptr<Action> Action::generateAction (json &action, json& allActionsJson, s
 
     }
     else{
-        cout << "Type Not Found" << endl;
+        cout << "Type Not Found: " << type << endl;
         return make_shared<Action>();
     }
 

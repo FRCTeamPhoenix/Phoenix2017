@@ -31,6 +31,7 @@ void Rotate::run ()
         m_timer.Reset ();
         m_timer.Start ();
         start ();
+        cout << m_name << ": has started" << endl;
     }
     else if(m_timer.Get() < 0.1)
     {
