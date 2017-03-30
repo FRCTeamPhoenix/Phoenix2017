@@ -12,17 +12,17 @@
       "startingCondition": -1,
       "containedActions":[
         {
-          "type": "ActionGroupPtr",
+          "type": "CommonActionRef",
           "commonAction": "Count Sequence",
           "dependencies": []
         },
         {
-          "type": "ActionGroupPtr",
+          "type": "CommonActionRef",
           "commonAction": "Count Sequence",
           "dependencies": []
         },
         {
-          "type": "ActionGroupPtr",
+          "type": "CommonActionRef",
           "commonAction": "Count Sequence",
           "dependencies": [{"place": 0, "requiredCondition": 2} ]
         }
