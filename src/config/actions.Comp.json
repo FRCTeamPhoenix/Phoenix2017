@@ -418,7 +418,7 @@
               "name": "Turn on shooter",
               "startingCondition": 0,
               "state": 1,
-              "duration": 0.5,
+              "duration": 0.1,
               "dependencies": []
             },
             {
@@ -426,7 +426,7 @@
               "name": "Turn on indexer",
               "startingCondition": 0,
               "state": 1,
-              "duration": 0.5,
+              "duration": 0.1,
               "dependencies": [{"place": 0, "requiredCondition": 2}]
             }
           ],
@@ -437,6 +437,8 @@
       "dependencies": [],
       "doneDependencies": []
     },
+    
+    
 
     {
       "type": "ActionGroup",
@@ -468,7 +470,7 @@
           "name": "Turn on shooter",
           "startingCondition": 0,
           "state": 2,
-          "duration": 0.5,
+          "duration": 0.1,
           "dependencies": []
         },
         {
@@ -476,7 +478,7 @@
           "name": "Turn on indexer",
           "startingCondition": 0,
           "state": 1,
-          "duration": 0.5,
+          "duration": 0.1,
           "dependencies": [
             {
               "place": 0,
@@ -499,7 +501,7 @@
           "name": "Turn on shooter",
           "startingCondition": 0,
           "state": 1,
-          "duration": 0.5,
+          "duration": 0.1,
           "dependencies": []
         },
         {
@@ -507,7 +509,7 @@
           "name": "Turn on indexer",
           "startingCondition": 0,
           "state": 1,
-          "duration": 0.5,
+          "duration": 0.1,
           "dependencies": [
             {
               "place": 0,
