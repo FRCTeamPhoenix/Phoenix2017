@@ -90,8 +90,8 @@ shared_ptr<Action> Action::generateAction (json &action, json& allActionsJson, s
 
     }
     else{
-        cout << "Type Not Found: " << type << endl;
-        return make_shared<Action>();
+        cout << "Type Not Found" << endl;
+        return NULL;
     }
 
 }

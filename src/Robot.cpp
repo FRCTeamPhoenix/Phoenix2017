@@ -141,21 +141,7 @@ void Robot::OperatorControl()
 {
 	LOGI << "Start Teleop";
 
-    bool lastPressed3 = false;
-    bool lastPressed4 = false;
-
-    Timer timer;
-    timer.Start();
-    double currentVelY = 0;
-    double currentPosY = 0;
-
-    double currentVelZ = 0;
-    double currentPosZ = 0;
-
-
-	switchToTeleoperated();
-    timer.Reset();
-    while (IsEnabled() && IsOperatorControl())
+	while (IsEnabled() && IsOperatorControl())
 	{
 
         m_mainAutoGroup->execute (m_mainAutoGroup->getContainedActions ());
