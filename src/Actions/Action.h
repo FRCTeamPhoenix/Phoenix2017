@@ -31,6 +31,16 @@ using json=nlohmann::json;
  *      and if they are met the Action is run. Action Conditions are set when the action is run, the
  *      action is skipped over if it's condition is Finished or Disabled.
  *
+ *      ~~~Example Action~~~~
+ *      {
+ *         "type": "ACTION_TYPE",
+ *         "name": "ACTION_NAME",
+ *         "startingCondition": 0,
+ *
+ *         +++ Required Json for specific action +++
+ *
+ *         "dependencies": []
+ *      }
  *
  * Action Groups:
  *      An organizational tool that contains Actions while being an Action itself. This allows
@@ -41,6 +51,24 @@ using json=nlohmann::json;
  *      set looks at its internal actions and says the group is complete when those Done Dependencies
  *      are met.
  *
+ *      ~~~Example Action Group~~~~
+ *      {
+ *          "type": "actionGroup",
+ *          "name": "ACTION_NAME",
+ *          "startingCondition": 0,
+ *          "containedActions" [
+ *
+ *              {
+ *                  Action Json
+ *              },
+ *              {
+ *                  Another Action Json
+ *              },
+ *         ],
+ *
+ *         "dependencies": [],
+ *         "doneDependencies" []
+ *      }
  *
  * Reset Action:
  *      This is a utility action that takes in a set of places in the group of actions it is contained with
@@ -56,6 +84,18 @@ using json=nlohmann::json;
  *      This is a function declaration that is the basis for how actions are loaded through a Json file.
  *      It is a part of the the base class Action. When Action Group is initialized with a Json file it
  *      uses this factory to create the actions based on a passed in Type.
+ *
+ * Common Actions:
+ *      Common actions are groups or single actions that can be referenced in multiple places through out the
+ *      json file. This is to save on size and time in writing the json file. To implement them use the following
+ *      example json format
+ *
+ *      ~~~Example Common Action Ref~~~
+ *      {
+ *          "type": "CommonActionRef",
+ *          "commonAction": "COMMON_ACTION_NAME",
+ *          "dependencies": [{"place": 0, "requiredCondition": 2]
+ *      }
  */
 
 class Action

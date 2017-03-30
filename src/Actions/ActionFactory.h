@@ -78,7 +78,7 @@ shared_ptr<Action> Action::generateAction (json &action, json& allActionsJson, s
     {
         return make_shared<SetShooterState>(action, robot);
     }
-    else if("ActionGroupPtr" == type)
+    else if("CommonActionRef" == type)
     {
     	json& commonActions = allActionsJson["Common_Actions"];
         string commonAction = action["commonAction"];
