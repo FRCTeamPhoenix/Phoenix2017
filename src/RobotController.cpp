@@ -25,7 +25,7 @@ RobotController::RobotController(
         m_gatherer(gatherer)
 
 {
-    m_state = TELEOP;
+    m_state = AUTO;
 }
 
 RobotController::~RobotController()
