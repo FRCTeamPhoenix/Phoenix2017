@@ -791,6 +791,12 @@ void Robot::setIndexerState(int state)
     {
         this->m_indexer.setState(Indexer::State::OFF);
     }
+
+}
+
+void Robot::setTurretState(int state)
+{
+    m_turret.setState((Turret::STATE)state);
 }
 
 START_ROBOT_CLASS(Robot)
