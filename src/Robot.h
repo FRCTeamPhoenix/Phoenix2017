@@ -124,6 +124,8 @@ public:
 
     void setIndexerState(int state);
 
+    void setTurretState(int state);
+
 	//End of Functions for Actions
 
 	// Beginning of Test Mode
