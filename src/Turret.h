@@ -39,12 +39,15 @@ public:
     );
     virtual ~Turret();
 
+    bool isAimed();
+
 private:
     SmartTalon& m_turretRotatorMotor;
     Communications& m_visionComms;
     Joystick& m_customBox; //Turret uses a joystick on the gamepad
     float m_gamepadJoystick; //Variable for the gamepad joystick value that is out putted
     STATE m_state; //State variable for the Turret
+    bool m_aimed;
 };
 
 #endif /* SRC_TURRET_H_ */

@@ -17,7 +17,7 @@ Indexer::Indexer(SmartTalon& indexerMotor, Joystick& customBox):
 {
 
     m_state = OFF;
-    m_speed = 1.0;
+    m_speed = 0.3;
 
 
 //Drive full

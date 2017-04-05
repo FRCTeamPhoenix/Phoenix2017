@@ -36,7 +36,7 @@ Robot::Robot() :
         m_expansionBoard(),
         m_visionComs(),
         m_shooterCalibrator(),
-        m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_customBox),
+        m_flywheel(m_lowerFlyWheelMotor, m_topFlyWheelMotor, m_shooterCalibrator, m_lidar, m_customBox, m_visionComs),
         m_turret(m_turretRotateMotor,m_visionComs, m_customBox),
         m_loggerController(),
         m_configEditor(),
@@ -118,8 +118,8 @@ void Robot::RobotInit()
     std::thread runLidar(lidarThread, this, &m_lidar);
     runLidar.detach();
 
-    std::thread runVision(VisionThread);
-    runVision.detach();
+//    std::thread runVision(VisionThread);
+//    runVision.detach();
 
     m_expansionBoard.Reset();
     m_expansionBoard.Calibrate();
@@ -144,6 +144,7 @@ void Robot::Autonomous()
 void Robot::OperatorControl()
 {
 	LOGI << "Start Teleop";
+    switchToTeleoperated();
 
 	while (IsEnabled() && IsOperatorControl())
 	{
@@ -259,8 +260,8 @@ void Robot::Test()
                 printMSG("1", "FLD ENC: " + (m_FLDrive.testStr(0.25)));
                 printMSG("2", "BRD ENC: " + (m_BRDrive.testStr(0.25)));
                 printMSG("3", "BLD ENC: " + (m_BLDrive.testStr(0.25)));
-                printMSG("4", "RFW ENC: " + (m_lowerFlyWheelMotor.testStr(0.25)));
-                printMSG("5", "LFW ENC: " + (m_topFlyWheelMotor.testStr(0.25)));
+                printMSG("4", "LFW ENC: " + (m_lowerFlyWheelMotor.testStr(0.25)));
+                printMSG("5", "TFW ENC: " + (m_topFlyWheelMotor.testStr(0.25)));
                 printMSG("6", "TRM ENC: " + (m_turretRotateMotor.testStr(0.1, 0.25)));
                 printMSG("7", "FED ENC: " + (m_feederMotor.testStr(0.25)));
                 printMSG("8", "IDX ENC: " + (m_indexerMotor.testStr(0.25)));
@@ -386,8 +387,10 @@ void Robot::Test()
             printMSG("4", "Gyro Angle: " + std::to_string(m_expansionBoard.GetAngleX()));
             if (m_pidState == PID)
             {
-                m_turretRotateMotor.SetControlMode(CANSpeedController::kSpeed);
-                m_turretRotateMotor.goDistance(power * 200, 0.5);
+                if (m_gamepad.GetRawButton(DriveStationConstants::buttonY))
+                {
+					m_turretRotateMotor.goDistance(1000, 0.05);
+                }
 
             }
             else
@@ -535,18 +538,18 @@ void Robot::initMainActionGroup ()
 	try
 	{
 
-		if (!valijson::utils::loadDocument ("/home/lvuser/schemas/actions.schema",
-				mySchemaDoc))
-		{
-			cout << "Schema Failed Loading" << endl;
-
-			throw std::runtime_error ("Failed to load schema document");
-		}
-
-		Schema mySchema;
-		SchemaParser parser;
-		NlohmannJsonAdapter mySchemaAdapter (mySchemaDoc);
-		parser.populateSchema (mySchemaAdapter, mySchema);
+//		if (!valijson::utils::loadDocument ("/home/lvuser/schemas/actions.schema",
+//				mySchemaDoc))
+//		{
+//			cout << "Schema Failed Loading" << endl;
+//
+//			throw std::runtime_error ("Failed to load schema document");
+//		}
+//
+//		Schema mySchema;
+//		SchemaParser parser;
+//		NlohmannJsonAdapter mySchemaAdapter (mySchemaDoc);
+//		parser.populateSchema (mySchemaAdapter, mySchema);
 
 		if (!valijson::utils::loadDocument ("/home/lvuser/config/actions.json",
 				myJsonDoc))
@@ -556,18 +559,18 @@ void Robot::initMainActionGroup ()
 			throw std::runtime_error ("Failed to load Json document");
 		}
 
-		Validator validator;
-		NlohmannJsonAdapter myTargetAdapter (myJsonDoc);
-		if (!validator.validate (mySchema, myTargetAdapter, NULL))
-		{
-			cout << "Validation Failed" << endl;
-
-			throw std::runtime_error ("Validation failed.");
-		}
-		else
-		{
-			cout << "Validated" << endl;
-		}
+//		Validator validator;
+//		NlohmannJsonAdapter myTargetAdapter (myJsonDoc);
+//		if (!validator.validate (mySchema, myTargetAdapter, NULL))
+//		{
+//			cout << "Validation Failed" << endl;
+//
+//			throw std::runtime_error ("Validation failed.");
+//		}
+//		else
+//		{
+//			cout << "Validated" << endl;
+//		}
 
 		m_mainAutoGroup->initActionGroup (myJsonDoc, myJsonDoc, shared_ptr<Robot>(this));
 
@@ -639,6 +642,8 @@ void Robot::switchToTeleoperated()
 			actionIterator->get ()->disable ();
 		}
 	}
+
+    m_robotController.setState(RobotController::TELEOP);
 }
 
 void Robot::driveAt(double speed, double angle)
@@ -799,4 +804,9 @@ void Robot::setTurretState(int state)
     m_turret.setState((Turret::STATE)state);
 }
 
+bool Robot::isTurretAimed()
+{
+    return m_turret.isAimed();
+}
 START_ROBOT_CLASS(Robot)
+

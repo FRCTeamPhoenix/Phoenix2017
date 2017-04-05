@@ -8,681 +8,168 @@
   "containedActions": [
     {
       "type": "ActionGroup",
-      "name": "Drive Auto",
-      "startingCondition": -1,
-      "containedActions":[
-      	{
-          "type": "GoDistance",
-          "name": "Drive move",
-          "startingCondition": 0,
-
-          "distance": 8000,
-          "angle": 0,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": []
-      	}
-      ],
-        "dependencies": [],
-  		"doneDependencies": []
-    },
-
-    {
-      "type": "ActionGroup",
-      "name": "Center Gear Auto",
-      "startingCondition": -1,
-      "containedActions":[
-        {
-          "type": "GoDistance",
-          "name": "Drive move",
-          "startingCondition": 0,
-
-          "distance": 30000,
-          "angle": 0,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": []
-        },
-        {
-          "type": "GoDistance",
-          "name": "approach move",
-          "startingCondition": -1,
-
-          "distance": 10000,
-          "angle": 0,
-          "speed": 0.1,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-        }
-
-      ],
-      "dependencies": [],
-      "doneDependencies": []
-    },
-
-    {
-      "type": "ActionGroup",
-      "name": "Blue Boiler Gear Only Auto",
-      "startingCondition": -1,
-      "containedActions":[
-        {
-          "type": "GoDistance",
-          "name": "BBG Drive move",
-          "startingCondition": 0,
-
-          "distance": 34941,
-          "angle": 0,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": []
-        },
-        {
-          "type": "Rotate",
-          "name": "BBG Aim Rotate",
-          "startingCondition": 0,
-
-          "angle": -60,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-
-        },
-        {
-          "type": "GoDistance",
-          "name": "BBG approach move",
-          "startingCondition": -1,
-
-          "distance": 12375,
-          "angle": 0,
-          "speed": 0.15,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 1, "requiredCondition": 2}]
-        }
-
-      ],
-      "dependencies": [],
-      "doneDependencies": []
-    },
-    {
-        "type": "ActionGroup",
-        "name": "Blue Gear Non Boiler Auto",
-        "startingCondition": -1,
-        "containedActions":[
-        {
-        	"type": "GoDistance",
-        	"name": "BGNB Drive move",
-        	"startingCondition": 0,
-        
-        	"distance": 33908,
-        	"angle": 0,
-        	"speed": 0.15,
-        	"tolerance": 0.05,
-        	"dependencies": []
-       	 },
-         {
-        	"type": "Rotate",
-       		"name": "BGNB Rotate",
-       		"startingCondition": 0,
-        
-        	"angle": 60,
-        	"speed": 0.3,
-        	"tolerance": 0.05,
-        	"dependencies": [{"place": 0, "requiredCondition": 2}]
-        },
-        {
-            "type": "GoDistance",
-        	"name": "BGNB approaching move",
-        	"startingCondition": -1,
-        
-        	"distance": 8569,
-        	"angle": 0,
-        	"speed": 0.15,
-        	"tolerance": 0.05,
-        	"dependencies": [{"place": 1, "requiredCondition": 2}]
-        }
-        ],
-        
-      "dependencies": [],
-      "doneDependencies": []
-    },
-    {
-      "type": "ActionGroup",
-      "name": "Blue Boiler Gear Hopper Auto",
-      "startingCondition": -1,
-      "containedActions":[
-        {
-          "type": "GoDistance",
-          "name": "BBGH Drive move",
-          "startingCondition": 0,
-
-          "distance": 34941,
-          "angle": 0,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": []
-        },
-        {
-          "type": "Rotate",
-          "name": "BBGH Aim Rotate",
-          "startingCondition": 0,
-
-          "angle": -60,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-
-        },
-        {
-          "type": "GoDistance",
-          "name": "BBGH approach move",
-          "startingCondition": -1,
-
-          "distance": 10875,
-          "angle": 0,
-          "speed": 0.15,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 1, "requiredCondition": 2}]
-        },
-        {
-          "type": "GoDistance",
-          "name": "BBGH reproach move",
-          "startingCondition": -1,
-
-          "distance": 19087,
-          "angle": -180,
-          "speed": 0.15,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 2, "requiredCondition": 2}]
-        },
-        {
-          "type": "Rotate",
-          "name": "BBGH Aim Rotate",
-          "startingCondition": 0,
-
-          "angle": -30,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 3, "requiredCondition": 2}]
-
-        },
-        {
-          "type": "GoDistance",
-          "name": "BBGH Drive move",
-          "startingCondition": 0,
-
-          "distance": 13653,
-          "angle": -180,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 4, "requiredCondition": 2}]
-        }
-
-      ],
-      "dependencies": [],
-      "doneDependencies": []
-    },
-    {
-      "type": "ActionGroup",
-      "name": "Red Boiler Gear Only Auto",
-      "startingCondition": -1,
-      "containedActions":[
-        {
-          "type": "GoDistance",
-          "name": "RBG Drive move",
-          "startingCondition": 0,
-
-          "distance": 34941,
-          "angle": 0,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": []
-        },
-        {
-          "type": "Rotate",
-          "name": "RBG Aim Rotate",
-          "startingCondition": 0,
-
-          "angle": 60,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-
-        },
-        {
-          "type": "GoDistance",
-          "name": "RBG approach move",
-          "startingCondition": -1,
-
-          "distance": 12375,
-          "angle": 0,
-          "speed": 0.15,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 1, "requiredCondition": 2}]
-        }
-
-      ],
-      "dependencies": [],
-      "doneDependencies": []
-    },
-    {
-      "type": "ActionGroup",
-      "name": "Red Gear Non Boiler Auto",
-      "startingCondition": -1,
-      "containedActions":[
-        {
-          "type": "GoDistance",
-          "name": "RGNB Drive move",
-          "startingCondition": 0,
-
-          "distance": 33908,
-          "angle": 0,
-          "speed": 0.15,
-          "tolerance": 0.05,
-          "dependencies": []
-        },
-        {
-          "type": "Rotate",
-          "name": "RGNB Rotate",
-          "startingCondition": 0,
-
-          "angle": -60,
-          "speed": 0.3,
-          "tolerance": 0.05,
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-        },
-        {
-          "type": "GoDistance",
-          "name": "RGNB approaching move",
-          "startingCondition": -1,
-
-          "distance": 8569,
-          "angle": 0,
-          "speed": 0.15,
-          "tolerance": 0.05,
-          "dependencies": [{"place": 1, "requiredCondition": 2}]
-        }
-      ],
-
-      "dependencies": [],
-      "doneDependencies": []
-    },
-    {
-      "type": "ActionGroup",
-      "name": "Red Boiler Gear Hopper Auto",
-      "startingCondition": -1,
-      "containedActions":[
-        {
-          "type": "GoDistance",
-          "name": "RBGH Drive move",
-          "startingCondition": 0,
-
-          "distance": 34941,
-          "angle": 0,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": []
-        },
-        {
-          "type": "Rotate",
-          "name": "RBGH Aim Rotate",
-          "startingCondition": 0,
-
-          "angle": 60,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-
-        },
-
-    {
-      "type": "ActionGroup",
-      "name": "Red Boiler Gear Hopper Auto",
-      "startingCondition": -1,
-      "containedActions":[
-        {
-          "type": "GoDistance",
-          "name": "RBGH Drive move",
-          "startingCondition": 0,
-
-          "distance": 34941,
-          "angle": 0,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": []
-        },
-        {
-          "type": "Rotate",
-          "name": "RBGH Aim Rotate",
-          "startingCondition": 0,
-
-          "angle": 60,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-
-        },
-        {
-          "type": "GoDistance",
-          "name": "RBGH approach move",
-          "startingCondition": -1,
-
-          "distance": 10875,
-          "angle": 0,
-          "speed": 0.15,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 1, "requiredCondition": 2}]
-        },
-        {
-          "type": "GoDistance",
-          "name": "RBGH reproach move",
-          "startingCondition": -1,
-
-          "distance": 19087,
-          "angle": -180,
-          "speed": 0.15,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 2, "requiredCondition": 2}]
-        },
-        {
-          "type": "Rotate",
-          "name": "RBGH Aim Rotate",
-          "startingCondition": 0,
-
-          "angle": 30,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 3, "requiredCondition": 2}]
-
-        },
-        {
-          "type": "GoDistance",
-          "name": "RBGH Drive move",
-          "startingCondition": 0,
-
-          "distance": 13653,
-          "angle": -180,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 4, "requiredCondition": 2}]
-        }
-
-      ],
-      "dependencies": [],
-      "doneDependencies": []
-    },
-    
-    
-    {
-      "type": "ActionGroup",
-      "name": "Red Far Hopper Auto",
-      "startingCondition": -1,
-      "containedActions":[
-        {
-          "type": "GoDistance",
-          "name": "RFH Forward Drive Move",
-          "startingCondition": 0,
-
-          "distance": 35873,
-          "angle": 0,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": []
-        },
-        {
-          "type": "GoDistance",
-          "name": "RFH Right Drive Move",
-          "startingCondition": 0,
-
-          "distance": 22828,
-          "angle": 90,
-          "speed": 0.4,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-        },
-        {
-          "type": "SetTurretState",
-          "name": "Aim",
-          "startingCondition": 0,
-
-          "state": 3
-
-          "dependencies": [{"place": 1, "requiredCondition": 2}]
-        },
-		{
-		  "type": "CommonActionRef",
-		  "commonAction": "Lidar Shoot",
-		  "dependencies": [{"place": 2, "requiredCondition": 2}],
-        }
-        
-      ],
-      "dependencies": [],
-      "doneDependencies": []
-    },
-
-    {
-      "type": "ActionGroup",
-      "name": "Blue Far Hopper Auto",
-      "startingCondition": -1,
-      "containedActions":[
-        {
-          "type": "GoDistance",
-          "name": "BFH Forward Drive Move",
-          "startingCondition": 0,
-
-          "distance": 35873,
-          "angle": 0,
-          "speed": 0.3,
-          "tolerance": 0.05,
-
-          "dependencies": []
-        },
-        {
-          "type": "GoDistance",
-          "name": "BFH Left Drive Move",
-          "startingCondition": 0,
-
-          "distance": 22828,
-          "angle": -90,
-          "speed": 0.4,
-          "tolerance": 0.05,
-
-          "dependencies": [{"place": 0, "requiredCondition": 2}]
-        },
-        {
-          "type": "SetTurretState",
-          "name": "Aim",
-          "startingCondition": 0,
-
-          "state": 3
-
-          "dependencies": [{"place": 1, "requiredCondition": 2}]
-        },
-		{
-		  "type": "CommonActionRef",
-		  "commonAction": "Lidar Shoot",
-		  "dependencies": [{"place": 2, "requiredCondition": 2}],
-        }
-        
-      ],
-      "dependencies": [],
-      "doneDependencies": []
-    },
-
-    
-    {
-      "type": "ActionGroup",
       "name": "NO MOVE SHOOT Auto",
       "startingCondition": -1,
-      "containedActions":[
+      "containedActions": [
         {
-          "type": "ActionGroup",
-          "name": "LidarShoot",
+          "type": "CommonActionRef",
+          "commonAction": "LidarShoot",
+          "dependencies": []
+        }
+      ],
+      "dependencies": [],
+      "doneDependencies": []
+      },
+    {
+      "type": "ActionGroup",
+      "name": "TEST MOVE SHOOT Auto",
+      "startingCondition": -1,
+      "containedActions": [
+        {
+          "type": "GoDistance",
+          "name": "Drive move",
           "startingCondition": 0,
+
+          "distance": 20000,
+          "angle": 0,
+          "speed": 0.2,
+          "tolerance": 0.05,
+
+          "dependencies": []
+        },
+        {
+          "type": "CommonActionRef",
+          "commonAction": "LidarShoot",
+          "dependencies": [{"place": 0, "requiredCondition": 2}]
+        }
+      ],
+      "dependencies": [],
+      "doneDependencies": []
+    },
+
+    {
+          "type": "ActionGroup",
+          "name": "Teleoperated",
+          "startingCondition": -1,
           "containedActions": [
             {
-              "type": "SetShooterState",
-              "name": "Turn on shooter",
+              "type": "DriveJoystick",
+              "name": "joystick",
               "startingCondition": 0,
-              "state": 1,
-              "duration": 0.1,
               "dependencies": []
-            },
-            {
-              "type": "SetIndexerState",
-              "name": "Turn on indexer",
-              "startingCondition": 0,
-              "state": 1,
-              "duration": 0.1,
-              "dependencies": [{"place": 0, "requiredCondition": 2}]
             }
           ],
           "dependencies": [],
           "doneDependencies": []
         }
-      ],
-      "dependencies": [],
-      "doneDependencies": []
-    },
-    
-    
-
-    {
-      "type": "ActionGroup",
-      "name": "Teleoperated",
-      "startingCondition": -1,
-      "containedActions":[
-      	{
-	      	"type": "DriveJoystick",
-	      	"name": "joystick",
-	      	"startingCondition": 0,	      	
-	      	"dependencies": []
-      	}
-      ],
-        "dependencies": [],
-  		"doneDependencies": []
-    }
   ],
-  "dependencies": [],
-  "doneDependencies": [],
-
   "Common_Actions": {
-    "LidarShoot": {
-      "type": "ActionGroup",
-      "name": "LidarShoot",
-      "startingCondition": -1,
-      "containedActions": [
-        {
-          "type": "SetShooterState",
-          "name": "Turn on shooter",
-          "startingCondition": 0,
-          "state": 2,
-          "duration": 0.1,
-          "dependencies": []
-        },
-        {
-          "type": "SetIndexerState",
-          "name": "Turn on indexer",
-          "startingCondition": 0,
-          "state": 1,
-          "duration": 0.1,
-          "dependencies": [
-            {
-              "place": 0,
-              "requiredCondition": 2
-            }
-          ]
-        }
-      ],
-      "dependencies": [],
-      "doneDependencies": [{"place": 0, "requiredCondition": 2}, 
-      					   {"place": 1, "requiredCondition": 2}]
-    },
-
-    "NumericShoot": {
-      "type": "ActionGroup",
-      "name": "NumericShoot",
-      "startingCondition": -1,
-      "containedActions": [
-        {
-          "type": "SetShooterState",
-          "name": "Turn on shooter",
-          "startingCondition": 0,
-          "state": 1,
-          "duration": 0.1,
-          "dependencies": []
-        },
-        {
-          "type": "SetIndexerState",
-          "name": "Turn on indexer",
-          "startingCondition": 0,
-          "state": 1,
-          "duration": 0.1,
-          "dependencies": [
-            {
-              "place": 0,
-              "requiredCondition": 2
-            }
-          ]
-        }
-      ],
-      "dependencies": [],
-      "doneDependencies": []
-    },
-
-    "Turn off Shooter": {
-      "type": "ActionGroup",
-      "name": "Turn off Shooter",
-      "startingCondition": -1,
-      "containedAction": [
-        {
-          "type": "SetShooterState",
-          "name": "Turn off shooter",
-          "startingCondition": -1,
-          "state": 0,
-          "duration": 0.1,
-          "dependencies": []
-        },
-        {
-          "type": "SetIndexerState",
-          "name": "Turn off indexer",
-          "startingCondition": -1,
-          "state": 2,
-          "duration": 0.01,
-          "dependencies": [
-            {
-              "place": 0,
-              "requiredCondition": 2
-            }
-          ]
-        }
-      ],
-      "dependencies": [],
-      "doneDependencies": []
+      "LidarShoot":
+      {
+        "type": "ActionGroup",
+        "name": "LidarShoot",
+        "startingCondition": -1,
+        "containedActions": [
+          {
+            "type": "SetShooterState",
+            "name": "Turn on shooter",
+            "startingCondition": 0,
+            "state": 2,
+            "duration": 3,
+            "dependencies": []
+          },
+          {
+            "type": "SetTurretState",
+            "name": "Aim",
+            "startingCondition": 0,
+            "state": 3,
+            "dependencies": []
+          },
+          {
+            "type": "IsAimed",
+            "name": "Is Turret Aimed",
+            "startingCondition": 0,
+            "dependencies": [{"place": 0, "requiredCondition": 2}]
+          },
+          {
+            "type": "SetIndexerState",
+            "name": "Turn on indexer",
+            "startingCondition": 0,
+            "state": 1,
+            "duration": 0.1,
+            "dependencies": [{"place": 2, "requiredCondition": 1}]
+          },
+          {
+            "type": "SetIndexerState",
+            "name": "Turn off indexer",
+            "startingCondition": 0,
+            "state": 2,
+            "duration": 0.1,
+            "dependencies": [{"place": 2, "requiredCondition": 0}]
+          }
+        ],
+        "dependencies": [],
+        "doneDependencies": []
+      },
+      "NumericShoot": {
+        "type": "ActionGroup",
+        "name": "NumericShoot",
+        "startingCondition": -1,
+        "containedActions": [
+          {
+            "type": "SetShooterState",
+            "name": "Turn on shooter",
+            "startingCondition": 0,
+            "state": 1,
+            "duration": 0.1,
+            "dependencies": []
+          },
+          {
+            "type": "SetIndexerState",
+            "name": "Turn on indexer",
+            "startingCondition": 0,
+            "state": 1,
+            "duration": 0.1,
+            "dependencies": [
+              {
+                "place": 0,
+                "requiredCondition": 2
+              }
+            ]
+          }
+        ],
+        "dependencies": [],
+        "doneDependencies": []
+      },
+      "Turn off Shooter": {
+        "type": "ActionGroup",
+        "name": "Turn off Shooter",
+        "startingCondition": -1,
+        "containedAction": [
+          {
+            "type": "SetShooterState",
+            "name": "Turn off shooter",
+            "startingCondition": -1,
+            "state": 0,
+            "duration": 0.1,
+            "dependencies": []
+          },
+          {
+            "type": "SetIndexerState",
+            "name": "Turn off indexer",
+            "startingCondition": -1,
+            "state": 2,
+            "duration": 0.01,
+            "dependencies": [
+              {
+                "place": 0,
+                "requiredCondition": 2
+              }
+            ]
+          }
+        ],
+        "dependencies": [],
+        "doneDependencies": []
+      }
     }
-  }
 }

@@ -59,7 +59,6 @@ shared_ptr<Action> Action::generateAction (json &action, json& allActionsJson, s
     }
     else if("Rotate" == type)
     {
-        cout << "Rotate Created" << endl;
         return make_shared<Rotate>(action, robot);
     }
     else if("DriveJoystick" == type)
@@ -82,6 +81,10 @@ shared_ptr<Action> Action::generateAction (json &action, json& allActionsJson, s
     {
         return make_shared<SetTurretState>(action, robot);
     }
+    else if("IsAimed" == type)
+    {
+        return make_shared<IsAimed>(action, robot);
+    }
     else if("CommonActionRef" == type)
     {
     	json& commonActions = allActionsJson["Common_Actions"];
@@ -90,6 +93,7 @@ shared_ptr<Action> Action::generateAction (json &action, json& allActionsJson, s
         json commonActionJson = commonActions[commonAction];
 
         commonActionJson["dependencies"] = action["dependencies"];
+        cout << "Common Action Fonud" << endl;
         return generateAction(commonActionJson, allActionsJson, robot);
 
     }

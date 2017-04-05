@@ -17,6 +17,7 @@
 #include "SetIndexerState.h"
 #include "SetShooterState.h"
 #include "SetTurretState.h"
+#include "IsAimed.h"
 
 
 #endif //ACTIONGRAPHS_ALLACTIONS_H

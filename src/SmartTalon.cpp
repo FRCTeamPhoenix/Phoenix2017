@@ -102,6 +102,7 @@ void SmartTalon::goVoltage(double speed)
     {
         SetControlMode (CANSpeedController::kPercentVbus);
         m_mode = CANSpeedController::kPercentVbus;
+        ConfigMaxOutputVoltage(12);
     }
 
     if(m_inverted)
@@ -484,6 +485,7 @@ int SmartTalon::test(double power, double timeout)
     Set(power);
     Wait(timeout);
     int speed = GetSpeed();
+    double current = GetOutputCurrent();
     if(speed > 10)
     {
         Set(0.0);
@@ -494,9 +496,15 @@ int SmartTalon::test(double power, double timeout)
         Set(0.0);
         return -1;
     }
+    else if(fabs(current) < 0.2)
+    {
+        Set(0);
+        return 0;
+    }
     else
     {
-        return 0;
+        Set(0.0);
+        return -2;
     }
 }
 
@@ -504,17 +512,23 @@ int SmartTalon::test(double power, double timeout)
 string SmartTalon::testStr(double power, double timeout)
 {
     int condition = test(power, timeout);
-    if(condition == 1)
+
+    switch(condition)
     {
-        return "Correct";
-    }
-    else if(condition == -1)
-    {
-        return "Reversed";
-    }
-    else
-    {
-        return "Not Reading!!!";
+        case 1:
+            return "correct";
+
+        case -1:
+            return "Reversed";
+
+        case 0:
+            return "Check Motor";
+
+        case -2:
+            return "Check Encoder";
+
+        default:
+            return "Not Reading!!!";
     }
 }
 

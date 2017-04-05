@@ -12,6 +12,7 @@
 #include "constants.h"
 #include "ShooterCalibrator.h"
 #include "Lidar.h"
+#include "Communications.h"
 
 class FlyWheels
 {
@@ -37,7 +38,8 @@ public:
             SmartTalon& leftFlyWheelMotor, // Smart Talon of the left flywheel
             ShooterCalibrator& shooterCalibrator, //Lidar based flywheel speed
             Lidar& lidar,
-            Joystick& customBox //Uses gamepad for the right trigger and the left trigger
+            Joystick& customBox, //Uses gamepad for the right trigger and the left trigger
+            Communications& communications
     );
     virtual ~FlyWheels();
 
@@ -49,6 +51,7 @@ private:
     ShooterCalibrator& m_shooterCalibrator;
     Lidar& m_lidar;
     Joystick& m_customBox;
+    Communications& m_communications;
 
     void setRightSpeed(double speed);
     void setLeftSpeed(double speed);

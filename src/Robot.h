@@ -126,6 +126,8 @@ public:
 
     void setTurretState(int state);
 
+    bool isTurretAimed();
+
 	//End of Functions for Actions
 
 	// Beginning of Test Mode

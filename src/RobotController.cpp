@@ -131,6 +131,7 @@ void RobotController::run()
         }
         break;
     case AUTO:
+
         break;
 
     }

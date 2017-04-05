@@ -220,9 +220,6 @@ void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotat
     double x = cos(M_PI_4 - front) * FB + sin(M_PI_4 - front) * LR;
     double y = cos(M_PI_4 + front) * FB + sin(-M_PI_4 - front) * LR;
 
-    x *= sqrt(2);
-    y *= sqrt(2);
-
     x = x > 1   ?   1   : x;
     x = x < -1  ?  -1   : x;
 
@@ -230,11 +227,11 @@ void relativeMecanumDrivetrain::moveRelative (double FB, double LR, double rotat
     y = y < -1  ?  -1   : y;
 
     stringstream ss;
-    ss << y;
+    ss << "Y wheels " << y;
     SmartDashboard::PutString("DB/String 7", ss.str());
 
     stringstream ss2;
-    ss2 << x;
+    ss2 << "X wheels " << x;
     SmartDashboard::PutString("DB/String 8", ss2.str());
     m_FLTalon.goVoltage (x + rotation);
     m_BRTalon.goVoltage (x - rotation);

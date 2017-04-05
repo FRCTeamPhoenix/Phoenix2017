@@ -28,17 +28,17 @@ void SetIndexerState::run()
 
     m_robot->setIndexerState(m_state);
 
-    if(getCondition() == dependency::NotStarted)
-    {
-        m_timer.Reset();
-        m_timer.Start();
-        start();
-    }
-    else if (m_timer.Get() > m_duration)
-    {
-        finish();
-        m_timer.Start();
-    }
+//    if(getCondition() == dependency::NotStarted)
+//    {
+//        m_timer.Reset();
+//        m_timer.Start();
+//        start();
+//    }
+//    else if (m_timer.Get() > m_duration)
+//    {
+//        finish();
+//        m_timer.Start();
+//    }
 
 }
 

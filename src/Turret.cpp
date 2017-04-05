@@ -49,8 +49,8 @@ void Turret::run()
             //Moving state of Turret
             //Changes to Idle when there is no joystick movement
         case TELEOP:
-            m_turretRotatorMotor.SetControlMode(CANSpeedController::kPercentVbus);
-            m_turretRotatorMotor.Set(gamepadJoystickWithDeadZone());
+            m_turretRotatorMotor.goVoltage(gamepadJoystickWithDeadZone());
+
 
             SmartDashboard::PutNumber("Turret Joystick", gamepadJoystickWithDeadZone());
 
@@ -58,8 +58,7 @@ void Turret::run()
         case HOMING:
             if(m_turretRotatorMotor.IsFwdLimitSwitchClosed())
             {
-                m_turretRotatorMotor.SetControlMode(CANSpeedController::kPercentVbus);
-                m_turretRotatorMotor.Set(0.1);
+                m_turretRotatorMotor.goVoltage(0.1);
                 m_turretRotatorMotor.ConfigSoftPositionLimits(0, -6000);
             }
             else
@@ -70,7 +69,22 @@ void Turret::run()
             break;
         case AUTO:
             double degreesGoal = m_visionComms.getNumber(JetsonComms::goalAngle);
-            m_turretRotatorMotor.goTo(degreesGoal * RobotConstants::degreesToTicks, RobotConstants::turretSpeed);
+
+            degreesGoal += (m_customBox.GetRawAxis(1) * 4);
+
+            SmartDashboard::PutNumber("Talons/Turret/Goal shift", (m_customBox.GetRawAxis(1) * 4));
+
+            if(!m_aimed)
+            {
+                m_turretRotatorMotor.goTo(degreesGoal * RobotConstants::degreesToTicks, RobotConstants::turretSpeed);
+            }
+            else
+            {
+                m_turretRotatorMotor.goTo(degreesGoal * RobotConstants::degreesToTicks, RobotConstants::turretSpeed * 0.8);
+            }
+
+            m_aimed = (fabs(m_visionComms.getNumber(JetsonComms::turretAngle) - degreesGoal) < 4);
+
             //LOGI << "Goal: " << degreesGoal << "\n";
             break;
     }
@@ -100,4 +114,9 @@ void Turret::setState(STATE state)
 {
     m_state = state;
 
+}
+
+bool Turret::isAimed()
+{
+    return m_aimed;
 }
